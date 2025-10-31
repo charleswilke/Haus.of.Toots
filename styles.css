@@ -230,7 +230,7 @@ section {
 
 .hero-layout {
     display: grid;
-    grid-template-columns: 45% 55%;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: var(--spacing-md);
     align-items: center;
 }
@@ -252,6 +252,22 @@ section {
 
 .hero-logo:hover {
     transform: scale(1.05);
+}
+
+.hero-photo-side {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-sm);
+}
+
+.hero-hoop {
+    width: 260px;
+    height: 260px;
+}
+
+.hero-hoop .hero-hoop-ring {
+    border: 12px solid #FFB3BA !important;
 }
 
 .hero-content-side {
@@ -301,6 +317,7 @@ section {
     transition: all 0.3s var(--transition-smooth);
     position: relative;
     overflow: hidden;
+    white-space: nowrap;
 }
 
 .cta-button.large {
@@ -376,26 +393,17 @@ section {
     background: var(--linen);
 }
 
-.about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--spacing-lg);
-    align-items: center;
+.about-content {
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
 }
 
-.about-image {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--spacing-md);
+.about-content .section-title {
+    text-align: center;
 }
 
-.bio-name {
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--coral-dark);
-    margin: 0;
+.about-text {
     text-align: center;
 }
 
@@ -430,6 +438,10 @@ section {
 .gallery-hoop {
     width: 240px;
     height: 240px;
+}
+
+.gallery-hoop .hoop-ring {
+    border-color: #FFB3BA;
 }
 
 .hoop-ring {
@@ -517,9 +529,8 @@ section {
 
 .gallery-caption {
     font-size: 1rem;
-    color: var(--neutral-mid);
-    font-style: italic;
-    font-weight: 500;
+    color: var(--neutral-dark);
+    font-weight: 700;
 }
 
 /* ===================================
@@ -660,13 +671,17 @@ section {
         padding: var(--spacing-sm);
     }
     
-    .about-grid {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-md);
+    .hero-photo-side {
+        order: 3;
     }
     
-    .about-image {
-        order: -1;
+    .hero-content-side {
+        order: 2;
+    }
+    
+    .hero-hoop {
+        width: 220px;
+        height: 220px;
     }
     
     .gallery-grid {
