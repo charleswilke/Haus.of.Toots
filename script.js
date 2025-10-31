@@ -25,8 +25,8 @@ class ScrollStitchSidebar {
         this.stitchContainer = document.getElementById('stitchContainer');
         this.needle = document.getElementById('needle');
         this.stitches = [];
-        this.numStitches = 40; // Number of stitches along the sidebar - more stitches = tighter spacing
-        this.stitchSize = 8; // Size of each stitch
+        this.numStitches = 65; // Number of stitches along the sidebar - more stitches = tighter spacing
+        this.stitchSize = 3.36; // Size of each stitch (42% of original 8)
         this.spacing = 1000 / this.numStitches; // Spacing between stitches in SVG units
         this.stitchSpeed = 0.8; // Speed multiplier - higher = stitches appear closer together as you scroll
         
