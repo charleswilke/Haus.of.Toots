@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Haus of Toots - Custom Needlepoint Canvases</title>
+    <meta name="description" content="Custom needlepoint canvases, hand-drawn by Jessie Toots. Each X a little love note.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Scroll Stitch Sidebar -->
+    <div class="stitch-sidebar">
+        <svg class="stitch-line" viewBox="0 0 60 1000" preserveAspectRatio="xMidYMid slice">
+            <defs>
+                <!-- Gradient for thread shading - creates 3D effect -->
+                <linearGradient id="threadGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#FFAAB5;stop-opacity:1" />
+                    <stop offset="25%" style="stop-color:#FF8B9A;stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:#FF6B7A;stop-opacity:1" />
+                    <stop offset="75%" style="stop-color:#E85563;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#D04552;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <g id="stitchContainer"></g>
+            <g id="needle" transform="translate(30, 0)">
+                <line x1="-8" y1="-15" x2="8" y2="-15" stroke="#FF6B7A" stroke-width="3" stroke-linecap="round"/>
+                <path d="M 0 -15 L 0 5" stroke="#C0C0C0" stroke-width="2"/>
+                <circle cx="0" cy="-18" r="2" fill="#C0C0C0"/>
+            </g>
+        </svg>
+    </div>
+
+    <!-- Cursor Trail Canvas -->
+    <canvas id="cursorCanvas"></canvas>
+
+    <!-- Header -->
+    <header class="site-header">
+        <div class="container">
+            <div class="logo-container">
+                <img src="images/wordmarklogo.png" alt="Haus of Toots" class="logo" id="hausLogo">
+            </div>
+            <p class="tagline">Custom Needlepoint Canvases, Made Just for You</p>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="stitched-border">
+                <div class="hero-content">
+                    <h2 class="hero-title">Let's Create Something <span class="highlight">Wonderful</span></h2>
+                    <p class="hero-description">Every canvas is hand-drawn with care. Whether you're dreaming up something completely new or want to customize an existing design, I'd love to help bring your vision to life.</p>
+                    <a href="#request" class="cta-button needle-hover">
+                        <span>Request Your Design</span>
+                        <svg class="needle-icon" width="24" height="24" viewBox="0 0 24 24">
+                            <line x1="4" y1="12" x2="20" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <circle cx="2" cy="12" r="2" fill="currentColor"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-image">
+                    <div class="embroidery-hoop">
+                        <div class="hoop-ring"></div>
+                        <div class="canvas-placeholder">
+                            <img src="images/jessiebio.jpg" alt="Jessie Wilke" class="bio-photo">
+                        </div>
+                    </div>
+                    <p class="bio-name">Hi, I'm Jessie Wilke</p>
+                </div>
+                <div class="about-text">
+                    <h2 class="section-title">Every Stitch Tells a Story</h2>
+                    <p>I create custom needlepoint canvases that are as unique as the people who stitch them. <strong>Each canvas is hand-drawn by me, with each X a little love note.</strong></p>
+                    <p>Whether you want a beloved pet immortalized, a family home captured in thread, or a completely original design that speaks to your soul.</p>
+                    <p>No mass production. No templates. Just thoughtful, custom designs made for stitchers who want something truly special.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery">
+        <div class="container">
+            <h2 class="section-title">Recent Commissions</h2>
+            <p class="section-subtitle">A peek at some custom and customized canvases I've helped bring to life</p>
+            
+            <div class="gallery-carousel">
+                <button class="carousel-nav prev" aria-label="Previous">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+                
+                <div class="gallery-track">
+                    <div class="gallery-item active">
+                        <div class="embroidery-hoop gallery-hoop">
+                            <div class="hoop-ring"></div>
+                            <div class="canvas-placeholder">
+                                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="200" height="200" fill="#FAF8F5"/>
+                                    <text x="100" y="100" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="14" fill="#999">Custom Pet Portrait</text>
+                                    <path d="M 60 80 Q 80 60 100 80 Q 120 60 140 80" stroke="#FF6B7A" stroke-width="2" fill="none"/>
+                                    <circle cx="85" cy="75" r="3" fill="#FF6B7A"/>
+                                    <circle cx="115" cy="75" r="3" fill="#FF6B7A"/>
+                                    <path d="M 80 120 Q 100 130 120 120" stroke="#FF6B7A" stroke-width="2" fill="none"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="gallery-caption">Custom design ready for stitching</p>
+                    </div>
+                    
+                    <div class="gallery-item">
+                        <div class="embroidery-hoop gallery-hoop">
+                            <div class="hoop-ring"></div>
+                            <div class="canvas-placeholder">
+                                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="200" height="200" fill="#FAF8F5"/>
+                                    <text x="100" y="100" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="14" fill="#999">Home Sweet Home</text>
+                                    <path d="M 60 110 L 100 70 L 140 110 L 140 150 L 60 150 Z" stroke="#FF6B7A" stroke-width="2" fill="none"/>
+                                    <rect x="85" y="120" width="30" height="30" stroke="#FF6B7A" stroke-width="2" fill="none"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="gallery-caption">Personalized house design</p>
+                    </div>
+                    
+                    <div class="gallery-item">
+                        <div class="embroidery-hoop gallery-hoop">
+                            <div class="hoop-ring"></div>
+                            <div class="canvas-placeholder">
+                                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="200" height="200" fill="#FAF8F5"/>
+                                    <text x="100" y="90" text-anchor="middle" font-family="'Playfair Display', serif" font-size="24" fill="#FF6B7A" font-weight="600">XO</text>
+                                    <text x="100" y="120" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="14" fill="#999">Monogram Design</text>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="gallery-caption">Custom monogram canvas</p>
+                    </div>
+                </div>
+                
+                <button class="carousel-nav next" aria-label="Next">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="carousel-dots">
+                <button class="dot active" data-index="0" aria-label="Go to slide 1"></button>
+                <button class="dot" data-index="1" aria-label="Go to slide 2"></button>
+                <button class="dot" data-index="2" aria-label="Go to slide 3"></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Request Section -->
+    <section id="request" class="request">
+        <div class="container">
+            <div class="stitched-border">
+                <div class="request-content">
+                    <h2 class="section-title">Ready to Start Stitching?</h2>
+                    <p class="request-description">Whether you have a clear vision or just a spark of an idea, I'd love to hear about it. Fill out the form below and I'll be in touch to discuss bringing your canvas to life!</p>
+                    
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSc1mAKgMdbhpppybBRnaIn7cDVKOkAZpGX0zCfs5zOy72pUIg/viewform" 
+                       target="_blank" 
+                       rel="noopener noreferrer" 
+                       class="cta-button needle-hover large">
+                        <span>Open Request Form</span>
+                        <svg class="needle-icon" width="24" height="24" viewBox="0 0 24 24">
+                            <line x1="4" y1="12" x2="20" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <circle cx="2" cy="12" r="2" fill="currentColor"/>
+                        </svg>
+                    </a>
+                    
+                    <div class="contact-note">
+                        <p>Prefer to chat first? Find me on Instagram <a href="https://instagram.com/haus.of.toots" target="_blank" rel="noopener noreferrer" class="instagram-link">@haus.of.toots</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-social">
+                    <a href="https://instagram.com/haus.of.toots" target="_blank" rel="noopener noreferrer" class="social-link needle-hover">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                        <span>@haus.of.toots</span>
+                    </a>
+                </div>
+                <div class="footer-credits">
+                    <p>Made with <span class="heart">♥</span> and lots of X's</p>
+                    <p class="copyright">&copy; 2025 Haus of Toots. Designs and customizationsby Jessie Wilke.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
