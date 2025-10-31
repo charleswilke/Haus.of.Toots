@@ -39,14 +39,6 @@ A charming, interactive website for Jessie Wilke's custom needlepoint canvas des
 
 This site includes automatic deployment to DreamHost via SFTP using GitHub Actions.
 
-#### Required Secrets
-
-Add these secrets to your GitHub repository (Settings → Secrets and variables → Actions):
-
-1. `SFTP_SERVER` - Your DreamHost SFTP server: `chawil155.dreamhosters.com`
-2. `SFTP_USERNAME` - Your SFTP username: `jessieToots`
-3. `SFTP_PASSWORD` - Your SFTP password (the one you set for the jessieToots user)
-
 #### How it Works
 
 1. Push changes to the `main` branch

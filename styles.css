@@ -49,21 +49,9 @@ body {
     line-height: 1.6;
     color: var(--neutral-dark);
     background-color: var(--cream);
-    background-image: 
-        repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 40px,
-            rgba(255, 107, 122, 0.02) 40px,
-            rgba(255, 107, 122, 0.02) 41px
-        ),
-        repeating-linear-gradient(
-            90deg,
-            transparent,
-            transparent 40px,
-            rgba(255, 107, 122, 0.02) 40px,
-            rgba(255, 107, 122, 0.02) 41px
-        );
+    background-image: url('images/haus_of_toots_canvas_13ct_512px.png');
+    background-repeat: repeat;
+    background-size: 256px 256px; /* Make it slightly smaller for subtle texture */
     overflow-x: hidden;
 }
 
