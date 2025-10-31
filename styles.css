@@ -51,7 +51,8 @@ body {
     background-color: var(--cream);
     background-image: url('images/haus_of_toots_canvas_13ct_512px.png');
     background-repeat: repeat;
-    background-size: 256px 256px; /* Make it slightly smaller for subtle texture */
+    background-size: 512px 500px; /* Crop bottom by making height smaller */
+    background-position: 0 0;
     overflow-x: hidden;
 }
 
