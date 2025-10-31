@@ -133,7 +133,7 @@ Update the Instagram link in the footer section if needed.
 
 ## Credits
 
-**Design & Development:** Built with love for Jessie Toots  
+**Design & Development:** Built with love for Jessie Wilke  
 **Brand Identity:** Haus of Toots  
 **Instagram:** [@haus.of.toots](https://instagram.com/haus.of.toots)
 
