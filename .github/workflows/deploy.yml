@@ -15,20 +15,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         
-      - name: Deploy to DreamHost
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      - name: Deploy to DreamHost via SFTP
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
           server: ${{ secrets.SFTP_SERVER }}
           username: ${{ secrets.SFTP_USERNAME }}
           password: ${{ secrets.SFTP_PASSWORD }}
-          protocol: ftps
-          port: 21
-          server-dir: /home/jessieToots/hausoftoots.com/
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/.vscode/**
-            **/.idea/**
-            **/README.md
-            **/.DS_Store
+          port: 22
+          local_path: './*'
+          remote_path: '/home/jessieToots/hausoftoots.com/'
+          sftp_only: true
+          args: '-o ConnectTimeout=5'
