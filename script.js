@@ -242,65 +242,40 @@ class CursorTrail {
 }
 
 // ===================================
-// GALLERY CAROUSEL
+// ROTATING CAROUSEL (auto-rotating images in hoops)
 // ===================================
 
-class GalleryCarousel {
+class RotatingCarousel {
     constructor() {
-        this.currentIndex = 0;
-        this.items = document.querySelectorAll('.gallery-item');
-        this.dots = document.querySelectorAll('.dot');
-        this.prevBtn = document.querySelector('.carousel-nav.prev');
-        this.nextBtn = document.querySelector('.carousel-nav.next');
+        // Find all rotating carousels
+        this.carousels = document.querySelectorAll('.rotating-carousel');
         
-        this.prevBtn.addEventListener('click', () => this.prev());
-        this.nextBtn.addEventListener('click', () => this.next());
-        
-        this.dots.forEach((dot, index) => {
-            dot.addEventListener('click', () => this.goTo(index));
+        if (this.carousels.length > 0) {
+            this.initializeCarousels();
+        }
+    }
+    
+    initializeCarousels() {
+        this.carousels.forEach(carousel => {
+            const images = carousel.querySelectorAll('.rotating-image');
+            if (images.length > 1) {
+                let currentIndex = 0;
+                
+                setInterval(() => {
+                    // Remove active from current
+                    images[currentIndex].classList.remove('active');
+                    
+                    // Move to next image
+                    currentIndex = (currentIndex + 1) % images.length;
+                    
+                    // Add active to next
+                    images[currentIndex].classList.add('active');
+                }, 3000);
+            }
         });
-        
-        // Auto-advance carousel
-        this.startAutoPlay();
-    }
-    
-    update() {
-        this.items.forEach((item, index) => {
-            item.classList.toggle('active', index === this.currentIndex);
-        });
-        
-        this.dots.forEach((dot, index) => {
-            dot.classList.toggle('active', index === this.currentIndex);
-        });
-    }
-    
-    next() {
-        this.currentIndex = (this.currentIndex + 1) % this.items.length;
-        this.update();
-        this.resetAutoPlay();
-    }
-    
-    prev() {
-        this.currentIndex = (this.currentIndex - 1 + this.items.length) % this.items.length;
-        this.update();
-        this.resetAutoPlay();
-    }
-    
-    goTo(index) {
-        this.currentIndex = index;
-        this.update();
-        this.resetAutoPlay();
-    }
-    
-    startAutoPlay() {
-        this.autoPlayInterval = setInterval(() => this.next(), 5000);
-    }
-    
-    resetAutoPlay() {
-        clearInterval(this.autoPlayInterval);
-        this.startAutoPlay();
     }
 }
+
 
 // ===================================
 // NEEDLE HOVER EFFECTS
@@ -418,8 +393,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Cursor trail
     const cursorTrail = new CursorTrail();
     
-    // Gallery carousel
-    const carousel = new GalleryCarousel();
+    // Rotating carousel (auto-rotating images in hoops)
+    const rotatingCarousel = new RotatingCarousel();
     
     // Needle hover effects
     initNeedleHovers();
@@ -438,20 +413,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
 });
 
-// ===================================
-// KEYBOARD NAVIGATION
-// ===================================
-
-document.addEventListener('keydown', (e) => {
-    const carousel = document.querySelector('.gallery-carousel');
-    if (!carousel) return;
-    
-    if (e.key === 'ArrowLeft') {
-        document.querySelector('.carousel-nav.prev').click();
-    } else if (e.key === 'ArrowRight') {
-        document.querySelector('.carousel-nav.next').click();
-    }
-});
 
 // ===================================
 // PERFORMANCE OPTIMIZATION
