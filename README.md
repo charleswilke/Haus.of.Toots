@@ -4,7 +4,7 @@ Custom Needlepoint Canvases, Made Just for You
 
 ## About
 
-A charming, interactive website for Jessie Toots' custom needlepoint canvas designs. Features delightful animations including scroll-stitching effects, needle hover states, cursor trails, and an animated winking house logo.
+A charming, interactive website for Jessie Wilke's custom needlepoint canvas designs. Features delightful animations including scroll-stitching effects, needle hover states, cursor trails, and an animated winking house logo.
 
 ## Features
 
