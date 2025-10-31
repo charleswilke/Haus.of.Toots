@@ -744,9 +744,21 @@ section {
         max-width: 220px;
     }
     
+    .stitched-border {
+        padding: var(--spacing-md);
+    }
+    
     .hero-content,
     .request-content {
-        padding: var(--spacing-md);
+        padding: 0;
+    }
+    
+    .hero-description {
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .hero-title {
+        margin-bottom: var(--spacing-xs);
     }
     
     .embroidery-hoop {
@@ -762,6 +774,9 @@ section {
     .cta-button {
         width: 100%;
         justify-content: center;
+        font-size: 1rem;
+        padding: 0.875rem 1.5rem;
+        white-space: nowrap;
     }
     
     .carousel-nav {
