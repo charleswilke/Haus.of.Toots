@@ -33,33 +33,6 @@ A charming, interactive website for Jessie Wilke's custom needlepoint canvas des
 - Optimized for all screen sizes
 - Touch-friendly interactive elements
 
-## Deployment
-
-### Setting up GitHub Actions for DreamHost
-
-This site includes automatic deployment to DreamHost via SFTP using GitHub Actions.
-
-#### How it Works
-
-1. Push changes to the `main` branch
-2. GitHub Actions automatically triggers the deployment workflow
-3. Files are uploaded to your DreamHost server via SFTP to `/home/jessieToots/hausoftoots.com/`
-4. Your site is live at hausoftoots.com!
-
-You can also manually trigger deployment from the Actions tab in GitHub.
-
-### Manual Deployment
-
-If you prefer to deploy manually:
-
-1. Connect to your DreamHost server via SFTP:
-   - Host: `chawil155.dreamhosters.com`
-   - Username: `jessieToots`
-   - Port: 21 (FTPS)
-   - Remote directory: `/home/jessieToots/hausoftoots.com/`
-2. Upload all files (`index.html`, `styles.css`, `script.js`, and the `images` folder)
-3. Your site is ready!
-
 ## Local Development
 
 No build process required! Simply:
@@ -96,18 +69,6 @@ The color palette is defined in CSS variables in `styles.css`:
 --cream: #FAF8F5;
 --linen: #F5F1EC;
 ```
-
-### Google Form
-
-Update the Google Form URL in `index.html` (line with the Request Form button href).
-
-### Gallery Images
-
-Replace the placeholder SVG content in the gallery items with your actual needlepoint design images.
-
-### Instagram Handle
-
-Update the Instagram link in the footer section if needed.
 
 ## Browser Support
 
