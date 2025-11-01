@@ -510,6 +510,7 @@ section {
 
 .gallery {
     text-align: center;
+    background: var(--linen);
 }
 
 .gallery-grid {
@@ -629,7 +630,7 @@ section {
    =================================== */
 
 .request {
-    background: var(--linen);
+    /* Canvas background - inherited from body */
 }
 
 .request-content {
