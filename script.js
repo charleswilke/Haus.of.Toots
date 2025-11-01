@@ -378,6 +378,162 @@ function animateCrossStitchPattern() {
 }
 
 // ===================================
+// LIGHTBOX GALLERY
+// ===================================
+
+class LightboxGallery {
+    constructor() {
+        this.lightbox = document.getElementById('lightbox');
+        this.lightboxImage = this.lightbox.querySelector('.lightbox-image');
+        this.lightboxCaption = this.lightbox.querySelector('.lightbox-caption');
+        this.closeBtn = this.lightbox.querySelector('.lightbox-close');
+        this.prevBtn = this.lightbox.querySelector('.lightbox-prev');
+        this.nextBtn = this.lightbox.querySelector('.lightbox-next');
+        
+        this.currentImages = [];
+        this.currentIndex = 0;
+        this.categoryName = '';
+        
+        // Gallery data
+        this.galleries = {
+            pets: {
+                name: 'Pet Caricatures',
+                images: [
+                    { src: 'images/recent-canvases/wilson.jpg', alt: 'Custom pet canvas - Wilson' },
+                    { src: 'images/recent-canvases/maziesmiley.jpg', alt: 'Custom pet canvas - Mazie' }
+                ]
+            },
+            events: {
+                name: 'Events',
+                images: [
+                    { src: 'images/recent-canvases/campflannelfizz.jpg', alt: 'Event canvas' }
+                ]
+            },
+            popculture: {
+                name: 'Pop Culture',
+                images: [
+                    { src: 'images/recent-canvases/duckhunt.jpg', alt: 'Pop culture canvas - Duck Hunt' },
+                    { src: 'images/recent-canvases/peewee.jpg', alt: 'Pop culture canvas - Pee Wee' },
+                    { src: 'images/recent-canvases/sephora.jpg', alt: 'Pop culture canvas - Sephora' },
+                    { src: 'images/recent-canvases/sephoraxmas.jpg', alt: 'Pop culture canvas - Sephora Christmas' }
+                ]
+            },
+            customizations: {
+                name: 'Customizations',
+                images: [
+                    { src: 'images/recent-canvases/ization-pinehurst1.jpg', alt: 'Original Pinehurst design' },
+                    { src: 'images/recent-canvases/ization-pinehurst2.jpg', alt: 'Customized Pinehurst design' },
+                    { src: 'images/recent-canvases/ization-stocking1.jpg', alt: 'Original stocking design' },
+                    { src: 'images/recent-canvases/ization-stocking2.jpg', alt: 'Customized stocking design' }
+                ]
+            }
+        };
+        
+        this.init();
+    }
+    
+    init() {
+        // Add click handlers to gallery items
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                const category = item.dataset.category;
+                this.openGallery(category);
+            });
+            
+            // Keyboard accessibility
+            item.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    const category = item.dataset.category;
+                    this.openGallery(category);
+                }
+            });
+        });
+        
+        // Navigation handlers
+        this.closeBtn.addEventListener('click', () => this.close());
+        this.prevBtn.addEventListener('click', () => this.navigate(-1));
+        this.nextBtn.addEventListener('click', () => this.navigate(1));
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (!this.lightbox.classList.contains('active')) return;
+            
+            switch(e.key) {
+                case 'Escape':
+                    this.close();
+                    break;
+                case 'ArrowLeft':
+                    this.navigate(-1);
+                    break;
+                case 'ArrowRight':
+                    this.navigate(1);
+                    break;
+            }
+        });
+        
+        // Close on background click
+        this.lightbox.addEventListener('click', (e) => {
+            if (e.target === this.lightbox) {
+                this.close();
+            }
+        });
+    }
+    
+    openGallery(category) {
+        const gallery = this.galleries[category];
+        if (!gallery) return;
+        
+        this.currentImages = gallery.images;
+        this.categoryName = gallery.name;
+        this.currentIndex = 0;
+        
+        this.showImage();
+        this.lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        
+        // Focus close button for accessibility
+        this.closeBtn.focus();
+    }
+    
+    showImage() {
+        if (this.currentImages.length === 0) return;
+        
+        const image = this.currentImages[this.currentIndex];
+        this.lightboxImage.src = image.src;
+        this.lightboxImage.alt = image.alt;
+        this.lightboxCaption.textContent = `${this.categoryName} - ${this.currentIndex + 1} of ${this.currentImages.length}`;
+        
+        // Show/hide navigation buttons
+        if (this.currentImages.length <= 1) {
+            this.prevBtn.style.display = 'none';
+            this.nextBtn.style.display = 'none';
+        } else {
+            this.prevBtn.style.display = 'flex';
+            this.nextBtn.style.display = 'flex';
+        }
+    }
+    
+    navigate(direction) {
+        this.currentIndex += direction;
+        
+        // Loop around
+        if (this.currentIndex < 0) {
+            this.currentIndex = this.currentImages.length - 1;
+        } else if (this.currentIndex >= this.currentImages.length) {
+            this.currentIndex = 0;
+        }
+        
+        this.showImage();
+    }
+    
+    close() {
+        this.lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+// ===================================
 // INITIALIZE EVERYTHING
 // ===================================
 
@@ -395,6 +551,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Rotating carousel (auto-rotating images in hoops)
     const rotatingCarousel = new RotatingCarousel();
+    
+    // Lightbox gallery
+    const lightboxGallery = new LightboxGallery();
     
     // Needle hover effects
     initNeedleHovers();

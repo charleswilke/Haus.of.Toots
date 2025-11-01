@@ -78,9 +78,9 @@
     <section class="about">
         <div class="container">
             <div class="about-content">
-                <h2 class="section-title">Needlepoint, personal.</h2>
+                <h2 class="section-title">Needlepoint, it's <em>personal</em>.</h2>
                 <div class="about-text">
-                    <p>I create custom needlepoint canvases that are as unique as the people who request and stitch them.<br />A beloved pet, a cherished place, or peculiar idea, if it means something to you <strong>let's bring it to canvas!</strong></p>
+                    <p>I create custom needlepoint canvases that are as unique as the people who request and stitch them.<br />A beloved pet, a cherished place, or peculiar idea, if it means something to you <strong>let's take it to the canvas!</strong></p>
                 </div>
             </div>
         </div>
@@ -92,7 +92,7 @@
             <h2 class="section-title">Recent Pieces</h2>
             
             <div class="gallery-grid">
-                <div class="gallery-item">
+                <div class="gallery-item" data-category="pets" role="button" tabindex="0" aria-label="View Pet Caricatures gallery">
                     <div class="embroidery-hoop gallery-hoop">
                         <div class="hoop-ring"></div>
                         <div class="canvas-placeholder rotating-carousel">
@@ -100,10 +100,10 @@
                             <img src="images/recent-canvases/maziesmiley.jpg" alt="Custom pet canvas" class="gallery-image rotating-image">
                         </div>
                     </div>
-                    <p class="gallery-caption">Pet Caricatures</p>
+                    <p class="gallery-caption">Custom Pet Portraits</p>
                 </div>
                 
-                <div class="gallery-item">
+                <div class="gallery-item" data-category="events" role="button" tabindex="0" aria-label="View Events gallery">
                     <div class="embroidery-hoop gallery-hoop">
                         <div class="hoop-ring"></div>
                         <div class="canvas-placeholder">
@@ -113,7 +113,7 @@
                     <p class="gallery-caption">Events</p>
                 </div>
                 
-                <div class="gallery-item">
+                <div class="gallery-item" data-category="popculture" role="button" tabindex="0" aria-label="View Pop Culture gallery">
                     <div class="embroidery-hoop gallery-hoop">
                         <div class="hoop-ring"></div>
                         <div class="canvas-placeholder rotating-carousel">
@@ -126,7 +126,7 @@
                     <p class="gallery-caption">Pop Culture</p>
                 </div>
                 
-                <div class="gallery-item">
+                <div class="gallery-item" data-category="customizations" role="button" tabindex="0" aria-label="View Customizations gallery">
                     <div class="embroidery-hoop gallery-hoop">
                         <div class="hoop-ring"></div>
                         <div class="canvas-placeholder rotating-carousel">
@@ -190,6 +190,17 @@
             </div>
         </div>
     </footer>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Image gallery">
+        <button class="lightbox-close" aria-label="Close gallery">&times;</button>
+        <button class="lightbox-prev" aria-label="Previous image">&#8249;</button>
+        <button class="lightbox-next" aria-label="Next image">&#8250;</button>
+        <div class="lightbox-content">
+            <img src="" alt="" class="lightbox-image">
+            <div class="lightbox-caption"></div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
