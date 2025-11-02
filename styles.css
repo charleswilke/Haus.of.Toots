@@ -422,6 +422,93 @@ section {
     font-weight: 600;
 }
 
+/* About Cards - Choose Your Adventure Style */
+.about-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-lg);
+}
+
+.about-cards-three {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.about-card {
+    background: var(--white);
+    padding: 0;
+    border-radius: 20px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s var(--transition-smooth);
+    border: 2px solid transparent;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.about-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 24px rgba(255, 107, 122, 0.15);
+    border-color: var(--coral-light);
+}
+
+.about-card-header {
+    background: linear-gradient(135deg, var(--coral-primary) 0%, var(--coral-dark) 100%);
+    padding: var(--spacing-md) var(--spacing-sm);
+    text-align: center;
+}
+
+.about-card-header h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1.4;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.about-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-sm);
+    flex: 1;
+}
+
+.about-card-content p {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--neutral-dark);
+    line-height: 1.6;
+}
+
+.card-footnote {
+    font-size: 0.8125rem !important;
+    color: var(--neutral-mid) !important;
+    font-style: italic;
+    line-height: 1.5 !important;
+    margin-top: -1.5rem !important;
+}
+
+.about-card-cta {
+    margin-top: auto;
+    padding-top: var(--spacing-md);
+    border-top: 2px dashed var(--neutral-light);
+    font-size: 1rem !important;
+}
+
+@media (max-width: 968px) {
+    .about-cards {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+    
+    .about-cards-three {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* ===================================
    EMBROIDERY HOOP
    =================================== */
@@ -1031,6 +1118,177 @@ section {
     .lightbox-caption {
         font-size: 1rem;
     }
+}
+
+/* ===================================
+   EMAIL LINK STYLING
+   =================================== */
+
+.about-text a[href^="mailto:"],
+.about-card a[href^="mailto:"] {
+    position: relative;
+    display: inline;
+    color: var(--coral-primary);
+    font-weight: 700;
+    text-decoration: none;
+    padding: 0.15rem 0.25rem;
+    background: linear-gradient(
+        90deg,
+        var(--coral-light) 0%,
+        var(--coral-primary) 25%,
+        var(--coral-dark) 50%,
+        var(--coral-primary) 75%,
+        var(--coral-light) 100%
+    );
+    background-size: 200% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: threadShimmer 3s ease-in-out infinite;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+@keyframes threadShimmer {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+.about-text a[href^="mailto:"]::before,
+.about-card a[href^="mailto:"]::before {
+    content: '✉️';
+    position: absolute;
+    left: -30px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2em;
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.about-text a[href^="mailto:"]::after,
+.about-card a[href^="mailto:"]::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 14px;
+    pointer-events: none;
+}
+
+.about-text a[href^="mailto:"]:hover,
+.about-card a[href^="mailto:"]:hover {
+    transform: translateY(-3px) scale(1.05);
+    filter: drop-shadow(0 4px 12px rgba(255, 107, 122, 0.4));
+    animation: threadShimmer 1.5s ease-in-out infinite, emailBounce 0.6s ease;
+}
+
+.about-text a[href^="mailto:"]:hover::before,
+.about-card a[href^="mailto:"]:hover::before {
+    opacity: 1;
+    left: -35px;
+    animation: envelopeFloat 2s ease-in-out infinite;
+}
+
+/* Container for the stitch SVG */
+.email-stitch-container {
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 14px;
+    pointer-events: none;
+    overflow: visible;
+}
+
+.email-stitch-container svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+@keyframes emailBounce {
+    0%, 100% { transform: translateY(-3px) scale(1.05); }
+    25% { transform: translateY(-5px) scale(1.08); }
+    50% { transform: translateY(-3px) scale(1.05); }
+    75% { transform: translateY(-5px) scale(1.08); }
+}
+
+@keyframes envelopeFloat {
+    0%, 100% { transform: translateY(-50%) rotate(0deg); }
+    25% { transform: translateY(-55%) rotate(-5deg); }
+    75% { transform: translateY(-45%) rotate(5deg); }
+}
+
+/* Active/Focus state */
+.about-text a[href^="mailto:"]:active,
+.about-card a[href^="mailto:"]:active {
+    transform: translateY(-1px) scale(1.02);
+}
+
+.about-text a[href^="mailto:"]:focus,
+.about-card a[href^="mailto:"]:focus {
+    outline: 3px dashed var(--coral-primary);
+    outline-offset: 6px;
+}
+
+/* Mobile adjustments for email link */
+@media (max-width: 640px) {
+    .about-text a[href^="mailto:"]::before,
+    .about-card a[href^="mailto:"]::before {
+        left: -25px;
+        font-size: 1em;
+    }
+    
+    .about-text a[href^="mailto:"]:hover::before,
+    .about-card a[href^="mailto:"]:hover::before {
+        left: -28px;
+    }
+}
+
+/* ===================================
+   OTHER INLINE LINKS (like inquiry form)
+   =================================== */
+
+.about-text a:not([href^="mailto:"]),
+.about-card a:not([href^="mailto:"]) {
+    position: relative;
+    display: inline;
+    color: var(--coral-primary);
+    font-weight: 600;
+    text-decoration: none;
+    padding: 0.15rem 0.25rem;
+    background: linear-gradient(
+        90deg,
+        var(--coral-light) 0%,
+        var(--coral-primary) 25%,
+        var(--coral-dark) 50%,
+        var(--coral-primary) 75%,
+        var(--coral-light) 100%
+    );
+    background-size: 200% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: threadShimmer 3s ease-in-out infinite;
+    transition: all 0.3s ease;
+}
+
+
+.about-text a:not([href^="mailto:"]):hover,
+.about-card a:not([href^="mailto:"]):hover {
+    animation: threadShimmer 1.5s ease-in-out infinite;
+}
+
+.about-text a:not([href^="mailto:"]):focus,
+.about-card a:not([href^="mailto:"]):focus {
+    outline: 2px solid var(--coral-primary);
+    outline-offset: 4px;
 }
 
 /* Print styles */

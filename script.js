@@ -25,9 +25,11 @@ class ScrollStitchSidebar {
         this.stitchContainer = document.getElementById('stitchContainer');
         this.needle = document.getElementById('needle');
         this.stitches = [];
-        this.numStitches = 65; // Number of stitches along the sidebar - more stitches = tighter spacing
         this.stitchSize = 3.36; // Size of each stitch (42% of original 8)
-        this.spacing = 1000 / this.numStitches; // Spacing between stitches in SVG units
+        // Authentic needlepoint spacing: stitches share holes
+        // The vertical spacing equals the stitch size so top-right of one = bottom-left of next
+        this.spacing = this.stitchSize * 2; // Vertical spacing between stitch centers
+        this.numStitches = Math.floor(1000 / this.spacing); // Calculate how many stitches fit
         this.stitchSpeed = 0.8; // Speed multiplier - higher = stitches appear closer together as you scroll
         
         this.createStitches();
@@ -37,7 +39,7 @@ class ScrollStitchSidebar {
     createStitches() {
         // Create all X stitch elements
         for (let i = 0; i < this.numStitches; i++) {
-            const yPos = (i + 0.5) * this.spacing;
+            const yPos = i * this.spacing;
             const stitch = this.createXStitch(yPos, i);
             this.stitches.push(stitch);
             this.stitchContainer.appendChild(stitch.group);
@@ -276,6 +278,168 @@ class RotatingCarousel {
     }
 }
 
+
+// ===================================
+// EMAIL LINK STITCHING EFFECT
+// ===================================
+
+class EmailStitchEffect {
+    constructor(emailLink) {
+        this.emailLink = emailLink;
+        this.stitches = [];
+        this.numStitches = 0;
+        this.currentStitch = 0;
+        this.stitchSize = 4;
+        // Authentic needlepoint spacing: stitches share holes
+        this.spacing = this.stitchSize * 2; // Same as scroll stitches - tight grouping
+        this.animationFrame = null;
+        this.isAnimating = false;
+        
+        this.createStitchContainer();
+        this.setupHoverListeners();
+    }
+    
+    createStitchContainer() {
+        // Create SVG container
+        this.container = document.createElement('div');
+        this.container.className = 'email-stitch-container';
+        
+        this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        this.svg.setAttribute('preserveAspectRatio', 'none');
+        
+        this.stitchGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        this.svg.appendChild(this.stitchGroup);
+        this.container.appendChild(this.svg);
+        
+        this.emailLink.style.position = 'relative';
+        this.emailLink.appendChild(this.container);
+    }
+    
+    setupHoverListeners() {
+        this.emailLink.addEventListener('mouseenter', () => {
+            if (!this.isAnimating) {
+                this.startStitching();
+            }
+        });
+        
+        this.emailLink.addEventListener('mouseleave', () => {
+            this.resetStitches();
+        });
+    }
+    
+    startStitching() {
+        // Calculate number of stitches based on link width
+        const linkWidth = this.emailLink.offsetWidth;
+        this.numStitches = Math.floor(linkWidth / this.spacing);
+        
+        // Clear existing stitches
+        this.stitchGroup.innerHTML = '';
+        this.stitches = [];
+        this.currentStitch = 0;
+        this.isAnimating = true;
+        
+        // Create stitch elements
+        for (let i = 0; i < this.numStitches; i++) {
+            const xPos = (i * this.spacing) + (this.spacing / 2);
+            const stitch = this.createXStitch(xPos);
+            this.stitches.push(stitch);
+            this.stitchGroup.appendChild(stitch.group);
+        }
+        
+        // Start animation
+        this.animateNextStitch();
+    }
+    
+    createXStitch(xPos) {
+        const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        
+        // Single diagonal stroke: bottom-left to top-right (needlepoint style)
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', xPos - this.stitchSize);
+        line.setAttribute('y1', 7 + this.stitchSize);
+        line.setAttribute('x2', xPos - this.stitchSize);
+        line.setAttribute('y2', 7 + this.stitchSize);
+        line.setAttribute('stroke', '#FF6B7A');
+        line.setAttribute('stroke-width', '2.5');
+        line.setAttribute('stroke-linecap', 'round');
+        line.setAttribute('opacity', '0');
+        line.style.filter = 'drop-shadow(0.5px 1px 1px rgba(0, 0, 0, 0.2))';
+        
+        group.appendChild(line);
+        
+        return {
+            group: group,
+            line: line,
+            xPos: xPos,
+            progress: 0
+        };
+    }
+    
+    animateNextStitch() {
+        if (this.currentStitch >= this.stitches.length) {
+            this.isAnimating = false;
+            return;
+        }
+        
+        const stitch = this.stitches[this.currentStitch];
+        const duration = 80; // milliseconds per stitch
+        const startTime = performance.now();
+        
+        const animate = (currentTime) => {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            // Ease out cubic for smooth deceleration
+            const easedProgress = 1 - Math.pow(1 - progress, 3);
+            
+            // Fade in the line as it starts drawing
+            if (progress > 0) {
+                stitch.line.setAttribute('opacity', '1');
+            }
+            
+            // Animate the stitch growing from bottom-left to top-right
+            const size = this.stitchSize;
+            const centerX = stitch.xPos;
+            const centerY = 7;
+            
+            stitch.line.setAttribute('x2', centerX - size + (size * 2 * easedProgress));
+            stitch.line.setAttribute('y2', centerY + size - (size * 2 * easedProgress));
+            
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            } else {
+                // Move to next stitch
+                this.currentStitch++;
+                this.animateNextStitch();
+            }
+        };
+        
+        requestAnimationFrame(animate);
+    }
+    
+    resetStitches() {
+        this.isAnimating = false;
+        if (this.animationFrame) {
+            cancelAnimationFrame(this.animationFrame);
+        }
+        
+        // Fade out existing stitches
+        this.stitches.forEach((stitch, index) => {
+            setTimeout(() => {
+                if (stitch.group.parentNode) {
+                    stitch.group.style.transition = 'opacity 0.2s ease';
+                    stitch.group.style.opacity = '0';
+                }
+            }, index * 15);
+        });
+        
+        // Clear after fade
+        setTimeout(() => {
+            this.stitchGroup.innerHTML = '';
+            this.stitches = [];
+        }, 300);
+    }
+}
 
 // ===================================
 // NEEDLE HOVER EFFECTS
@@ -554,6 +718,12 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Lightbox gallery
     const lightboxGallery = new LightboxGallery();
+    
+    // Email link stitching effect - apply to all links in about section
+    const aboutLinks = document.querySelectorAll('.about-text a, .about-card a');
+    aboutLinks.forEach(link => {
+        const linkStitch = new EmailStitchEffect(link);
+    });
     
     // Needle hover effects
     initNeedleHovers();
