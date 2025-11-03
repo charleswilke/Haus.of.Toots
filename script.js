@@ -542,10 +542,10 @@ function animateCrossStitchPattern() {
 }
 
 // ===================================
-// LIGHTBOX GALLERY
+// EXPANDABLE GALLERY CARDS
 // ===================================
 
-class LightboxGallery {
+class ExpandableGallery {
     constructor() {
         this.lightbox = document.getElementById('lightbox');
         this.lightboxImage = this.lightbox.querySelector('.lightbox-image');
@@ -557,38 +557,53 @@ class LightboxGallery {
         this.currentImages = [];
         this.currentIndex = 0;
         this.categoryName = '';
+        this.currentExpandedCard = null;
         
-        // Gallery data
+        // Gallery data with all images from new folders
         this.galleries = {
-            pets: {
-                name: 'Pet Caricatures',
+            'custom-canvases': {
+                name: 'Custom Canvases',
                 images: [
-                    { src: 'images/recent-canvases/wilson.jpg', alt: 'Custom pet canvas - Wilson' },
-                    { src: 'images/recent-canvases/maziesmiley.jpg', alt: 'Custom pet canvas - Mazie' }
+                    { src: 'images/recent-canvases/1CustomCanvases/Winston.jpeg', thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Winston.jpg', alt: 'Winston' },
+                    { src: 'images/recent-canvases/1CustomCanvases/Mazie-and-Smiley.jpeg', thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Mazie-and-Smiley.jpg', alt: 'Mazie & Smiley' },
+                    { src: 'images/recent-canvases/1CustomCanvases/CampFlannelFizz.jpeg', thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-CampFlannelFizz.jpg', alt: 'Camp Flannel & Fizz' },
+                    { src: 'images/recent-canvases/1CustomCanvases/CowboyBear.jpeg', thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-CowboyBear.jpg', alt: 'Cowboy Bear' },
+                    { src: 'images/recent-canvases/1CustomCanvases/HappyHollowRectangle.jpeg', thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-HappyHollowRectangle.jpg', alt: 'Happy Hollow (Rectangle)' },
+                    { src: 'images/recent-canvases/1CustomCanvases/HappyHollowRound.jpeg', thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-HappyHollowRound.jpg', alt: 'Happy Hollow (Round)' },
+                    { src: 'images/recent-canvases/1CustomCanvases/Mazie.jpeg', thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Mazie.jpg', alt: 'Mazie' },
+                    { src: 'images/recent-canvases/1CustomCanvases/MommyOnly.jpeg', thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-MommyOnly.jpg', alt: 'Mommy Only' },
+                    { src: 'images/recent-canvases/1CustomCanvases/Smiley.jpeg', thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Smiley.jpg', alt: 'Smiley' },
+                    { src: 'images/recent-canvases/1CustomCanvases/YouAreMySunshine2.jpeg', thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-YouAreMySunshine2.jpg', alt: 'You Are My Sunshine' }
                 ]
             },
-            events: {
-                name: 'Events',
+            'hot-originals': {
+                name: 'HoT Originals',
                 images: [
-                    { src: 'images/recent-canvases/campflannelfizz.jpg', alt: 'Event canvas' }
+                    { src: 'images/recent-canvases/2HoT-originals/SephoraHoliday.jpeg', thumbnail: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SephoraHoliday.jpg', alt: 'Sephora (Holiday)' },
+                    { src: 'images/recent-canvases/2HoT-originals/SephoraStandard.jpg', thumbnail: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SephoraStandard.jpg', alt: 'Sephora (Standard)' },
+                    { src: 'images/recent-canvases/2HoT-originals/SharpestTool.jpeg', thumbnail: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SharpestTool.jpg', alt: 'Sharpest Tool' }
                 ]
             },
-            popculture: {
-                name: 'Pop Culture',
+            'digital-charts': {
+                name: 'Painted from Purchased Digital Charts',
                 images: [
-                    { src: 'images/recent-canvases/duckhunt.jpg', alt: 'Pop culture canvas - Duck Hunt' },
-                    { src: 'images/recent-canvases/peewee.jpg', alt: 'Pop culture canvas - Pee Wee' },
-                    { src: 'images/recent-canvases/sephora.jpg', alt: 'Pop culture canvas - Sephora' },
-                    { src: 'images/recent-canvases/sephoraxmas.jpg', alt: 'Pop culture canvas - Sephora Christmas' }
+                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/DuckHunt-by-TurtleStitchShop-Etsy.jpeg', thumbnail: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-DuckHunt-by-TurtleStitchShop-Etsy.jpg', alt: 'Duck Hunt (by TurtleStitchShop on Etsy)' },
+                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/FuckOff-by-HoopModernStitch-Etsy.jpeg', thumbnail: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-FuckOff-by-HoopModernStitch-Etsy.jpg', alt: 'Fuck Off (by HoopModernStitch on Etsy)' },
+                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/Kermit-w-PearlEarring-by-CherryMarryStore-Etsy.jpeg', thumbnail: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-Kermit-w-PearlEarring-by-CherryMarryStore-Etsy.jpg', alt: 'Kermit with the Pearl Earring (by CherryMarryStore on Etsy)' },
+                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PeeWee-by-StitchedIts-Etsy.jpeg', thumbnail: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PeeWee-by-StitchedIts-Etsy.jpg', alt: 'Pee-Wee Herman (by StitchedIts on Etsy)' },
+                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PixelHearts-by-PixellPatterns-Etsy.jpeg', thumbnail: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PixelHearts-by-PixellPatterns-Etsy.jpg', alt: 'Pixel Hearts (by PixellPatterns on Etsy)' },
+                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PopeKermit-by-CherryMarryStore.jpeg', thumbnail: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PopeKermit-by-CherryMarryStore.jpg', alt: 'Pope Kermit (by CherryMarryStore on Etsy)' }
                 ]
             },
-            customizations: {
-                name: 'Customizations',
+            'customizations': {
+                name: 'Canvas Customizations',
                 images: [
-                    { src: 'images/recent-canvases/ization-pinehurst1.jpg', alt: 'Original Pinehurst design' },
-                    { src: 'images/recent-canvases/ization-pinehurst2.jpg', alt: 'Customized Pinehurst design' },
-                    { src: 'images/recent-canvases/ization-stocking1.jpg', alt: 'Original stocking design' },
-                    { src: 'images/recent-canvases/ization-stocking2.jpg', alt: 'Customized stocking design' }
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Pinehurst-Customization-Before.jpeg', thumbnail: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Pinehurst-Customization-Before.jpg', alt: 'Pinehurst (Before)' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Pinehurst-Customization-After.jpeg', thumbnail: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Pinehurst-Customization-After.jpg', alt: 'Pinehurst (After)' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-Before.jpeg', thumbnail: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Lance-StockingCustomization-Before.jpg', alt: 'Lance Stocking (Before)' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-After.jpg', thumbnail: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Lance-StockingCustomization-After.jpg', alt: 'Lance Stocking (After)' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-After2.jpg', thumbnail: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Lance-StockingCustomization-After2.jpg', alt: 'Lance Stocking (After 2)' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Kathryn-StockingCustomization-After.jpeg', thumbnail: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Kathryn-StockingCustomization-After.jpg', alt: 'Kathryn Stocking (After)' }
                 ]
             }
         };
@@ -597,25 +612,39 @@ class LightboxGallery {
     }
     
     init() {
-        // Add click handlers to gallery items
-        document.querySelectorAll('.gallery-item').forEach(item => {
-            item.addEventListener('click', (e) => {
-                const category = item.dataset.category;
-                this.openGallery(category);
-            });
+        // Add click handlers to gallery cards
+        document.querySelectorAll('.gallery-card').forEach(card => {
+            // Make sure we only have one listener per card
+            const handleClick = (e) => {
+                // Don't toggle if clicking a thumbnail
+                if (e.target.closest('.thumbnail-item')) return;
+                
+                // Only process clicks on this specific card's preview area
+                if (!e.target.closest('.gallery-card-preview')) {
+                    return;
+                }
+                
+                e.stopPropagation();
+                e.preventDefault();
+                const galleryId = card.dataset.gallery;
+                this.toggleGallery(card, galleryId);
+            };
+            
+            card.addEventListener('click', handleClick);
             
             // Keyboard accessibility
-            item.addEventListener('keypress', (e) => {
+            card.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
-                    const category = item.dataset.category;
-                    this.openGallery(category);
+                    e.stopPropagation();
+                    const galleryId = card.dataset.gallery;
+                    this.toggleGallery(card, galleryId);
                 }
             });
         });
         
-        // Navigation handlers
-        this.closeBtn.addEventListener('click', () => this.close());
+        // Lightbox navigation handlers
+        this.closeBtn.addEventListener('click', () => this.closeLightbox());
         this.prevBtn.addEventListener('click', () => this.navigate(-1));
         this.nextBtn.addEventListener('click', () => this.navigate(1));
         
@@ -625,7 +654,7 @@ class LightboxGallery {
             
             switch(e.key) {
                 case 'Escape':
-                    this.close();
+                    this.closeLightbox();
                     break;
                 case 'ArrowLeft':
                     this.navigate(-1);
@@ -639,18 +668,119 @@ class LightboxGallery {
         // Close on background click
         this.lightbox.addEventListener('click', (e) => {
             if (e.target === this.lightbox) {
-                this.close();
+                this.closeLightbox();
             }
         });
     }
     
-    openGallery(category) {
-        const gallery = this.galleries[category];
+    toggleGallery(card, galleryId) {
+        const gallery = this.galleries[galleryId];
+        if (!gallery) return;
+        
+        const isExpanded = card.getAttribute('aria-expanded') === 'true';
+        
+        // Close ALL other expanded cards first
+        document.querySelectorAll('.gallery-card[aria-expanded="true"]').forEach(expandedCard => {
+            if (expandedCard !== card) {
+                this.collapseCard(expandedCard);
+            }
+        });
+        
+        if (isExpanded) {
+            // Collapse this card
+            this.collapseCard(card);
+        } else {
+            // Expand this card
+            this.expandCard(card, galleryId, gallery);
+        }
+    }
+    
+    expandCard(card, galleryId, gallery) {
+        card.setAttribute('aria-expanded', 'true');
+        this.currentExpandedCard = card;
+        
+        // Generate thumbnails
+        const thumbnailContainer = card.querySelector('.gallery-card-thumbnails');
+        const thumbnailsGrid = document.createElement('div');
+        thumbnailsGrid.className = 'thumbnails-grid';
+        
+        gallery.images.forEach((image, index) => {
+            const thumbnail = document.createElement('div');
+            thumbnail.className = 'thumbnail-item';
+            thumbnail.setAttribute('role', 'button');
+            thumbnail.setAttribute('tabindex', '0');
+            thumbnail.setAttribute('aria-label', `View ${image.alt}`);
+            
+            const img = document.createElement('img');
+            img.src = image.thumbnail || image.src; // Use thumbnail if available, fallback to full
+            img.alt = image.alt;
+            img.loading = 'lazy';
+            
+            thumbnail.appendChild(img);
+            
+            // Click to open in lightbox
+            thumbnail.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.openLightbox(galleryId, index);
+            });
+            
+            // Keyboard support
+            thumbnail.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.openLightbox(galleryId, index);
+                }
+            });
+            
+            thumbnailsGrid.appendChild(thumbnail);
+        });
+        
+        thumbnailContainer.innerHTML = '';
+        thumbnailContainer.appendChild(thumbnailsGrid);
+        
+        // Update preview text - preserve the title
+        const previewText = card.querySelector('.gallery-preview-text');
+        if (previewText) {
+            const title = gallery.name;
+            previewText.innerHTML = `<strong>${title}</strong> <span class="gallery-action-text">(Click a thumbnail to view full size)</span>`;
+        }
+    }
+    
+    collapseCard(card) {
+        card.setAttribute('aria-expanded', 'false');
+        const thumbnailContainer = card.querySelector('.gallery-card-thumbnails');
+        
+        // Clear thumbnails after animation
+        setTimeout(() => {
+            if (card.getAttribute('aria-expanded') === 'false') {
+                thumbnailContainer.innerHTML = '';
+            }
+        }, 500);
+        
+        // Reset preview text - preserve the title
+        const previewText = card.querySelector('.gallery-preview-text');
+        if (previewText) {
+            const galleryId = card.dataset.gallery;
+            const gallery = this.galleries[galleryId];
+            if (gallery) {
+                const title = gallery.name;
+                previewText.innerHTML = `<strong>${title}</strong> <span class="gallery-action-text">(Click to view all designs)</span>`;
+            }
+        }
+        
+        if (this.currentExpandedCard === card) {
+            this.currentExpandedCard = null;
+        }
+    }
+    
+    openLightbox(galleryId, startIndex = 0) {
+        const gallery = this.galleries[galleryId];
         if (!gallery) return;
         
         this.currentImages = gallery.images;
         this.categoryName = gallery.name;
-        this.currentIndex = 0;
+        this.currentIndex = startIndex;
         
         this.showImage();
         this.lightbox.classList.add('active');
@@ -666,7 +796,7 @@ class LightboxGallery {
         const image = this.currentImages[this.currentIndex];
         this.lightboxImage.src = image.src;
         this.lightboxImage.alt = image.alt;
-        this.lightboxCaption.textContent = `${this.categoryName} - ${this.currentIndex + 1} of ${this.currentImages.length}`;
+        this.lightboxCaption.textContent = `${image.alt} — ${this.categoryName} (${this.currentIndex + 1} of ${this.currentImages.length})`;
         
         // Show/hide navigation buttons
         if (this.currentImages.length <= 1) {
@@ -691,7 +821,7 @@ class LightboxGallery {
         this.showImage();
     }
     
-    close() {
+    closeLightbox() {
         this.lightbox.classList.remove('active');
         document.body.style.overflow = '';
     }
@@ -716,8 +846,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Rotating carousel (auto-rotating images in hoops)
     const rotatingCarousel = new RotatingCarousel();
     
-    // Lightbox gallery
-    const lightboxGallery = new LightboxGallery();
+    // Expandable gallery cards with lightbox
+    const expandableGallery = new ExpandableGallery();
     
     // Email link stitching effect - apply to all links in about section
     const aboutLinks = document.querySelectorAll('.about-text a, .about-card a');

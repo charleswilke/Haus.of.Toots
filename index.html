@@ -120,7 +120,7 @@
     <!-- How It Works Section -->
     <section class="how-it-works">
         <div class="container">
-            <h2 class="section-title">✨ How It Works</h2>
+            <h2 class="section-title">✨ What to expect when you're expecting<br><small style="font-size: 0.5em; font-weight: 400; opacity: 0.8;">(a custom needlepoint canvas)</small></h2>
             
             <div class="steps-list">
                 <div class="step-item">
@@ -201,52 +201,67 @@
         <div class="container">
             <h2 class="section-title">Recent Pieces</h2>
             
-            <div class="gallery-grid">
-                <div class="gallery-item" data-category="pets" role="button" tabindex="0" aria-label="View Pet Caricatures gallery">
-                    <div class="embroidery-hoop gallery-hoop">
-                        <div class="hoop-ring"></div>
-                        <div class="canvas-placeholder rotating-carousel">
-                            <img src="images/recent-canvases/wilson.jpg" alt="Custom pet canvas" class="gallery-image rotating-image active">
-                            <img src="images/recent-canvases/maziesmiley.jpg" alt="Custom pet canvas" class="gallery-image rotating-image">
+            <div class="gallery-cards">
+                <!-- Gallery Card 1: Custom Canvases -->
+                <div class="gallery-card" data-gallery="custom-canvases" role="button" tabindex="0" aria-expanded="false">
+                    <div class="gallery-card-preview">
+                        <div class="gallery-preview-image rotating-carousel">
+                            <img src="images/recent-canvases/1CustomCanvases/Winston.jpeg" alt="Custom canvas" class="rotating-image active">
+                            <img src="images/recent-canvases/1CustomCanvases/Mazie-and-Smiley.jpeg" alt="Custom canvas" class="rotating-image">
+                            <img src="images/recent-canvases/1CustomCanvases/CampFlannelFizz.jpeg" alt="Custom canvas" class="rotating-image">
                         </div>
+                        <p class="gallery-preview-text"><strong>Custom Canvases</strong> <span class="gallery-action-text">(Click to view all designs)</span></p>
                     </div>
-                    <p class="gallery-caption">Custom Pet Portraits</p>
+                    <div class="gallery-card-thumbnails">
+                        <!-- Thumbnails will be dynamically generated -->
+                    </div>
                 </div>
-                
-                <div class="gallery-item" data-category="events" role="button" tabindex="0" aria-label="View Events gallery">
-                    <div class="embroidery-hoop gallery-hoop">
-                        <div class="hoop-ring"></div>
-                        <div class="canvas-placeholder">
-                            <img src="images/recent-canvases/campflannelfizz.jpg" alt="Event canvas" class="gallery-image">
+
+                <!-- Gallery Card 2: HoT Originals -->
+                <div class="gallery-card" data-gallery="hot-originals" role="button" tabindex="0" aria-expanded="false">
+                    <div class="gallery-card-preview">
+                        <div class="gallery-preview-image rotating-carousel">
+                            <img src="images/recent-canvases/2HoT-originals/SephoraHoliday.jpeg" alt="HoT Original" class="rotating-image active">
+                            <img src="images/recent-canvases/2HoT-originals/SephoraStandard.jpg" alt="HoT Original" class="rotating-image">
+                            <img src="images/recent-canvases/2HoT-originals/SharpestTool.jpeg" alt="HoT Original" class="rotating-image">
                         </div>
+                        <p class="gallery-preview-text"><strong>HoT Originals</strong> <span class="gallery-action-text">(Click to view all designs)</span></p>
                     </div>
-                    <p class="gallery-caption">Events</p>
+                    <div class="gallery-card-thumbnails">
+                        <!-- Thumbnails will be dynamically generated -->
+                    </div>
                 </div>
-                
-                <div class="gallery-item" data-category="popculture" role="button" tabindex="0" aria-label="View Pop Culture gallery">
-                    <div class="embroidery-hoop gallery-hoop">
-                        <div class="hoop-ring"></div>
-                        <div class="canvas-placeholder rotating-carousel">
-                            <img src="images/recent-canvases/duckhunt.jpg" alt="Pop culture canvas" class="gallery-image rotating-image active">
-                            <img src="images/recent-canvases/peewee.jpg" alt="Pop culture canvas" class="gallery-image rotating-image">
-                            <img src="images/recent-canvases/sephora.jpg" alt="Pop culture canvas" class="gallery-image rotating-image">
-                            <img src="images/recent-canvases/sephoraxmas.jpg" alt="Pop culture canvas" class="gallery-image rotating-image">
+
+                <!-- Gallery Card 3: Painted from Purchased Digital Charts -->
+                <div class="gallery-card" data-gallery="digital-charts" role="button" tabindex="0" aria-expanded="false">
+                    <div class="gallery-card-preview">
+                        <div class="gallery-preview-image rotating-carousel">
+                            <img src="images/recent-canvases/3PaintedFromPurchasedDigitalCharts/DuckHunt-by-TurtleStitchShop-Etsy.jpeg" alt="Digital chart painting" class="rotating-image active">
+                            <img src="images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PeeWee-by-StitchedIts-Etsy.jpeg" alt="Digital chart painting" class="rotating-image">
+                            <img src="images/recent-canvases/3PaintedFromPurchasedDigitalCharts/Kermit-w-PearlEarring-by-CherryMarryStore-Etsy.jpeg" alt="Digital chart painting" class="rotating-image">
                         </div>
+                        <p class="gallery-preview-text"><strong>Painted from Purchased Digital Charts</strong> <span class="gallery-action-text">(Click to view all designs)</span></p>
                     </div>
-                    <p class="gallery-caption">Pop Culture</p>
+                    <div class="gallery-card-thumbnails">
+                        <!-- Thumbnails will be dynamically generated -->
+                    </div>
                 </div>
-                
-                <div class="gallery-item" data-category="customizations" role="button" tabindex="0" aria-label="View Customizations gallery">
-                    <div class="embroidery-hoop gallery-hoop">
-                        <div class="hoop-ring"></div>
-                        <div class="canvas-placeholder rotating-carousel">
-                            <img src="images/recent-canvases/ization-pinehurst1.jpg" alt="Original design before customization" class="gallery-image rotating-image active">
-                            <img src="images/recent-canvases/ization-pinehurst2.jpg" alt="Customized design by Jessie" class="gallery-image rotating-image">
-                            <img src="images/recent-canvases/ization-stocking1.jpg" alt="Original design before customization" class="gallery-image rotating-image">
-                            <img src="images/recent-canvases/ization-stocking2.jpg" alt="Customized design by Jessie" class="gallery-image rotating-image">
+
+                <!-- Gallery Card 4: Canvas Customizations -->
+                <div class="gallery-card" data-gallery="customizations" role="button" tabindex="0" aria-expanded="false">
+                    <div class="gallery-card-preview">
+                        <div class="gallery-preview-image rotating-carousel">
+                            <img src="images/recent-canvases/4CanvasCustomizations/Pinehurst-Customization-Before.jpeg" alt="Customization before" class="rotating-image active">
+                            <img src="images/recent-canvases/4CanvasCustomizations/Pinehurst-Customization-After.jpeg" alt="Customization after" class="rotating-image">
+                            <img src="images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-Before.jpeg" alt="Customization before" class="rotating-image">
+                            <img src="images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-After.jpg" alt="Customization after" class="rotating-image">
+                            <img src="images/recent-canvases/4CanvasCustomizations/Kathryn-StockingCustomization-After.jpeg" alt="Customization" class="rotating-image">
                         </div>
+                        <p class="gallery-preview-text"><strong>Canvas Customizations</strong> <span class="gallery-action-text">(Click to view all designs)</span></p>
                     </div>
-                    <p class="gallery-caption">Customizations</p>
+                    <div class="gallery-card-thumbnails">
+                        <!-- Thumbnails will be dynamically generated -->
+                    </div>
                 </div>
             </div>
         </div>
