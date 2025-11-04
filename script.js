@@ -716,6 +716,11 @@ class ExpandableGallery {
             img.alt = image.alt;
             img.loading = 'lazy';
             
+            // Add class for stocking images to enable top-alignment
+            if (image.src.toLowerCase().includes('stocking') || (image.thumbnail && image.thumbnail.toLowerCase().includes('stocking'))) {
+                img.classList.add('stocking-image');
+            }
+            
             thumbnail.appendChild(img);
             
             // Click to open in lightbox
