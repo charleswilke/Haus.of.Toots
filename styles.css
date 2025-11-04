@@ -679,6 +679,12 @@ section {
     object-fit: cover;
 }
 
+/* Top-align images in customization gallery (stockings only) */
+.gallery-card[data-gallery="customizations"] .gallery-preview-image img[src*="Stocking"],
+.gallery-card[data-gallery="customizations"] .thumbnail-item img[src*="Stocking"] {
+    object-position: top;
+}
+
 .gallery-preview-text {
     font-size: 1rem;
     color: var(--neutral-dark);
