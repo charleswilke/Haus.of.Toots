@@ -799,6 +799,53 @@ section {
     object-position: top !important;
 }
 
+/* Before/After Badges */
+.before-after-badge {
+    position: relative;
+}
+
+.before-after-badge::after {
+    content: attr(data-badge);
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+    pointer-events: none;
+}
+
+.before-after-badge[data-badge="Before"]::after {
+    background: linear-gradient(135deg, #9B9690 0%, #4A4542 100%);
+    color: var(--white);
+}
+
+.before-after-badge[data-badge="After"]::after {
+    background: linear-gradient(135deg, var(--coral-primary) 0%, var(--coral-dark) 100%);
+    color: var(--white);
+}
+
+/* Badges for thumbnails */
+.thumbnail-item.before-after-badge::after {
+    top: 6px;
+    right: 6px;
+    padding: 3px 8px;
+    font-size: 0.65rem;
+}
+
+/* Badges for rotating carousel preview images */
+.gallery-preview-image .rotating-image.before-after-badge::after {
+    top: 10px;
+    right: 10px;
+    padding: 5px 12px;
+    font-size: 0.8rem;
+}
+
 /* Legacy gallery styles for compatibility */
 .gallery-grid {
     display: grid;
@@ -1313,6 +1360,32 @@ section {
     transform: translateY(-50%) scale(1.1);
 }
 
+/* Lightbox Badge */
+.lightbox-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 8px 16px;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    z-index: 10002;
+    pointer-events: none;
+}
+
+.lightbox-badge[data-type="before"] {
+    background: linear-gradient(135deg, #9B9690 0%, #4A4542 100%);
+    color: var(--white);
+}
+
+.lightbox-badge[data-type="after"] {
+    background: linear-gradient(135deg, var(--coral-primary) 0%, var(--coral-dark) 100%);
+    color: var(--white);
+}
+
 @media (max-width: 768px) {
     .lightbox-prev,
     .lightbox-next {
@@ -1329,6 +1402,13 @@ section {
     
     .lightbox-caption {
         font-size: 1rem;
+    }
+    
+    .lightbox-badge {
+        top: 15px;
+        right: 15px;
+        padding: 6px 12px;
+        font-size: 0.85rem;
     }
 }
 

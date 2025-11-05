@@ -713,6 +713,18 @@ class ExpandableGallery {
             thumbnail.setAttribute('tabindex', '0');
             thumbnail.setAttribute('aria-label', `View ${image.alt}`);
             
+            // Add before/after badge for customization gallery
+            if (galleryId === 'customizations') {
+                const altLower = image.alt.toLowerCase();
+                if (altLower.includes('before')) {
+                    thumbnail.classList.add('before-after-badge');
+                    thumbnail.setAttribute('data-badge', 'Before');
+                } else if (altLower.includes('after')) {
+                    thumbnail.classList.add('before-after-badge');
+                    thumbnail.setAttribute('data-badge', 'After');
+                }
+            }
+            
             const img = document.createElement('img');
             img.src = image.thumbnail || image.src; // Use thumbnail if available, fallback to full
             img.alt = image.alt;
@@ -804,6 +816,25 @@ class ExpandableGallery {
         this.lightboxImage.src = image.src;
         this.lightboxImage.alt = image.alt;
         this.lightboxCaption.textContent = `${image.alt} — ${this.categoryName} (${this.currentIndex + 1} of ${this.currentImages.length})`;
+        
+        // Add before/after badge to lightbox image
+        const lightboxContent = this.lightbox.querySelector('.lightbox-content');
+        const existingBadge = lightboxContent.querySelector('.lightbox-badge');
+        if (existingBadge) {
+            existingBadge.remove();
+        }
+        
+        // Only add badge for customization gallery
+        if (this.categoryName === 'Canvas Customizations') {
+            const altLower = image.alt.toLowerCase();
+            if (altLower.includes('before') || altLower.includes('after')) {
+                const badge = document.createElement('div');
+                badge.className = 'lightbox-badge';
+                badge.textContent = altLower.includes('before') ? 'Before' : 'After';
+                badge.setAttribute('data-type', altLower.includes('before') ? 'before' : 'after');
+                lightboxContent.insertBefore(badge, this.lightboxCaption);
+            }
+        }
         
         // Show/hide navigation buttons
         if (this.currentImages.length <= 1) {
