@@ -603,7 +603,9 @@ class ExpandableGallery {
                     { src: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-Before.jpeg', thumbnail: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Lance-StockingCustomization-Before.jpg', alt: 'Lance Stocking (Before)' },
                     { src: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-After.jpg', thumbnail: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Lance-StockingCustomization-After.jpg', alt: 'Lance Stocking (After)' },
                     { src: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-After2.jpg', thumbnail: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Lance-StockingCustomization-After2.jpg', alt: 'Lance Stocking (After 2)' },
-                    { src: 'images/recent-canvases/4CanvasCustomizations/Kathryn-StockingCustomization-After.jpeg', thumbnail: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Kathryn-StockingCustomization-After.jpg', alt: 'Kathryn Stocking (After)' }
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Kathryn-StockingCustomization-After.jpeg', thumbnail: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Kathryn-StockingCustomization-After.jpg', alt: 'Kathryn Stocking (After)' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/MM-CanvasMonogram-Before.jpeg', thumbnail: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-MM-CanvasMonogram-Before.jpg', alt: 'MM Canvas Monogram (Before)' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/MM-CanvasMonogram-After.jpeg', thumbnail: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-MM-CanvasMonogram-After.jpg', alt: 'MM Canvas Monogram (After)' }
                 ]
             }
         };
