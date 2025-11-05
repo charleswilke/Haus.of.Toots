@@ -800,10 +800,6 @@ section {
 }
 
 /* Before/After Badges */
-.before-after-badge {
-    position: relative;
-}
-
 .before-after-badge::after {
     content: attr(data-badge);
     position: absolute;
@@ -830,7 +826,11 @@ section {
     color: var(--white);
 }
 
-/* Badges for thumbnails */
+/* Badges for thumbnails - container needs relative positioning */
+.thumbnail-item.before-after-badge {
+    position: relative;
+}
+
 .thumbnail-item.before-after-badge::after {
     top: 6px;
     right: 6px;
@@ -838,12 +838,21 @@ section {
     font-size: 0.65rem;
 }
 
-/* Badges for rotating carousel preview images */
+/* Badges for rotating carousel preview images - parent container provides positioning context */
 .gallery-preview-image .rotating-image.before-after-badge::after {
     top: 10px;
     right: 10px;
     padding: 5px 12px;
     font-size: 0.8rem;
+}
+
+/* Ensure rotating images with badges maintain their positioning */
+.rotating-image.before-after-badge {
+    position: absolute;
+}
+
+.rotating-image.before-after-badge.active {
+    position: relative;
 }
 
 /* Legacy gallery styles for compatibility */
