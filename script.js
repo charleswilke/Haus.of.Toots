@@ -944,29 +944,6 @@ function optimizedScroll(callback) {
 // ACCESSIBILITY ENHANCEMENTS
 // ===================================
 
-// Skip to main content
-const skipLink = document.createElement('a');
-skipLink.href = '#main';
-skipLink.textContent = 'Skip to main content';
-skipLink.className = 'skip-link';
-skipLink.style.cssText = `
-    position: absolute;
-    top: -40px;
-    left: 0;
-    background: var(--coral-primary);
-    color: white;
-    padding: 8px;
-    text-decoration: none;
-    z-index: 10000;
-`;
-skipLink.addEventListener('focus', function() {
-    this.style.top = '0';
-});
-skipLink.addEventListener('blur', function() {
-    this.style.top = '-40px';
-});
-document.body.insertBefore(skipLink, document.body.firstChild);
-
 // Announce page region changes for screen readers
 const announcer = document.createElement('div');
 announcer.setAttribute('role', 'status');
