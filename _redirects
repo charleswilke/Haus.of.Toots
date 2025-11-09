@@ -1,0 +1,5 @@
+# Netlify Redirects
+# This allows /shop to work instead of /shop.html
+
+/shop /shop.html 200
+

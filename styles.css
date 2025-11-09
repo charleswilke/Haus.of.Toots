@@ -188,6 +188,7 @@ section {
     border-radius: var(--border-radius);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     border: 3px dashed var(--coral-primary);
+    overflow: visible;
 }
 
 .stitched-border::before,
@@ -233,6 +234,7 @@ section {
     grid-template-columns: 1fr 1fr 1fr;
     gap: var(--spacing-md);
     align-items: center;
+    position: relative;
 }
 
 .hero-logo-side {
@@ -240,6 +242,8 @@ section {
     align-items: center;
     justify-content: center;
     padding: var(--spacing-sm);
+    position: relative;
+    z-index: 1;
 }
 
 .hero-logo {
@@ -259,11 +263,24 @@ section {
     align-items: center;
     justify-content: center;
     padding: var(--spacing-sm);
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
 }
 
 .hero-hoop {
-    width: 260px;
-    height: 260px;
+    width: 240px;
+    height: 240px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+/* Slightly larger on very wide screens */
+@media (min-width: 1400px) {
+    .hero-hoop {
+        width: 260px;
+        height: 260px;
+    }
 }
 
 .hero-hoop .hero-hoop-ring {
@@ -273,6 +290,9 @@ section {
 .hero-content-side {
     display: flex;
     align-items: center;
+    padding: 0 var(--spacing-sm);
+    position: relative;
+    z-index: 2;
 }
 
 .hero-content {
@@ -296,6 +316,14 @@ section {
     line-height: 1.6;
 }
 
+.hero-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    align-items: center;
+    width: 100%;
+}
+
 /* ===================================
    BUTTONS & CTA
    =================================== */
@@ -303,6 +331,7 @@ section {
 .cta-button {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: var(--spacing-sm);
     padding: 1rem 2rem;
     font-family: var(--font-body);
@@ -318,6 +347,7 @@ section {
     position: relative;
     overflow: hidden;
     white-space: nowrap;
+    width: 100%;
 }
 
 .cta-button.large {
@@ -333,6 +363,18 @@ section {
 
 .cta-button:active {
     transform: translateY(0);
+}
+
+.cta-button-secondary {
+    background: var(--white);
+    color: var(--coral-primary);
+    border: 2px solid var(--coral-primary);
+}
+
+.cta-button-secondary:hover {
+    background: var(--coral-primary);
+    color: var(--white);
+    border-color: var(--coral-primary);
 }
 
 .needle-icon {
@@ -604,8 +646,9 @@ section {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-md);
-    margin-top: var(--spacing-lg);
+    margin: var(--spacing-lg) auto 0;
     align-items: start; /* Prevent grid from stretching cards */
+    max-width: 90%;
 }
 
 .gallery-card {
@@ -692,7 +735,7 @@ section {
 
 .gallery-preview-text strong {
     font-family: var(--font-display);
-    font-size: 1.125rem;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--coral-dark);
     display: block;
@@ -1030,6 +1073,29 @@ section {
     align-items: center;
 }
 
+.footer-links {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.footer-link {
+    color: var(--cream);
+    text-decoration: none;
+    transition: color 0.3s ease;
+    font-weight: 500;
+}
+
+.footer-link:hover {
+    color: var(--coral-light);
+}
+
+.footer-divider {
+    color: var(--neutral-mid);
+}
+
 .footer-social {
     margin-bottom: var(--spacing-sm);
 }
@@ -1086,6 +1152,27 @@ section {
 /* ===================================
    RESPONSIVE DESIGN
    =================================== */
+
+/* Prevent hero overlap on medium-large screens */
+@media (max-width: 1200px) {
+    .hero-layout {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+    
+    .hero-logo-side {
+        order: 1;
+    }
+    
+    .hero-content-side {
+        order: 2;
+        padding: 0;
+    }
+    
+    .hero-photo-side {
+        order: 3;
+    }
+}
 
 @media (max-width: 968px) {
     .hero {
