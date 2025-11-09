@@ -14,6 +14,16 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      
+      - name: Verify .htaccess exists
+        run: |
+          if [ -f .htaccess ]; then
+            echo ".htaccess file found"
+            cat .htaccess
+          else
+            echo "ERROR: .htaccess file not found!"
+            exit 1
+          fi
         
       - name: Deploy to DreamHost via SFTP
         uses: wlixcc/SFTP-Deploy-Action@v1.2.4
@@ -26,3 +36,9 @@ jobs:
           remote_path: '/home/jessieToots/hausoftoots.com/'
           sftp_only: true
           args: '-o ConnectTimeout=5'
+          exclude: |
+            .git
+            .github
+            *.code-workspace
+            node_modules
+            .DS_Store
