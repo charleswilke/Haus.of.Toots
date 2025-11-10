@@ -300,6 +300,24 @@ section {
     width: 100%;
 }
 
+/* Mobile photo inside white box - hidden on desktop */
+.hero-photo-mobile {
+    display: none;
+    margin-bottom: var(--spacing-md);
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.hero-text-mobile {
+    width: 100%;
+}
+
+.hero-hoop-mobile {
+    width: 180px;
+    height: 180px;
+}
+
 .hero-title {
     font-family: var(--font-display);
     font-size: clamp(2rem, 5vw, 3rem);
@@ -540,16 +558,6 @@ section {
     font-size: 1rem !important;
 }
 
-@media (max-width: 968px) {
-    .about-cards {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-md);
-    }
-    
-    .about-cards-three {
-        grid-template-columns: 1fr;
-    }
-}
 
 /* ===================================
    EMBROIDERY HOOP
@@ -1153,8 +1161,68 @@ section {
    RESPONSIVE DESIGN
    =================================== */
 
-/* Prevent hero overlap on medium-large screens */
-@media (max-width: 1200px) {
+/* ===================================
+   DESKTOP (> 1024px)
+   =================================== */
+@media (min-width: 1025px) {
+    /* Desktop: show original photo outside white box */
+    .hero-photo-mobile {
+        display: none;
+    }
+    
+    .hero-photo-side {
+        display: flex;
+    }
+    
+    /* Desktop: 3-column grid layout */
+    .hero-layout {
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: var(--spacing-md);
+    }
+}
+
+/* Gradually reduce margins before breakpoint for smoother transition */
+@media (min-width: 1025px) and (max-width: 1200px) {
+    .container {
+        padding: 0 var(--spacing-md);
+    }
+    
+    .hero-logo-side {
+        padding: var(--spacing-sm);
+    }
+    
+    .hero-content-side {
+        padding: 0 var(--spacing-sm);
+    }
+    
+    .hero-photo-side {
+        padding: var(--spacing-sm);
+    }
+    
+    .hero-layout {
+        gap: var(--spacing-md);
+    }
+    
+    /* Allow logo to shrink slightly before breakpoint */
+    .hero-logo {
+        max-width: 300px;
+    }
+}
+
+/* ===================================
+   TABLET - iPad & iPad Mini (768px - 1024px)
+   =================================== */
+@media (min-width: 768px) and (max-width: 1024px) {
+    /* Tablet: show photo inside white box, hide original photo */
+    .hero-photo-mobile {
+        display: flex;
+    }
+    
+    .hero-photo-side {
+        display: none;
+    }
+    
+    /* Tablet: single column layout */
     .hero-layout {
         grid-template-columns: 1fr;
         gap: var(--spacing-md);
@@ -1172,17 +1240,71 @@ section {
     .hero-photo-side {
         order: 3;
     }
-}
-
-@media (max-width: 968px) {
-    .hero {
-        min-height: auto;
-        padding: var(--spacing-lg) 0;
+    
+    /* Tablet: center the white box and prevent cutoff */
+    .container {
+        overflow: visible;
+        /* Add extra padding to account for 3px border on each side */
+        padding: 0 calc(var(--spacing-sm) + 3px);
+        box-sizing: border-box;
     }
     
-    .hero-layout {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-md);
+    .hero-content-side {
+        padding: 0;
+        overflow: visible;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .stitched-border {
+        margin: 0 auto;
+        padding: var(--spacing-md);
+        box-sizing: border-box;
+        width: 100%;
+        max-width: 100%;
+        position: relative;
+    }
+    
+    /* Tablet: side-by-side layout with left-justified text */
+    .hero-content {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-lg);
+        text-align: left;
+    }
+    
+    .hero-photo-mobile {
+        margin-bottom: 0;
+        margin-right: 0;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+    }
+    
+    .hero-text-mobile {
+        flex: 0 1 auto;
+        max-width: 400px;
+        text-align: left;
+    }
+    
+    .hero-title {
+        text-align: left;
+        margin-bottom: var(--spacing-xs);
+    }
+    
+    .hero-description {
+        text-align: left;
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .hero-buttons {
+        align-items: flex-start;
+        gap: var(--spacing-xs);
+    }
+    
+    .hero-hoop-mobile {
+        width: 260px;
+        height: 260px;
     }
     
     .hero-logo {
@@ -1190,20 +1312,145 @@ section {
     }
     
     .hero-logo-side {
-        padding: var(--spacing-sm);
+        padding: var(--spacing-xs);
+    }
+    
+    .hero {
+        min-height: auto;
+        padding: var(--spacing-sm) 0;
+    }
+    
+    .hero-layout {
+        gap: var(--spacing-sm);
+    }
+    
+    /* Reduce section padding for iPad mini to show more content on load */
+    section {
+        padding: var(--spacing-md) 0;
+    }
+    
+    .about {
+        padding: var(--spacing-md) 0;
+    }
+    
+    .about-cards {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+    
+    .about-cards-three {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===================================
+   MOBILE (< 768px)
+   =================================== */
+@media (max-width: 767px) {
+    /* Mobile: show photo inside white box, hide original photo */
+    .hero-photo-mobile {
+        display: flex;
+    }
+    
+    .hero-photo-side {
+        display: none;
+    }
+    
+    /* Mobile: single column layout */
+    .hero-layout {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+    
+    .hero-logo-side {
+        order: 1;
+    }
+    
+    .hero-content-side {
+        order: 2;
+        padding: 0;
+        display: flex;
+        justify-content: center;
     }
     
     .hero-photo-side {
         order: 3;
     }
     
-    .hero-content-side {
-        order: 2;
+    /* Mobile: center the white box */
+    .container {
+        overflow: visible;
+        /* Add extra padding to account for 3px border on each side */
+        padding: 0 calc(var(--spacing-sm) + 3px);
+        box-sizing: border-box;
     }
     
-    .hero-hoop {
-        width: 220px;
-        height: 220px;
+    .hero-content-side {
+        overflow: visible;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .stitched-border {
+        margin: 0 auto;
+        padding: var(--spacing-md);
+        box-sizing: border-box;
+        width: 100%;
+        max-width: 100%;
+        position: relative;
+    }
+    
+    /* Mobile: stacked layout with centered text */
+    .hero-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .hero-photo-mobile {
+        margin-bottom: var(--spacing-sm);
+        margin-right: 0;
+    }
+    
+    .hero-text-mobile {
+        text-align: center;
+    }
+    
+    .hero-title {
+        text-align: center;
+        margin-bottom: var(--spacing-xs);
+    }
+    
+    .hero-description {
+        text-align: center;
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .hero-buttons {
+        align-items: center;
+    }
+    
+    .hero-hoop-mobile {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .hero-logo {
+        max-width: 280px;
+    }
+    
+    .hero-logo-side {
+        padding: var(--spacing-xs);
+    }
+    
+    .hero {
+        min-height: auto;
+        padding: var(--spacing-md) 0;
+    }
+    
+    .hero-layout {
+        gap: var(--spacing-sm);
     }
     
     .gallery-cards {
@@ -1211,7 +1458,7 @@ section {
     }
     
     .gallery-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr;
         gap: var(--spacing-md);
     }
     
@@ -1219,87 +1466,94 @@ section {
         right: 10px;
         width: 17px;
     }
-}
-
-@media (max-width: 640px) {
-    :root {
-        --spacing-lg: 3rem;
-        --spacing-xl: 4rem;
+    
+    .about-cards {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
     }
     
-    .hero-logo {
-        max-width: 220px;
-    }
-    
-    .stitched-border {
-        padding: var(--spacing-md);
-    }
-    
-    .hero-content,
-    .request-content {
-        padding: 0;
-    }
-    
-    .hero-description {
-        margin-bottom: var(--spacing-sm);
-    }
-    
-    .hero-title {
-        margin-bottom: var(--spacing-xs);
-    }
-    
-    .gallery-cards {
+    .about-cards-three {
         grid-template-columns: 1fr;
     }
     
-    .thumbnails-grid {
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    }
-    
-    .gallery-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .step-card {
-        padding: var(--spacing-md);
-    }
-    
-    .step-card:hover {
-        transform: translateX(4px);
-    }
-    
-    .step-title {
-        font-size: 1.25rem;
-    }
-    
-    .step-number {
-        width: 38px;
-        height: 38px;
-        font-size: 1.125rem;
-    }
-    
-    .step-description {
-        margin-left: 0;
-        margin-top: var(--spacing-sm);
-        font-size: 1rem;
-    }
-    
-    .embroidery-hoop {
-        width: 220px;
-        height: 220px;
-    }
-    
-    .gallery-hoop {
-        width: 200px;
-        height: 200px;
-    }
-    
-    .cta-button {
-        width: 100%;
-        justify-content: center;
-        font-size: 1rem;
-        padding: 0.875rem 1.5rem;
-        white-space: nowrap;
+    /* Additional refinements for very small mobile screens */
+    @media (max-width: 640px) {
+        :root {
+            --spacing-lg: 3rem;
+            --spacing-xl: 4rem;
+        }
+        
+        .hero-logo {
+            max-width: 220px;
+        }
+        
+        .stitched-border {
+            padding: var(--spacing-md);
+        }
+        
+        .hero-content,
+        .request-content {
+            padding: 0;
+        }
+        
+        .hero-description {
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .hero-title {
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .thumbnails-grid {
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        }
+        
+        .step-card {
+            padding: var(--spacing-md);
+        }
+        
+        .step-card:hover {
+            transform: translateX(4px);
+        }
+        
+        .step-title {
+            font-size: 1.25rem;
+        }
+        
+        .step-number {
+            width: 38px;
+            height: 38px;
+            font-size: 1.125rem;
+        }
+        
+        .step-description {
+            margin-left: 0;
+            margin-top: var(--spacing-sm);
+            font-size: 1rem;
+        }
+        
+        .embroidery-hoop {
+            width: 220px;
+            height: 220px;
+        }
+        
+        .gallery-hoop {
+            width: 200px;
+            height: 200px;
+        }
+        
+        .hero-hoop-mobile {
+            width: 180px;
+            height: 180px;
+        }
+        
+        .cta-button {
+            width: 100%;
+            justify-content: center;
+            font-size: 1rem;
+            padding: 0.875rem 1.5rem;
+            white-space: nowrap;
+        }
     }
 }
 
