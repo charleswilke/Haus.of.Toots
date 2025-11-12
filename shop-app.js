@@ -53,8 +53,26 @@ class ShopApp {
             return;
         }
 
-        productsGrid.innerHTML = this.products.map(product => this.createProductCard(product)).join('');
+        // Sort products - hand painted canvases first
+        const sortedProducts = [...this.products].sort((a, b) => {
+            const aIsHandPainted = this.isHandPainted(a);
+            const bIsHandPainted = this.isHandPainted(b);
+            if (aIsHandPainted && !bIsHandPainted) return -1;
+            if (!aIsHandPainted && bIsHandPainted) return 1;
+            return 0;
+        });
+
+        productsGrid.innerHTML = sortedProducts.map(product => this.createProductCard(product)).join('');
         
+        // Add event listeners to variant selectors
+        const variantSelectors = productsGrid.querySelectorAll('.product-variant-selector');
+        variantSelectors.forEach(select => {
+            select.addEventListener('change', (e) => {
+                e.stopPropagation(); // Prevent card click
+                this.handleVariantChange(e);
+            });
+        });
+
         // Add event listeners to all "Add to Cart" buttons
         const addToCartButtons = productsGrid.querySelectorAll('.add-to-cart-btn');
         addToCartButtons.forEach(button => {
@@ -64,12 +82,12 @@ class ShopApp {
             });
         });
 
-        // Add click listeners to product cards (but not the add to cart button)
+        // Add click listeners to product cards (but not the add to cart button or variant selector)
         const productCards = productsGrid.querySelectorAll('.product-card');
         productCards.forEach(card => {
             card.addEventListener('click', (e) => {
-                // Don't open modal if clicking the add to cart button
-                if (e.target.closest('.add-to-cart-btn')) {
+                // Don't open modal if clicking the add to cart button or variant selector
+                if (e.target.closest('.add-to-cart-btn') || e.target.closest('.product-variant-selector')) {
                     return;
                 }
                 const productId = card.getAttribute('data-product-id');
@@ -79,51 +97,160 @@ class ShopApp {
     }
 
     /**
+     * Check if a product is hand painted
+     */
+    isHandPainted(product) {
+        const productType = (product.productType || '').toLowerCase();
+        const tags = (product.tags || []).map(tag => tag.toLowerCase());
+        return productType.includes('hand painted') || 
+               productType.includes('canvas') || 
+               tags.includes('hand painted') ||
+               tags.includes('canvas') ||
+               tags.includes('hand-painted');
+    }
+
+    /**
      * Create HTML for a product card
      */
     createProductCard(product) {
         const image = product.images?.edges?.[0]?.node;
-        const variant = product.variants?.edges?.[0]?.node;
-        const price = variant?.priceV2 || product.priceRange?.minVariantPrice;
-        const available = variant?.availableForSale ?? true;
+        const variants = product.variants?.edges || [];
+        const availableVariants = variants.filter(v => v.node.availableForSale);
+        const firstVariant = availableVariants[0]?.node || variants[0]?.node;
+        const hasMultipleVariants = variants.length > 1;
+        const isHandPainted = this.isHandPainted(product);
 
         const imageHTML = image 
             ? `<img src="${image.url}" alt="${image.altText || product.title}" class="product-image">`
             : `<div class="product-no-image">No image available</div>`;
 
-        const priceFormatted = price 
-            ? `${this.formatPrice(price.amount, price.currencyCode)}`
+        // Badge for hand painted products
+        const badgeHTML = isHandPainted 
+            ? `<div class="product-badge product-badge-hand-painted">Hand Painted Canvas</div>`
+            : `<div class="product-badge product-badge-digital">Digital Pattern</div>`;
+
+        // Get variant options (like Size, Canvas Count, etc.)
+        const variantOptions = this.getVariantOptionsForProduct(variants);
+        
+        // Current price (will update with variant selection)
+        const currentPrice = firstVariant?.priceV2 || product.priceRange?.minVariantPrice;
+        const priceFormatted = currentPrice 
+            ? `${this.formatPrice(currentPrice.amount, currentPrice.currencyCode)}`
             : 'Price not available';
+
+        // Variant selector HTML
+        const variantSelectorHTML = hasMultipleVariants && variantOptions.length > 0
+            ? `<div class="product-variant-selector-wrapper">
+                <label class="product-variant-label">
+                    ${this.escapeHtml(variantOptions[0].name)}:
+                </label>
+                <select class="product-variant-selector" data-product-id="${product.id}">
+                    ${variants.map((variantEdge, index) => {
+                        const variant = variantEdge.node;
+                        const optionValue = variant.selectedOptions?.[0]?.value || variant.title;
+                        return `<option value="${variant.id}" ${index === 0 ? 'selected' : ''} ${!variant.availableForSale ? 'disabled' : ''}>
+                            ${this.escapeHtml(optionValue)}${!variant.availableForSale ? ' (Unavailable)' : ''}
+                        </option>`;
+                    }).join('')}
+                </select>
+            </div>`
+            : '';
 
         const description = this.stripHtml(product.description || product.descriptionHtml || '');
 
+        const cardClasses = isHandPainted ? 'product-card product-card-hand-painted' : 'product-card';
+
         return `
-            <div class="product-card" data-product-id="${product.id}">
+            <div class="${cardClasses}" data-product-id="${product.id}">
                 <div class="product-image-container">
                     ${imageHTML}
+                    ${badgeHTML}
                 </div>
                 <div class="product-info">
                     <h3 class="product-title">${this.escapeHtml(product.title)}</h3>
                     ${description ? `<p class="product-description">${this.escapeHtml(description)}</p>` : ''}
+                    <div class="product-price-section">
+                        <span class="product-price" data-product-id="${product.id}">${priceFormatted}</span>
+                    </div>
+                    ${variantSelectorHTML}
                     <div class="product-footer">
-                        <span class="product-price">${priceFormatted}</span>
                         <button 
                             class="add-to-cart-btn" 
                             data-product='${this.escapeHtml(JSON.stringify(product))}'
-                            data-variant-id="${variant?.id || ''}"
-                            ${!available || !variant?.id ? 'disabled' : ''}
+                            data-variant-id="${firstVariant?.id || ''}"
+                            ${!firstVariant?.availableForSale || !firstVariant?.id ? 'disabled' : ''}
                         >
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="9" cy="21" r="1"></circle>
                                 <circle cx="20" cy="21" r="1"></circle>
                                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                             </svg>
-                            ${available ? 'Add to Cart' : 'Unavailable'}
+                            ${firstVariant?.availableForSale ? 'Add to Cart' : 'Unavailable'}
                         </button>
                     </div>
                 </div>
             </div>
         `;
+    }
+
+    /**
+     * Get variant options for a product
+     */
+    getVariantOptionsForProduct(variants) {
+        if (variants.length === 0) return [];
+        
+        const optionNames = [];
+        const firstVariant = variants[0]?.node;
+        
+        if (firstVariant?.selectedOptions) {
+            firstVariant.selectedOptions.forEach(option => {
+                if (!optionNames.includes(option.name) && option.name !== 'Title') {
+                    optionNames.push(option.name);
+                }
+            });
+        }
+        
+        return optionNames.map(name => ({ name }));
+    }
+
+    /**
+     * Handle variant selection change on product card
+     */
+    handleVariantChange(event) {
+        const select = event.target;
+        const selectedVariantId = select.value;
+        const productId = select.getAttribute('data-product-id');
+        
+        // Find the product
+        const product = this.products.find(p => p.id === productId);
+        if (!product) return;
+        
+        // Find the selected variant
+        const selectedVariant = product.variants.edges.find(v => v.node.id === selectedVariantId)?.node;
+        if (!selectedVariant) return;
+        
+        // Update the add to cart button with new variant ID
+        const card = select.closest('.product-card');
+        const addToCartBtn = card.querySelector('.add-to-cart-btn');
+        const priceDisplay = card.querySelector('.product-price');
+        
+        if (addToCartBtn) {
+            addToCartBtn.setAttribute('data-variant-id', selectedVariantId);
+            addToCartBtn.disabled = !selectedVariant.availableForSale;
+            addToCartBtn.innerHTML = `
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                ${selectedVariant.availableForSale ? 'Add to Cart' : 'Unavailable'}
+            `;
+        }
+        
+        // Update price display
+        if (priceDisplay && selectedVariant.priceV2) {
+            priceDisplay.textContent = this.formatPrice(selectedVariant.priceV2.amount, selectedVariant.priceV2.currencyCode);
+        }
     }
 
     /**
@@ -482,28 +609,42 @@ class ShopApp {
         const images = product.images?.edges || [];
         const variants = product.variants?.edges || [];
         const mainImage = images[0]?.node;
-        const selectedVariant = variants.find(v => v.node.availableForSale)?.node || variants[0]?.node;
+        const availableVariants = variants.filter(v => v.node.availableForSale);
+        const selectedVariant = availableVariants[0]?.node || variants[0]?.node;
+        const hasMultipleVariants = variants.length > 1;
+        const isHandPainted = this.isHandPainted(product);
         
-        // Group variants by options
-        const variantGroups = {};
-        variants.forEach(variantEdge => {
-            const variant = variantEdge.node;
-            variant.selectedOptions?.forEach(option => {
-                if (!variantGroups[option.name]) {
-                    variantGroups[option.name] = [];
-                }
-                const value = option.value;
-                if (!variantGroups[option.name].find(v => v.value === value)) {
-                    variantGroups[option.name].push({
-                        value: value,
-                        available: variant.availableForSale
-                    });
-                }
-            });
-        });
+        // Badge HTML for modal
+        const badgeHTML = isHandPainted 
+            ? `<span class="product-detail-badge product-detail-badge-hand-painted">Hand Painted Canvas</span>`
+            : `<span class="product-detail-badge product-detail-badge-digital">Digital Pattern</span>`;
+
+        // Variant selector HTML (dropdown style for modal)
+        const variantSelectorHTML = hasMultipleVariants 
+            ? `<div class="product-detail-variant-selector-wrapper">
+                <label class="product-detail-variant-label">
+                    ${variants[0]?.node.selectedOptions?.[0]?.name || 'Options'}:
+                </label>
+                <select class="product-detail-variant-selector" data-product-id="${product.id}">
+                    ${variants.map((variantEdge, index) => {
+                        const variant = variantEdge.node;
+                        const optionValue = variant.selectedOptions?.[0]?.value || variant.title;
+                        const isFirst = index === 0 && variant.availableForSale;
+                        return `<option value="${variant.id}" 
+                                    data-price="${variant.priceV2.amount}" 
+                                    data-currency="${variant.priceV2.currencyCode}"
+                                    ${isFirst ? 'selected' : ''} 
+                                    ${!variant.availableForSale ? 'disabled' : ''}>
+                            ${this.escapeHtml(optionValue)}${!variant.availableForSale ? ' (Unavailable)' : ''}
+                        </option>`;
+                    }).join('')}
+                </select>
+            </div>`
+            : '';
 
         const addToCartButtonHTML = `
             <div class="product-detail-actions">
+                ${variantSelectorHTML}
                 <button class="product-detail-add-to-cart" 
                         data-product-id="${product.id}"
                         data-variant-id="${selectedVariant?.id || ''}"
@@ -532,33 +673,13 @@ class ShopApp {
                         `).join('')}
                     </div>
                 ` : ''}
-                ${addToCartButtonHTML}
             </div>
-        ` : `<div class="product-detail-images"><div class="product-detail-main-image" style="background: var(--linen); display: flex; align-items: center; justify-content: center; color: var(--neutral-mid);">No image available</div>${addToCartButtonHTML}</div>`;
-
-        const variantsHTML = Object.keys(variantGroups).length > 0 ? `
-            <div class="product-detail-variants">
-                ${Object.keys(variantGroups).map(optionName => `
-                    <div class="product-detail-variant-group">
-                        <div class="product-detail-variant-label">${this.escapeHtml(optionName)}</div>
-                        <div class="product-detail-variant-options" data-option-name="${this.escapeHtml(optionName)}">
-                            ${variantGroups[optionName].map(option => `
-                                <button class="product-detail-variant-option ${!option.available ? 'unavailable' : ''}" 
-                                        data-option-value="${this.escapeHtml(option.value)}"
-                                        ${!option.available ? 'disabled' : ''}>
-                                    ${this.escapeHtml(option.value)}
-                                </button>
-                            `).join('')}
-                        </div>
-                    </div>
-                `).join('')}
-            </div>
-        ` : '';
+        ` : `<div class="product-detail-images"><div class="product-detail-main-image" style="background: var(--linen); display: flex; align-items: center; justify-content: center; color: var(--neutral-mid);">No image available</div></div>`;
 
         const priceHTML = selectedVariant?.priceV2 
-            ? `<div class="product-detail-price">${this.formatPrice(selectedVariant.priceV2.amount, selectedVariant.priceV2.currencyCode)}</div>`
+            ? `<div class="product-detail-price" id="modalProductPrice">${this.formatPrice(selectedVariant.priceV2.amount, selectedVariant.priceV2.currencyCode)}</div>`
             : product.priceRange?.minVariantPrice 
-                ? `<div class="product-detail-price">${this.formatPrice(product.priceRange.minVariantPrice.amount, product.priceRange.minVariantPrice.currencyCode)}</div>`
+                ? `<div class="product-detail-price" id="modalProductPrice">${this.formatPrice(product.priceRange.minVariantPrice.amount, product.priceRange.minVariantPrice.currencyCode)}</div>`
                 : '';
 
         const descriptionHTML = product.descriptionHtml 
@@ -567,15 +688,17 @@ class ShopApp {
                 ? `<div class="product-detail-description"><p>${this.escapeHtml(product.description)}</p></div>`
                 : '';
 
-        const metaHTML = '';
-
         modalBody.innerHTML = `
             <div class="product-detail-content">
                 ${imagesHTML}
                 <div class="product-detail-info">
-                    <h1 class="product-detail-title">${this.escapeHtml(product.title)}</h1>
+                    <div class="product-detail-header">
+                        <h1 class="product-detail-title">${this.escapeHtml(product.title)}</h1>
+                        ${badgeHTML}
+                    </div>
                     ${priceHTML}
                     ${descriptionHTML}
+                    ${addToCartButtonHTML}
                 </div>
             </div>
         `;
@@ -602,38 +725,38 @@ class ShopApp {
             });
         });
 
-        // Variant selection (simplified - would need more logic for multiple options)
-        const variantOptions = document.querySelectorAll('.product-detail-variant-option:not(.unavailable)');
-        variantOptions.forEach(option => {
-            option.addEventListener('click', () => {
-                const optionGroup = option.closest('.product-detail-variant-options');
-                optionGroup.querySelectorAll('.product-detail-variant-option').forEach(opt => {
-                    opt.classList.remove('selected');
-                });
-                option.classList.add('selected');
+        // Variant selector dropdown in modal
+        const variantSelector = document.querySelector('.product-detail-variant-selector');
+        if (variantSelector) {
+            variantSelector.addEventListener('change', (e) => {
+                const selectedOption = e.target.options[e.target.selectedIndex];
+                const variantId = selectedOption.value;
+                const price = selectedOption.getAttribute('data-price');
+                const currency = selectedOption.getAttribute('data-currency');
                 
-                // Find matching variant (simplified - would need proper matching logic)
-                const optionName = optionGroup.getAttribute('data-option-name');
-                const optionValue = option.getAttribute('data-option-value');
+                // Update price display
+                const priceDisplay = document.getElementById('modalProductPrice');
+                if (priceDisplay && price && currency) {
+                    priceDisplay.textContent = this.formatPrice(price, currency);
+                }
                 
-                // For now, just update the add to cart button with first available variant
-                // In a real implementation, you'd match all selected options to find the right variant
+                // Update add to cart button
                 const addToCartBtn = document.querySelector('.product-detail-add-to-cart');
-                const availableVariant = variants.find(v => v.node.availableForSale)?.node;
-                if (availableVariant && addToCartBtn) {
-                    addToCartBtn.setAttribute('data-variant-id', availableVariant.id);
-                    addToCartBtn.disabled = false;
+                if (addToCartBtn) {
+                    addToCartBtn.setAttribute('data-variant-id', variantId);
+                    const selectedVariant = variants.find(v => v.node.id === variantId)?.node;
+                    addToCartBtn.disabled = !selectedVariant?.availableForSale;
                     addToCartBtn.innerHTML = `
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="9" cy="21" r="1"></circle>
                             <circle cx="20" cy="21" r="1"></circle>
                             <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                         </svg>
-                        Add to Cart
+                        ${selectedVariant?.availableForSale ? 'Add to Cart' : 'Unavailable'}
                     `;
                 }
             });
-        });
+        }
 
         // Add to cart from modal
         const addToCartBtn = document.querySelector('.product-detail-add-to-cart');

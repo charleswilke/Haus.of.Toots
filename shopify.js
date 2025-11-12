@@ -82,7 +82,7 @@ class ShopifyClient {
                                     }
                                 }
                             }
-                            variants(first: 1) {
+                            variants(first: 50) {
                                 edges {
                                     node {
                                         id
@@ -91,6 +91,10 @@ class ShopifyClient {
                                         priceV2 {
                                             amount
                                             currencyCode
+                                        }
+                                        selectedOptions {
+                                            name
+                                            value
                                         }
                                     }
                                 }

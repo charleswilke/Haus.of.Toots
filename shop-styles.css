@@ -127,11 +127,23 @@
     transition: transform 0.3s var(--transition-smooth), box-shadow 0.3s var(--transition-smooth);
     display: flex;
     flex-direction: column;
+    border: 2px solid transparent;
 }
 
 .product-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Hand Painted Canvas Card - Special Styling */
+.product-card-hand-painted {
+    border: 2px solid var(--coral-light);
+    background: linear-gradient(135deg, var(--white) 0%, #FFF9F5 100%);
+}
+
+.product-card-hand-painted:hover {
+    border-color: var(--coral-primary);
+    box-shadow: 0 8px 24px rgba(255, 107, 122, 0.25);
 }
 
 .product-image-container {
@@ -140,8 +152,35 @@
     padding-bottom: 100%; /* Square aspect ratio */
     background: var(--linen);
     border-radius: 12px;
-    overflow: hidden;
+    overflow: visible; /* Changed to visible for badge */
     margin-bottom: var(--spacing-md);
+}
+
+/* Product Badge */
+.product-badge {
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.375rem 0.875rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    z-index: 10;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.product-badge-hand-painted {
+    background: linear-gradient(135deg, var(--coral-primary) 0%, var(--coral-dark) 100%);
+    color: var(--white);
+}
+
+.product-badge-digital {
+    background: linear-gradient(135deg, #8B7FD9 0%, #6B5FB5 100%);
+    color: var(--white);
 }
 
 .product-image {
@@ -151,6 +190,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 12px;
 }
 
 .product-no-image {
@@ -182,7 +222,7 @@
     font-size: 0.875rem;
     color: var(--neutral-mid);
     line-height: 1.5;
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
     flex: 1;
     display: -webkit-box;
     -webkit-line-clamp: 3;
@@ -190,10 +230,55 @@
     overflow: hidden;
 }
 
+.product-price-section {
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Variant Selector on Product Card */
+.product-variant-selector-wrapper {
+    margin-bottom: var(--spacing-sm);
+}
+
+.product-variant-label {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--neutral-dark);
+    margin-bottom: 0.375rem;
+}
+
+.product-variant-selector {
+    width: 100%;
+    padding: 0.625rem 0.875rem;
+    border: 2px solid var(--neutral-light);
+    border-radius: 8px;
+    background: var(--white);
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--neutral-dark);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%23FF6B7A' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.875rem center;
+    padding-right: 2.5rem;
+}
+
+.product-variant-selector:hover {
+    border-color: var(--coral-primary);
+}
+
+.product-variant-selector:focus {
+    outline: none;
+    border-color: var(--coral-primary);
+    box-shadow: 0 0 0 3px rgba(255, 107, 122, 0.1);
+}
+
 .product-footer {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     gap: var(--spacing-sm);
     margin-top: auto;
 }
@@ -216,8 +301,10 @@
     transition: all 0.3s var(--transition-smooth);
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
     white-space: nowrap;
+    flex: 1;
 }
 
 .add-to-cart-btn:hover {
@@ -757,6 +844,15 @@
     gap: var(--spacing-md);
 }
 
+/* Product Detail Modal Header */
+.product-detail-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+    margin-bottom: var(--spacing-sm);
+}
+
 .product-detail-title {
     font-family: var(--font-display);
     font-size: 2rem;
@@ -764,19 +860,29 @@
     color: var(--coral-dark);
     margin: 0;
     line-height: 1.2;
-    position: relative;
-    padding-bottom: var(--spacing-sm);
+    flex: 1;
 }
 
-.product-detail-title::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 60px;
-    height: 3px;
-    background: linear-gradient(90deg, var(--coral-primary) 0%, var(--coral-light) 100%);
-    border-radius: 2px;
+/* Product Detail Badge */
+.product-detail-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-detail-badge-hand-painted {
+    background: linear-gradient(135deg, var(--coral-primary) 0%, var(--coral-dark) 100%);
+    color: var(--white);
+}
+
+.product-detail-badge-digital {
+    background: linear-gradient(135deg, #8B7FD9 0%, #6B5FB5 100%);
+    color: var(--white);
 }
 
 .product-detail-meta {
@@ -876,9 +982,52 @@
     text-decoration: line-through;
 }
 
+/* Variant Selector in Modal */
+.product-detail-variant-selector-wrapper {
+    margin-bottom: var(--spacing-md);
+    width: 100%;
+}
+
+.product-detail-variant-label {
+    display: block;
+    font-weight: 600;
+    color: var(--neutral-dark);
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.product-detail-variant-selector {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 2px solid var(--neutral-light);
+    border-radius: 12px;
+    background: var(--white);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--neutral-dark);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='16' height='10' viewBox='0 0 16 10' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L8 8L15 1' stroke='%23FF6B7A' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 3rem;
+}
+
+.product-detail-variant-selector:hover {
+    border-color: var(--coral-primary);
+}
+
+.product-detail-variant-selector:focus {
+    outline: none;
+    border-color: var(--coral-primary);
+    box-shadow: 0 0 0 3px rgba(255, 107, 122, 0.15);
+}
+
 .product-detail-actions {
     display: flex;
-    gap: var(--spacing-sm);
+    flex-direction: column;
+    gap: var(--spacing-md);
     margin-top: var(--spacing-md);
     width: 100%;
 }
