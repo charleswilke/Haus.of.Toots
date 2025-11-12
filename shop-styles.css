@@ -937,6 +937,29 @@
     margin-bottom: 0;
 }
 
+/* Add spacing before section headings like "Shop Notes:" and "Details:" */
+/* Target paragraphs that come after lists (which typically contain the main description) */
+.product-detail-description ul + p,
+.product-detail-description ol + p {
+    margin-top: var(--spacing-md);
+}
+
+/* Target paragraphs with strong tags (section headings) that aren't the first child */
+.product-detail-description p:not(:first-child):has(strong) {
+    margin-top: var(--spacing-md);
+}
+
+/* Target headings */
+.product-detail-description h2,
+.product-detail-description h3 {
+    margin-top: var(--spacing-md);
+}
+
+.product-detail-description h2:first-child,
+.product-detail-description h3:first-child {
+    margin-top: 0;
+}
+
 .product-detail-variants {
     display: flex;
     flex-direction: column;
