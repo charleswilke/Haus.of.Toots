@@ -330,12 +330,26 @@ class CartManager {
         if (existingItem) {
             existingItem.quantity += quantity;
         } else {
+            // Find the selected variant to get its details
+            const selectedVariant = product.variants?.edges?.find(v => v.node.id === variantId)?.node;
+            
+            // Build variant info string from all selected options
+            let variantInfo = '';
+            if (selectedVariant?.selectedOptions && selectedVariant.selectedOptions.length > 0) {
+                variantInfo = selectedVariant.selectedOptions
+                    .map(opt => `${opt.name}: ${opt.value}`)
+                    .join(', ');
+            } else if (selectedVariant?.title) {
+                variantInfo = selectedVariant.title;
+            }
+
             this.items.push({
                 variantId,
                 productId: product.id,
                 productTitle: product.title,
                 productImage: product.images?.edges?.[0]?.node?.url,
-                price: product.variants.edges[0].node.priceV2,
+                price: selectedVariant?.priceV2 || product.variants?.edges?.[0]?.node?.priceV2,
+                variantInfo: variantInfo,
                 quantity
             });
         }

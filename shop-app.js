@@ -414,6 +414,7 @@ class ShopApp {
                 }
                 <div class="cart-item-details">
                     <div class="cart-item-title">${this.escapeHtml(item.productTitle)}</div>
+                    ${item.variantInfo ? `<div class="cart-item-variant">${this.escapeHtml(item.variantInfo)}</div>` : ''}
                     <div class="cart-item-price">${this.formatPrice(item.price.amount, item.price.currencyCode)}</div>
                     <div class="cart-item-controls">
                         <div class="quantity-control">
