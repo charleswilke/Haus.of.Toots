@@ -984,7 +984,7 @@
 
 /* Variant Selector in Modal */
 .product-detail-variant-selector-wrapper {
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
     width: 100%;
 }
 
@@ -1027,8 +1027,8 @@
 .product-detail-actions {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-md);
-    margin-top: var(--spacing-md);
+    gap: 0;
+    margin-top: 0;
     width: 100%;
 }
 

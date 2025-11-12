@@ -673,8 +673,12 @@ class ShopApp {
                         `).join('')}
                     </div>
                 ` : ''}
+                ${addToCartButtonHTML}
             </div>
-        ` : `<div class="product-detail-images"><div class="product-detail-main-image" style="background: var(--linen); display: flex; align-items: center; justify-content: center; color: var(--neutral-mid);">No image available</div></div>`;
+        ` : `<div class="product-detail-images">
+            <div class="product-detail-main-image" style="background: var(--linen); display: flex; align-items: center; justify-content: center; color: var(--neutral-mid);">No image available</div>
+            ${addToCartButtonHTML}
+        </div>`;
 
         const priceHTML = selectedVariant?.priceV2 
             ? `<div class="product-detail-price" id="modalProductPrice">${this.formatPrice(selectedVariant.priceV2.amount, selectedVariant.priceV2.currencyCode)}</div>`
@@ -698,7 +702,6 @@ class ShopApp {
                     </div>
                     ${priceHTML}
                     ${descriptionHTML}
-                    ${addToCartButtonHTML}
                 </div>
             </div>
         `;
