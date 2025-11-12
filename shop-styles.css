@@ -250,7 +250,7 @@
     width: 100%;
     padding: 0.625rem 0.875rem;
     border: 2px solid var(--neutral-light);
-    border-radius: 8px;
+    border-radius: 4px;
     background: var(--white);
     font-family: var(--font-body);
     font-size: 0.875rem;
@@ -293,7 +293,7 @@
     color: var(--white);
     border: none;
     padding: 0.75rem 1.5rem;
-    border-radius: 12px;
+    border-radius: 4px;
     font-weight: 600;
     font-size: 0.95rem;
     cursor: pointer;
@@ -332,7 +332,7 @@
     color: var(--white);
     border: none;
     padding: 0.75rem 1.5rem;
-    border-radius: 12px;
+    border-radius: 4px;
     box-shadow: 0 4px 16px rgba(255, 107, 122, 0.4);
     cursor: pointer;
     display: flex;
