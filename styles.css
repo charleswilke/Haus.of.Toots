@@ -2266,7 +2266,7 @@ section {
     color: var(--coral-primary);
     font-weight: 600;
     text-decoration: none;
-    padding: 0.15rem 0.25rem;
+    padding: 0;
     background: linear-gradient(
         90deg,
         var(--coral-light) 0%,
