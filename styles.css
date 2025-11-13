@@ -805,8 +805,7 @@ section {
 
 .about-image-wrapper {
     float: right;
-    margin: 0 0 var(--spacing-md) var(--spacing-md);
-    shape-outside: circle(50%);
+    shape-outside: circle(60%);
 }
 
 .about-photo {
@@ -819,6 +818,7 @@ section {
 
 .about-text p {
     margin-bottom: var(--spacing-md);
+    margin-top: var(--spacing-sm);
     font-size: 1.125rem;
     color: var(--neutral-dark);
 }
@@ -1595,7 +1595,7 @@ section {
     .container {
         overflow: visible;
         /* Add extra padding to account for 3px border on each side */
-        padding: 0 calc(var(--spacing-sm) + 3px);
+        padding: 0 calc(var(--spacing-sm) + 33px);
         box-sizing: border-box;
     }
     
