@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Me - Haus of Toots</title>
+    <meta name="description" content="Learn more about Jessie Wilke, the artist behind Haus of Toots custom needlepoint canvases.">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <span class="nav-brand-text">Haus of Toots</span>
+                <span class="nav-brand-subtitle">- Custom & Customized Needlepoint Canvases</span>
+            </a>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                <span class="nav-toggle-icon"></span>
+                <span class="nav-toggle-icon"></span>
+                <span class="nav-toggle-icon"></span>
+            </button>
+            <div class="nav-links" id="navLinks">
+                <a href="/shop" class="nav-link">Shop</a>
+                <a href="about.html" class="nav-link">About Me</a>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSd8y7MONwNWWYLNienG8kjcCDZd0De0kJl--dNNfpgUyw4Bfg/viewform?usp=dialog" target="_blank" rel="noopener noreferrer" class="nav-link">Request</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Scroll Stitch Sidebar -->
+    <div class="stitch-sidebar">
+        <svg class="stitch-line" viewBox="0 0 60 1000" preserveAspectRatio="xMidYMid slice">
+            <defs>
+                <linearGradient id="threadGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#FFAAB5;stop-opacity:1" />
+                    <stop offset="25%" style="stop-color:#FF8B9A;stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:#FF6B7A;stop-opacity:1" />
+                    <stop offset="75%" style="stop-color:#E85563;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#D04552;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <g id="stitchContainer"></g>
+            <g id="needle" transform="translate(30, 0)">
+                <line x1="-8" y1="-15" x2="8" y2="-15" stroke="#FF6B7A" stroke-width="3" stroke-linecap="round"/>
+                <path d="M 0 -15 L 0 5" stroke="#C0C0C0" stroke-width="2"/>
+                <circle cx="0" cy="-18" r="2" fill="#C0C0C0"/>
+            </g>
+        </svg>
+    </div>
+
+    <!-- Cursor Trail Canvas -->
+    <canvas id="cursorCanvas"></canvas>
+
+    <!-- About Section -->
+    <section class="about">
+        <div class="container">
+            <div class="about-content">
+                <h1 class="section-title">About <span class="highlight">Jessie</span></h1>
+                
+                <div class="stitched-border">
+                    <div class="about-layout">
+                        <div class="about-image-wrapper">
+                            <div class="embroidery-hoop hero-hoop about-photo">
+                                <div class="hoop-ring hero-hoop-ring"></div>
+                                <div class="canvas-placeholder">
+                                    <img src="images/jessiebio.jpg" alt="Jessie Wilke" class="bio-photo">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="about-text">
+                        <p><strong>Jessie's always been a chronic hobbyist</strong> in the best possible way. The kind of person who follows a spark until it becomes a skill.</p>
+                        
+                        <p>For years she orbited the world of threadcraft: cross-stitching, punch needling, experimenting with yarn weights and textures… Slowly filling the house with little portals of color. All of it, almost inevitably, led her to needlepoint.</p>
+                        
+                        <p>Needlepoint offered something the others didn't: calm. The rhythm. The structure. The way a painted canvas removes the guesswork and lets the hands settle into something meditative. It became her favorite kind of quiet.</p>
+                        
+                        <p>Originally from Anaheim, California, and after spending a decade in Los Angeles, she's found home in Omaha, Nebraska where she's been welcomed into the needlepoint community, and with that, forged some new lifelong friendships.</p>
+
+                        <p><strong>But Haus of Toots isn't built on hobby energy alone.</strong></p>
+                        
+                        <p>Jessie spent years managing teams, shaping customer experiences, and building trust with people from all walks of life. At <a href="https://www.farrow-ball.com/" target="_blank" rel="noopener noreferrer">Farrow & Ball</a>, she sharpened her color theory in practical application; watching how light, pigment, and environment shift the feeling of a room.</p>
+                        
+                        <p>At <a href="https://saltandstraw.com/" target="_blank" rel="noopener noreferrer">Salt & Straw</a>, she led with a gentle, servant-leadership style that centered on people, not pressure. Now, working in tech, as part of a customer experience team, she learned how to listen deeply, understand someone truly, and build those relationships into something meaningful.</p>
+                        
+                        <p><strong>All of that perspective and experience folds into her needlepoint work.</strong></p>
+                        
+                        <p>When someone requests a custom needlepoint canvas — a pet, a home, a memory — Jessie approaches it the way she always has: with curiosity, empathy, and an eye for the small details that make something feel special. Each canvas is designed with intention, crafted with care, and meant to be stitched into something cherished.</p>
+                        
+                        <p><strong>Haus of Toots is where craft and character meet.</strong></p>
+                        
+                        <p>A place where hobbyist joy and professional care blend into something warm, thoughtful, and beautifully handmade.</p>
+                        
+                        
+                        <p style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 2px dashed var(--neutral-light); font-size: 0.95rem; color: var(--neutral-mid); font-style: italic;">
+                            Written with love by <a href="https://charleswilke.com" target="_blank" rel="noopener noreferrer">Charles Wilke</a>, Jessie's husband & biggest fan
+                        </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="/shop" class="footer-link">Shop Digital Patterns</a>
+                    <span class="footer-divider">•</span>
+                    <a href="index.html#request" class="footer-link">Request Custom Design</a>
+                </div>
+                <div class="footer-social">
+                    <a href="https://instagram.com/haus.of.toots" target="_blank" rel="noopener noreferrer" class="social-link needle-hover">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                        <span>@haus.of.toots</span>
+                    </a>
+                </div>
+                <div class="footer-credits">
+                    <p>Made with <span class="heart">♥</span></p>
+                    <p class="copyright">&copy; 2025 Haus of Toots. Designs and customizations by Jessie Wilke.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

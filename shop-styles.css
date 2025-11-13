@@ -1161,6 +1161,31 @@
     .shop-logo {
         max-width: 216px;
     }
+    
+    .shop-header .hero-content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+        gap: 0.25rem;
+    }
+    
+    .shop-header .hero-title {
+        margin-bottom: 0;
+        width: 100%;
+        line-height: 1.1;
+    }
+    
+    .shop-header .hero-description {
+        margin: 0;
+        width: 100%;
+        text-align: left;
+        line-height: 1.4;
+    }
+    
+    .shop-content-side .stitched-border {
+        text-align: left;
+    }
 }
 
 /* Mobile - stacked layout */

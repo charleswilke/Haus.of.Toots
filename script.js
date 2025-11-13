@@ -981,5 +981,83 @@ if (prefersReducedMotion.matches) {
     }
 }
 
+// ===================================
+// TOP NAVIGATION
+// ===================================
+
+// Add scroll effect to navigation
+const topNav = document.querySelector('.top-nav');
+if (topNav) {
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            topNav.classList.add('scrolled');
+        } else {
+            topNav.classList.remove('scrolled');
+        }
+    });
+}
+
+// Highlight active page in navigation
+const currentPage = window.location.pathname;
+const navLinks = document.querySelectorAll('.nav-link');
+
+navLinks.forEach(link => {
+    const linkPath = new URL(link.href).pathname;
+    // Check if the link matches current page, accounting for index.html being the root
+    if (linkPath === currentPage || 
+        (currentPage === '/' && linkPath.endsWith('index.html')) ||
+        (currentPage.endsWith('index.html') && linkPath === '/')) {
+        link.classList.add('active');
+    }
+});
+
+// Hamburger menu toggle
+const navToggle = document.getElementById('navToggle');
+const navLinksContainer = document.getElementById('navLinks');
+
+if (navToggle && navLinksContainer) {
+    navToggle.addEventListener('click', () => {
+        const isExpanded = navToggle.getAttribute('aria-expanded') === 'true';
+        navToggle.setAttribute('aria-expanded', !isExpanded);
+        navLinksContainer.classList.toggle('active');
+        
+        // Prevent body scroll when menu is open
+        if (!isExpanded) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+    });
+    
+    // Close menu when clicking on a link or cart button
+    navLinksContainer.querySelectorAll('.nav-link, .nav-cart-button').forEach(element => {
+        element.addEventListener('click', () => {
+            navToggle.setAttribute('aria-expanded', 'false');
+            navLinksContainer.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+    });
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!navToggle.contains(e.target) && !navLinksContainer.contains(e.target)) {
+            if (navLinksContainer.classList.contains('active')) {
+                navToggle.setAttribute('aria-expanded', 'false');
+                navLinksContainer.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+    });
+    
+    // Close menu on window resize if it's larger than 768px
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+            navToggle.setAttribute('aria-expanded', 'false');
+            navLinksContainer.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+}
+
 console.log('✨ Haus of Toots is ready to stitch! ✨');
 
