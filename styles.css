@@ -187,12 +187,21 @@ section {
     transform: translateY(-2px);
 }
 
+.nav-brand-logo {
+    height: 42px;
+    width: auto;
+    display: block;
+    margin-bottom: -2px;
+}
+
 .nav-brand-text {
     font-family: var(--font-display);
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--coral-dark);
     letter-spacing: -0.5px;
+    line-height: 1.2;
+    margin-bottom: -2px;
 }
 
 .nav-brand-subtitle {
@@ -202,6 +211,8 @@ section {
     color: var(--neutral-mid);
     letter-spacing: 0.2px;
     white-space: nowrap;
+    line-height: 1.2;
+    margin-bottom: 4px;
 }
 
 .nav-toggle {
@@ -441,6 +452,10 @@ section {
         flex-direction: column;
         align-items: flex-start;
         gap: 0.25rem;
+    }
+    
+    .nav-brand-logo {
+        height: 32px;
     }
     
     .nav-brand-text {
