@@ -449,21 +449,23 @@ section {
     }
     
     .nav-brand {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.25rem;
+        align-items: center;
+        gap: 0.4rem;
     }
     
     .nav-brand-logo {
         height: 32px;
+        margin-bottom: 0;
     }
     
     .nav-brand-text {
         font-size: 1.25rem;
+        margin-bottom: 0;
     }
     
     .nav-brand-subtitle {
         font-size: 0.75rem;
+        margin-bottom: 0;
     }
     
     .nav-cart-button {
