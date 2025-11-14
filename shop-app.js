@@ -126,7 +126,7 @@ class ShopApp {
 
         // Badge for hand painted products
         const badgeHTML = isHandPainted 
-            ? `<div class="product-badge product-badge-hand-painted">Hand Painted Canvas</div>`
+            ? `<div class="product-badge product-badge-hand-painted">Painted Canvas</div>`
             : `<div class="product-badge product-badge-digital">Digital Pattern</div>`;
 
         // Get variant options (like Size, Canvas Count, etc.)
@@ -617,7 +617,7 @@ class ShopApp {
         
         // Badge HTML for modal
         const badgeHTML = isHandPainted 
-            ? `<span class="product-detail-badge product-detail-badge-hand-painted">Hand Painted Canvas</span>`
+            ? `<span class="product-detail-badge product-detail-badge-hand-painted">Painted Canvas</span>`
             : `<span class="product-detail-badge product-detail-badge-digital">Digital Pattern</span>`;
 
         // Variant selector HTML (dropdown style for modal)
