@@ -542,11 +542,14 @@ function animateCrossStitchPattern() {
 }
 
 // ===================================
-// EXPANDABLE GALLERY CARDS
+// UNIFIED GALLERY WITH LAZY LOADING
 // ===================================
 
-class ExpandableGallery {
+class UnifiedGallery {
     constructor() {
+        this.galleryGrid = document.getElementById('galleryGrid');
+        this.galleryHero = document.getElementById('galleryHero');
+        this.filterChips = document.querySelectorAll('.filter-chip');
         this.lightbox = document.getElementById('lightbox');
         this.lightboxImage = this.lightbox.querySelector('.lightbox-image');
         this.lightboxCaption = this.lightbox.querySelector('.lightbox-caption');
@@ -554,58 +557,83 @@ class ExpandableGallery {
         this.prevBtn = this.lightbox.querySelector('.lightbox-prev');
         this.nextBtn = this.lightbox.querySelector('.lightbox-next');
         
+        this.currentFilter = 'all';
+        this.allImages = [];
         this.currentImages = [];
         this.currentIndex = 0;
-        this.categoryName = '';
-        this.currentExpandedCard = null;
+        this.heroIndex = 0;
+        this.heroInterval = null;
+        this.hasFilteredOnce = false; // Track if user has clicked a filter
         
-        // Gallery data with all images from new folders
+        // Featured pieces with stories
+        this.featuredPieces = [
+            {
+                src: 'images/recent-canvases/1CustomCanvases/Winston.jpeg',
+                thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Winston.jpg',
+                title: 'Winston',
+                story: 'A beloved French Bulldog with the sweetest underbite. His owner wanted to capture his personality in needlepoint—complete with that mischievous gleam in his eye.'
+            },
+            {
+                src: 'images/recent-canvases/1CustomCanvases/HappyHollowRectangle.jpeg',
+                thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-HappyHollowRectangle.jpg',
+                title: 'Happy Hollow',
+                story: 'A custom piece celebrating a family\'s favorite summer camp. Every detail matters—from the lake to the cabins—because these memories are woven into their story.'
+            },
+            {
+                src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/Kermit-w-PearlEarring-by-CherryMarryStore-Etsy.jpeg',
+                thumbnail: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-Kermit-w-PearlEarring-by-CherryMarryStore-Etsy.jpg',
+                title: 'Kermit with the Pearl Earring',
+                story: 'Because sometimes you need Vermeer meets the Muppets. Painted from a digital chart by CherryMarryStore—equal parts classy and whimsical.'
+            }
+        ];
+        
+        // Gallery data with all images from new folders (with micro-stories)
         this.galleries = {
             'custom-canvases': {
                 name: 'Custom Canvases',
                 images: [
-                    { src: 'images/recent-canvases/1CustomCanvases/Winston.jpeg', thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Winston.jpg', alt: 'Winston' },
-                    { src: 'images/recent-canvases/1CustomCanvases/Mazie-and-Smiley.jpeg', thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Mazie-and-Smiley.jpg', alt: 'Mazie & Smiley' },
-                    { src: 'images/recent-canvases/1CustomCanvases/CampFlannelFizz.jpeg', thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-CampFlannelFizz.jpg', alt: 'Camp Flannel & Fizz' },
-                    { src: 'images/recent-canvases/1CustomCanvases/CowboyBear.jpeg', thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-CowboyBear.jpg', alt: 'Cowboy Bear' },
-                    { src: 'images/recent-canvases/1CustomCanvases/HappyHollowRectangle.jpeg', thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-HappyHollowRectangle.jpg', alt: 'Happy Hollow (Rectangle)' },
-                    { src: 'images/recent-canvases/1CustomCanvases/HappyHollowRound.jpeg', thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-HappyHollowRound.jpg', alt: 'Happy Hollow (Round)' },
-                    { src: 'images/recent-canvases/1CustomCanvases/Mazie.jpeg', thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Mazie.jpg', alt: 'Mazie' },
-                    { src: 'images/recent-canvases/1CustomCanvases/MommyOnly.jpeg', thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-MommyOnly.jpg', alt: 'Mommy Only' },
-                    { src: 'images/recent-canvases/1CustomCanvases/Smiley.jpeg', thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Smiley.jpg', alt: 'Smiley' },
-                    { src: 'images/recent-canvases/1CustomCanvases/YouAreMySunshine2.jpeg', thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-YouAreMySunshine2.jpg', alt: 'You Are My Sunshine' }
+                    { src: 'images/recent-canvases/1CustomCanvases/Winston.jpeg', thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Winston.jpg', alt: 'Winston', story: 'custom pet portrait' },
+                    { src: 'images/recent-canvases/1CustomCanvases/Mazie-and-Smiley.jpeg', thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Mazie-and-Smiley.jpg', alt: 'Mazie & Smiley', story: 'sibling duo' },
+                    { src: 'images/recent-canvases/1CustomCanvases/CampFlannelFizz.jpeg', thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-CampFlannelFizz.jpg', alt: 'Camp Flannel & Fizz', story: 'preppy summer vibes' },
+                    { src: 'images/recent-canvases/1CustomCanvases/CowboyBear.jpeg', thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-CowboyBear.jpg', alt: 'Cowboy Bear', story: 'wild west cuteness' },
+                    { src: 'images/recent-canvases/1CustomCanvases/HappyHollowRectangle.jpeg', thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-HappyHollowRectangle.jpg', alt: 'Happy Hollow', story: 'summer camp memories' },
+                    { src: 'images/recent-canvases/1CustomCanvases/HappyHollowRound.jpeg', thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-HappyHollowRound.jpg', alt: 'Happy Hollow (Round)', story: 'camp crest variation' },
+                    { src: 'images/recent-canvases/1CustomCanvases/Mazie.jpeg', thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Mazie.jpg', alt: 'Mazie', story: 'custom pet portrait' },
+                    { src: 'images/recent-canvases/1CustomCanvases/MommyOnly.jpeg', thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-MommyOnly.jpg', alt: 'Mommy Only', story: 'playful family sign' },
+                    { src: 'images/recent-canvases/1CustomCanvases/Smiley.jpeg', thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Smiley.jpg', alt: 'Smiley', story: 'custom pet portrait' },
+                    { src: 'images/recent-canvases/1CustomCanvases/YouAreMySunshine2.jpeg', thumbnail: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-YouAreMySunshine2.jpg', alt: 'You Are My Sunshine', story: 'sentimental keepsake' }
                 ]
             },
             'hot-originals': {
                 name: 'HoT Originals',
                 images: [
-                    { src: 'images/recent-canvases/2HoT-originals/SephoraHoliday.jpeg', thumbnail: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SephoraHoliday.jpg', alt: 'Sephora (Holiday)' },
-                    { src: 'images/recent-canvases/2HoT-originals/SephoraStandard.jpg', thumbnail: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SephoraStandard.jpg', alt: 'Sephora (Standard)' },
-                    { src: 'images/recent-canvases/2HoT-originals/SharpestTool.jpeg', thumbnail: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SharpestTool.jpg', alt: 'Sharpest Tool' }
+                    { src: 'images/recent-canvases/2HoT-originals/SephoraHoliday.jpeg', thumbnail: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SephoraHoliday.jpg', alt: 'Sephora', story: 'holiday edition design' },
+                    { src: 'images/recent-canvases/2HoT-originals/SephoraStandard.jpg', thumbnail: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SephoraStandard.jpg', alt: 'Sephora', story: 'original design' },
+                    { src: 'images/recent-canvases/2HoT-originals/SharpestTool.jpeg', thumbnail: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SharpestTool.jpg', alt: 'Sharpest Tool', story: 'witty wordplay piece' }
                 ]
             },
             'digital-charts': {
-                name: 'Painted from Purchased Digital Charts',
+                name: 'Digital Charts',
                 images: [
-                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/DuckHunt-by-TurtleStitchShop-Etsy.jpeg', thumbnail: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-DuckHunt-by-TurtleStitchShop-Etsy.jpg', alt: 'Duck Hunt (by TurtleStitchShop on Etsy)' },
-                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/FuckOff-by-HoopModernStitch-Etsy.jpeg', thumbnail: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-FuckOff-by-HoopModernStitch-Etsy.jpg', alt: 'Fuck Off (by HoopModernStitch on Etsy)' },
-                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/Kermit-w-PearlEarring-by-CherryMarryStore-Etsy.jpeg', thumbnail: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-Kermit-w-PearlEarring-by-CherryMarryStore-Etsy.jpg', alt: 'Kermit with the Pearl Earring (by CherryMarryStore on Etsy)' },
-                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PeeWee-by-StitchedIts-Etsy.jpeg', thumbnail: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PeeWee-by-StitchedIts-Etsy.jpg', alt: 'Pee-Wee Herman (by StitchedIts on Etsy)' },
-                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PixelHearts-by-PixellPatterns-Etsy.jpeg', thumbnail: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PixelHearts-by-PixellPatterns-Etsy.jpg', alt: 'Pixel Hearts (by PixellPatterns on Etsy)' },
-                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PopeKermit-by-CherryMarryStore.jpeg', thumbnail: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PopeKermit-by-CherryMarryStore.jpg', alt: 'Pope Kermit (by CherryMarryStore on Etsy)' }
+                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/DuckHunt-by-TurtleStitchShop-Etsy.jpeg', thumbnail: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-DuckHunt-by-TurtleStitchShop-Etsy.jpg', alt: 'Duck Hunt', story: 'nostalgic gamer classic' },
+                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/FuckOff-by-HoopModernStitch-Etsy.jpeg', thumbnail: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-FuckOff-by-HoopModernStitch-Etsy.jpg', alt: 'Fuck Off', story: 'bold modern statement' },
+                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/Kermit-w-PearlEarring-by-CherryMarryStore-Etsy.jpeg', thumbnail: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-Kermit-w-PearlEarring-by-CherryMarryStore-Etsy.jpg', alt: 'Kermit with Pearl Earring', story: 'art history meets Muppets' },
+                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PeeWee-by-StitchedIts-Etsy.jpeg', thumbnail: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PeeWee-by-StitchedIts-Etsy.jpg', alt: 'Pee-Wee Herman', story: 'cult classic character' },
+                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PixelHearts-by-PixellPatterns-Etsy.jpeg', thumbnail: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PixelHearts-by-PixellPatterns-Etsy.jpg', alt: 'Pixel Hearts', story: 'retro 8-bit love' },
+                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PopeKermit-by-CherryMarryStore.jpeg', thumbnail: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PopeKermit-by-CherryMarryStore.jpg', alt: 'Pope Kermit', story: 'blessed and iconic' }
                 ]
             },
             'customizations': {
-                name: 'Canvas Customizations',
+                name: 'Customizations',
                 images: [
-                    { src: 'images/recent-canvases/4CanvasCustomizations/Pinehurst-Customization-Before.jpeg', thumbnail: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Pinehurst-Customization-Before.jpg', alt: 'Pinehurst (Before)' },
-                    { src: 'images/recent-canvases/4CanvasCustomizations/Pinehurst-Customization-After.jpeg', thumbnail: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Pinehurst-Customization-After.jpg', alt: 'Pinehurst (After)' },
-                    { src: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-Before.jpeg', thumbnail: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Lance-StockingCustomization-Before.jpg', alt: 'Lance Stocking (Before)' },
-                    { src: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-After.jpg', thumbnail: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Lance-StockingCustomization-After.jpg', alt: 'Lance Stocking (After)' },
-                    { src: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-After2.jpg', thumbnail: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Lance-StockingCustomization-After2.jpg', alt: 'Lance Stocking (After 2)' },
-                    { src: 'images/recent-canvases/4CanvasCustomizations/Kathryn-StockingCustomization-After.jpeg', thumbnail: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Kathryn-StockingCustomization-After.jpg', alt: 'Kathryn Stocking (After)' },
-                    { src: 'images/recent-canvases/4CanvasCustomizations/MM-CanvasMonogram-Before.jpeg', thumbnail: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-MM-CanvasMonogram-Before.jpg', alt: 'MM Canvas Monogram (Before)' },
-                    { src: 'images/recent-canvases/4CanvasCustomizations/MM-CanvasMonogram-After.jpeg', thumbnail: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-MM-CanvasMonogram-After.jpg', alt: 'MM Canvas Monogram (After)' }
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Pinehurst-Customization-Before.jpeg', thumbnail: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Pinehurst-Customization-Before.jpg', alt: 'Pinehurst (Before)', story: 'original canvas' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Pinehurst-Customization-After.jpeg', thumbnail: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Pinehurst-Customization-After.jpg', alt: 'Pinehurst (After)', story: 'personalized update' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-Before.jpeg', thumbnail: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Lance-StockingCustomization-Before.jpg', alt: 'Lance Stocking (Before)', story: 'original canvas' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-After.jpg', thumbnail: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Lance-StockingCustomization-After.jpg', alt: 'Lance Stocking (After)', story: 'name added' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-After2.jpg', thumbnail: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Lance-StockingCustomization-After2.jpg', alt: 'Lance Stocking', story: 'finished detail' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Kathryn-StockingCustomization-After.jpeg', thumbnail: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Kathryn-StockingCustomization-After.jpg', alt: 'Kathryn Stocking', story: 'personalized stocking' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/MM-CanvasMonogram-Before.jpeg', thumbnail: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-MM-CanvasMonogram-Before.jpg', alt: 'MM Monogram (Before)', story: 'original canvas' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/MM-CanvasMonogram-After.jpeg', thumbnail: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-MM-CanvasMonogram-After.jpg', alt: 'MM Monogram (After)', story: 'custom monogram added' }
                 ]
             }
         };
@@ -614,37 +642,332 @@ class ExpandableGallery {
     }
     
     init() {
-        // Add click handlers to gallery cards
-        document.querySelectorAll('.gallery-card').forEach(card => {
-            // Make sure we only have one listener per card
-            const handleClick = (e) => {
-                // Don't toggle if clicking a thumbnail
-                if (e.target.closest('.thumbnail-item')) return;
-                
-                // Only process clicks on this specific card's preview area
-                if (!e.target.closest('.gallery-card-preview')) {
-                    return;
-                }
-                
-                e.stopPropagation();
-                e.preventDefault();
-                const galleryId = card.dataset.gallery;
-                this.toggleGallery(card, galleryId);
-            };
-            
-            card.addEventListener('click', handleClick);
-            
-            // Keyboard accessibility
-            card.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const galleryId = card.dataset.gallery;
-                    this.toggleGallery(card, galleryId);
-                }
+        // Build flat array of all images with category info
+        this.buildImageArray();
+        
+        // Setup hero carousel
+        this.setupHero();
+        
+        // Generate gallery items
+        this.generateGallery();
+        
+        // Update filter counts
+        this.updateFilterCounts();
+        
+        // Setup filter chips
+        this.setupFilters();
+        
+        // Setup lazy loading
+        this.setupLazyLoading();
+        
+        // Setup lightbox
+        this.setupLightbox();
+    }
+    
+    buildImageArray() {
+        // Create flat array of all images with category metadata
+        Object.entries(this.galleries).forEach(([categoryId, category]) => {
+            category.images.forEach(image => {
+                this.allImages.push({
+                    ...image,
+                    category: categoryId,
+                    categoryName: category.name
+                });
             });
         });
+    }
+    
+    setupHero() {
+        if (!this.galleryHero) return;
         
+        const imageContainer = this.galleryHero.querySelector('.gallery-hero-image');
+        const title = this.galleryHero.querySelector('.hero-story-title');
+        const text = this.galleryHero.querySelector('.hero-story-text');
+        const dotsContainer = this.galleryHero.querySelector('.hero-story-dots');
+        
+        // Wait for images to be built, then create hero slides from all gallery items
+        setTimeout(() => {
+            if (this.allImages.length === 0) return;
+            
+            // Create featured pieces from all gallery items with micro-stories
+            this.heroSlides = this.allImages.map(img => ({
+                src: img.src,
+                thumbnail: img.thumbnail,
+                title: img.alt,
+                story: `${img.story || img.categoryName} • ${img.categoryName}`
+            }));
+            
+            // Limit dots to reasonable number for UI
+            const maxDots = 10;
+            const dotStep = Math.ceil(this.heroSlides.length / maxDots);
+            
+            // Create dots for navigation (show up to 10 dots)
+            for (let i = 0; i < Math.min(maxDots, this.heroSlides.length); i++) {
+                const dot = document.createElement('div');
+                dot.className = 'hero-story-dot';
+                if (i === 0) dot.classList.add('active');
+                const slideIndex = i * dotStep;
+                dot.addEventListener('click', () => this.showHeroSlide(slideIndex));
+                dotsContainer.appendChild(dot);
+            }
+            
+            // Show first slide
+            this.showHeroSlide(0);
+            
+            // Auto-rotate every 6 seconds through all images
+            this.heroInterval = setInterval(() => {
+                this.heroIndex = (this.heroIndex + 1) % this.heroSlides.length;
+                this.showHeroSlide(this.heroIndex);
+            }, 6000);
+            
+            // Pause on hover
+            this.galleryHero.addEventListener('mouseenter', () => {
+                if (this.heroInterval) {
+                    clearInterval(this.heroInterval);
+                    this.heroInterval = null;
+                }
+            });
+            
+            this.galleryHero.addEventListener('mouseleave', () => {
+                if (!this.heroInterval) {
+                    this.heroInterval = setInterval(() => {
+                        this.heroIndex = (this.heroIndex + 1) % this.heroSlides.length;
+                        this.showHeroSlide(this.heroIndex);
+                    }, 6000);
+                }
+            });
+        }, 100);
+    }
+    
+    showHeroSlide(index) {
+        if (!this.heroSlides || this.heroSlides.length === 0) return;
+        
+        this.heroIndex = index;
+        const piece = this.heroSlides[index];
+        
+        const heroContent = this.galleryHero.querySelector('.gallery-hero-content');
+        const imageContainer = this.galleryHero.querySelector('.gallery-hero-image');
+        const category = this.galleryHero.querySelector('.hero-story-category');
+        const title = this.galleryHero.querySelector('.hero-story-title');
+        const text = this.galleryHero.querySelector('.hero-story-text');
+        const dots = this.galleryHero.querySelectorAll('.hero-story-dot');
+        
+        // Reset and trigger card dealing animation
+        heroContent.style.animation = 'none';
+        setTimeout(() => {
+            heroContent.style.animation = 'dealCard 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        }, 10);
+        
+        // Slide out current image, then slide in new one (card dealing effect)
+        imageContainer.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+        imageContainer.style.transform = 'translateX(-30px) scale(0.95)';
+        imageContainer.style.opacity = '0';
+        
+        setTimeout(() => {
+            imageContainer.innerHTML = `<img src="${piece.thumbnail || piece.src}" alt="${piece.title}">`;
+            
+            // Reset position and slide in
+            imageContainer.style.transform = 'translateX(30px) scale(0.95)';
+            
+            setTimeout(() => {
+                imageContainer.style.transition = 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s ease';
+                imageContainer.style.transform = 'translateX(0) scale(1)';
+                imageContainer.style.opacity = '1';
+            }, 50);
+        }, 300);
+        
+        // Parse category from story (format: "story • category")
+        const storyParts = piece.story.split(' • ');
+        const categoryName = storyParts[1] || piece.story;
+        const storyText = storyParts[0] || piece.story;
+        
+        // Update content with pop-in animations (reset and replay)
+        category.style.animation = 'none';
+        title.style.animation = 'none';
+        text.style.animation = 'none';
+        
+        setTimeout(() => {
+            category.textContent = categoryName;
+            title.textContent = piece.title;
+            text.textContent = storyText;
+            
+            // Trigger bounce-in animations
+            setTimeout(() => {
+                category.style.animation = 'popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
+                title.style.animation = 'popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s forwards';
+                text.style.animation = 'popIn 0.4s ease-out 0.2s forwards';
+            }, 300);
+        }, 10);
+        
+        // Update navigation dots
+        const maxDots = 10;
+        const dotStep = Math.ceil(this.heroSlides.length / maxDots);
+        const activeDot = Math.floor(index / dotStep);
+        
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === activeDot);
+        });
+    }
+    
+    generateGallery() {
+        this.galleryGrid.innerHTML = '';
+        
+        this.allImages.forEach((image, index) => {
+            const item = document.createElement('div');
+            item.className = 'gallery-item-unified hidden'; // Start hidden
+            item.dataset.category = image.category;
+            item.dataset.index = index;
+            item.setAttribute('role', 'button');
+            item.setAttribute('tabindex', '0');
+            item.setAttribute('aria-label', `View ${image.alt}`);
+            
+            // Create image element with lazy loading
+            const img = document.createElement('img');
+            img.className = 'gallery-item-image';
+            img.dataset.src = image.thumbnail || image.src;
+            img.alt = image.alt;
+            img.setAttribute('data-lazy', 'true');
+            
+            // Create micro-story caption
+            const caption = document.createElement('div');
+            caption.className = 'gallery-item-caption';
+            
+            const captionTitle = document.createElement('div');
+            captionTitle.className = 'gallery-item-caption-title';
+            captionTitle.textContent = image.alt;
+            
+            const captionSubtitle = document.createElement('div');
+            captionSubtitle.className = 'gallery-item-caption-subtitle';
+            captionSubtitle.textContent = image.story || image.categoryName;
+            
+            caption.appendChild(captionTitle);
+            caption.appendChild(captionSubtitle);
+            
+            item.appendChild(img);
+            item.appendChild(caption);
+            
+            // Add before/after badge for customizations
+            if (image.category === 'customizations') {
+                const altLower = image.alt.toLowerCase();
+                if (altLower.includes('before')) {
+                    const badge = document.createElement('div');
+                    badge.className = 'gallery-item-badge before';
+                    badge.textContent = 'Before';
+                    item.appendChild(badge);
+                } else if (altLower.includes('after')) {
+                    const badge = document.createElement('div');
+                    badge.className = 'gallery-item-badge after';
+                    badge.textContent = 'After';
+                    item.appendChild(badge);
+                }
+            }
+            
+            // Click handler
+            item.addEventListener('click', () => this.openLightbox(index));
+            
+            // Keyboard support
+            item.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.openLightbox(index);
+                }
+            });
+            
+            this.galleryGrid.appendChild(item);
+        });
+    }
+    
+    updateFilterCounts() {
+        // Count images per category
+        const counts = {
+            'all': this.allImages.length
+        };
+        
+        Object.keys(this.galleries).forEach(categoryId => {
+            counts[categoryId] = this.allImages.filter(img => img.category === categoryId).length;
+        });
+        
+        // Update chip counts
+        this.filterChips.forEach(chip => {
+            const filter = chip.dataset.filter;
+            const countElem = chip.querySelector('.chip-count');
+            if (countElem && counts[filter] !== undefined) {
+                countElem.textContent = counts[filter];
+            }
+        });
+    }
+    
+    setupFilters() {
+        this.filterChips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                const filter = chip.dataset.filter;
+                this.applyFilter(filter);
+                
+                // Update active state
+                this.filterChips.forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+            });
+        });
+    }
+    
+    applyFilter(filter) {
+        this.currentFilter = filter;
+        const items = this.galleryGrid.querySelectorAll('.gallery-item-unified');
+        
+        // Track if this is the first filter interaction
+        if (!this.hasFilteredOnce) {
+            this.hasFilteredOnce = true;
+        }
+        
+        items.forEach((item, index) => {
+            const itemCategory = item.dataset.category;
+            
+            if (filter === 'all' || itemCategory === filter) {
+                item.classList.remove('hidden');
+                // Stagger animation
+                setTimeout(() => {
+                    item.classList.add('loaded');
+                }, index * 30);
+            } else {
+                item.classList.add('hidden');
+                item.classList.remove('loaded');
+            }
+        });
+    }
+    
+    setupLazyLoading() {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    const src = img.dataset.src;
+                    
+                    if (src) {
+                        img.src = src;
+                        img.removeAttribute('data-lazy');
+                        
+                        img.onload = () => {
+                            const item = img.closest('.gallery-item-unified');
+                            if (item && !item.classList.contains('hidden')) {
+                                item.classList.add('loaded');
+                            }
+                        };
+                    }
+                    
+                    observer.unobserve(img);
+                }
+            });
+        }, {
+            rootMargin: '50px 0px',
+            threshold: 0.01
+        });
+        
+        // Observe all lazy images
+        const lazyImages = this.galleryGrid.querySelectorAll('img[data-lazy]');
+        lazyImages.forEach(img => imageObserver.observe(img));
+    }
+    
+    setupLightbox() {
         // Lightbox navigation handlers
         this.closeBtn.addEventListener('click', () => this.closeLightbox());
         this.prevBtn.addEventListener('click', () => this.navigate(-1));
@@ -675,131 +998,21 @@ class ExpandableGallery {
         });
     }
     
-    toggleGallery(card, galleryId) {
-        const gallery = this.galleries[galleryId];
-        if (!gallery) return;
-        
-        const isExpanded = card.getAttribute('aria-expanded') === 'true';
-        
-        // Close ALL other expanded cards first
-        document.querySelectorAll('.gallery-card[aria-expanded="true"]').forEach(expandedCard => {
-            if (expandedCard !== card) {
-                this.collapseCard(expandedCard);
-            }
+    openLightbox(startIndex = 0) {
+        // Get current filtered images
+        const visibleItems = Array.from(this.galleryGrid.querySelectorAll('.gallery-item-unified:not(.hidden)'));
+        this.currentImages = visibleItems.map(item => {
+            const index = parseInt(item.dataset.index);
+            return this.allImages[index];
         });
         
-        if (isExpanded) {
-            // Collapse this card
-            this.collapseCard(card);
-        } else {
-            // Expand this card
-            this.expandCard(card, galleryId, gallery);
-        }
-    }
-    
-    expandCard(card, galleryId, gallery) {
-        card.setAttribute('aria-expanded', 'true');
-        this.currentExpandedCard = card;
-        
-        // Generate thumbnails
-        const thumbnailContainer = card.querySelector('.gallery-card-thumbnails');
-        const thumbnailsGrid = document.createElement('div');
-        thumbnailsGrid.className = 'thumbnails-grid';
-        
-        gallery.images.forEach((image, index) => {
-            const thumbnail = document.createElement('div');
-            thumbnail.className = 'thumbnail-item';
-            thumbnail.setAttribute('role', 'button');
-            thumbnail.setAttribute('tabindex', '0');
-            thumbnail.setAttribute('aria-label', `View ${image.alt}`);
-            
-            // Add before/after badge for customization gallery
-            if (galleryId === 'customizations') {
-                const altLower = image.alt.toLowerCase();
-                if (altLower.includes('before')) {
-                    thumbnail.classList.add('before-after-badge');
-                    thumbnail.setAttribute('data-badge', 'Before');
-                } else if (altLower.includes('after')) {
-                    thumbnail.classList.add('before-after-badge');
-                    thumbnail.setAttribute('data-badge', 'After');
-                }
-            }
-            
-            const img = document.createElement('img');
-            img.src = image.thumbnail || image.src; // Use thumbnail if available, fallback to full
-            img.alt = image.alt;
-            img.loading = 'lazy';
-            
-            // Add class for stocking images to enable top-alignment
-            if (image.src.toLowerCase().includes('stocking') || (image.thumbnail && image.thumbnail.toLowerCase().includes('stocking'))) {
-                img.classList.add('stocking-image');
-            }
-            
-            thumbnail.appendChild(img);
-            
-            // Click to open in lightbox
-            thumbnail.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.openLightbox(galleryId, index);
-            });
-            
-            // Keyboard support
-            thumbnail.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    this.openLightbox(galleryId, index);
-                }
-            });
-            
-            thumbnailsGrid.appendChild(thumbnail);
+        // Find the index in the filtered list
+        const globalIndex = parseInt(startIndex);
+        const filteredIndex = this.currentImages.findIndex(img => {
+            return this.allImages.indexOf(img) === globalIndex;
         });
         
-        thumbnailContainer.innerHTML = '';
-        thumbnailContainer.appendChild(thumbnailsGrid);
-        
-        // Update preview text - preserve the title
-        const previewText = card.querySelector('.gallery-preview-text');
-        if (previewText) {
-            const title = gallery.name;
-            previewText.innerHTML = `<strong>${title}</strong> <span class="gallery-action-text">(Click a thumbnail to view full size)</span>`;
-        }
-    }
-    
-    collapseCard(card) {
-        card.setAttribute('aria-expanded', 'false');
-        const thumbnailContainer = card.querySelector('.gallery-card-thumbnails');
-        
-        // Clear thumbnails after animation
-        setTimeout(() => {
-            if (card.getAttribute('aria-expanded') === 'false') {
-                thumbnailContainer.innerHTML = '';
-            }
-        }, 500);
-        
-        // Reset preview text - preserve the title
-        const previewText = card.querySelector('.gallery-preview-text');
-        if (previewText) {
-            const galleryId = card.dataset.gallery;
-            const gallery = this.galleries[galleryId];
-            if (gallery) {
-                const title = gallery.name;
-                previewText.innerHTML = `<strong>${title}</strong> <span class="gallery-action-text">(Click to view all designs)</span>`;
-            }
-        }
-        
-        if (this.currentExpandedCard === card) {
-            this.currentExpandedCard = null;
-        }
-    }
-    
-    openLightbox(galleryId, startIndex = 0) {
-        const gallery = this.galleries[galleryId];
-        if (!gallery) return;
-        
-        this.currentImages = gallery.images;
-        this.categoryName = gallery.name;
-        this.currentIndex = startIndex;
+        this.currentIndex = filteredIndex >= 0 ? filteredIndex : 0;
         
         this.showImage();
         this.lightbox.classList.add('active');
@@ -815,7 +1028,7 @@ class ExpandableGallery {
         const image = this.currentImages[this.currentIndex];
         this.lightboxImage.src = image.src;
         this.lightboxImage.alt = image.alt;
-        this.lightboxCaption.textContent = `${image.alt} — ${this.categoryName} (${this.currentIndex + 1} of ${this.currentImages.length})`;
+        this.lightboxCaption.textContent = `${image.alt} — ${image.categoryName} (${this.currentIndex + 1} of ${this.currentImages.length})`;
         
         // Add before/after badge to lightbox image
         const lightboxContent = this.lightbox.querySelector('.lightbox-content');
@@ -824,8 +1037,8 @@ class ExpandableGallery {
             existingBadge.remove();
         }
         
-        // Only add badge for customization gallery
-        if (this.categoryName === 'Canvas Customizations') {
+        // Only add badge for customization category
+        if (image.category === 'customizations') {
             const altLower = image.alt.toLowerCase();
             if (altLower.includes('before') || altLower.includes('after')) {
                 const badge = document.createElement('div');
@@ -884,8 +1097,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Rotating carousel (auto-rotating images in hoops)
     const rotatingCarousel = new RotatingCarousel();
     
-    // Expandable gallery cards with lightbox
-    const expandableGallery = new ExpandableGallery();
+    // Unified gallery with lazy loading and filters
+    const unifiedGallery = new UnifiedGallery();
     
     // Email link stitching effect - apply to all links in about section
     const aboutLinks = document.querySelectorAll('.about-text a, .about-card a');
