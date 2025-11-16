@@ -217,6 +217,37 @@
                 grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
             }
         }
+
+        /* Lightbox with canvas texture background */
+        .lightbox {
+            background: rgba(250, 248, 245, 0.98);
+            background-image: url('images/haus_of_toots_canvas_13ct_512px.png');
+            background-repeat: repeat;
+            background-size: 512px 500px;
+            background-position: 0 0;
+        }
+
+        .lightbox-close,
+        .lightbox-prev,
+        .lightbox-next {
+            background: var(--coral-primary);
+            box-shadow: 0 4px 12px rgba(255, 107, 122, 0.6);
+        }
+
+        .lightbox-close:hover,
+        .lightbox-prev:hover,
+        .lightbox-next:hover {
+            background: var(--coral-dark);
+            box-shadow: 0 6px 16px rgba(255, 107, 122, 0.8);
+        }
+
+        .lightbox-caption {
+            color: var(--neutral-dark);
+            text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.9);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--border-radius);
+        }
     </style>
 </head>
 <body>
