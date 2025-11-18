@@ -70,6 +70,12 @@ The color palette is defined in CSS variables in `styles.css`:
 --linen: #F5F1EC;
 ```
 
+Gallery page buttons use:
+```css
+--btn-accent: #FF836F;  /* Peachy coral for gallery buttons */
+--btn-dark: #E86F5D;    /* Hover state */
+```
+
 ## Browser Support
 
 - Chrome/Edge (latest)
