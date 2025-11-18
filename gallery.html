@@ -12,6 +12,11 @@
     <link rel="stylesheet" href="styles.css">
     <style>
         /* Gallery page specific styles */
+        :root {
+            --btn-accent: #FF836F;
+            --btn-dark: #E86F5D;
+        }
+
         .gallery-page {
             padding: var(--spacing-lg) 0;
         }
@@ -44,14 +49,14 @@
         .gallery-more-btn {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: var(--coral-primary);
+            gap: 0.375rem;
+            padding: 0.375rem 0.75rem;
+            background: var(--btn-accent);
             color: var(--white);
             border: none;
             border-radius: var(--border-radius);
             font-family: var(--font-body);
-            font-size: 0.875rem;
+            font-size: 0.8125rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s var(--transition-smooth);
@@ -59,9 +64,9 @@
         }
 
         .gallery-more-btn:hover {
-            background: var(--coral-dark);
+            background: var(--btn-dark);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 107, 122, 0.4);
+            box-shadow: 0 4px 12px rgba(255, 131, 111, 0.5);
         }
 
         .gallery-more-btn:active {
@@ -70,6 +75,8 @@
 
         .gallery-more-btn svg {
             transition: transform 0.3s ease;
+            width: 12px;
+            height: 12px;
         }
 
         .gallery-more-btn.expanded svg {
@@ -108,7 +115,7 @@
         }
 
         @media (max-width: 480px) {
-            .gallery-thumbnails:not(.expanded) .gallery-thumbnail-box:nth-child(n+3) {
+            .gallery-thumbnails:not(.expanded) .gallery-thumbnail-box:nth-child(n+4) {
                 display: none;
             }
         }
@@ -195,7 +202,7 @@
 
         @media (max-width: 768px) {
             .gallery-thumbnails {
-                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+                grid-template-columns: repeat(4, 1fr);
                 gap: var(--spacing-xs);
             }
 
@@ -207,14 +214,26 @@
             }
 
             .gallery-more-btn {
-                font-size: 0.8125rem;
-                padding: 0.4rem 0.875rem;
+                font-size: 0.75rem;
+                padding: 0.35rem 0.65rem;
+                gap: 0.25rem;
+            }
+            
+            .gallery-more-btn svg {
+                width: 10px;
+                height: 10px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .gallery-thumbnails {
+                grid-template-columns: repeat(4, 1fr);
             }
         }
 
         @media (max-width: 480px) {
             .gallery-thumbnails {
-                grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+                grid-template-columns: repeat(3, 1fr);
             }
         }
 
@@ -310,7 +329,7 @@
                             <h2 class="gallery-category-title">Custom Canvases</h2>
                         </div>
                         <button class="gallery-more-btn" data-category="custom-canvases">
-                            <span class="btn-text">Show More</span>
+                            <span class="btn-text">Show All</span>
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="6 9 12 15 18 9"></polyline>
                             </svg>
@@ -330,7 +349,7 @@
                             <h2 class="gallery-category-title">Canvas Customizations</h2>
                         </div>
                         <button class="gallery-more-btn" data-category="customizations">
-                            <span class="btn-text">Show More</span>
+                            <span class="btn-text">Show All</span>
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="6 9 12 15 18 9"></polyline>
                             </svg>
@@ -350,7 +369,7 @@
                             <h2 class="gallery-category-title">Painted from Purchased Digital Charts</h2>
                         </div>
                         <button class="gallery-more-btn" data-category="digital-charts">
-                            <span class="btn-text">Show More</span>
+                            <span class="btn-text">Show All</span>
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="6 9 12 15 18 9"></polyline>
                             </svg>
@@ -370,7 +389,7 @@
                             <h2 class="gallery-category-title">HoT Originals</h2>
                         </div>
                         <button class="gallery-more-btn" data-category="hot-originals">
-                            <span class="btn-text">Show More</span>
+                            <span class="btn-text">Show All</span>
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="6 9 12 15 18 9"></polyline>
                             </svg>
@@ -437,7 +456,12 @@
                 { thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-MommyOnly.jpg', full: 'images/recent-canvases/1CustomCanvases/MommyOnly.jpeg', title: 'Mommy Only' },
                 { thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Smiley.jpg', full: 'images/recent-canvases/1CustomCanvases/Smiley.jpeg', title: 'Smiley' },
                 { thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Winston.jpg', full: 'images/recent-canvases/1CustomCanvases/Winston.jpeg', title: 'Winston' },
-                { thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-YouAreMySunshine2.jpg', full: 'images/recent-canvases/1CustomCanvases/YouAreMySunshine2.jpeg', title: 'You Are My Sunshine' }
+                { thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-YouAreMySunshine2.jpg', full: 'images/recent-canvases/1CustomCanvases/YouAreMySunshine2.jpeg', title: 'You Are My Sunshine' },
+                { thumb: 'images/recent-canvases/1CustomCanvases/thumb-NotreDameLuggageTagInsert.jpg', full: 'images/recent-canvases/1CustomCanvases/NotreDameLuggageTagInsert.jpg', title: 'Notre Dame Luggage Tag Insert' },
+                { thumb: 'images/recent-canvases/1CustomCanvases/thumb-PallMallCigaretteBox.jpg', full: 'images/recent-canvases/1CustomCanvases/PallMallCigaretteBox.jpg', title: 'Pall Mall Cigarette Box' },
+                { thumb: 'images/recent-canvases/1CustomCanvases/thumb-RingBearerPillow.jpg', full: 'images/recent-canvases/1CustomCanvases/RingBearerPillow.jpg', title: 'Ring Bearer Pillow' },
+                { thumb: 'images/recent-canvases/1CustomCanvases/thumb-SimpleMonogram4Self-FinishingJewelryBox.jpg', full: 'images/recent-canvases/1CustomCanvases/SimpleMonogram4Self-FinishingJewelryBox.jpg', title: 'Simple Monogram for Self-Finishing Jewelry Box' },
+                { thumb: 'images/recent-canvases/1CustomCanvases/thumb-UNOMaverickBagCharm.jpg', full: 'images/recent-canvases/1CustomCanvases/UNOMaverickBagCharm.jpg', title: 'UNO Maverick Bag Charm' }
             ],
             'hot-originals': [
                 { thumb: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SephoraHoliday.jpg', full: 'images/recent-canvases/2HoT-originals/SephoraHoliday.jpeg', title: 'Sephora Holiday' },
@@ -505,22 +529,22 @@
                 const items = galleryData[categoryId];
                 const itemCount = items.length;
                 
-                // Determine how many items fit in first row based on screen width
-                let itemsPerRow = 10; // Default for desktop
+                // Determine how many items fit initially based on screen width
+                let initialItems = 10; // Default for desktop
                 const width = window.innerWidth;
                 
                 if (width <= 480) {
-                    itemsPerRow = 2;
+                    initialItems = 3;
                 } else if (width <= 640) {
-                    itemsPerRow = 4;
+                    initialItems = 4;
                 } else if (width <= 900) {
-                    itemsPerRow = 6;
+                    initialItems = 6;
                 } else if (width <= 1200) {
-                    itemsPerRow = 8;
+                    initialItems = 8;
                 }
                 
-                // Hide button if all items fit in first row
-                if (itemCount <= itemsPerRow) {
+                // Hide button if all items fit in initial view
+                if (itemCount <= initialItems) {
                     btn.style.display = 'none';
                 } else {
                     btn.style.display = 'inline-flex';
@@ -538,7 +562,7 @@
             resizeTimer = setTimeout(updateButtonVisibility, 250);
         });
 
-        // Handle "Show More" buttons
+        // Handle "Show All" buttons
         document.querySelectorAll('.gallery-more-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const categoryId = this.getAttribute('data-category');
@@ -548,13 +572,13 @@
                 
                 if (isExpanded) {
                     container.classList.remove('expanded');
-                    btnText.textContent = 'Show More';
+                    btnText.textContent = 'Show All';
                     this.classList.remove('expanded');
                     // Scroll to the category title
                     this.closest('.gallery-category').scrollIntoView({ behavior: 'smooth', block: 'start' });
                 } else {
                     container.classList.add('expanded');
-                    btnText.textContent = 'Show Less';
+                    btnText.textContent = 'Hide';
                     this.classList.add('expanded');
                 }
             });
