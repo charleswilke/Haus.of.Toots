@@ -682,6 +682,50 @@
                 }
             }
         });
+
+        // Touch swipe support for mobile
+        (function setupTouchSwipe() {
+            let touchStartX = 0;
+            let touchEndX = 0;
+            let touchStartY = 0;
+            let touchEndY = 0;
+            const swipeThreshold = 50; // Minimum distance for a swipe
+            const lightbox = document.getElementById('lightbox');
+            const lightboxContent = lightbox.querySelector('.lightbox-content');
+            
+            lightboxContent.addEventListener('touchstart', function(e) {
+                touchStartX = e.changedTouches[0].screenX;
+                touchStartY = e.changedTouches[0].screenY;
+            }, { passive: true });
+            
+            lightboxContent.addEventListener('touchend', function(e) {
+                if (!lightbox.classList.contains('active')) return;
+                
+                touchEndX = e.changedTouches[0].screenX;
+                touchEndY = e.changedTouches[0].screenY;
+                
+                const deltaX = touchEndX - touchStartX;
+                const deltaY = touchEndY - touchStartY;
+                
+                // Only process horizontal swipes (ignore if vertical movement is greater)
+                if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > swipeThreshold) {
+                    if (deltaX > 0) {
+                        // Swipe right - go to previous image
+                        if (currentIndex > 0) {
+                            currentIndex--;
+                            openLightbox(currentCategory, currentIndex);
+                        }
+                    } else {
+                        // Swipe left - go to next image
+                        const items = galleryData[currentCategory];
+                        if (currentIndex < items.length - 1) {
+                            currentIndex++;
+                            openLightbox(currentCategory, currentIndex);
+                        }
+                    }
+                }
+            }, { passive: true });
+        })();
     </script>
     <script src="script.js"></script>
 </body>

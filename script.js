@@ -996,6 +996,44 @@ class UnifiedGallery {
                 this.closeLightbox();
             }
         });
+        
+        // Touch swipe support for mobile
+        this.setupTouchSwipe();
+    }
+    
+    setupTouchSwipe() {
+        let touchStartX = 0;
+        let touchEndX = 0;
+        let touchStartY = 0;
+        let touchEndY = 0;
+        const swipeThreshold = 50; // Minimum distance for a swipe
+        const lightboxContent = this.lightbox.querySelector('.lightbox-content');
+        
+        lightboxContent.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+        
+        lightboxContent.addEventListener('touchend', (e) => {
+            if (!this.lightbox.classList.contains('active')) return;
+            
+            touchEndX = e.changedTouches[0].screenX;
+            touchEndY = e.changedTouches[0].screenY;
+            
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+            
+            // Only process horizontal swipes (ignore if vertical movement is greater)
+            if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > swipeThreshold) {
+                if (deltaX > 0) {
+                    // Swipe right - go to previous image
+                    this.navigate(-1);
+                } else {
+                    // Swipe left - go to next image
+                    this.navigate(1);
+                }
+            }
+        }, { passive: true });
     }
     
     openLightbox(startIndex = 0) {
