@@ -819,13 +819,34 @@ section {
     text-align: center;
 }
 
+.stitched-border > p:first-child {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px dashed var(--neutral-light);
+    font-size: 0.95rem;
+    color: var(--neutral-mid);
+    font-style: italic;
+    text-align: center;
+}
+
+.stitched-border > p:first-child a {
+    color: var(--coral-primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.stitched-border > p:first-child a:hover {
+    color: var(--coral-dark);
+}
+
 .about-layout {
     overflow: hidden; /* Clear floats */
 }
 
 .about-image-wrapper {
     float: right;
-    shape-outside: circle(60%);
+    margin: 0 0 var(--spacing-md) var(--spacing-md);
 }
 
 .about-photo {
@@ -850,6 +871,107 @@ section {
 .about-text strong {
     color: var(--coral-dark);
     font-weight: 600;
+}
+
+/* Rectangular Photo Frame - Vintage Photo Mat Style */
+.about-photo-frame {
+    position: relative;
+    width: 400px;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    aspect-ratio: 4 / 3;
+    background: linear-gradient(135deg, var(--coral-primary) 0%, var(--coral-dark) 100%);
+    border-radius: 4px;
+    /* Deep shadow for dimensional mat board effect */
+    box-shadow: 
+        0 8px 24px rgba(255, 107, 122, 0.4),
+        0 4px 12px rgba(0, 0, 0, 0.15),
+        0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s var(--transition-smooth);
+}
+
+/* Outer frame layer - coral gradient */
+.about-photo-frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--coral-primary) 0%, var(--coral-dark) 100%);
+    border-radius: 4px;
+    z-index: 0;
+}
+
+/* Inner mat layer - cream/linen with window opening */
+.about-photo-frame::after {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    background: transparent;
+    border: 16px solid var(--linen);
+    border-radius: 2px;
+    /* Enhanced beveled edge effect on the border */
+    box-shadow: 
+        inset 2px 2px 4px rgba(255, 255, 255, 0.9),
+        inset -2px -2px 4px rgba(0, 0, 0, 0.15),
+        0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 3;
+    pointer-events: none;
+}
+
+.about-photo-frame:hover {
+    transform: translateY(-8px);
+    box-shadow: 
+        0 16px 40px rgba(255, 107, 122, 0.5),
+        0 8px 20px rgba(255, 107, 122, 0.3),
+        0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.about-photo-rectangular {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    width: calc(100% - 48px);
+    height: calc(100% - 48px);
+    border-radius: 1px;
+    object-fit: cover;
+    /* Deep inset shadow - photo sits behind the mat */
+    box-shadow: 
+        inset 0 0 0 1px rgba(0, 0, 0, 0.1),
+        inset 3px 3px 8px rgba(0, 0, 0, 0.3),
+        inset -1px -1px 4px rgba(0, 0, 0, 0.15),
+        0 1px 2px rgba(255, 255, 255, 0.1);
+    z-index: 2;
+    clip-path: inset(0 0 0 0 round 1px);
+}
+
+/* Decorative Ribbon Caption - Bottom of frame */
+.photo-ribbon {
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 6px 16px;
+    background: linear-gradient(135deg, var(--coral-primary) 0%, var(--coral-dark) 100%);
+    color: var(--white);
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    box-shadow: 
+        0 4px 12px rgba(255, 107, 122, 0.5),
+        0 2px 6px rgba(0, 0, 0, 0.25);
+    z-index: 10;
+    white-space: nowrap;
+    transition: all 0.3s var(--transition-smooth);
+}
+
+.about-photo-frame:hover .photo-ribbon {
+    transform: translateX(-50%) translateY(-4px);
+    box-shadow: 
+        0 6px 16px rgba(255, 107, 122, 0.6),
+        0 3px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* About Cards - Choose Your Adventure Style */
@@ -2530,13 +2652,36 @@ section {
     /* About page: stack image and text on mobile */
     .about-image-wrapper {
         float: none;
-        margin: 0 auto var(--spacing-md);
+        margin: 0 auto var(--spacing-lg);
         text-align: center;
     }
     
     .about-layout {
         display: flex;
         flex-direction: column;
+    }
+    
+    /* Rectangular photo frame adjustments for mobile */
+    .about-photo-frame {
+        width: 320px;
+    }
+    
+    .about-photo-frame::after {
+        inset: 6px;
+        border-width: 12px;
+    }
+    
+    .about-photo-rectangular {
+        top: 18px;
+        left: 18px;
+        width: calc(100% - 36px);
+        height: calc(100% - 36px);
+    }
+    
+    .photo-ribbon {
+        font-size: 0.8125rem;
+        padding: 5px 14px;
+        bottom: -10px;
     }
     
     /* Additional refinements for very small mobile screens */
