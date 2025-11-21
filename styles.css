@@ -888,7 +888,6 @@ section {
         0 8px 24px rgba(255, 107, 122, 0.4),
         0 4px 12px rgba(0, 0, 0, 0.15),
         0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: all 0.4s var(--transition-smooth);
 }
 
 /* Outer frame layer - coral gradient */
@@ -918,13 +917,6 @@ section {
     pointer-events: none;
 }
 
-.about-photo-frame:hover {
-    transform: translateY(-8px);
-    box-shadow: 
-        0 16px 40px rgba(255, 107, 122, 0.5),
-        0 8px 20px rgba(255, 107, 122, 0.3),
-        0 4px 10px rgba(0, 0, 0, 0.15);
-}
 
 .about-photo-rectangular {
     position: absolute;
@@ -964,15 +956,8 @@ section {
         0 2px 6px rgba(0, 0, 0, 0.25);
     z-index: 10;
     white-space: nowrap;
-    transition: all 0.3s var(--transition-smooth);
 }
 
-.about-photo-frame:hover .photo-ribbon {
-    transform: translateX(-50%) translateY(-4px);
-    box-shadow: 
-        0 6px 16px rgba(255, 107, 122, 0.6),
-        0 3px 8px rgba(0, 0, 0, 0.3);
-}
 
 /* About Cards - Choose Your Adventure Style */
 .about-cards {
