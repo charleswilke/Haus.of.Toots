@@ -22,7 +22,7 @@
     
     /* Typography */
     --font-body: 'Winky Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-display: 'Winky Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-display: 'Chewy', cursive;
     
     /* Spacing */
     --spacing-xs: 0.5rem;
@@ -79,10 +79,11 @@ section {
 .section-title {
     font-family: var(--font-display);
     font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 800;
+    font-weight: 400;
     color: var(--coral-dark);
     margin-bottom: var(--spacing-md);
     line-height: 1.2;
+    letter-spacing: 1px;
 }
 
 .section-subtitle {
@@ -198,9 +199,9 @@ section {
 .nav-brand-text {
     font-family: var(--font-display);
     font-size: 1.5rem;
-    font-weight: 800;
+    font-weight: 400;
     color: var(--coral-dark);
-    letter-spacing: -0.5px;
+    letter-spacing: 1px;
     line-height: 1.2;
     margin-bottom: -2px;
 }
@@ -555,7 +556,7 @@ section {
     height: 32px;
     color: var(--coral-primary);
     font-size: 32px;
-    font-weight: 800;
+    font-weight: 700;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -677,10 +678,11 @@ section {
 .hero-title {
     font-family: var(--font-display);
     font-size: clamp(2rem, 5vw, 3rem);
-    font-weight: 800;
+    font-weight: 400;
     color: var(--neutral-dark);
     margin-bottom: var(--spacing-sm);
     line-height: 1.1;
+    letter-spacing: 1px;
 }
 
 .hero-description {
@@ -890,10 +892,11 @@ section {
     margin: 0;
     font-family: var(--font-display);
     font-size: 1.375rem;
-    font-weight: 800;
+    font-weight: 400;
     color: var(--white);
     line-height: 1.4;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    letter-spacing: 0.5px;
 }
 
 .about-card-content {
@@ -1199,12 +1202,13 @@ section {
 .hero-story-title {
     font-family: var(--font-display);
     font-size: clamp(1.25rem, 2.5vw, 1.75rem);
-    font-weight: 800;
+    font-weight: 400;
     color: var(--coral-dark);
     margin-bottom: 0.75rem;
     line-height: 1.2;
     opacity: 0;
     animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s forwards;
+    letter-spacing: 0.5px;
 }
 
 .hero-story-text {
@@ -1697,10 +1701,11 @@ section {
     margin: 0;
     font-family: var(--font-display);
     font-size: 1.375rem;
-    font-weight: 800;
+    font-weight: 400;
     color: var(--white);
     line-height: 1.4;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    letter-spacing: 0.5px;
 }
 
 .gallery-card-preview {
@@ -2004,10 +2009,11 @@ section {
 .step-title {
     font-family: var(--font-display);
     font-size: 1.5rem;
-    font-weight: 800;
+    font-weight: 400;
     color: var(--coral-dark);
     margin: 0;
     line-height: 1.3;
+    letter-spacing: 0.5px;
 }
 
 .step-description {
@@ -2702,9 +2708,10 @@ section {
     margin-top: var(--spacing-md);
     color: var(--white);
     font-size: 1.25rem;
-    font-weight: 800;
+    font-weight: 400;
     text-align: center;
     font-family: var(--font-display);
+    letter-spacing: 0.5px;
 }
 
 .lightbox-close,
