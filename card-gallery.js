@@ -1,0 +1,828 @@
+// ===================================
+// CARD GALLERY - Trading Card Experience
+// ===================================
+
+class CardGallery {
+    constructor() {
+        this.overlay = null;
+        this.cardStack = null;
+        this.currentIndex = 0;
+        this.currentCategory = 'all';
+        this.cards = [];
+        this.filteredCards = [];
+        this.isOpen = false;
+        this.isAnimating = false;
+        this.touchStartX = 0;
+        this.touchEndX = 0;
+        
+        // Gallery data
+        this.galleryData = {
+            'custom-canvases': {
+                name: 'Customs',
+                description: 'One-of-a-kind designs created from your ideas, memories, beloved pets, and more!',
+                images: [
+                    { src: 'images/recent-canvases/1CustomCanvases/CampFlannelFizz.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-CampFlannelFizz.jpg', title: 'Camp Flannel Fizz', subtitle: 'preppy summer vibes' },
+                    { src: 'images/recent-canvases/1CustomCanvases/CowboyBear.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-CowboyBear.jpg', title: 'Cowboy Bear', subtitle: 'wild west cuteness' },
+                    { src: 'images/recent-canvases/1CustomCanvases/HappyHollowRectangle.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-HappyHollowRectangle.jpg', title: 'Happy Hollow Rectangle', subtitle: 'summer camp memories' },
+                    { src: 'images/recent-canvases/1CustomCanvases/HappyHollowRound.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-HappyHollowRound.jpg', title: 'Happy Hollow Round', subtitle: 'camp crest variation' },
+                    { src: 'images/recent-canvases/1CustomCanvases/Mazie-and-Smiley.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Mazie-and-Smiley.jpg', title: 'Mazie & Smiley', subtitle: 'sibling duo portrait' },
+                    { src: 'images/recent-canvases/1CustomCanvases/Mazie.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Mazie.jpg', title: 'Mazie', subtitle: 'custom pet portrait' },
+                    { src: 'images/recent-canvases/1CustomCanvases/MommyOnly.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-MommyOnly.jpg', title: 'Mommy Only', subtitle: 'playful family sign' },
+                    { src: 'images/recent-canvases/1CustomCanvases/Smiley.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Smiley.jpg', title: 'Smiley', subtitle: 'custom pet portrait' },
+                    { src: 'images/recent-canvases/1CustomCanvases/Winston.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Winston.jpg', title: 'Wilson', subtitle: 'beloved French Bulldog' },
+                    { src: 'images/recent-canvases/1CustomCanvases/YouAreMySunshine2.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-YouAreMySunshine2.jpg', title: 'You Are My Sunshine', subtitle: 'sentimental keepsake' },
+                    { src: 'images/recent-canvases/1CustomCanvases/NotreDameLuggageTagInsert.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-NotreDameLuggageTagInsert.jpg', title: 'Notre Dame Luggage Tag', subtitle: 'fighting Irish spirit' },
+                    { src: 'images/recent-canvases/1CustomCanvases/PallMallCigaretteBox.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-PallMallCigaretteBox.jpg', title: 'Pall Mall Box', subtitle: 'vintage nostalgia' },
+                    { src: 'images/recent-canvases/1CustomCanvases/RingBearerPillow.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-RingBearerPillow.jpg', title: 'Ring Bearer Pillow', subtitle: 'wedding keepsake' },
+                    { src: 'images/recent-canvases/1CustomCanvases/SimpleMonogram4Self-FinishingJewelryBox.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-SimpleMonogram4Self-FinishingJewelryBox.jpg', title: 'Monogram Jewelry Box', subtitle: 'elegant personalization' },
+                    { src: 'images/recent-canvases/1CustomCanvases/UNOMaverickBagCharm.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-UNOMaverickBagCharm.jpg', title: 'UNO Maverick Charm', subtitle: 'school pride' }
+                ]
+            },
+            'hot-originals': {
+                name: 'HoT Originals',
+                description: 'Original designs straight from the Haus of Toots imagination.',
+                images: [
+                    { src: 'images/recent-canvases/2HoT-originals/SephoraHoliday.jpeg', thumb: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SephoraHoliday.jpg', title: 'Sephora Holiday', subtitle: 'holiday edition design' },
+                    { src: 'images/recent-canvases/2HoT-originals/SephoraStandard.jpg', thumb: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SephoraStandard.jpg', title: 'Sephora Standard', subtitle: 'beauty lover\'s dream' },
+                    { src: 'images/recent-canvases/2HoT-originals/SharpestTool.jpeg', thumb: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SharpestTool.jpg', title: 'Sharpest Tool', subtitle: 'witty wordplay piece' }
+                ]
+            },
+            'digital-charts': {
+                name: 'Digital Charts',
+                description: 'Painted canvases from purchased digital cross-stitch patterns.',
+                images: [
+                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/DuckHunt-by-TurtleStitchShop-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-DuckHunt-by-TurtleStitchShop-Etsy.jpg', title: 'Duck Hunt', subtitle: 'nostalgic gamer classic' },
+                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/FuckOff-by-HoopModernStitch-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-FuckOff-by-HoopModernStitch-Etsy.jpg', title: 'Fuck Off', subtitle: 'bold modern statement' },
+                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/Kermit-w-PearlEarring-by-CherryMarryStore-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-Kermit-w-PearlEarring-by-CherryMarryStore-Etsy.jpg', title: 'Kermit with Pearl Earring', subtitle: 'Vermeer meets Muppets' },
+                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PeeWee-by-StitchedIts-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PeeWee-by-StitchedIts-Etsy.jpg', title: 'Pee-Wee Herman', subtitle: 'cult classic character' },
+                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PixelHearts-by-PixellPatterns-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PixelHearts-by-PixellPatterns-Etsy.jpg', title: 'Pixel Hearts', subtitle: 'retro 8-bit love' },
+                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PopeKermit-by-CherryMarryStore.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PopeKermit-by-CherryMarryStore.jpg', title: 'Pope Kermit', subtitle: 'blessed and iconic' }
+                ]
+            },
+            'customizations': {
+                name: 'Customizations',
+                description: 'Existing canvases personalized with names, colors, and custom details.',
+                images: [
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Kathryn-StockingCustomization-After.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Kathryn-StockingCustomization-After.jpg', title: 'Kathryn Stocking', subtitle: 'personalized stocking', badge: 'after' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-After.jpg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Lance-StockingCustomization-After.jpg', title: 'Lance Stocking', subtitle: 'name added', badge: 'after' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-After2.jpg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Lance-StockingCustomization-After2.jpg', title: 'Lance Stocking Detail', subtitle: 'finished detail', badge: 'after' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-Before.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Lance-StockingCustomization-Before.jpg', title: 'Lance Stocking', subtitle: 'original canvas', badge: 'before' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/MM-CanvasMonogram-After.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-MM-CanvasMonogram-After.jpg', title: 'MM Monogram', subtitle: 'custom monogram added', badge: 'after' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/MM-CanvasMonogram-Before.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-MM-CanvasMonogram-Before.jpg', title: 'MM Monogram', subtitle: 'original canvas', badge: 'before' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Pinehurst-Customization-After.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Pinehurst-Customization-After.jpg', title: 'Pinehurst', subtitle: 'personalized update', badge: 'after' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Pinehurst-Customization-Before.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Pinehurst-Customization-Before.jpg', title: 'Pinehurst', subtitle: 'original canvas', badge: 'before' }
+                ]
+            }
+        };
+        
+        this.init();
+    }
+    
+    init() {
+        this.buildCards();
+        this.createOverlay();
+        this.attachNavListeners();
+        this.attachKeyboardListeners();
+    }
+    
+    buildCards() {
+        // Flatten gallery data into cards array
+        this.cards = [];
+        Object.entries(this.galleryData).forEach(([categoryId, category]) => {
+            category.images.forEach(image => {
+                this.cards.push({
+                    ...image,
+                    category: categoryId,
+                    categoryName: category.name,
+                    categoryDescription: category.description
+                });
+            });
+        });
+        this.filteredCards = [...this.cards];
+    }
+    
+    createOverlay() {
+        // Create main overlay container
+        this.overlay = document.createElement('div');
+        this.overlay.className = 'card-gallery-overlay';
+        this.overlay.setAttribute('role', 'dialog');
+        this.overlay.setAttribute('aria-modal', 'true');
+        this.overlay.setAttribute('aria-label', 'Gallery');
+        
+        this.overlay.innerHTML = `
+            <!-- Header -->
+            <header class="card-gallery-header">
+                <div class="card-gallery-brand">
+                    <img src="images/hauslogo.png" alt="Haus of Toots" class="card-gallery-logo">
+                    <h2 class="card-gallery-title">The Canvas Collection</h2>
+                </div>
+                <button class="card-gallery-close" aria-label="Close gallery">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </header>
+            
+            <!-- Category Tabs -->
+            <nav class="card-gallery-tabs" role="tablist" aria-label="Gallery categories">
+                <button class="card-deck-tab active" data-category="all" role="tab" aria-selected="true">
+                    All <span class="tab-count">${this.cards.length}</span>
+                </button>
+                ${Object.entries(this.galleryData).map(([id, cat]) => `
+                    <button class="card-deck-tab" data-category="${id}" role="tab" aria-selected="false">
+                        ${cat.name} <span class="tab-count">${cat.images.length}</span>
+                    </button>
+                `).join('')}
+            </nav>
+            
+            <!-- Main Card Area -->
+            <main class="card-gallery-main">
+                <button class="card-nav card-nav-prev" aria-label="Previous card">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+                
+                <div class="card-stack"></div>
+                
+                <button class="card-nav card-nav-next" aria-label="Next card">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+                
+                <div class="swipe-hint">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                    Swipe to browse
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </div>
+                
+                <div class="card-counter">
+                    <span class="card-counter-current">1</span> of <span class="card-counter-total">${this.cards.length}</span>
+                </div>
+            </main>
+            
+            <!-- Deck Preview -->
+            <div class="deck-preview"></div>
+            
+            <!-- Full Image View -->
+            <div class="card-fullview">
+                <button class="card-fullview-close" aria-label="Close full view">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+                <img class="card-fullview-image" src="" alt="">
+            </div>
+        `;
+        
+        document.body.appendChild(this.overlay);
+        
+        this.cardStack = this.overlay.querySelector('.card-stack');
+        this.deckPreview = this.overlay.querySelector('.deck-preview');
+        this.fullview = this.overlay.querySelector('.card-fullview');
+        
+        // Attach overlay event listeners
+        this.attachOverlayListeners();
+    }
+    
+    attachOverlayListeners() {
+        // Close button
+        this.overlay.querySelector('.card-gallery-close').addEventListener('click', () => this.close());
+        
+        // Category tabs
+        this.overlay.querySelectorAll('.card-deck-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const category = tab.dataset.category;
+                this.filterByCategory(category);
+                
+                // Update active state
+                this.overlay.querySelectorAll('.card-deck-tab').forEach(t => {
+                    t.classList.remove('active');
+                    t.setAttribute('aria-selected', 'false');
+                });
+                tab.classList.add('active');
+                tab.setAttribute('aria-selected', 'true');
+            });
+        });
+        
+        // Navigation buttons
+        this.overlay.querySelector('.card-nav-prev').addEventListener('click', () => this.navigate(-1));
+        this.overlay.querySelector('.card-nav-next').addEventListener('click', () => this.navigate(1));
+        
+        // Full view close
+        this.overlay.querySelector('.card-fullview-close').addEventListener('click', () => this.closeFullview());
+        this.fullview.addEventListener('click', (e) => {
+            if (e.target === this.fullview) this.closeFullview();
+        });
+        
+        // Touch swipe support with improved handling
+        this.touchStartX = 0;
+        this.touchStartY = 0;
+        this.touchEndX = 0;
+        this.touchEndY = 0;
+        this.isSwiping = false;
+        
+        this.cardStack.addEventListener('touchstart', (e) => {
+            this.touchStartX = e.changedTouches[0].screenX;
+            this.touchStartY = e.changedTouches[0].screenY;
+            this.isSwiping = false;
+        }, { passive: true });
+        
+        this.cardStack.addEventListener('touchmove', (e) => {
+            const deltaX = Math.abs(e.changedTouches[0].screenX - this.touchStartX);
+            const deltaY = Math.abs(e.changedTouches[0].screenY - this.touchStartY);
+            // If moving more horizontally than vertically, it's a swipe
+            if (deltaX > 10 && deltaX > deltaY) {
+                this.isSwiping = true;
+            }
+        }, { passive: true });
+        
+        this.cardStack.addEventListener('touchend', (e) => {
+            this.touchEndX = e.changedTouches[0].screenX;
+            this.touchEndY = e.changedTouches[0].screenY;
+            
+            const deltaX = Math.abs(this.touchEndX - this.touchStartX);
+            const deltaY = Math.abs(this.touchEndY - this.touchStartY);
+            
+            // Only handle as swipe if horizontal movement was significant
+            if (deltaX > 50 && deltaX > deltaY) {
+                this.handleSwipe();
+            }
+        }, { passive: true });
+        
+        // Click outside to close
+        this.overlay.addEventListener('click', (e) => {
+            if (e.target === this.overlay) this.close();
+        });
+    }
+    
+    attachNavListeners() {
+        // Find all gallery nav links and intercept them
+        document.querySelectorAll('a[href="gallery.html"], a.nav-link[href="gallery.html"]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.open();
+            });
+        });
+    }
+    
+    attachKeyboardListeners() {
+        document.addEventListener('keydown', (e) => {
+            if (!this.isOpen) return;
+            
+            switch(e.key) {
+                case 'Escape':
+                    if (this.fullview.classList.contains('active')) {
+                        this.closeFullview();
+                    } else {
+                        this.close();
+                    }
+                    break;
+                case 'ArrowLeft':
+                    this.navigate(-1);
+                    break;
+                case 'ArrowRight':
+                    this.navigate(1);
+                    break;
+                case ' ':
+                case 'Enter':
+                    if (document.activeElement.classList.contains('gallery-card')) {
+                        this.flipCard(document.activeElement);
+                    }
+                    break;
+            }
+        });
+    }
+    
+    open() {
+        if (this.isOpen) return;
+        this.isOpen = true;
+        
+        // Reset to beginning
+        this.currentIndex = 0;
+        this.currentCategory = 'all';
+        this.filteredCards = [...this.cards];
+        
+        // Reset tabs
+        this.overlay.querySelectorAll('.card-deck-tab').forEach(tab => {
+            tab.classList.remove('active');
+            tab.setAttribute('aria-selected', 'false');
+        });
+        this.overlay.querySelector('[data-category="all"]').classList.add('active');
+        this.overlay.querySelector('[data-category="all"]').setAttribute('aria-selected', 'true');
+        
+        // Show overlay
+        this.overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        
+        // Render the stack of cards
+        this.renderStack();
+        this.renderDeckPreview();
+        this.updateCounter();
+        this.updateNavButtons();
+        
+        // Focus close button for accessibility
+        setTimeout(() => {
+            this.overlay.querySelector('.card-gallery-close').focus();
+        }, 100);
+    }
+    
+    close() {
+        if (!this.isOpen) return;
+        
+        // Exit animation for cards
+        const activeCard = this.cardStack.querySelector('.gallery-card.active');
+        if (activeCard) {
+            activeCard.classList.add('exiting');
+        }
+        
+        setTimeout(() => {
+            this.isOpen = false;
+            this.overlay.classList.remove('active');
+            document.body.style.overflow = '';
+            this.cardStack.innerHTML = '';
+        }, 300);
+    }
+    
+    filterByCategory(category) {
+        if (this.isAnimating) return;
+        this.isAnimating = true;
+        
+        // Animate current cards out with shuffle effect
+        const currentCards = this.cardStack.querySelectorAll('.gallery-card');
+        currentCards.forEach((card) => {
+            // Random scatter directions
+            const randomX = (Math.random() - 0.5) * 300;
+            const randomY = (Math.random() - 0.5) * 200 - 50;
+            const randomRotate = (Math.random() - 0.5) * 60;
+            
+            card.style.setProperty('--shuffle-x', `${randomX}px`);
+            card.style.setProperty('--shuffle-y', `${randomY}px`);
+            card.style.setProperty('--shuffle-rotate', `${randomRotate}deg`);
+            card.classList.add('shuffling-out');
+        });
+        
+        // After shuffle out, update and fan in
+        setTimeout(() => {
+            this.currentCategory = category;
+            this.currentIndex = 0;
+            
+            if (category === 'all') {
+                this.filteredCards = [...this.cards];
+            } else {
+                this.filteredCards = this.cards.filter(card => card.category === category);
+            }
+            
+            // Re-render the stack
+            this.renderStack();
+            this.renderDeckPreview();
+            this.updateCounter();
+            this.updateNavButtons();
+            
+            setTimeout(() => {
+                this.isAnimating = false;
+            }, 400);
+        }, 300);
+    }
+    
+    renderCardsWithDeal() {
+        this.cardStack.innerHTML = '';
+        
+        if (this.filteredCards.length === 0) {
+            this.cardStack.innerHTML = '<p style="color: rgba(74, 69, 66, 0.7); text-align: center; background: rgba(255,255,255,0.8); padding: 1rem; border-radius: 8px;">No cards in this deck</p>';
+            return;
+        }
+        
+        // Render a subset of cards for performance
+        const visibleRange = 3;
+        const startIdx = Math.max(0, this.currentIndex - visibleRange);
+        const endIdx = Math.min(this.filteredCards.length - 1, this.currentIndex + visibleRange);
+        
+        for (let i = startIdx; i <= endIdx; i++) {
+            const card = this.createCardElement(this.filteredCards[i], i);
+            
+            // Apply position classes
+            if (i === this.currentIndex) {
+                card.classList.add('active');
+                card.setAttribute('tabindex', '0');
+                
+                // Add dealing animation
+                card.classList.add('dealing');
+                card.style.setProperty('--deal-x', '0px');
+                card.style.setProperty('--deal-y', '0px');
+                card.style.setProperty('--deal-rotation', '0deg');
+                
+                setTimeout(() => {
+                    card.classList.remove('dealing');
+                }, 600);
+            } else if (i === this.currentIndex - 1) {
+                card.classList.add('prev');
+            } else if (i === this.currentIndex + 1) {
+                card.classList.add('next');
+            } else if (i < this.currentIndex - 1) {
+                card.classList.add('far-prev');
+            } else {
+                card.classList.add('far-next');
+            }
+            
+            this.cardStack.appendChild(card);
+        }
+    }
+    
+    renderCardsWithShuffle() {
+        this.cardStack.innerHTML = '';
+        
+        if (this.filteredCards.length === 0) {
+            this.cardStack.innerHTML = '<p style="color: rgba(74, 69, 66, 0.7); text-align: center; background: rgba(255,255,255,0.8); padding: 1rem; border-radius: 8px;">No cards in this deck</p>';
+            return;
+        }
+        
+        // Render a subset of cards for performance
+        const visibleRange = 3;
+        const startIdx = Math.max(0, this.currentIndex - visibleRange);
+        const endIdx = Math.min(this.filteredCards.length - 1, this.currentIndex + visibleRange);
+        
+        for (let i = startIdx; i <= endIdx; i++) {
+            const card = this.createCardElement(this.filteredCards[i], i);
+            
+            // Apply position classes
+            if (i === this.currentIndex) {
+                card.classList.add('active');
+                card.setAttribute('tabindex', '0');
+                
+                // Add shuffle-in animation with slight random rotation
+                const randomRotate = (Math.random() - 0.5) * 10;
+                card.style.setProperty('--shuffle-rotate', `${randomRotate}deg`);
+                card.classList.add('shuffling-in');
+                
+                setTimeout(() => {
+                    card.classList.remove('shuffling-in');
+                }, 500);
+            } else if (i === this.currentIndex - 1) {
+                card.classList.add('prev');
+            } else if (i === this.currentIndex + 1) {
+                card.classList.add('next');
+            } else if (i < this.currentIndex - 1) {
+                card.classList.add('far-prev');
+            } else {
+                card.classList.add('far-next');
+            }
+            
+            this.cardStack.appendChild(card);
+        }
+    }
+    
+    renderCards(animate = false) {
+        this.cardStack.innerHTML = '';
+        
+        if (this.filteredCards.length === 0) {
+            this.cardStack.innerHTML = '<p style="color: #FFB3BA; text-align: center;">No cards in this deck</p>';
+            return;
+        }
+        
+        // Render a subset of cards for performance (current + neighbors)
+        const visibleRange = 3;
+        const startIdx = Math.max(0, this.currentIndex - visibleRange);
+        const endIdx = Math.min(this.filteredCards.length - 1, this.currentIndex + visibleRange);
+        
+        for (let i = startIdx; i <= endIdx; i++) {
+            const card = this.createCardElement(this.filteredCards[i], i);
+            
+            // Apply position classes
+            if (i === this.currentIndex) {
+                card.classList.add('active');
+                card.setAttribute('tabindex', '0');
+            } else if (i === this.currentIndex - 1) {
+                card.classList.add('prev');
+            } else if (i === this.currentIndex + 1) {
+                card.classList.add('next');
+            } else if (i < this.currentIndex - 1) {
+                card.classList.add('far-prev');
+            } else {
+                card.classList.add('far-next');
+            }
+            
+            // Add dealing animation
+            if (animate && i === this.currentIndex) {
+                card.classList.add('dealing');
+                card.style.setProperty('--deal-x', '0px');
+                card.style.setProperty('--deal-y', '0px');
+                card.style.setProperty('--deal-rotation', '0deg');
+            }
+            
+            this.cardStack.appendChild(card);
+        }
+    }
+    
+    createCardElement(cardData, index) {
+        const card = document.createElement('div');
+        card.className = 'gallery-card';
+        card.dataset.index = index;
+        card.setAttribute('role', 'button');
+        card.setAttribute('aria-label', `${cardData.title} - ${cardData.categoryName}`);
+        
+        // Determine badge type
+        let badgeHtml = '';
+        if (cardData.badge) {
+            badgeHtml = `<div class="card-status-badge ${cardData.badge}">${cardData.badge}</div>`;
+        }
+        
+        card.innerHTML = `
+            <div class="card-face card-front">
+                <div class="card-image-container loading">
+                    <img class="card-image" data-src="${cardData.src}" alt="${cardData.title}">
+                    <div class="card-category-badge">${cardData.categoryName}</div>
+                    ${badgeHtml}
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">${cardData.title}</h3>
+                    <p class="card-subtitle">${cardData.subtitle}</p>
+                </div>
+                <div class="flip-hint">Tap to flip</div>
+            </div>
+            <div class="card-face card-back">
+                <div class="card-back-content">
+                    <img class="card-back-logo" src="images/hauslogo.png" alt="Haus of Toots">
+                    <h3 class="card-back-title">${cardData.title}</h3>
+                    <p class="card-back-category">${cardData.categoryName}</p>
+                    <p class="card-back-description">${cardData.categoryDescription}</p>
+                    <button class="card-back-cta" data-src="${cardData.src}">View Full Image</button>
+                </div>
+            </div>
+        `;
+        
+        // Lazy load image
+        const img = card.querySelector('.card-image');
+        const container = card.querySelector('.card-image-container');
+        
+        img.onload = () => {
+            container.classList.remove('loading');
+        };
+        
+        // Load image after a short delay for animation
+        setTimeout(() => {
+            img.src = img.dataset.src;
+        }, 50);
+        
+        // Track tap state for this card
+        let cardTapStart = { time: 0, x: 0, y: 0 };
+        let cardWasTapped = false;
+        
+        // Touch start - record position
+        card.addEventListener('touchstart', (e) => {
+            cardTapStart.time = Date.now();
+            cardTapStart.x = e.touches[0].clientX;
+            cardTapStart.y = e.touches[0].clientY;
+            cardWasTapped = false;
+        }, { passive: true });
+        
+        // Touch end - check if it was a tap
+        card.addEventListener('touchend', (e) => {
+            const touch = e.changedTouches[0];
+            const deltaX = Math.abs(touch.clientX - cardTapStart.x);
+            const deltaY = Math.abs(touch.clientY - cardTapStart.y);
+            const duration = Date.now() - cardTapStart.time;
+            
+            // It's a tap if: short duration AND minimal movement
+            if (duration < 300 && deltaX < 30 && deltaY < 30) {
+                cardWasTapped = true;
+                e.preventDefault();
+                
+                // Check what was tapped
+                const target = document.elementFromPoint(touch.clientX, touch.clientY);
+                
+                if (target && target.classList.contains('card-back-cta')) {
+                    this.openFullview(target.dataset.src, cardData.title);
+                } else if (card.classList.contains('active')) {
+                    this.flipCard(card);
+                }
+            }
+        }, { passive: false });
+        
+        // Click handler for desktop
+        card.addEventListener('click', (e) => {
+            // Skip if this was already handled by touch
+            if (cardWasTapped) {
+                cardWasTapped = false;
+                return;
+            }
+            
+            if (e.target.classList.contains('card-back-cta')) {
+                this.openFullview(e.target.dataset.src, cardData.title);
+                return;
+            }
+            
+            if (card.classList.contains('active')) {
+                this.flipCard(card);
+            }
+            
+        });
+        
+        return card;
+    }
+    
+    flipCard(card) {
+        if (!card.classList.contains('active')) return;
+        if (card.classList.contains('flipping') || card.classList.contains('flipping-back')) return;
+        
+        const isFlipped = card.classList.contains('flipped');
+        
+        if (isFlipped) {
+            // Flip back to front
+            card.classList.add('flipping-back');
+            setTimeout(() => {
+                card.classList.remove('flipped');
+                card.classList.remove('flipping-back');
+            }, 500);
+        } else {
+            // Flip to back
+            card.classList.add('flipping');
+            setTimeout(() => {
+                card.classList.add('flipped');
+                card.classList.remove('flipping');
+            }, 500);
+        }
+    }
+    
+    navigate(steps) {
+        if (this.isAnimating) return;
+        if (this.filteredCards.length <= 1) return;
+        
+        this.isAnimating = true;
+        
+        // Unflip current card if flipped
+        const currentCard = this.cardStack.querySelector('.gallery-card.active');
+        if (currentCard && currentCard.classList.contains('flipped')) {
+            currentCard.classList.remove('flipped');
+        }
+        
+        // Update index (wrap around)
+        if (steps > 0) {
+            this.currentIndex = (this.currentIndex + 1) % this.filteredCards.length;
+        } else {
+            this.currentIndex = (this.currentIndex - 1 + this.filteredCards.length) % this.filteredCards.length;
+        }
+        
+        // Simple re-render
+        this.renderStack();
+        this.updateDeckPreviewActive();
+        this.updateCounter();
+        this.updateNavButtons();
+        
+        setTimeout(() => {
+            this.isAnimating = false;
+        }, 250);
+    }
+    
+    renderStack() {
+        this.cardStack.innerHTML = '';
+        
+        if (this.filteredCards.length === 0) {
+            this.cardStack.innerHTML = '<p style="color: rgba(74, 69, 66, 0.7); text-align: center; background: rgba(255,255,255,0.8); padding: 1rem; border-radius: 8px;">No cards in this deck</p>';
+            return;
+        }
+        
+        // Show up to 6 cards in the stack (current + 5 behind)
+        const maxVisible = Math.min(6, this.filteredCards.length);
+        
+        // Render stack cards first (behind), then active card last (on top)
+        // Stack cards: positions 5, 4, 3, 2, 1 (furthest back to closest)
+        for (let i = maxVisible - 1; i >= 1; i--) {
+            const idx = (this.currentIndex + i) % this.filteredCards.length;
+            const card = this.createCardElement(this.filteredCards[idx], idx);
+            card.classList.add('in-stack', `stack-${i}`);
+            this.cardStack.appendChild(card);
+        }
+        
+        // Active card last (on top of DOM, highest z-index)
+        const activeData = this.filteredCards[this.currentIndex];
+        const activeCard = this.createCardElement(activeData, this.currentIndex);
+        activeCard.classList.add('active');
+        activeCard.setAttribute('tabindex', '0');
+        this.cardStack.appendChild(activeCard);
+    }
+    
+    handleSwipe() {
+        const swipeThreshold = 50;
+        const deltaX = this.touchEndX - this.touchStartX;
+        
+        if (Math.abs(deltaX) > swipeThreshold) {
+            if (deltaX > 0) {
+                this.navigate(-1); // Swipe right = previous
+            } else {
+                this.navigate(1); // Swipe left = next
+            }
+        }
+    }
+    
+    renderDeckPreview() {
+        this.deckPreview.innerHTML = '';
+        
+        // Show all thumbnails - let them scroll horizontally
+        this.filteredCards.forEach((card, i) => {
+            const mini = document.createElement('button');
+            mini.className = 'deck-mini-card';
+            mini.dataset.index = i;
+            if (i === this.currentIndex) mini.classList.add('active');
+            mini.setAttribute('aria-label', `Jump to ${card.title}`);
+            mini.innerHTML = `<img src="${card.thumb || card.src}" alt="${card.title}" loading="lazy">`;
+            
+            mini.addEventListener('click', () => {
+                if (this.isAnimating) return;
+                if (i === this.currentIndex) return;
+                
+                this.isAnimating = true;
+                
+                // Unflip if needed
+                const currentCard = this.cardStack.querySelector('.gallery-card.active');
+                if (currentCard && currentCard.classList.contains('flipped')) {
+                    currentCard.classList.remove('flipped');
+                }
+                
+                this.currentIndex = i;
+                
+                // Re-render stack
+                this.renderStack();
+                this.updateDeckPreviewActive();
+                this.updateCounter();
+                this.updateNavButtons();
+                
+                setTimeout(() => {
+                    this.isAnimating = false;
+                }, 300);
+            });
+            
+            this.deckPreview.appendChild(mini);
+        });
+    }
+    
+    updateDeckPreviewActive() {
+        const minis = this.deckPreview.querySelectorAll('.deck-mini-card');
+        
+        minis.forEach((mini) => {
+            const idx = parseInt(mini.dataset.index);
+            mini.classList.toggle('active', idx === this.currentIndex);
+        });
+        
+        // Scroll to center the active thumbnail
+        const activeMini = this.deckPreview.querySelector('.deck-mini-card.active');
+        if (activeMini && this.deckPreview) {
+            const containerWidth = this.deckPreview.offsetWidth;
+            const cardLeft = activeMini.offsetLeft;
+            const cardWidth = activeMini.offsetWidth;
+            const scrollTo = cardLeft - (containerWidth / 2) + (cardWidth / 2);
+            
+            this.deckPreview.scrollTo({
+                left: scrollTo,
+                behavior: 'smooth'
+            });
+        }
+    }
+    
+    updateCounter() {
+        const current = this.overlay.querySelector('.card-counter-current');
+        const total = this.overlay.querySelector('.card-counter-total');
+        
+        current.textContent = this.currentIndex + 1;
+        total.textContent = this.filteredCards.length;
+    }
+    
+    updateNavButtons() {
+        const prevBtn = this.overlay.querySelector('.card-nav-prev');
+        const nextBtn = this.overlay.querySelector('.card-nav-next');
+        
+        prevBtn.disabled = this.currentIndex === 0;
+        nextBtn.disabled = this.currentIndex === this.filteredCards.length - 1;
+    }
+    
+    openFullview(src, title) {
+        const img = this.fullview.querySelector('.card-fullview-image');
+        img.src = src;
+        img.alt = title;
+        this.fullview.classList.add('active');
+    }
+    
+    closeFullview() {
+        this.fullview.classList.remove('active');
+    }
+}
+
+// Initialize when DOM is ready
+let cardGallery;
+
+document.addEventListener('DOMContentLoaded', () => {
+    cardGallery = new CardGallery();
+});
+
+// Export for use in other scripts
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = CardGallery;
+}
+
