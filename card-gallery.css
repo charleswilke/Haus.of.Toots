@@ -20,10 +20,10 @@
     overflow: hidden;
 }
 
-/* Vignette overlay */
+/* Vignette overlay - fixed to viewport */
 .card-gallery-overlay::before {
     content: '';
-    position: absolute;
+    position: fixed;
     inset: 0;
     background: radial-gradient(
         ellipse at center,
@@ -37,10 +37,10 @@
     z-index: 1;
 }
 
-/* Additional ambient shadow layer */
+/* Additional ambient shadow layer - fixed to viewport */
 .card-gallery-overlay::after {
     content: '';
-    position: absolute;
+    position: fixed;
     inset: 0;
     background: 
         linear-gradient(180deg, rgba(26, 22, 20, 0.3) 0%, transparent 15%),
@@ -228,15 +228,195 @@
 
 @media (max-width: 768px) {
     .card-stack {
-        width: 340px;
-        height: 480px;
+        width: 100%;
+        max-width: 360px;
+        height: 520px;
+    }
+}
+
+/* ========================================
+   MOBILE PEEK LAYOUT (show adjacent cards)
+   ======================================== */
+@media (max-width: 1023px) {
+    .card-gallery-wrapper {
+        overflow: visible;
+    }
+    
+    .card-stage {
+        overflow: visible;
+    }
+    
+    .card-stack {
+        overflow: visible;
+    }
+    
+    /* Active card slightly scaled up on mobile */
+    .gallery-card.active {
+        transform: scale(1.02) !important;
+    }
+    
+    /* Adjacent cards peeking from sides */
+    .gallery-card.stack-1 {
+        transform: translateX(85%) rotate(6deg) scale(0.85) !important;
+        filter: brightness(0.7);
+        z-index: 8 !important;
+    }
+    
+    .gallery-card.stack-2 {
+        transform: translateX(115%) rotate(10deg) scale(0.75) !important;
+        filter: brightness(0.5);
+        z-index: 7 !important;
+    }
+    
+    .gallery-card.stack-prev-1 {
+        transform: translateX(-85%) rotate(-6deg) scale(0.85) !important;
+        filter: brightness(0.7);
+        z-index: 8 !important;
+    }
+    
+    .gallery-card.stack-prev-2 {
+        transform: translateX(-115%) rotate(-10deg) scale(0.75) !important;
+        filter: brightness(0.5);
+        z-index: 7 !important;
+    }
+}
+
+/* ========================================
+   MASONRY GRID LAYOUT FOR DESKTOP (1024px+)
+   ======================================== */
+@media (min-width: 1024px) {
+    /* Allow scrolling in masonry mode */
+    .card-gallery-overlay.masonry-mode {
+        overflow-y: auto;
+    }
+    
+    /* Expand card stage to full width for masonry */
+    .card-gallery-overlay.masonry-mode .card-stage {
+        width: 100%;
+        max-width: none;
+        padding: 1rem 2rem 2rem;
+        min-height: calc(100vh - 120px);
+        height: auto;
+        overflow: visible;
+        /* Remove 3D perspective for flat grid */
+        perspective: none;
+        -webkit-perspective: none;
+        transform-style: flat;
+    }
+    
+    /* Make card stack a masonry grid container */
+    .card-gallery-overlay.masonry-mode .card-stack {
+        width: 100%;
+        max-width: 1400px;
+        height: auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+        padding: 1rem;
+        margin: 0 auto;
+        position: relative;
+        /* Remove 3D transforms for flat grid */
+        transform: none;
+        perspective: none;
+        transform-style: flat;
+    }
+    
+    /* Cards in masonry grid */
+    .card-gallery-overlay.masonry-mode .gallery-card {
+        position: relative;
+        width: 100%;
+        height: 400px;
+        transform: none !important;
+        opacity: 1 !important;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        /* Flat cards, no 3D */
+        transform-style: flat;
+    }
+    
+    .card-gallery-overlay.masonry-mode .gallery-card:hover {
+        transform: translateY(-8px) !important;
+        z-index: 10;
+    }
+    
+    /* Focused/flipped card gets highlight */
+    .card-gallery-overlay.masonry-mode .gallery-card.flipped {
+        z-index: 100;
+        transform: scale(1.02);
+    }
+    
+    /* Hide navigation arrows in masonry mode */
+    .card-gallery-overlay.masonry-mode .card-nav {
+        display: none !important;
+    }
+    
+    /* Hide thumbnail strip in masonry - all cards visible */
+    .card-gallery-overlay.masonry-mode .deck-preview {
+        display: none;
+    }
+    
+    /* Hide counter in masonry mode */
+    .card-gallery-overlay.masonry-mode .card-counter {
+        display: none;
+    }
+    
+    /* Hide swipe hint on desktop */
+    .card-gallery-overlay.masonry-mode .swipe-hint {
+        display: none !important;
+    }
+    
+    /* Category tabs stay visible and work as filters */
+    .card-gallery-overlay.masonry-mode .card-deck-tabs {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: rgba(45, 40, 37, 0.95);
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+        border-radius: 12px;
+    }
+}
+
+/* Larger cards on bigger screens */
+@media (min-width: 1200px) {
+    .card-gallery-overlay.masonry-mode .card-stack {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+    
+    .card-gallery-overlay.masonry-mode .gallery-card {
+        height: 420px;
+    }
+}
+
+@media (min-width: 1600px) {
+    .card-gallery-overlay.masonry-mode .card-stack {
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        max-width: 1800px;
+    }
+    
+    .card-gallery-overlay.masonry-mode .gallery-card {
+        height: 450px;
     }
 }
 
 @media (max-width: 480px) {
     .card-stack {
-        width: 280px;
-        height: 400px;
+        width: 88vw;
+        max-width: 320px;
+        height: 470px;
+    }
+    
+    /* Tighter peek on small screens */
+    .gallery-card.stack-1 {
+        transform: translateX(75%) rotate(5deg) scale(0.85) !important;
+    }
+    
+    .gallery-card.stack-prev-1 {
+        transform: translateX(-75%) rotate(-5deg) scale(0.85) !important;
+    }
+    
+    .gallery-card.stack-2,
+    .gallery-card.stack-prev-2 {
+        display: none; /* Hide second peek on very small screens */
     }
 }
 
@@ -326,6 +506,7 @@
     width: 100%;
     height: 100%;
     border-radius: 16px;
+    background: #FAF8F5; /* Solid fallback background */
     box-shadow: 
         /* Tight shadow for depth */
         0 2px 4px rgba(0, 0, 0, 0.1),
@@ -339,6 +520,9 @@
         0 0 0 1px rgba(255, 255, 255, 0.1) inset;
     /* Use visibility approach instead of backface-visibility */
     transition: visibility 0s linear 0.3s, opacity 0.3s ease;
+    /* Ensure cards are fully opaque */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
 /* Card Front */
@@ -738,6 +922,7 @@
         right: 1rem;
     }
 }
+
 
 /* Card Counter */
 .card-counter {

@@ -15,6 +15,9 @@ class CardGallery {
         this.touchStartX = 0;
         this.touchEndX = 0;
         
+        // Desktop masonry mode
+        this.isMasonryMode = false;
+        
         // Gallery data
         this.galleryData = {
             'custom-canvases': {
@@ -293,8 +296,14 @@ class CardGallery {
                     break;
                 case ' ':
                 case 'Enter':
-                    if (document.activeElement.classList.contains('gallery-card')) {
-                        this.flipCard(document.activeElement);
+                    // Open full view for focused card
+                    const focusedCard = document.activeElement;
+                    if (focusedCard.classList.contains('gallery-card')) {
+                        const idx = parseInt(focusedCard.dataset.index);
+                        const cardData = this.filteredCards[idx];
+                        if (cardData) {
+                            this.openFullview(cardData.src, cardData.title);
+                        }
                     }
                     break;
             }
@@ -318,12 +327,15 @@ class CardGallery {
         this.overlay.querySelector('[data-category="all"]').classList.add('active');
         this.overlay.querySelector('[data-category="all"]').setAttribute('aria-selected', 'true');
         
+        // Check for desktop arc mode
+        this.checkMasonryMode();
+        
         // Show overlay
         this.overlay.classList.add('active');
         document.body.style.overflow = 'hidden';
         
-        // Render the stack of cards
-        this.renderStack();
+        // Render cards (arc or stack based on screen size)
+        this.render();
         this.renderDeckPreview();
         this.updateCounter();
         this.updateNavButtons();
@@ -332,10 +344,47 @@ class CardGallery {
         setTimeout(() => {
             this.overlay.querySelector('.card-gallery-close').focus();
         }, 100);
+        
+        // Listen for resize to switch modes
+        this.resizeHandler = () => this.handleResize();
+        window.addEventListener('resize', this.resizeHandler);
+    }
+    
+    checkMasonryMode() {
+        const wasMasonryMode = this.isMasonryMode;
+        this.isMasonryMode = window.innerWidth >= 1024;
+        
+        if (this.isMasonryMode) {
+            this.overlay.classList.add('masonry-mode');
+        } else {
+            this.overlay.classList.remove('masonry-mode');
+        }
+        
+        return wasMasonryMode !== this.isMasonryMode;
+    }
+    
+    handleResize() {
+        if (this.checkMasonryMode()) {
+            this.render();
+            this.updateNavButtons();
+        }
+    }
+    
+    render() {
+        if (this.isMasonryMode) {
+            this.renderMasonry();
+        } else {
+            this.renderStack();
+        }
     }
     
     close() {
         if (!this.isOpen) return;
+        
+        // Remove resize listener
+        if (this.resizeHandler) {
+            window.removeEventListener('resize', this.resizeHandler);
+        }
         
         // Exit animation for cards
         const activeCard = this.cardStack.querySelector('.gallery-card.active');
@@ -346,6 +395,7 @@ class CardGallery {
         setTimeout(() => {
             this.isOpen = false;
             this.overlay.classList.remove('active');
+            this.overlay.classList.remove('masonry-mode');
             document.body.style.overflow = '';
             this.cardStack.innerHTML = '';
         }, 300);
@@ -380,8 +430,8 @@ class CardGallery {
                 this.filteredCards = this.cards.filter(card => card.category === category);
             }
             
-            // Re-render the stack
-            this.renderStack();
+            // Re-render cards
+            this.render();
             this.renderDeckPreview();
             this.updateCounter();
             this.updateNavButtons();
@@ -545,16 +595,6 @@ class CardGallery {
                     <h3 class="card-title">${cardData.title}</h3>
                     <p class="card-subtitle">${cardData.subtitle}</p>
                 </div>
-                <div class="flip-hint">Tap to flip</div>
-            </div>
-            <div class="card-face card-back">
-                <div class="card-back-content">
-                    <img class="card-back-logo" src="images/hauslogo.png" alt="Haus of Toots">
-                    <h3 class="card-back-title">${cardData.title}</h3>
-                    <p class="card-back-category">${cardData.categoryName}</p>
-                    <p class="card-back-description">${cardData.categoryDescription}</p>
-                    <button class="card-back-cta" data-src="${cardData.src}">View Full Image</button>
-                </div>
             </div>
         `;
         
@@ -598,10 +638,9 @@ class CardGallery {
                 // Check what was tapped
                 const target = document.elementFromPoint(touch.clientX, touch.clientY);
                 
-                if (target && target.classList.contains('card-back-cta')) {
-                    this.openFullview(target.dataset.src, cardData.title);
-                } else if (card.classList.contains('active')) {
-                    this.flipCard(card);
+                // Go directly to full size view
+                if (card.classList.contains('active') || card.classList.contains('masonry-card')) {
+                    this.openFullview(cardData.src, cardData.title);
                 }
             }
         }, { passive: false });
@@ -614,42 +653,15 @@ class CardGallery {
                 return;
             }
             
-            if (e.target.classList.contains('card-back-cta')) {
-                this.openFullview(e.target.dataset.src, cardData.title);
-                return;
+            // Go directly to full size view
+            if (card.classList.contains('active') || card.classList.contains('masonry-card')) {
+                this.openFullview(cardData.src, cardData.title);
             }
-            
-            if (card.classList.contains('active')) {
-                this.flipCard(card);
-            }
-            
         });
         
         return card;
     }
     
-    flipCard(card) {
-        if (!card.classList.contains('active')) return;
-        if (card.classList.contains('flipping') || card.classList.contains('flipping-back')) return;
-        
-        const isFlipped = card.classList.contains('flipped');
-        
-        if (isFlipped) {
-            // Flip back to front
-            card.classList.add('flipping-back');
-            setTimeout(() => {
-                card.classList.remove('flipped');
-                card.classList.remove('flipping-back');
-            }, 500);
-        } else {
-            // Flip to back
-            card.classList.add('flipping');
-            setTimeout(() => {
-                card.classList.add('flipped');
-                card.classList.remove('flipping');
-            }, 500);
-        }
-    }
     
     navigate(steps) {
         if (this.isAnimating) return;
@@ -670,8 +682,8 @@ class CardGallery {
             this.currentIndex = (this.currentIndex - 1 + this.filteredCards.length) % this.filteredCards.length;
         }
         
-        // Simple re-render
-        this.renderStack();
+        // Simple re-render (arc or stack based on mode)
+        this.render();
         this.updateDeckPreviewActive();
         this.updateCounter();
         this.updateNavButtons();
@@ -689,16 +701,36 @@ class CardGallery {
             return;
         }
         
-        // Show up to 6 cards in the stack (current + 5 behind)
-        const maxVisible = Math.min(6, this.filteredCards.length);
+        const total = this.filteredCards.length;
         
-        // Render stack cards first (behind), then active card last (on top)
-        // Stack cards: positions 5, 4, 3, 2, 1 (furthest back to closest)
-        for (let i = maxVisible - 1; i >= 1; i--) {
-            const idx = (this.currentIndex + i) % this.filteredCards.length;
-            const card = this.createCardElement(this.filteredCards[idx], idx);
-            card.classList.add('in-stack', `stack-${i}`);
-            this.cardStack.appendChild(card);
+        // Render previous cards (peeking from left) - furthest first
+        if (total > 2) {
+            const prevIdx2 = (this.currentIndex - 2 + total) % total;
+            const prevCard2 = this.createCardElement(this.filteredCards[prevIdx2], prevIdx2);
+            prevCard2.classList.add('stack-prev-2');
+            this.cardStack.appendChild(prevCard2);
+        }
+        
+        if (total > 1) {
+            const prevIdx1 = (this.currentIndex - 1 + total) % total;
+            const prevCard1 = this.createCardElement(this.filteredCards[prevIdx1], prevIdx1);
+            prevCard1.classList.add('stack-prev-1');
+            this.cardStack.appendChild(prevCard1);
+        }
+        
+        // Render next cards (peeking from right) - furthest first
+        if (total > 2) {
+            const nextIdx2 = (this.currentIndex + 2) % total;
+            const nextCard2 = this.createCardElement(this.filteredCards[nextIdx2], nextIdx2);
+            nextCard2.classList.add('stack-2');
+            this.cardStack.appendChild(nextCard2);
+        }
+        
+        if (total > 1) {
+            const nextIdx1 = (this.currentIndex + 1) % total;
+            const nextCard1 = this.createCardElement(this.filteredCards[nextIdx1], nextIdx1);
+            nextCard1.classList.add('stack-1');
+            this.cardStack.appendChild(nextCard1);
         }
         
         // Active card last (on top of DOM, highest z-index)
@@ -707,6 +739,40 @@ class CardGallery {
         activeCard.classList.add('active');
         activeCard.setAttribute('tabindex', '0');
         this.cardStack.appendChild(activeCard);
+    }
+    
+    renderMasonry() {
+        this.cardStack.innerHTML = '';
+        
+        if (this.filteredCards.length === 0) {
+            this.cardStack.innerHTML = '<p style="color: rgba(74, 69, 66, 0.7); text-align: center; background: rgba(255,255,255,0.8); padding: 1rem; border-radius: 8px;">No cards in this category</p>';
+            return;
+        }
+        
+        // Render all filtered cards in a grid
+        this.filteredCards.forEach((cardData, index) => {
+            const card = this.createCardElement(cardData, index);
+            card.classList.add('masonry-card');
+            card.setAttribute('tabindex', '0');
+            this.cardStack.appendChild(card);
+        });
+    }
+    
+    navigateTo(targetIndex) {
+        if (this.isAnimating) return;
+        if (targetIndex === this.currentIndex) return;
+        
+        this.isAnimating = true;
+        this.currentIndex = targetIndex;
+        
+        this.render();
+        this.updateDeckPreviewActive();
+        this.updateCounter();
+        this.updateNavButtons();
+        
+        setTimeout(() => {
+            this.isAnimating = false;
+        }, 300);
     }
     
     handleSwipe() {
@@ -724,6 +790,17 @@ class CardGallery {
     
     renderDeckPreview() {
         this.deckPreview.innerHTML = '';
+        
+        // Add horizontal scroll on mouse wheel (if not already added)
+        if (!this.deckPreview.dataset.wheelListener) {
+            this.deckPreview.dataset.wheelListener = 'true';
+            this.deckPreview.addEventListener('wheel', (e) => {
+                if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+                    e.preventDefault();
+                    this.deckPreview.scrollLeft += e.deltaY;
+                }
+            }, { passive: false });
+        }
         
         // Show all thumbnails - let them scroll horizontally
         this.filteredCards.forEach((card, i) => {
@@ -748,8 +825,8 @@ class CardGallery {
                 
                 this.currentIndex = i;
                 
-                // Re-render stack
-                this.renderStack();
+                // Re-render cards
+                this.render();
                 this.updateDeckPreviewActive();
                 this.updateCounter();
                 this.updateNavButtons();
