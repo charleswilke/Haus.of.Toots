@@ -25,19 +25,19 @@ class CardGallery {
                 color: '#FFB7C2',
                 description: 'One-of-a-kind designs created from your ideas, memories, beloved pets, and more!',
                 images: [
-                    { src: 'images/recent-canvases/1CustomCanvases/CampFlannelFizz.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-CampFlannelFizz.jpg', title: 'Camp Flannel Fizz', subtitle: 'cozy fall vibes' },
-                    { src: 'images/recent-canvases/1CustomCanvases/CowboyBear.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-CowboyBear.jpg', title: 'Cowboy Bear', subtitle: 'wild west cuteness' },
-                    { src: 'images/recent-canvases/1CustomCanvases/HappyHollowRectangle.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-HappyHollowRectangle.jpg', title: 'Happy Hollow Rectangle', subtitle: 'simple crest design' },
-                    { src: 'images/recent-canvases/1CustomCanvases/HappyHollowRound.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-HappyHollowRound.jpg', title: 'Happy Hollow Round', subtitle: 'simple crest variation' },
-                    { src: 'images/recent-canvases/1CustomCanvases/Mazie.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Mazie.jpg', title: 'Mazie', subtitle: 'custom pet portrait' },
-                    { src: 'images/recent-canvases/1CustomCanvases/MommyOnly.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-MommyOnly.jpg', title: 'Mommy Only', subtitle: 'playful family sign' },
-                    { src: 'images/recent-canvases/1CustomCanvases/Smiley.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Smiley.jpg', title: 'Smiley', subtitle: 'custom pet portrait' },
-                    { src: 'images/recent-canvases/1CustomCanvases/Winston.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Winston.jpg', title: 'Wilson', subtitle: 'custom pet portrait' },
-                    { src: 'images/recent-canvases/1CustomCanvases/YouAreMySunshine2.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-YouAreMySunshine2.jpg', title: 'You Are My Sunshine', subtitle: 'sentimental keepsake' },
-                    { src: 'images/recent-canvases/1CustomCanvases/NotreDameLuggageTagInsert.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-NotreDameLuggageTagInsert.jpg', title: 'Notre Dame Luggage Tag', subtitle: 'fighting Irish spirit' },
-                    { src: 'images/recent-canvases/1CustomCanvases/PallMallCigaretteBox.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-PallMallCigaretteBox.jpg', title: 'Pall Mall Box', subtitle: 'vintage nostalgia' },
-                    { src: 'images/recent-canvases/1CustomCanvases/RingBearerPillow.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-RingBearerPillow.jpg', title: 'Ring Bearer Pillow', subtitle: 'wedding keepsake' },
-                    { src: 'images/recent-canvases/1CustomCanvases/UNOMaverickBagCharm.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-UNOMaverickBagCharm.jpg', title: 'UNO Maverick Charm', subtitle: 'school pride' },
+                    { src: 'images/recent-canvases/1CustomCanvases/CampFlannelFizz.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-CampFlannelFizz.jpg', title: 'Camp Flannel Fizz', subtitle: '' },
+                    { src: 'images/recent-canvases/1CustomCanvases/CowboyBear.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-CowboyBear.jpg', title: 'Cowboy Bear', subtitle: '' },
+                    { src: 'images/recent-canvases/1CustomCanvases/HappyHollowRectangle.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-HappyHollowRectangle.jpg', title: 'Happy Hollow Rectangle', subtitle: ' ' },
+                    { src: 'images/recent-canvases/1CustomCanvases/HappyHollowRound.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-HappyHollowRound.jpg', title: 'Happy Hollow Round', subtitle: '' },
+                    { src: 'images/recent-canvases/1CustomCanvases/Mazie.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Mazie.jpg', title: 'Mazie', subtitle: '' },
+                    { src: 'images/recent-canvases/1CustomCanvases/MommyOnly.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-MommyOnly.jpg', title: 'Mommy Only', subtitle: '' },
+                    { src: 'images/recent-canvases/1CustomCanvases/Smiley.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Smiley.jpg', title: 'Smiley', subtitle: '' },
+                    { src: 'images/recent-canvases/1CustomCanvases/Winston.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Winston.jpg', title: 'Wilson', subtitle: '' },
+                    { src: 'images/recent-canvases/1CustomCanvases/YouAreMySunshine2.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-YouAreMySunshine2.jpg', title: 'You Are My Sunshine', subtitle: '' },
+                    { src: 'images/recent-canvases/1CustomCanvases/NotreDameLuggageTagInsert.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-NotreDameLuggageTagInsert.jpg', title: 'Notre Dame Luggage Tag', subtitle: '' },
+                    { src: 'images/recent-canvases/1CustomCanvases/PallMallCigaretteBox.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-PallMallCigaretteBox.jpg', title: 'Pall Mall Box', subtitle: '' },
+                    { src: 'images/recent-canvases/1CustomCanvases/RingBearerPillow.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-RingBearerPillow.jpg', title: 'Ring Bearer Pillow', subtitle: '' },
+                    { src: 'images/recent-canvases/1CustomCanvases/UNOMaverickBagCharm.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-UNOMaverickBagCharm.jpg', title: 'UNO Maverick Charm', subtitle: '' },
                     { src: 'images/recent-canvases/1CustomCanvases/CustomBelt_HuskersFrenchiesGolfHikingChiefs.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-CustomBelt_HuskersFrenchiesGolfHikingChiefs.jpg', title: 'Custom Belt', subtitle: 'Huskers, Frenchies, Golf, Hiking, Chiefs' }
                 ]
             },
@@ -48,7 +48,7 @@ class CardGallery {
                 images: [
                     { src: 'images/recent-canvases/2HoT-originals/SephoraHoliday.jpeg', thumb: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SephoraHoliday.jpg', title: 'Sephora Holiday', subtitle: 'holiday edition design' },
                     { src: 'images/recent-canvases/2HoT-originals/SephoraStandard.jpg', thumb: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SephoraStandard.jpg', title: 'Sephora Standard', subtitle: 'beauty lover\'s dream' },
-                    { src: 'images/recent-canvases/2HoT-originals/SharpestTool.jpeg', thumb: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SharpestTool.jpg', title: 'Sharpest Tool', subtitle: 'witty wordplay piece' }
+                    { src: 'images/recent-canvases/2HoT-originals/SharpestTool.jpeg', thumb: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SharpestTool.jpg', title: 'Sharpest Tool', subtitle: '' }
                 ]
             },
             'digital-charts': {
@@ -56,11 +56,11 @@ class CardGallery {
                 color: '#F74560',
                 description: 'Painted canvases from purchased digital cross-stitch patterns.',
                 images: [
-                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/DuckHunt-by-TurtleStitchShop-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-DuckHunt-by-TurtleStitchShop-Etsy.jpg', title: 'Duck Hunt', subtitle: 'nostalgic gamer classic' },
+                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/DuckHunt-by-TurtleStitchShop-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-DuckHunt-by-TurtleStitchShop-Etsy.jpg', title: 'Duck Hunt', subtitle: '' },
                     { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/FuckOff-by-HoopModernStitch-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-FuckOff-by-HoopModernStitch-Etsy.jpg', title: 'Fuck Off', subtitle: 'bold modern statement' },
                     { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/Kermit-w-PearlEarring-by-CherryMarryStore-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-Kermit-w-PearlEarring-by-CherryMarryStore-Etsy.jpg', title: 'Kermit with Pearl Earring', subtitle: 'Vermeer meets Muppets' },
-                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PeeWee-by-StitchedIts-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PeeWee-by-StitchedIts-Etsy.jpg', title: 'Pee-Wee Herman', subtitle: 'cult classic character' },
-                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PixelHearts-by-PixellPatterns-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PixelHearts-by-PixellPatterns-Etsy.jpg', title: 'Pixel Hearts', subtitle: 'retro 8-bit love' },
+                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PeeWee-by-StitchedIts-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PeeWee-by-StitchedIts-Etsy.jpg', title: 'Pee-Wee Herman', subtitle: '' },
+                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PixelHearts-by-PixellPatterns-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PixelHearts-by-PixellPatterns-Etsy.jpg', title: 'Pixel Hearts', subtitle: '' },
                     { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PopeKermit-by-CherryMarryStore.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PopeKermit-by-CherryMarryStore.jpg', title: 'Pope Kermit', subtitle: 'blessed and iconic' }
                 ]
             },
