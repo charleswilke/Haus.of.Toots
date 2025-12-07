@@ -64,7 +64,7 @@ The color palette is defined in CSS variables in `styles.css`:
 
 ```css
 --coral-primary: #FF6B7A;
---coral-light: #FFB3BA;
+--coral-light: #FF8497;
 --coral-dark: #E85563;
 --cream: #FAF8F5;
 --linen: #F5F1EC;
@@ -74,6 +74,15 @@ Gallery page buttons use:
 ```css
 --btn-accent: #FF836F;  /* Peachy coral for gallery buttons */
 --btn-dark: #E86F5D;    /* Hover state */
+```
+
+Additional color palette (Analogous scheme):
+```css
+#FFB7C2  /* Light pink */
+#FF8497  /* Medium pink */
+#D97EAE  /* Medium purple-pink */
+#F74560  /* Vibrant red-pink */
+#F06F51  /* Orange-red */
 ```
 
 ## Browser Support

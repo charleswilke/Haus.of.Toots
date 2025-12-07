@@ -22,27 +22,28 @@ class CardGallery {
         this.galleryData = {
             'custom-canvases': {
                 name: 'Customs',
+                color: '#FFB7C2',
                 description: 'One-of-a-kind designs created from your ideas, memories, beloved pets, and more!',
                 images: [
-                    { src: 'images/recent-canvases/1CustomCanvases/CampFlannelFizz.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-CampFlannelFizz.jpg', title: 'Camp Flannel Fizz', subtitle: 'preppy summer vibes' },
+                    { src: 'images/recent-canvases/1CustomCanvases/CampFlannelFizz.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-CampFlannelFizz.jpg', title: 'Camp Flannel Fizz', subtitle: 'cozy fall vibes' },
                     { src: 'images/recent-canvases/1CustomCanvases/CowboyBear.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-CowboyBear.jpg', title: 'Cowboy Bear', subtitle: 'wild west cuteness' },
-                    { src: 'images/recent-canvases/1CustomCanvases/HappyHollowRectangle.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-HappyHollowRectangle.jpg', title: 'Happy Hollow Rectangle', subtitle: 'summer camp memories' },
-                    { src: 'images/recent-canvases/1CustomCanvases/HappyHollowRound.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-HappyHollowRound.jpg', title: 'Happy Hollow Round', subtitle: 'camp crest variation' },
-                    { src: 'images/recent-canvases/1CustomCanvases/Mazie-and-Smiley.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Mazie-and-Smiley.jpg', title: 'Mazie & Smiley', subtitle: 'sibling duo portrait' },
+                    { src: 'images/recent-canvases/1CustomCanvases/HappyHollowRectangle.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-HappyHollowRectangle.jpg', title: 'Happy Hollow Rectangle', subtitle: 'simple crest design' },
+                    { src: 'images/recent-canvases/1CustomCanvases/HappyHollowRound.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-HappyHollowRound.jpg', title: 'Happy Hollow Round', subtitle: 'simple crest variation' },
                     { src: 'images/recent-canvases/1CustomCanvases/Mazie.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Mazie.jpg', title: 'Mazie', subtitle: 'custom pet portrait' },
                     { src: 'images/recent-canvases/1CustomCanvases/MommyOnly.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-MommyOnly.jpg', title: 'Mommy Only', subtitle: 'playful family sign' },
                     { src: 'images/recent-canvases/1CustomCanvases/Smiley.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Smiley.jpg', title: 'Smiley', subtitle: 'custom pet portrait' },
-                    { src: 'images/recent-canvases/1CustomCanvases/Winston.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Winston.jpg', title: 'Wilson', subtitle: 'beloved French Bulldog' },
+                    { src: 'images/recent-canvases/1CustomCanvases/Winston.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Winston.jpg', title: 'Wilson', subtitle: 'custom pet portrait' },
                     { src: 'images/recent-canvases/1CustomCanvases/YouAreMySunshine2.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-YouAreMySunshine2.jpg', title: 'You Are My Sunshine', subtitle: 'sentimental keepsake' },
                     { src: 'images/recent-canvases/1CustomCanvases/NotreDameLuggageTagInsert.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-NotreDameLuggageTagInsert.jpg', title: 'Notre Dame Luggage Tag', subtitle: 'fighting Irish spirit' },
                     { src: 'images/recent-canvases/1CustomCanvases/PallMallCigaretteBox.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-PallMallCigaretteBox.jpg', title: 'Pall Mall Box', subtitle: 'vintage nostalgia' },
                     { src: 'images/recent-canvases/1CustomCanvases/RingBearerPillow.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-RingBearerPillow.jpg', title: 'Ring Bearer Pillow', subtitle: 'wedding keepsake' },
-                    { src: 'images/recent-canvases/1CustomCanvases/SimpleMonogram4Self-FinishingJewelryBox.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-SimpleMonogram4Self-FinishingJewelryBox.jpg', title: 'Monogram Jewelry Box', subtitle: 'elegant personalization' },
-                    { src: 'images/recent-canvases/1CustomCanvases/UNOMaverickBagCharm.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-UNOMaverickBagCharm.jpg', title: 'UNO Maverick Charm', subtitle: 'school pride' }
+                    { src: 'images/recent-canvases/1CustomCanvases/UNOMaverickBagCharm.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-UNOMaverickBagCharm.jpg', title: 'UNO Maverick Charm', subtitle: 'school pride' },
+                    { src: 'images/recent-canvases/1CustomCanvases/CustomBelt_HuskersFrenchiesGolfHikingChiefs.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-CustomBelt_HuskersFrenchiesGolfHikingChiefs.jpg', title: 'Custom Belt', subtitle: 'Huskers, Frenchies, Golf, Hiking, Chiefs' }
                 ]
             },
             'hot-originals': {
                 name: 'HoT Originals',
+                color: '#D97EAE',
                 description: 'Original designs straight from the Haus of Toots imagination.',
                 images: [
                     { src: 'images/recent-canvases/2HoT-originals/SephoraHoliday.jpeg', thumb: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SephoraHoliday.jpg', title: 'Sephora Holiday', subtitle: 'holiday edition design' },
@@ -52,6 +53,7 @@ class CardGallery {
             },
             'digital-charts': {
                 name: 'Digital Charts',
+                color: '#F74560',
                 description: 'Painted canvases from purchased digital cross-stitch patterns.',
                 images: [
                     { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/DuckHunt-by-TurtleStitchShop-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-DuckHunt-by-TurtleStitchShop-Etsy.jpg', title: 'Duck Hunt', subtitle: 'nostalgic gamer classic' },
@@ -64,6 +66,7 @@ class CardGallery {
             },
             'customizations': {
                 name: 'Customizations',
+                color: '#F06F51',
                 description: 'Existing canvases personalized with names, colors, and custom details.',
                 images: [
                     { src: 'images/recent-canvases/4CanvasCustomizations/Kathryn-StockingCustomization-After.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Kathryn-StockingCustomization-After.jpg', title: 'Kathryn Stocking', subtitle: 'personalized stocking', badge: 'after' },
@@ -73,7 +76,9 @@ class CardGallery {
                     { src: 'images/recent-canvases/4CanvasCustomizations/MM-CanvasMonogram-After.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-MM-CanvasMonogram-After.jpg', title: 'MM Monogram', subtitle: 'custom monogram added', badge: 'after' },
                     { src: 'images/recent-canvases/4CanvasCustomizations/MM-CanvasMonogram-Before.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-MM-CanvasMonogram-Before.jpg', title: 'MM Monogram', subtitle: 'original canvas', badge: 'before' },
                     { src: 'images/recent-canvases/4CanvasCustomizations/Pinehurst-Customization-After.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Pinehurst-Customization-After.jpg', title: 'Pinehurst', subtitle: 'personalized update', badge: 'after' },
-                    { src: 'images/recent-canvases/4CanvasCustomizations/Pinehurst-Customization-Before.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Pinehurst-Customization-Before.jpg', title: 'Pinehurst', subtitle: 'original canvas', badge: 'before' }
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Pinehurst-Customization-Before.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Pinehurst-Customization-Before.jpg', title: 'Pinehurst', subtitle: 'original canvas', badge: 'before' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Cameron-Stocking-BeforeFull.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/Cameron-Stocking-BeforeFull.jpeg', title: 'Cameron Stocking', subtitle: 'original canvas', badge: 'before' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Cameron-Stocking-AfterFull.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/Cameron-Stocking-AfterFull.jpeg', title: 'Cameron Stocking', subtitle: 'personalized stocking', badge: 'after' }
                 ]
             }
         };
@@ -97,7 +102,8 @@ class CardGallery {
                     ...image,
                     category: categoryId,
                     categoryName: category.name,
-                    categoryDescription: category.description
+                    categoryDescription: category.description,
+                    categoryColor: category.color
                 });
             });
         });
@@ -133,7 +139,7 @@ class CardGallery {
                     All <span class="tab-count">${this.cards.length}</span>
                 </button>
                 ${Object.entries(this.galleryData).map(([id, cat]) => `
-                    <button class="card-deck-tab" data-category="${id}" role="tab" aria-selected="false">
+                    <button class="card-deck-tab" data-category="${id}" data-color="${cat.color}" role="tab" aria-selected="false">
                         ${cat.name} <span class="tab-count">${cat.images.length}</span>
                     </button>
                 `).join('')}
@@ -345,8 +351,14 @@ class CardGallery {
             this.overlay.querySelector('.card-gallery-close').focus();
         }, 100);
         
-        // Listen for resize to switch modes
-        this.resizeHandler = () => this.handleResize();
+        // Listen for resize to switch modes or recalculate widths
+        this.resizeTimeout = null;
+        this.resizeHandler = () => {
+            clearTimeout(this.resizeTimeout);
+            this.resizeTimeout = setTimeout(() => {
+                this.handleResize();
+            }, 150); // Debounce resize events
+        };
         window.addEventListener('resize', this.resizeHandler);
     }
     
@@ -364,10 +376,29 @@ class CardGallery {
     }
     
     handleResize() {
-        if (this.checkMasonryMode()) {
+        const modeChanged = this.checkMasonryMode();
+        if (modeChanged) {
             this.render();
             this.updateNavButtons();
+        } else if (this.isMasonryMode && this.isOpen) {
+            // Recalculate card widths when container size changes
+            // This ensures cards wrap properly when screen size changes
+            this.recalculateMasonryCardWidths();
         }
+    }
+    
+    recalculateMasonryCardWidths() {
+        if (!this.isMasonryMode || !this.cardStack) return;
+        
+        const cards = this.cardStack.querySelectorAll('.masonry-card');
+        cards.forEach(card => {
+            const img = card.querySelector('.card-image');
+            if (img && img.complete && img.naturalWidth > 0) {
+                requestAnimationFrame(() => {
+                    this.calculateCardWidth(card, img);
+                });
+            }
+        });
     }
     
     render() {
@@ -384,6 +415,9 @@ class CardGallery {
         // Remove resize listener
         if (this.resizeHandler) {
             window.removeEventListener('resize', this.resizeHandler);
+            if (this.resizeTimeout) {
+                clearTimeout(this.resizeTimeout);
+            }
         }
         
         // Exit animation for cards
@@ -533,7 +567,7 @@ class CardGallery {
         this.cardStack.innerHTML = '';
         
         if (this.filteredCards.length === 0) {
-            this.cardStack.innerHTML = '<p style="color: #FFB3BA; text-align: center;">No cards in this deck</p>';
+            this.cardStack.innerHTML = '<p style="color: #FF8497; text-align: center;">No cards in this deck</p>';
             return;
         }
         
@@ -588,7 +622,7 @@ class CardGallery {
             <div class="card-face card-front">
                 <div class="card-image-container loading">
                     <img class="card-image" data-src="${cardData.src}" alt="${cardData.title}">
-                    <div class="card-category-badge">${cardData.categoryName}</div>
+                    <div class="card-category-badge" data-color="${cardData.categoryColor}">${cardData.categoryName}</div>
                     ${badgeHtml}
                 </div>
                 <div class="card-info">
@@ -604,7 +638,25 @@ class CardGallery {
         
         img.onload = () => {
             container.classList.remove('loading');
+            
+            // In masonry mode, calculate card width based on image aspect ratio
+            if (this.isMasonryMode && card.classList.contains('masonry-card')) {
+                // Use requestAnimationFrame to ensure layout is ready
+                requestAnimationFrame(() => {
+                    this.calculateCardWidth(card, img);
+                });
+            }
         };
+        
+        // Also handle case where image is already loaded
+        if (img.complete && img.naturalWidth > 0) {
+            container.classList.remove('loading');
+            if (this.isMasonryMode && card.classList.contains('masonry-card')) {
+                requestAnimationFrame(() => {
+                    this.calculateCardWidth(card, img);
+                });
+            }
+        }
         
         // Load image after a short delay for animation
         setTimeout(() => {
@@ -756,6 +808,11 @@ class CardGallery {
             card.setAttribute('tabindex', '0');
             this.cardStack.appendChild(card);
         });
+        
+        // After a brief delay to ensure layout, calculate widths for any already-loaded images
+        setTimeout(() => {
+            this.recalculateMasonryCardWidths();
+        }, 200);
     }
     
     navigateTo(targetIndex) {
@@ -888,6 +945,48 @@ class CardGallery {
     
     closeFullview() {
         this.fullview.classList.remove('active');
+    }
+    
+    calculateCardWidth(card, img) {
+        // Get the card's fixed height from computed styles
+        const cardHeight = card.offsetHeight;
+        
+        // Get image natural dimensions
+        const imgWidth = img.naturalWidth;
+        const imgHeight = img.naturalHeight;
+        
+        if (!imgWidth || !imgHeight || !cardHeight) return;
+        
+        // Calculate aspect ratio
+        const aspectRatio = imgWidth / imgHeight;
+        
+        // Get card info section height (title + subtitle + padding)
+        const cardInfo = card.querySelector('.card-info');
+        const infoHeight = cardInfo ? cardInfo.offsetHeight : 60; // fallback estimate
+        
+        // Calculate available height for image container
+        // Card has 16px margin top, 8px margin bottom for image, plus info section
+        const imageContainerHeight = cardHeight - 16 - 8 - infoHeight - 16; // top margin + bottom margin + info + bottom padding
+        
+        // Calculate the width needed to maintain aspect ratio
+        const imageContainerWidth = imageContainerHeight * aspectRatio;
+        
+        // Total card width = image width + left margin + right margin (16px each = 32px)
+        const naturalCardWidth = imageContainerWidth + 32;
+        
+        // Set the width directly - let the grid flow naturally
+        // Don't constrain to container - let CSS Grid handle wrapping
+        card.style.width = `${naturalCardWidth}px`;
+        
+        // Calculate dynamic margin based on card width
+        // Scales from 0.5% to 2% of width - larger cards get slightly more breathing room
+        // This creates natural, proportional spacing between cards
+        const marginPercent = Math.min(2, Math.max(0.5, (naturalCardWidth / 300) * 1.2));
+        const dynamicMargin = (naturalCardWidth * marginPercent) / 100;
+        
+        // Apply dynamic margin for spacing (creates proportional gaps)
+        card.style.marginLeft = `${dynamicMargin}px`;
+        card.style.marginRight = `${dynamicMargin}px`;
     }
 }
 

@@ -11,7 +11,7 @@
 :root {
     /* Color Palette - inspired by logo */
     --coral-primary: #FF6B7A;
-    --coral-light: #FFB3BA;
+    --coral-light: #FF8497;
     --coral-dark: #E85563;
     --cream: #FAF8F5;
     --linen: #F5F1EC;
@@ -641,7 +641,7 @@ section {
 }
 
 .hero-hoop .hero-hoop-ring {
-    border: 12px solid #FFB3BA !important;
+    border: 12px solid #FF8497 !important;
 }
 
 .hero-content-side {
@@ -1056,7 +1056,7 @@ section {
 }
 
 .gallery-hoop .hoop-ring {
-    border-color: #FFB3BA;
+    border-color: #FF8497;
 }
 
 .hoop-ring {
