@@ -354,6 +354,12 @@
     .card-gallery-overlay.masonry-mode {
         overflow-y: auto;
     }
+
+    /* In masonry mode, let the main area stretch full height.
+       Then the grid can center itself when content is short. */
+    .card-gallery-overlay.masonry-mode .card-gallery-main {
+        align-items: stretch;
+    }
     
     /* Expand card stage to full width for masonry */
     .card-gallery-overlay.masonry-mode .card-stage {
@@ -375,8 +381,8 @@
         max-width: 1400px;
         height: auto;
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, auto));
-        grid-auto-flow: row dense;
+        grid-template-columns: repeat(auto-fill, minmax(200px, max-content));
+        grid-auto-flow: row;
         column-gap: 1rem;
         row-gap: 2rem;
         padding: 1.5rem;
@@ -389,22 +395,26 @@
         /* Ensure proper wrapping */
         overflow-wrap: break-word;
         word-wrap: break-word;
+
+        /* Center rows/columns when there isn't enough content to fill the viewport */
+        min-height: 100%;
+        align-content: center;
+        justify-content: center;
     }
     
     /* Cards in masonry grid */
     .card-gallery-overlay.masonry-mode .gallery-card {
         position: relative;
-        width: auto;
+        width: auto; /* Will be set by JavaScript based on image aspect ratio */
         min-width: 200px;
         height: 400px;
         transform: none !important;
         opacity: 1 !important;
-        transition: transform 0.3s ease, box-shadow 0.3s ease, width 0.3s ease;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
         /* Flat cards, no 3D */
         transform-style: flat;
-        /* Dynamic margins will be set by JavaScript */
         box-sizing: border-box;
-        /* Ensure width is respected */
+        /* Let grid handle placement - each card takes its calculated width */
         grid-column: auto;
     }
     
@@ -707,9 +717,9 @@
     background: #E8E4DF;
 }
 
-/* In masonry mode, image container fills available space */
+/* In masonry mode, image container has explicit dimensions set by JS */
 .card-gallery-overlay.masonry-mode .card-image-container {
-    flex: 1;
+    flex: none; /* Override flex: 1 - dimensions set explicitly by JS */
     margin: 16px 16px 8px 16px;
     min-height: 0;
 }
@@ -725,7 +735,7 @@
 .card-gallery-overlay.masonry-mode .card-image {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain; /* Use contain to maintain aspect ratio without cropping */
 }
 
 .gallery-card:hover .card-image {

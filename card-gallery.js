@@ -25,20 +25,20 @@ class CardGallery {
                 color: '#FFB7C2',
                 description: 'One-of-a-kind designs created from your ideas, memories, beloved pets, and more!',
                 images: [
-                    { src: 'images/recent-canvases/1CustomCanvases/CampFlannelFizz.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-CampFlannelFizz.jpg', title: 'Camp Flannel Fizz', subtitle: '' },
-                    { src: 'images/recent-canvases/1CustomCanvases/CowboyBear.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-CowboyBear.jpg', title: 'Cowboy Bear', subtitle: '' },
-                    { src: 'images/recent-canvases/1CustomCanvases/HappyHollowRectangle.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-HappyHollowRectangle.jpg', title: 'Happy Hollow Rectangle', subtitle: ' ' },
-                    { src: 'images/recent-canvases/1CustomCanvases/HappyHollowRound.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-HappyHollowRound.jpg', title: 'Happy Hollow Round', subtitle: '' },
-                    { src: 'images/recent-canvases/1CustomCanvases/Mazie.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Mazie.jpg', title: 'Mazie', subtitle: '' },
-                    { src: 'images/recent-canvases/1CustomCanvases/MommyOnly.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-MommyOnly.jpg', title: 'Mommy Only', subtitle: '' },
-                    { src: 'images/recent-canvases/1CustomCanvases/Smiley.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Smiley.jpg', title: 'Smiley', subtitle: '' },
-                    { src: 'images/recent-canvases/1CustomCanvases/Winston.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Winston.jpg', title: 'Wilson', subtitle: '' },
-                    { src: 'images/recent-canvases/1CustomCanvases/YouAreMySunshine2.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-YouAreMySunshine2.jpg', title: 'You Are My Sunshine', subtitle: '' },
-                    { src: 'images/recent-canvases/1CustomCanvases/NotreDameLuggageTagInsert.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-NotreDameLuggageTagInsert.jpg', title: 'Notre Dame Luggage Tag', subtitle: '' },
-                    { src: 'images/recent-canvases/1CustomCanvases/PallMallCigaretteBox.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-PallMallCigaretteBox.jpg', title: 'Pall Mall Box', subtitle: '' },
-                    { src: 'images/recent-canvases/1CustomCanvases/RingBearerPillow.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-RingBearerPillow.jpg', title: 'Ring Bearer Pillow', subtitle: '' },
-                    { src: 'images/recent-canvases/1CustomCanvases/UNOMaverickBagCharm.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-UNOMaverickBagCharm.jpg', title: 'UNO Maverick Charm', subtitle: '' },
-                    { src: 'images/recent-canvases/1CustomCanvases/CustomBelt_HuskersFrenchiesGolfHikingChiefs.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-CustomBelt_HuskersFrenchiesGolfHikingChiefs.jpg', title: 'Custom Belt', subtitle: 'Huskers, Frenchies, Golf, Hiking, Chiefs' }
+                    { src: 'images/recent-canvases/1CustomCanvases/CampFlannelFizz.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-CampFlannelFizz.jpg', title: 'Camp Flannel Fizz', subtitle: '', date: '2024-12-15' },
+                    { src: 'images/recent-canvases/1CustomCanvases/CowboyBear.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-CowboyBear.jpg', title: 'Cowboy Bear', subtitle: '', date: '2024-12-10' },
+                    { src: 'images/recent-canvases/1CustomCanvases/HappyHollowRectangle.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-HappyHollowRectangle.jpg', title: 'Happy Hollow Rectangle', subtitle: ' ', date: '2024-12-08' },
+                    { src: 'images/recent-canvases/1CustomCanvases/HappyHollowRound.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-HappyHollowRound.jpg', title: 'Happy Hollow Round', subtitle: '', date: '2024-12-08' },
+                    { src: 'images/recent-canvases/1CustomCanvases/Mazie.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Mazie.jpg', title: 'Mazie', subtitle: '', date: '2024-12-05' },
+                    { src: 'images/recent-canvases/1CustomCanvases/MommyOnly.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-MommyOnly.jpg', title: 'Mommy Only', subtitle: '', date: '2024-12-03' },
+                    { src: 'images/recent-canvases/1CustomCanvases/Smiley.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Smiley.jpg', title: 'Smiley', subtitle: '', date: '2024-12-01' },
+                    { src: 'images/recent-canvases/1CustomCanvases/Winston.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Winston.jpg', title: 'Wilson', subtitle: '', date: '2024-11-28' },
+                    { src: 'images/recent-canvases/1CustomCanvases/YouAreMySunshine2.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-YouAreMySunshine2.jpg', title: 'You Are My Sunshine', subtitle: '', date: '2024-11-25' },
+                    { src: 'images/recent-canvases/1CustomCanvases/NotreDameLuggageTagInsert.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-NotreDameLuggageTagInsert.jpg', title: 'Notre Dame Luggage Tag', subtitle: '', date: '2024-11-20' },
+                    { src: 'images/recent-canvases/1CustomCanvases/PallMallCigaretteBox.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-PallMallCigaretteBox.jpg', title: 'Pall Mall Box', subtitle: '', date: '2024-11-18' },
+                    { src: 'images/recent-canvases/1CustomCanvases/RingBearerPillow.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-RingBearerPillow.jpg', title: 'Ring Bearer Pillow', subtitle: '', date: '2024-11-15' },
+                    { src: 'images/recent-canvases/1CustomCanvases/UNOMaverickBagCharm.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-UNOMaverickBagCharm.jpg', title: 'UNO Maverick Charm', subtitle: '', date: '2024-11-12' },
+                    { src: 'images/recent-canvases/1CustomCanvases/CustomBelt_HuskersFrenchiesGolfHikingChiefs.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-CustomBelt_HuskersFrenchiesGolfHikingChiefs.jpg', title: 'Custom Belt', subtitle: 'Huskers, Frenchies, Golf, Hiking, Chiefs', date: '2024-12-20' }
                 ]
             },
             'hot-originals': {
@@ -46,9 +46,9 @@ class CardGallery {
                 color: '#D97EAE',
                 description: 'Original designs straight from the Haus of Toots imagination.',
                 images: [
-                    { src: 'images/recent-canvases/2HoT-originals/SephoraHoliday.jpeg', thumb: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SephoraHoliday.jpg', title: 'Sephora Holiday', subtitle: '' },
-                    { src: 'images/recent-canvases/2HoT-originals/SephoraStandard.jpg', thumb: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SephoraStandard.jpg', title: 'Sephora Standard', subtitle: '' },
-                    { src: 'images/recent-canvases/2HoT-originals/SharpestTool.jpeg', thumb: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SharpestTool.jpg', title: 'Sharpest Tool', subtitle: '' }
+                    { src: 'images/recent-canvases/2HoT-originals/SephoraHoliday.jpeg', thumb: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SephoraHoliday.jpg', title: 'Sephora Holiday', subtitle: '', date: '2024-12-12' },
+                    { src: 'images/recent-canvases/2HoT-originals/SephoraStandard.jpg', thumb: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SephoraStandard.jpg', title: 'Sephora Standard', subtitle: '', date: '2024-11-30' },
+                    { src: 'images/recent-canvases/2HoT-originals/SharpestTool.jpeg', thumb: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SharpestTool.jpg', title: 'Sharpest Tool', subtitle: '', date: '2024-11-22' }
                 ]
             },
             'digital-charts': {
@@ -56,12 +56,12 @@ class CardGallery {
                 color: '#F74560',
                 description: 'Painted canvases from purchased digital cross-stitch patterns.',
                 images: [
-                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/DuckHunt-by-TurtleStitchShop-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-DuckHunt-by-TurtleStitchShop-Etsy.jpg', title: 'Duck Hunt', subtitle: '' },
-                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/FuckOff-by-HoopModernStitch-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-FuckOff-by-HoopModernStitch-Etsy.jpg', title: 'Fuck Off', subtitle: 'bold modern statement' },
-                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/Kermit-w-PearlEarring-by-CherryMarryStore-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-Kermit-w-PearlEarring-by-CherryMarryStore-Etsy.jpg', title: 'Kermit with Pearl Earring', subtitle: 'Vermeer meets Muppets' },
-                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PeeWee-by-StitchedIts-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PeeWee-by-StitchedIts-Etsy.jpg', title: 'Pee-Wee Herman', subtitle: '' },
-                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PixelHearts-by-PixellPatterns-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PixelHearts-by-PixellPatterns-Etsy.jpg', title: 'Pixel Hearts', subtitle: '' },
-                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PopeKermit-by-CherryMarryStore.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PopeKermit-by-CherryMarryStore.jpg', title: 'Pope Kermit', subtitle: 'blessed and iconic' }
+                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/DuckHunt-by-TurtleStitchShop-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-DuckHunt-by-TurtleStitchShop-Etsy.jpg', title: 'Duck Hunt', subtitle: '', date: '2024-12-06' },
+                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/FuckOff-by-HoopModernStitch-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-FuckOff-by-HoopModernStitch-Etsy.jpg', title: 'Fuck Off', subtitle: 'bold modern statement', date: '2024-11-27' },
+                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/Kermit-w-PearlEarring-by-CherryMarryStore-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-Kermit-w-PearlEarring-by-CherryMarryStore-Etsy.jpg', title: 'Kermit with Pearl Earring', subtitle: 'Vermeer meets Muppets', date: '2024-11-24' },
+                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PeeWee-by-StitchedIts-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PeeWee-by-StitchedIts-Etsy.jpg', title: 'Pee-Wee Herman', subtitle: '', date: '2024-11-19' },
+                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PixelHearts-by-PixellPatterns-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PixelHearts-by-PixellPatterns-Etsy.jpg', title: 'Pixel Hearts', subtitle: '', date: '2024-11-16' },
+                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PopeKermit-by-CherryMarryStore.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PopeKermit-by-CherryMarryStore.jpg', title: 'Pope Kermit', subtitle: 'blessed and iconic', date: '2024-11-14' }
                 ]
             },
             'customizations': {
@@ -69,21 +69,43 @@ class CardGallery {
                 color: '#F06F51',
                 description: 'Existing canvases personalized with names, colors, and custom details.',
                 images: [
-                    { src: 'images/recent-canvases/4CanvasCustomizations/Kathryn-StockingCustomization-After.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Kathryn-StockingCustomization-After.jpg', title: 'Kathryn Stocking', subtitle: 'personalized stocking', badge: 'after' },
-                    { src: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-After.jpg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Lance-StockingCustomization-After.jpg', title: 'Lance Stocking', subtitle: 'name added', badge: 'after' },
-                    { src: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-After2.jpg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Lance-StockingCustomization-After2.jpg', title: 'Lance Stocking Detail', subtitle: 'finished detail', badge: 'after' },
-                    { src: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-Before.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Lance-StockingCustomization-Before.jpg', title: 'Lance Stocking', subtitle: 'original canvas', badge: 'before' },
-                    { src: 'images/recent-canvases/4CanvasCustomizations/MM-CanvasMonogram-After.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-MM-CanvasMonogram-After.jpg', title: 'MM Monogram', subtitle: 'custom monogram added', badge: 'after' },
-                    { src: 'images/recent-canvases/4CanvasCustomizations/MM-CanvasMonogram-Before.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-MM-CanvasMonogram-Before.jpg', title: 'MM Monogram', subtitle: 'original canvas', badge: 'before' },
-                    { src: 'images/recent-canvases/4CanvasCustomizations/Pinehurst-Customization-After.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Pinehurst-Customization-After.jpg', title: 'Pinehurst', subtitle: 'personalized update', badge: 'after' },
-                    { src: 'images/recent-canvases/4CanvasCustomizations/Pinehurst-Customization-Before.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Pinehurst-Customization-Before.jpg', title: 'Pinehurst', subtitle: 'original canvas', badge: 'before' },
-                    { src: 'images/recent-canvases/4CanvasCustomizations/Cameron-Stocking-BeforeFull.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/Cameron-Stocking-BeforeFull.jpeg', title: 'Cameron Stocking', subtitle: 'original canvas', badge: 'before' },
-                    { src: 'images/recent-canvases/4CanvasCustomizations/Cameron-Stocking-AfterFull.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/Cameron-Stocking-AfterFull.jpeg', title: 'Cameron Stocking', subtitle: 'personalized stocking', badge: 'after' }
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Kathryn-StockingCustomization-After.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Kathryn-StockingCustomization-After.jpg', title: 'Kathryn Stocking', subtitle: 'personalized stocking', badge: 'after', date: '2024-12-14' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-After.jpg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Lance-StockingCustomization-After.jpg', title: 'Lance Stocking', subtitle: 'name added', badge: 'after', date: '2024-12-11' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-After2.jpg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Lance-StockingCustomization-After2.jpg', title: 'Lance Stocking Detail', subtitle: 'finished detail', badge: 'after', date: '2024-12-11' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-Before.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Lance-StockingCustomization-Before.jpg', title: 'Lance Stocking', subtitle: 'original canvas', badge: 'before', date: '2024-12-09' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/MM-CanvasMonogram-After.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-MM-CanvasMonogram-After.jpg', title: 'MM Monogram', subtitle: 'custom monogram added', badge: 'after', date: '2024-12-07' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/MM-CanvasMonogram-Before.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-MM-CanvasMonogram-Before.jpg', title: 'MM Monogram', subtitle: 'original canvas', badge: 'before', date: '2024-12-04' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Pinehurst-Customization-After.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Pinehurst-Customization-After.jpg', title: 'Pinehurst', subtitle: 'personalized update', badge: 'after', date: '2024-12-02' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Pinehurst-Customization-Before.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Pinehurst-Customization-Before.jpg', title: 'Pinehurst', subtitle: 'original canvas', badge: 'before', date: '2024-11-29' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Cameron-Stocking-BeforeFull.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/Cameron-Stocking-BeforeFull.jpeg', title: 'Cameron Stocking', subtitle: 'original canvas', badge: 'before', date: '2024-11-26' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Cameron-Stocking-AfterFull.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/Cameron-Stocking-AfterFull.jpeg', title: 'Cameron Stocking', subtitle: 'personalized stocking', badge: 'after', date: '2024-11-26' }
                 ]
             }
         };
         
         this.init();
+    }
+
+    parseDateToTime(dateValue) {
+        // Supports:
+        // - YYYY-MM-DD (recommended)
+        // - Any Date.parse-able string as a fallback
+        if (!dateValue) return 0;
+
+        if (typeof dateValue === 'number' && Number.isFinite(dateValue)) return dateValue;
+
+        const s = String(dateValue).trim();
+        const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s);
+        if (m) {
+            const y = Number(m[1]);
+            const mo = Number(m[2]);
+            const d = Number(m[3]);
+            // Use UTC to avoid timezone/date-shift surprises
+            return Date.UTC(y, mo - 1, d);
+        }
+
+        const t = Date.parse(s);
+        return Number.isFinite(t) ? t : 0;
     }
     
     init() {
@@ -103,10 +125,20 @@ class CardGallery {
                     category: categoryId,
                     categoryName: category.name,
                     categoryDescription: category.description,
-                    categoryColor: category.color
+                    categoryColor: category.color,
+                    // Use date from image data, or default to a very old date if not provided
+                    date: image.date || '2000-01-01'
                 });
             });
         });
+        
+        // Sort by date (newest first)
+        this.cards.sort((a, b) => {
+            const dateA = this.parseDateToTime(a.date);
+            const dateB = this.parseDateToTime(b.date);
+            return dateB - dateA; // newest first
+        });
+        
         this.filteredCards = [...this.cards];
     }
     
@@ -463,6 +495,13 @@ class CardGallery {
             } else {
                 this.filteredCards = this.cards.filter(card => card.category === category);
             }
+            
+            // Ensure filtered cards are still sorted by date (newest first)
+            this.filteredCards.sort((a, b) => {
+                const dateA = this.parseDateToTime(a.date);
+                const dateB = this.parseDateToTime(b.date);
+                return dateB - dateA; // newest first
+            });
             
             // Re-render cards
             this.render();
@@ -957,36 +996,35 @@ class CardGallery {
         
         if (!imgWidth || !imgHeight || !cardHeight) return;
         
-        // Calculate aspect ratio
-        const aspectRatio = imgWidth / imgHeight;
-        
         // Get card info section height (title + subtitle + padding)
         const cardInfo = card.querySelector('.card-info');
-        const infoHeight = cardInfo ? cardInfo.offsetHeight : 60; // fallback estimate
-        
-        // Calculate available height for image container
-        // Card has 16px margin top, 8px margin bottom for image, plus info section
-        const imageContainerHeight = cardHeight - 16 - 8 - infoHeight - 16; // top margin + bottom margin + info + bottom padding
-        
-        // Calculate the width needed to maintain aspect ratio
-        const imageContainerWidth = imageContainerHeight * aspectRatio;
-        
-        // Total card width = image width + left margin + right margin (16px each = 32px)
-        const naturalCardWidth = imageContainerWidth + 32;
-        
-        // Set the width directly - let the grid flow naturally
-        // Don't constrain to container - let CSS Grid handle wrapping
-        card.style.width = `${naturalCardWidth}px`;
-        
-        // Calculate dynamic margin based on card width
-        // Scales from 0.5% to 2% of width - larger cards get slightly more breathing room
-        // This creates natural, proportional spacing between cards
-        const marginPercent = Math.min(2, Math.max(0.5, (naturalCardWidth / 300) * 1.2));
-        const dynamicMargin = (naturalCardWidth * marginPercent) / 100;
-        
-        // Apply dynamic margin for spacing (creates proportional gaps)
-        card.style.marginLeft = `${dynamicMargin}px`;
-        card.style.marginRight = `${dynamicMargin}px`;
+        // Wait for next frame to ensure info height is calculated
+        requestAnimationFrame(() => {
+            const infoHeight = cardInfo ? cardInfo.offsetHeight : 60;
+            
+            // Calculate available height for image container
+            // Card has 16px margin top, 8px margin bottom for image, plus info section
+            const imageContainerHeight = cardHeight - 16 - 8 - infoHeight - 16;
+            
+            // Set explicit height on the image container
+            const imageContainer = card.querySelector('.card-image-container');
+            if (imageContainer) {
+                imageContainer.style.height = `${imageContainerHeight}px`;
+                imageContainer.style.flex = 'none'; // Override flex: 1
+                // Use CSS aspect-ratio to let width be determined naturally
+                imageContainer.style.aspectRatio = `${imgWidth} / ${imgHeight}`;
+                imageContainer.style.width = 'auto'; // Let aspect-ratio determine width
+            }
+            
+            // After image container width is set, calculate card width
+            requestAnimationFrame(() => {
+                if (imageContainer) {
+                    const imageContainerWidth = imageContainer.offsetWidth;
+                    const naturalCardWidth = imageContainerWidth + 32; // + margins
+                    card.style.width = `${naturalCardWidth}px`;
+                }
+            });
+        });
     }
 }
 
