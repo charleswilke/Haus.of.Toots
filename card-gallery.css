@@ -714,7 +714,29 @@
     border-radius: 8px;
     overflow: hidden;
     position: relative;
-    background: #E8E4DF;
+    /* Canvas texture behind "contain" images */
+    background-color: #F5F1EC;
+    background-image: url('images/haus_of_toots_canvas_13ct_512px.png');
+    background-repeat: repeat;
+    background-size: 300px 293px;
+    background-position: 0 0;
+    /* Ensure our overlay sits under image/badges */
+    isolation: isolate;
+}
+
+/* Soft vignette over canvas texture (but under the image) */
+.card-image-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(255, 255, 255, 0.55) 0%,
+        rgba(255, 255, 255, 0.20) 45%,
+        rgba(26, 22, 20, 0.20) 100%
+    );
+    pointer-events: none;
+    z-index: 0;
 }
 
 /* In masonry mode, image container has explicit dimensions set by JS */
@@ -729,6 +751,8 @@
     height: 100%;
     object-fit: cover;
     transition: transform 0.5s ease;
+    position: relative;
+    z-index: 1;
 }
 
 /* In masonry mode, image fills container maintaining aspect ratio */
