@@ -445,292 +445,320 @@
         </div>
     </div>
 
+    <script src="script.js"></script>
+    <script src="card-gallery.js"></script>
     <script>
-        // Gallery data structure matching the existing categories
-        const galleryData = {
-            'custom-canvases': [
-                { thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-CampFlannelFizz.jpg', full: 'images/recent-canvases/1CustomCanvases/CampFlannelFizz.jpeg', title: 'Camp Flannel Fizz' },
-                { thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-CowboyBear.jpg', full: 'images/recent-canvases/1CustomCanvases/CowboyBear.jpeg', title: 'Cowboy Bear' },
-                { thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-HappyHollowRectangle.jpg', full: 'images/recent-canvases/1CustomCanvases/HappyHollowRectangle.jpeg', title: 'Happy Hollow Rectangle' },
-                { thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-HappyHollowRound.jpg', full: 'images/recent-canvases/1CustomCanvases/HappyHollowRound.jpeg', title: 'Happy Hollow Round' },
-                { thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Mazie-and-Smiley.jpg', full: 'images/recent-canvases/1CustomCanvases/Mazie-and-Smiley.jpeg', title: 'Mazie and Smiley' },
-                { thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Mazie.jpg', full: 'images/recent-canvases/1CustomCanvases/Mazie.jpeg', title: 'Mazie' },
-                { thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-MommyOnly.jpg', full: 'images/recent-canvases/1CustomCanvases/MommyOnly.jpeg', title: 'Mommy Only' },
-                { thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Smiley.jpg', full: 'images/recent-canvases/1CustomCanvases/Smiley.jpeg', title: 'Smiley' },
-                { thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Winston.jpg', full: 'images/recent-canvases/1CustomCanvases/Winston.jpeg', title: 'Winston' },
-                { thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-YouAreMySunshine2.jpg', full: 'images/recent-canvases/1CustomCanvases/YouAreMySunshine2.jpeg', title: 'You Are My Sunshine' },
-                { thumb: 'images/recent-canvases/1CustomCanvases/thumb-NotreDameLuggageTagInsert.jpg', full: 'images/recent-canvases/1CustomCanvases/NotreDameLuggageTagInsert.jpg', title: 'Notre Dame Luggage Tag Insert' },
-                { thumb: 'images/recent-canvases/1CustomCanvases/thumb-PallMallCigaretteBox.jpg', full: 'images/recent-canvases/1CustomCanvases/PallMallCigaretteBox.jpg', title: 'Pall Mall Cigarette Box' },
-                { thumb: 'images/recent-canvases/1CustomCanvases/thumb-RingBearerPillow.jpg', full: 'images/recent-canvases/1CustomCanvases/RingBearerPillow.jpg', title: 'Ring Bearer Pillow' },
-                { thumb: 'images/recent-canvases/1CustomCanvases/thumb-SimpleMonogram4Self-FinishingJewelryBox.jpg', full: 'images/recent-canvases/1CustomCanvases/SimpleMonogram4Self-FinishingJewelryBox.jpg', title: 'Simple Monogram for Self-Finishing Jewelry Box' },
-                { thumb: 'images/recent-canvases/1CustomCanvases/thumb-UNOMaverickBagCharm.jpg', full: 'images/recent-canvases/1CustomCanvases/UNOMaverickBagCharm.jpg', title: 'UNO Maverick Bag Charm' }
-            ],
-            'hot-originals': [
-                { thumb: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SephoraHoliday.jpg', full: 'images/recent-canvases/2HoT-originals/SephoraHoliday.jpeg', title: 'Sephora Holiday' },
-                { thumb: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SephoraStandard.jpg', full: 'images/recent-canvases/2HoT-originals/SephoraStandard.jpg', title: 'Sephora Standard' },
-                { thumb: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SharpestTool.jpg', full: 'images/recent-canvases/2HoT-originals/SharpestTool.jpeg', title: 'Sharpest Tool' }
-            ],
-            'digital-charts': [
-                { thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-DuckHunt-by-TurtleStitchShop-Etsy.jpg', full: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/DuckHunt-by-TurtleStitchShop-Etsy.jpeg', title: 'Duck Hunt' },
-                { thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-FuckOff-by-HoopModernStitch-Etsy.jpg', full: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/FuckOff-by-HoopModernStitch-Etsy.jpeg', title: 'Fuck Off' },
-                { thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-Kermit-w-PearlEarring-by-CherryMarryStore-Etsy.jpg', full: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/Kermit-w-PearlEarring-by-CherryMarryStore-Etsy.jpeg', title: 'Kermit with Pearl Earring' },
-                { thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PeeWee-by-StitchedIts-Etsy.jpg', full: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PeeWee-by-StitchedIts-Etsy.jpeg', title: 'Pee Wee' },
-                { thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PixelHearts-by-PixellPatterns-Etsy.jpg', full: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PixelHearts-by-PixellPatterns-Etsy.jpeg', title: 'Pixel Hearts' },
-                { thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PopeKermit-by-CherryMarryStore.jpg', full: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PopeKermit-by-CherryMarryStore.jpeg', title: 'Pope Kermit' }
-            ],
-            'customizations': [
-                { thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Kathryn-StockingCustomization-After.jpg', full: 'images/recent-canvases/4CanvasCustomizations/Kathryn-StockingCustomization-After.jpeg', title: 'Kathryn Stocking - After', badge: 'after' },
-                { thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Lance-StockingCustomization-After.jpg', full: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-After.jpg', title: 'Lance Stocking - After', badge: 'after' },
-                { thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Lance-StockingCustomization-After2.jpg', full: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-After2.jpg', title: 'Lance Stocking - After 2', badge: 'after' },
-                { thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Lance-StockingCustomization-Before.jpg', full: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-Before.jpeg', title: 'Lance Stocking - Before', badge: 'before' },
-                { thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-MM-CanvasMonogram-After.jpg', full: 'images/recent-canvases/4CanvasCustomizations/MM-CanvasMonogram-After.jpeg', title: 'MM Canvas Monogram - After', badge: 'after' },
-                { thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-MM-CanvasMonogram-Before.jpg', full: 'images/recent-canvases/4CanvasCustomizations/MM-CanvasMonogram-Before.jpeg', title: 'MM Canvas Monogram - Before', badge: 'before' },
-                { thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Pinehurst-Customization-After.jpg', full: 'images/recent-canvases/4CanvasCustomizations/Pinehurst-Customization-After.jpeg', title: 'Pinehurst - After', badge: 'after' },
-                { thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Pinehurst-Customization-Before.jpg', full: 'images/recent-canvases/4CanvasCustomizations/Pinehurst-Customization-Before.jpeg', title: 'Pinehurst - Before', badge: 'before' }
-            ]
-        };
+        // NOTE:
+        // The page-level thumbnail grids are now sourced from the same data as the
+        // card gallery overlay (card-gallery.js), and sorted by date (newest first).
 
-        // Populate galleries
-        Object.keys(galleryData).forEach(categoryId => {
-            const container = document.getElementById(categoryId);
-            const items = galleryData[categoryId];
-            
-            items.forEach((item, index) => {
-                const box = document.createElement('div');
-                box.className = 'gallery-thumbnail-box';
-                box.setAttribute('data-full', item.full);
-                box.setAttribute('data-title', item.title);
-                box.setAttribute('data-category', categoryId);
-                box.setAttribute('data-index', index);
-                
-                const img = document.createElement('img');
-                img.className = 'gallery-thumbnail-image';
-                img.src = item.thumb;
+        function parseDateToTime(dateValue) {
+            // Supports:
+            // - YYYY-MM-DD (recommended)
+            // - Any Date.parse-able string as a fallback
+            if (!dateValue) return 0;
+
+            if (typeof dateValue === 'number' && Number.isFinite(dateValue)) return dateValue;
+
+            const s = String(dateValue).trim();
+            const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s);
+            if (m) {
+                const y = Number(m[1]);
+                const mo = Number(m[2]);
+                const d = Number(m[3]);
+                // Use UTC to avoid timezone/date-shift surprises
+                return Date.UTC(y, mo - 1, d);
+            }
+
+            const t = Date.parse(s);
+            return Number.isFinite(t) ? t : 0;
+        }
+
+        function buildSortedGalleryDataFromCardGallery(cardGalleryInstance) {
+            const out = {};
+            const source = (cardGalleryInstance && cardGalleryInstance.galleryData) ? cardGalleryInstance.galleryData : {};
+
+            Object.entries(source).forEach(([categoryId, category]) => {
+                const images = Array.isArray(category.images) ? category.images : [];
+                const items = images.map(img => ({
+                    thumb: img.thumb || img.src,
+                    full: img.src,
+                    title: img.title || '',
+                    badge: img.badge,
+                    date: img.date || '2000-01-01'
+                }));
+
+                items.sort((a, b) => parseDateToTime(b.date) - parseDateToTime(a.date)); // newest first
+                out[categoryId] = items;
+            });
+
+            return out;
+        }
+
+        // Gallery data used for the page thumbnails + lightbox navigation
+        let galleryData = {};
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // cardGallery is created by card-gallery.js on DOMContentLoaded.
+            // It's declared with `let`, so it may not exist on `window.*`—access it directly.
+            const cg = (typeof cardGallery !== 'undefined') ? cardGallery : null;
+            galleryData = buildSortedGalleryDataFromCardGallery(cg);
+
+            // Populate galleries (newest first)
+            Object.keys(galleryData).forEach(categoryId => {
+                const container = document.getElementById(categoryId);
+                const items = galleryData[categoryId];
+
+                if (!container || !Array.isArray(items)) return;
+
+                // Clear any existing children before (re)rendering
+                container.innerHTML = '';
+
+                items.forEach((item, index) => {
+                    const box = document.createElement('div');
+                    box.className = 'gallery-thumbnail-box';
+                    box.setAttribute('data-full', item.full);
+                    box.setAttribute('data-title', item.title);
+                    box.setAttribute('data-category', categoryId);
+                    box.setAttribute('data-index', index);
+
+                    const img = document.createElement('img');
+                    img.className = 'gallery-thumbnail-image';
+                    img.src = item.thumb;
+                    img.alt = item.title;
+                    img.loading = 'lazy';
+
+                    box.appendChild(img);
+
+                    // Add badge if present
+                    if (item.badge) {
+                        const badge = document.createElement('div');
+                        badge.className = `gallery-item-badge ${item.badge}`;
+                        badge.textContent = item.badge.charAt(0).toUpperCase() + item.badge.slice(1);
+                        box.appendChild(badge);
+                    }
+
+                    container.appendChild(box);
+                });
+            });
+
+            // Function to check if button should be visible based on item count
+            function updateButtonVisibility() {
+                document.querySelectorAll('.gallery-more-btn').forEach(btn => {
+                    const categoryId = btn.getAttribute('data-category');
+                    const container = document.getElementById(categoryId);
+                    const items = galleryData[categoryId] || [];
+                    const itemCount = items.length;
+
+                    // Determine how many items fit initially based on screen width
+                    let initialItems = 10; // Default for desktop
+                    const width = window.innerWidth;
+
+                    if (width <= 480) {
+                        initialItems = 3;
+                    } else if (width <= 640) {
+                        initialItems = 4;
+                    } else if (width <= 900) {
+                        initialItems = 6;
+                    } else if (width <= 1200) {
+                        initialItems = 8;
+                    }
+
+                    // Hide button if all items fit in initial view
+                    if (itemCount <= initialItems) {
+                        btn.style.display = 'none';
+                    } else {
+                        btn.style.display = 'inline-flex';
+                    }
+
+                    // If container isn't found, hide the button to avoid dead UI
+                    if (!container) {
+                        btn.style.display = 'none';
+                    }
+                });
+            }
+
+            // Call on page load
+            updateButtonVisibility();
+
+            // Call on window resize
+            let resizeTimer;
+            window.addEventListener('resize', function() {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(updateButtonVisibility, 250);
+            });
+
+            // Handle "Show All" buttons
+            document.querySelectorAll('.gallery-more-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const categoryId = this.getAttribute('data-category');
+                    const container = document.getElementById(categoryId);
+                    if (!container) return;
+
+                    const isExpanded = container.classList.contains('expanded');
+                    const btnText = this.querySelector('.btn-text');
+
+                    if (isExpanded) {
+                        container.classList.remove('expanded');
+                        if (btnText) btnText.textContent = 'Show All';
+                        this.classList.remove('expanded');
+                        // Scroll to the category title
+                        this.closest('.gallery-category').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    } else {
+                        container.classList.add('expanded');
+                        if (btnText) btnText.textContent = 'Hide';
+                        this.classList.add('expanded');
+                    }
+                });
+            });
+
+            // Lightbox functionality
+            let currentCategory = '';
+            let currentIndex = 0;
+
+            document.querySelectorAll('.gallery-thumbnail-box').forEach(box => {
+                box.addEventListener('click', function() {
+                    currentCategory = this.getAttribute('data-category') || '';
+                    currentIndex = parseInt(this.getAttribute('data-index') || '0', 10);
+                    openLightbox(currentCategory, currentIndex);
+                });
+            });
+
+            function openLightbox(category, index) {
+                const lightbox = document.getElementById('lightbox');
+                const items = galleryData[category] || [];
+                const item = items[index];
+                if (!lightbox || !item) return;
+
+                const img = lightbox.querySelector('.lightbox-image');
+                const caption = lightbox.querySelector('.lightbox-caption');
+
+                img.src = item.full;
                 img.alt = item.title;
-                img.loading = 'lazy';
-                
-                box.appendChild(img);
-                
+                caption.textContent = item.title;
+
+                // Remove any existing badge
+                const existingBadge = lightbox.querySelector('.lightbox-badge');
+                if (existingBadge) {
+                    existingBadge.remove();
+                }
+
                 // Add badge if present
                 if (item.badge) {
                     const badge = document.createElement('div');
-                    badge.className = `gallery-item-badge ${item.badge}`;
+                    badge.className = 'lightbox-badge';
+                    badge.setAttribute('data-type', item.badge);
                     badge.textContent = item.badge.charAt(0).toUpperCase() + item.badge.slice(1);
-                    box.appendChild(badge);
+                    // Append to lightbox-content so it's positioned relative to the image
+                    lightbox.querySelector('.lightbox-content').appendChild(badge);
                 }
-                
-                container.appendChild(box);
-            });
-        });
 
-        // Function to check if button should be visible based on item count
-        function updateButtonVisibility() {
-            document.querySelectorAll('.gallery-more-btn').forEach(btn => {
-                const categoryId = btn.getAttribute('data-category');
-                const container = document.getElementById(categoryId);
-                const items = galleryData[categoryId];
-                const itemCount = items.length;
-                
-                // Determine how many items fit initially based on screen width
-                let initialItems = 10; // Default for desktop
-                const width = window.innerWidth;
-                
-                if (width <= 480) {
-                    initialItems = 3;
-                } else if (width <= 640) {
-                    initialItems = 4;
-                } else if (width <= 900) {
-                    initialItems = 6;
-                } else if (width <= 1200) {
-                    initialItems = 8;
-                }
-                
-                // Hide button if all items fit in initial view
-                if (itemCount <= initialItems) {
-                    btn.style.display = 'none';
-                } else {
-                    btn.style.display = 'inline-flex';
+                lightbox.classList.add('active');
+
+                // Update prev/next button states
+                updateLightboxButtons(category, index, items.length);
+            }
+
+            function updateLightboxButtons(category, index, total) {
+                const prevBtn = document.querySelector('.lightbox-prev');
+                const nextBtn = document.querySelector('.lightbox-next');
+
+                if (!prevBtn || !nextBtn) return;
+
+                prevBtn.style.display = index > 0 ? 'flex' : 'none';
+                nextBtn.style.display = index < total - 1 ? 'flex' : 'none';
+            }
+
+            document.querySelector('.lightbox-close').addEventListener('click', () => {
+                document.getElementById('lightbox').classList.remove('active');
+            });
+
+            document.querySelector('.lightbox-prev').addEventListener('click', () => {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    openLightbox(currentCategory, currentIndex);
                 }
             });
-        }
 
-        // Call on page load
-        updateButtonVisibility();
-
-        // Call on window resize
-        let resizeTimer;
-        window.addEventListener('resize', function() {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(updateButtonVisibility, 250);
-        });
-
-        // Handle "Show All" buttons
-        document.querySelectorAll('.gallery-more-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const categoryId = this.getAttribute('data-category');
-                const container = document.getElementById(categoryId);
-                const isExpanded = container.classList.contains('expanded');
-                const btnText = this.querySelector('.btn-text');
-                
-                if (isExpanded) {
-                    container.classList.remove('expanded');
-                    btnText.textContent = 'Show All';
-                    this.classList.remove('expanded');
-                    // Scroll to the category title
-                    this.closest('.gallery-category').scrollIntoView({ behavior: 'smooth', block: 'start' });
-                } else {
-                    container.classList.add('expanded');
-                    btnText.textContent = 'Hide';
-                    this.classList.add('expanded');
-                }
-            });
-        });
-
-        // Lightbox functionality
-        let currentCategory = '';
-        let currentIndex = 0;
-
-        document.querySelectorAll('.gallery-thumbnail-box').forEach(box => {
-            box.addEventListener('click', function() {
-                currentCategory = this.getAttribute('data-category');
-                currentIndex = parseInt(this.getAttribute('data-index'));
-                openLightbox(currentCategory, currentIndex);
-            });
-        });
-
-        function openLightbox(category, index) {
-            const lightbox = document.getElementById('lightbox');
-            const items = galleryData[category];
-            const item = items[index];
-            
-            const img = lightbox.querySelector('.lightbox-image');
-            const caption = lightbox.querySelector('.lightbox-caption');
-            
-            img.src = item.full;
-            img.alt = item.title;
-            caption.textContent = item.title;
-            
-            // Remove any existing badge
-            const existingBadge = lightbox.querySelector('.lightbox-badge');
-            if (existingBadge) {
-                existingBadge.remove();
-            }
-            
-            // Add badge if present
-            if (item.badge) {
-                const badge = document.createElement('div');
-                badge.className = 'lightbox-badge';
-                badge.setAttribute('data-type', item.badge);
-                badge.textContent = item.badge.charAt(0).toUpperCase() + item.badge.slice(1);
-                // Append to lightbox-content so it's positioned relative to the image
-                lightbox.querySelector('.lightbox-content').appendChild(badge);
-            }
-            
-            lightbox.classList.add('active');
-            
-            // Update prev/next button states
-            updateLightboxButtons(category, index, items.length);
-        }
-
-        function updateLightboxButtons(category, index, total) {
-            const prevBtn = document.querySelector('.lightbox-prev');
-            const nextBtn = document.querySelector('.lightbox-next');
-            
-            prevBtn.style.display = index > 0 ? 'flex' : 'none';
-            nextBtn.style.display = index < total - 1 ? 'flex' : 'none';
-        }
-
-        document.querySelector('.lightbox-close').addEventListener('click', () => {
-            document.getElementById('lightbox').classList.remove('active');
-        });
-
-        document.querySelector('.lightbox-prev').addEventListener('click', () => {
-            if (currentIndex > 0) {
-                currentIndex--;
-                openLightbox(currentCategory, currentIndex);
-            }
-        });
-
-        document.querySelector('.lightbox-next').addEventListener('click', () => {
-            const items = galleryData[currentCategory];
-            if (currentIndex < items.length - 1) {
-                currentIndex++;
-                openLightbox(currentCategory, currentIndex);
-            }
-        });
-
-        // Close lightbox on clicking overlay
-        document.getElementById('lightbox').addEventListener('click', function(e) {
-            if (e.target === this) {
-                this.classList.remove('active');
-            }
-        });
-
-        // Keyboard navigation
-        document.addEventListener('keydown', function(e) {
-            const lightbox = document.getElementById('lightbox');
-            if (!lightbox.classList.contains('active')) return;
-            
-            if (e.key === 'Escape') {
-                lightbox.classList.remove('active');
-            } else if (e.key === 'ArrowLeft' && currentIndex > 0) {
-                currentIndex--;
-                openLightbox(currentCategory, currentIndex);
-            } else if (e.key === 'ArrowRight') {
-                const items = galleryData[currentCategory];
+            document.querySelector('.lightbox-next').addEventListener('click', () => {
+                const items = galleryData[currentCategory] || [];
                 if (currentIndex < items.length - 1) {
                     currentIndex++;
                     openLightbox(currentCategory, currentIndex);
                 }
-            }
-        });
+            });
 
-        // Touch swipe support for mobile
-        (function setupTouchSwipe() {
-            let touchStartX = 0;
-            let touchEndX = 0;
-            let touchStartY = 0;
-            let touchEndY = 0;
-            const swipeThreshold = 50; // Minimum distance for a swipe
-            const lightbox = document.getElementById('lightbox');
-            const lightboxContent = lightbox.querySelector('.lightbox-content');
-            
-            lightboxContent.addEventListener('touchstart', function(e) {
-                touchStartX = e.changedTouches[0].screenX;
-                touchStartY = e.changedTouches[0].screenY;
-            }, { passive: true });
-            
-            lightboxContent.addEventListener('touchend', function(e) {
+            // Close lightbox on clicking overlay
+            document.getElementById('lightbox').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                }
+            });
+
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                const lightbox = document.getElementById('lightbox');
                 if (!lightbox.classList.contains('active')) return;
-                
-                touchEndX = e.changedTouches[0].screenX;
-                touchEndY = e.changedTouches[0].screenY;
-                
-                const deltaX = touchEndX - touchStartX;
-                const deltaY = touchEndY - touchStartY;
-                
-                // Only process horizontal swipes (ignore if vertical movement is greater)
-                if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > swipeThreshold) {
-                    if (deltaX > 0) {
-                        // Swipe right - go to previous image
-                        if (currentIndex > 0) {
-                            currentIndex--;
-                            openLightbox(currentCategory, currentIndex);
-                        }
-                    } else {
-                        // Swipe left - go to next image
-                        const items = galleryData[currentCategory];
-                        if (currentIndex < items.length - 1) {
-                            currentIndex++;
-                            openLightbox(currentCategory, currentIndex);
-                        }
+
+                if (e.key === 'Escape') {
+                    lightbox.classList.remove('active');
+                } else if (e.key === 'ArrowLeft' && currentIndex > 0) {
+                    currentIndex--;
+                    openLightbox(currentCategory, currentIndex);
+                } else if (e.key === 'ArrowRight') {
+                    const items = galleryData[currentCategory] || [];
+                    if (currentIndex < items.length - 1) {
+                        currentIndex++;
+                        openLightbox(currentCategory, currentIndex);
                     }
                 }
-            }, { passive: true });
-        })();
+            });
+
+            // Touch swipe support for mobile
+            (function setupTouchSwipe() {
+                let touchStartX = 0;
+                let touchEndX = 0;
+                let touchStartY = 0;
+                let touchEndY = 0;
+                const swipeThreshold = 50; // Minimum distance for a swipe
+                const lightbox = document.getElementById('lightbox');
+                const lightboxContent = lightbox.querySelector('.lightbox-content');
+
+                lightboxContent.addEventListener('touchstart', function(e) {
+                    touchStartX = e.changedTouches[0].screenX;
+                    touchStartY = e.changedTouches[0].screenY;
+                }, { passive: true });
+
+                lightboxContent.addEventListener('touchend', function(e) {
+                    if (!lightbox.classList.contains('active')) return;
+
+                    touchEndX = e.changedTouches[0].screenX;
+                    touchEndY = e.changedTouches[0].screenY;
+
+                    const deltaX = touchEndX - touchStartX;
+                    const deltaY = touchEndY - touchStartY;
+
+                    // Only process horizontal swipes (ignore if vertical movement is greater)
+                    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > swipeThreshold) {
+                        if (deltaX > 0) {
+                            // Swipe right - go to previous image
+                            if (currentIndex > 0) {
+                                currentIndex--;
+                                openLightbox(currentCategory, currentIndex);
+                            }
+                        } else {
+                            // Swipe left - go to next image
+                            const items = galleryData[currentCategory] || [];
+                            if (currentIndex < items.length - 1) {
+                                currentIndex++;
+                                openLightbox(currentCategory, currentIndex);
+                            }
+                        }
+                    }
+                }, { passive: true });
+            })();
+        });
     </script>
-    <script src="script.js"></script>
-    <script src="card-gallery.js"></script>
     <script>
         // Auto-open the card gallery when landing on gallery.html
         document.addEventListener('DOMContentLoaded', () => {
