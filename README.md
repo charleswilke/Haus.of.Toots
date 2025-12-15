@@ -66,7 +66,14 @@ The color palette is defined in CSS variables in `styles.css`:
 --coral-primary: #FF6B7A;
 --coral-light: #FF8497;
 --coral-dark: #E85563;
---teal-contrast: #1F6F78; /* Complementary teal for contrast headings/text */
+--teal-contrast: #1F6F78;  /* Deep teal (true complement to coral) */
+--sage-soft: #3B6F5E;      /* Muted green (softer, earthy) */
+--plum-berry: #6E3F63;     /* Berry/plum (harmonious, cozy) */
+--cocoa-warm: #5A4036;     /* Warm cocoa (elevated neutral) */
+--slate-ink: #2E3A46;      /* Ink slate (modern neutral with cool bias) */
+
+/* Swap this ONE line to change the accent used for contrast headings/emphasis */
+--accent-heading: var(--teal-contrast);
 --cream: #FAF8F5;
 --linen: #F5F1EC;
 ```
@@ -84,7 +91,11 @@ Additional color palette (Analogous scheme):
 #D97EAE  /* Medium purple-pink */
 #F74560  /* Vibrant red-pink */
 #F06F51  /* Orange-red */
-#1F6F78  /* Deep teal (complementary contrast to coral) */
+#1F6F78  /* Deep teal (true complement to coral) */
+#3B6F5E  /* Muted sage (soft complementary) */
+#6E3F63  /* Berry/plum (harmonious) */
+#5A4036  /* Warm cocoa (neutral) */
+#2E3A46  /* Ink slate (neutral) */
 ```
 
 ## Browser Support
