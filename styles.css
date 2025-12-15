@@ -13,6 +13,8 @@
     --coral-primary: #FF6B7A;
     --coral-light: #FF8497;
     --coral-dark: #E85563;
+    /* Complementary accent (pairs well with coral for contrast text) */
+    --teal-contrast: #1F6F78;
     --cream: #FAF8F5;
     --linen: #F5F1EC;
     --neutral-light: #E8E4DF;
@@ -86,6 +88,11 @@ section {
     letter-spacing: 1px;
 }
 
+/* Contrast emphasis inside section titles (e.g. "it's personal") */
+.section-title em {
+    color: var(--teal-contrast);
+}
+
 .section-subtitle {
     font-size: 1.125rem;
     color: var(--neutral-mid);
@@ -95,6 +102,12 @@ section {
 
 .highlight {
     color: var(--coral-primary);
+    position: relative;
+}
+
+/* Optional alternate highlight color (use when you want teal instead of coral) */
+.highlight-contrast {
+    color: var(--teal-contrast);
     position: relative;
 }
 
@@ -679,7 +692,7 @@ section {
     font-family: var(--font-display);
     font-size: clamp(2rem, 5vw, 3rem);
     font-weight: 400;
-    color: var(--neutral-dark);
+    color: var(--teal-contrast);
     margin-bottom: var(--spacing-sm);
     line-height: 1.1;
     letter-spacing: 1px;

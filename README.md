@@ -66,6 +66,7 @@ The color palette is defined in CSS variables in `styles.css`:
 --coral-primary: #FF6B7A;
 --coral-light: #FF8497;
 --coral-dark: #E85563;
+--teal-contrast: #1F6F78; /* Complementary teal for contrast headings/text */
 --cream: #FAF8F5;
 --linen: #F5F1EC;
 ```
@@ -83,6 +84,7 @@ Additional color palette (Analogous scheme):
 #D97EAE  /* Medium purple-pink */
 #F74560  /* Vibrant red-pink */
 #F06F51  /* Orange-red */
+#1F6F78  /* Deep teal (complementary contrast to coral) */
 ```
 
 ## Browser Support
