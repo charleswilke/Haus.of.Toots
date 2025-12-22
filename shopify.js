@@ -79,6 +79,7 @@ class ShopifyClient {
                                     node {
                                         url
                                         altText
+                                        transformedSrc(maxWidth: 400, maxHeight: 400, crop: CENTER)
                                     }
                                 }
                             }
@@ -137,6 +138,7 @@ class ShopifyClient {
                                 altText
                                 width
                                 height
+                                transformedSrc(maxWidth: 400, maxHeight: 400, crop: CENTER)
                             }
                         }
                     }
@@ -201,6 +203,7 @@ class ShopifyClient {
                                 altText
                                 width
                                 height
+                                transformedSrc(maxWidth: 400, maxHeight: 400, crop: CENTER)
                             }
                         }
                     }
