@@ -163,11 +163,6 @@ class ShopApp {
                     class="product-image product-image-clickable">`
             : `<div class="product-no-image">No image available</div>`;
 
-        // Badge for hand painted products
-        const badgeHTML = isHandPainted 
-            ? `<div class="product-badge product-badge-hand-painted">Painted Canvas</div>`
-            : `<div class="product-badge product-badge-digital">Digital Pattern</div>`;
-
         // Get variant options (like Size, Canvas Count, etc.)
         const variantOptions = this.getVariantOptionsForProduct(variants);
         
@@ -197,13 +192,12 @@ class ShopApp {
 
         const description = this.stripHtml(product.description || product.descriptionHtml || '');
 
-        const cardClasses = isHandPainted ? 'product-card product-card-hand-painted' : 'product-card';
+        const cardClasses = 'product-card';
 
         return `
             <div class="${cardClasses}" data-product-id="${product.id}">
                 <div class="product-image-container">
                     ${imageHTML}
-                    ${badgeHTML}
                 </div>
                 <div class="product-info">
                     <h3 class="product-title">${this.escapeHtml(product.title)}</h3>
