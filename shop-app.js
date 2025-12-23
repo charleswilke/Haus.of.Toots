@@ -87,6 +87,11 @@ class ShopApp {
         const productImages = productsGrid.querySelectorAll('.product-image-clickable');
         productImages.forEach(img => {
             img.addEventListener('click', (e) => {
+                // On mobile, let the click propagate to open the product modal
+                if (this.isMobileDevice()) {
+                    return; // Don't stop propagation, let card click handler open modal
+                }
+                // On desktop, stop propagation and open lightbox
                 e.stopPropagation(); // Prevent card click
                 const fullImageUrl = img.getAttribute('data-full-image') || img.src;
                 const altText = img.getAttribute('alt') || '';
@@ -94,14 +99,18 @@ class ShopApp {
             });
         });
 
-        // Add click listeners to product cards (but not the add to cart button, variant selector, or image)
+        // Add click listeners to product cards (but not the add to cart button, variant selector, or image on desktop)
         const productCards = productsGrid.querySelectorAll('.product-card');
         productCards.forEach(card => {
             card.addEventListener('click', (e) => {
-                // Don't open modal if clicking the add to cart button, variant selector, or image
+                // Don't open modal if clicking the add to cart button or variant selector
                 if (e.target.closest('.add-to-cart-btn') || 
-                    e.target.closest('.product-variant-selector') || 
-                    e.target.closest('.product-image-clickable')) {
+                    e.target.closest('.product-variant-selector')) {
+                    return;
+                }
+                // On desktop, don't open modal if clicking image (image opens lightbox instead)
+                // On mobile, allow image clicks to open modal
+                if (!this.isMobileDevice() && e.target.closest('.product-image-clickable')) {
                     return;
                 }
                 const productId = card.getAttribute('data-product-id');
@@ -394,9 +403,21 @@ class ShopApp {
     }
 
     /**
+     * Check if device is mobile
+     */
+    isMobileDevice() {
+        return window.innerWidth <= 767;
+    }
+
+    /**
      * Open lightbox with images
      */
     openLightbox(imageUrls, startIndex = 0, captions = []) {
+        // Disable lightbox on mobile devices
+        if (this.isMobileDevice()) {
+            return;
+        }
+
         const lightbox = document.getElementById('imageLightbox');
         const lightboxImage = document.getElementById('lightboxImage');
         const lightboxCaption = document.getElementById('lightboxCaption');

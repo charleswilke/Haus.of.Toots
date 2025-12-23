@@ -72,8 +72,75 @@
 .shop-header .hero-description {
     font-size: 1.0625rem;
     color: var(--neutral-mid);
-    margin-bottom: 0;
+    margin-bottom: var(--spacing-md);
     line-height: 1.6;
+}
+
+/* Social Buttons */
+.social-buttons {
+    display: flex;
+    gap: var(--spacing-sm);
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.social-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.5rem;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--white);
+    border: none;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+    flex: 1;
+    min-width: 140px;
+    max-width: 200px;
+}
+
+.social-button-instagram {
+    background: linear-gradient(135deg, var(--coral-light) 0%, var(--coral-primary) 100%);
+    box-shadow: 0 4px 12px rgba(255, 132, 151, 0.3);
+}
+
+.social-button-instagram:hover {
+    background: linear-gradient(135deg, var(--coral-primary) 0%, var(--coral-dark) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 132, 151, 0.4);
+}
+
+.social-button-tiktok {
+    background: linear-gradient(135deg, #8B7FD9 0%, #6B5FB5 100%);
+    box-shadow: 0 4px 12px rgba(139, 127, 217, 0.3);
+}
+
+.social-button-tiktok:hover {
+    background: linear-gradient(135deg, #6B5FB5 0%, #5A4A9E 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(139, 127, 217, 0.4);
+}
+
+.social-button .needle-icon {
+    transition: transform 0.3s var(--transition-smooth);
+    flex-shrink: 0;
+}
+
+.social-button:hover .needle-icon {
+    transform: translateX(4px);
+}
+
+.social-button.needle-hover::before {
+    border-color: currentColor;
 }
 
 /* Shop Section */
@@ -1299,6 +1366,10 @@
     .shop-content-side .stitched-border {
         text-align: left;
     }
+    
+    .social-buttons {
+        justify-content: flex-start;
+    }
 }
 
 /* Mobile - stacked layout */
@@ -1324,6 +1395,16 @@
     
     .shop-logo {
         max-width: 280px;
+    }
+    
+    .social-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .social-button {
+        width: 100%;
+        max-width: 100%;
     }
 }
 
