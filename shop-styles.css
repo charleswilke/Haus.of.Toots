@@ -203,7 +203,7 @@
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
-/* Hand Painted Canvas Card - Special Styling */
+/* Hand Painted Canvas Card - Special Styling (legacy, kept for backwards compatibility) */
 .product-card-hand-painted {
     border: 2px solid var(--coral-light);
     background: linear-gradient(135deg, var(--white) 0%, #FFF9F5 100%);
@@ -212,6 +212,47 @@
 .product-card-hand-painted:hover {
     border-color: var(--coral-primary);
     box-shadow: 0 8px 24px rgba(255, 107, 122, 0.25);
+}
+
+/* Category-specific card borders */
+/* Custom Canvases - Pink */
+.product-card-custom-canvases {
+    border: 2px solid #FFB7C2;
+}
+
+.product-card-custom-canvases:hover {
+    border-color: #FF8497;
+    box-shadow: 0 8px 24px rgba(255, 183, 194, 0.3);
+}
+
+/* HoT Originals - Purple/Pink */
+.product-card-hot-originals {
+    border: 2px solid #D97EAE;
+}
+
+.product-card-hot-originals:hover {
+    border-color: #C06A9A;
+    box-shadow: 0 8px 24px rgba(217, 126, 174, 0.3);
+}
+
+/* Digital Charts - Red/Coral */
+.product-card-digital-charts {
+    border: 2px solid #F74560;
+}
+
+.product-card-digital-charts:hover {
+    border-color: #E83A52;
+    box-shadow: 0 8px 24px rgba(247, 69, 96, 0.3);
+}
+
+/* Customizations - Orange/Coral */
+.product-card-customizations {
+    border: 2px solid #F06F51;
+}
+
+.product-card-customizations:hover {
+    border-color: #E85A3A;
+    box-shadow: 0 8px 24px rgba(240, 111, 81, 0.3);
 }
 
 .product-image-container {

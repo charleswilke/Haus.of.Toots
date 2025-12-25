@@ -648,6 +648,7 @@ class CardGallery {
         const card = document.createElement('div');
         card.className = 'gallery-card';
         card.dataset.index = index;
+        card.dataset.categoryColor = cardData.categoryColor; // Add category color for border styling
         card.setAttribute('role', 'button');
         card.setAttribute('aria-label', `${cardData.title} - ${cardData.categoryName}`);
         
