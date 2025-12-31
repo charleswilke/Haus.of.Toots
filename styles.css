@@ -21,7 +21,7 @@
     */
     --teal-contrast: #1F6F78;      /* Deep teal (true complement to coral) */
     --sage-soft: #3B6F5E;          /* Muted green (softer, earthy) */
-    --plum-berry: #6E3F63;         /* Berry/plum (harmonious, cozy) */
+    --plum-berry: #CB6CE6;         /* Vibrant lavender-purple */
     --cocoa-warm: #5A4036;         /* Warm cocoa (elevated neutral) */
     --slate-ink: #2E3A46;          /* Ink slate (modern neutral with cool bias) */
 
@@ -711,6 +711,10 @@ section {
 
 .hero-hoop .hero-hoop-ring {
     border: 12px solid #FF8497 !important;
+    box-shadow: 
+        inset 0 0 0 4px var(--linen),
+        inset 0 0 0 8px #CB6CE6,  /* Vibrant lavender-purple inner ring */
+        0 8px 24px rgba(0, 0, 0, 0.15) !important;
 }
 
 .hero-content-side {
@@ -783,7 +787,7 @@ section {
     font-size: 1.125rem;
     font-weight: 600;
     color: var(--white);
-    background: var(--coral-primary);
+    background: #FF836F;  /* Peachy orange */
     border: none;
     border-radius: var(--border-radius);
     text-decoration: none;
@@ -801,9 +805,9 @@ section {
 }
 
 .cta-button:hover {
-    background: var(--coral-dark);
+    background: #F06F51;  /* Darker peachy orange */
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(255, 107, 122, 0.3);
+    box-shadow: 0 8px 24px rgba(255, 131, 111, 0.3);
 }
 
 .cta-button:active {
@@ -1059,7 +1063,7 @@ section {
 }
 
 .about-card-header {
-    background: linear-gradient(135deg, var(--coral-primary) 0%, var(--coral-dark) 100%);
+    background: linear-gradient(135deg, #FF836F 0%, #F06F51 100%);  /* Peachy orange gradient */
     padding: var(--spacing-md) var(--spacing-sm);
     text-align: center;
 }
@@ -2171,7 +2175,7 @@ section {
     flex-shrink: 0;
     width: 44px;
     height: 44px;
-    background: var(--coral-primary);
+    background: #FF836F;  /* Peachy orange */
     color: var(--white);
     border-radius: 50%;
     display: flex;
@@ -2179,7 +2183,7 @@ section {
     justify-content: center;
     font-size: 1.375rem;
     font-weight: 700;
-    box-shadow: 0 3px 12px rgba(255, 107, 122, 0.35);
+    box-shadow: 0 3px 12px rgba(255, 131, 111, 0.35);  /* Updated shadow to match */
 }
 
 .step-title {

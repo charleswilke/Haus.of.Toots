@@ -38,7 +38,10 @@ class CardGallery {
                     { src: 'images/recent-canvases/1CustomCanvases/PallMallCigaretteBox.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-PallMallCigaretteBox.jpg', title: 'Pall Mall Box', subtitle: '', date: '2025-11-02' },
                     { src: 'images/recent-canvases/1CustomCanvases/RingBearerPillow.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-RingBearerPillow.jpg', title: 'Ring Bearer Pillow', subtitle: '', date: '2025-11-17' },
                     { src: 'images/recent-canvases/1CustomCanvases/UNOMaverickBagCharm.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-UNOMaverickBagCharm.jpg', title: 'UNO Maverick Charm', subtitle: '', date: '2025-11-10' },
-                    { src: 'images/recent-canvases/1CustomCanvases/CustomBelt_HuskersFrenchiesGolfHikingChiefs.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-CustomBelt_HuskersFrenchiesGolfHikingChiefs.jpg', title: 'Custom Belt', subtitle: 'Huskers, Frenchies, Golf, Hiking, Chiefs', date: '2025-11-27' }
+                    { src: 'images/recent-canvases/1CustomCanvases/CustomBelt_HuskersFrenchiesGolfHikingChiefs.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-CustomBelt_HuskersFrenchiesGolfHikingChiefs.jpg', title: 'Custom Belt', subtitle: 'Huskers, Frenchies, Golf, Hiking, Chiefs', date: '2025-11-27' },
+                    { src: 'images/recent-canvases/1CustomCanvases/RAKACompanyLogoOrnament.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-RAKACompanyLogoOrnament.jpg', title: 'RAKA Logo Ornament', subtitle: 'company logo ornament', date: '2025-12-10' },
+                    { src: 'images/recent-canvases/1CustomCanvases/Spode-InspiredPupPlate.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-Spode-InspiredPupPlate.jpg', title: 'Spode-Inspired Pup Plate', subtitle: '', date: '2025-12-12' },
+                    { src: 'images/recent-canvases/1CustomCanvases/VailBeanie.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-VailBeanie.jpg', title: 'Vail Beanie', subtitle: '', date: '2025-12-08' }
                 ]
             },
             'hot-originals': {
@@ -61,7 +64,8 @@ class CardGallery {
                     { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/Kermit-w-PearlEarring-by-CherryMarryStore-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-Kermit-w-PearlEarring-by-CherryMarryStore-Etsy.jpg', title: 'Kermit with Pearl Earring', subtitle: 'Vermeer meets Muppets', date: '2025-05-26' },
                     { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PeeWee-by-StitchedIts-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PeeWee-by-StitchedIts-Etsy.jpg', title: 'Pee-Wee Herman', subtitle: '', date: '2025-10-24' },
                     { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PixelHearts-by-PixellPatterns-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PixelHearts-by-PixellPatterns-Etsy.jpg', title: 'Pixel Hearts', subtitle: '', date: '2025-10-24' },
-                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PopeKermit-by-CherryMarryStore.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PopeKermit-by-CherryMarryStore.jpg', title: 'Pope Kermit', subtitle: 'blessed and iconic', date: '2025-05-26' }
+                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PopeKermit-by-CherryMarryStore.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PopeKermit-by-CherryMarryStore.jpg', title: 'Pope Kermit', subtitle: 'blessed and iconic', date: '2025-05-26' },
+                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/Welcome to the Spritz Carlton (customized from a pattern by What\'s the Stitch).jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/thumb-Welcome-Spritz-Carlton-customized-WhatstheStitch.jpg', title: 'Welcome to the Spritz Carlton', subtitle: 'customized from What\'s the Stitch pattern', date: '2025-12-18' }
                 ]
             },
             'customizations': {
@@ -69,16 +73,16 @@ class CardGallery {
                 color: '#F06F51',
                 description: 'Existing canvases personalized with names, colors, and custom details.',
                 images: [
-                    { src: 'images/recent-canvases/4CanvasCustomizations/Kathryn-StockingCustomization-After.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Kathryn-StockingCustomization-After.jpg', title: 'Kathryn Stocking', subtitle: 'personalized stocking', badge: 'after', date: '2025-10-21' },
-                    { src: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-After.jpg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Lance-StockingCustomization-After.jpg', title: 'Lance Stocking', subtitle: 'name added', badge: 'after', date: '2025-10-26' },
-                    { src: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-After2.jpg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Lance-StockingCustomization-After2.jpg', title: 'Lance Stocking Detail', subtitle: 'finished detail', badge: 'after', date: '2025-10-26' },
-                    { src: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-Before.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Lance-StockingCustomization-Before.jpg', title: 'Lance Stocking', subtitle: 'original canvas', badge: 'before', date: '2025-10-26' },
-                    { src: 'images/recent-canvases/4CanvasCustomizations/MM-CanvasMonogram-After.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-MM-CanvasMonogram-After.jpg', title: 'MM Monogram', subtitle: 'custom monogram added', badge: 'after', date: '2025-11-04' },
-                    { src: 'images/recent-canvases/4CanvasCustomizations/MM-CanvasMonogram-Before.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-MM-CanvasMonogram-Before.jpg', title: 'MM Monogram', subtitle: 'original canvas', badge: 'before', date: '2025-11-04' },
-                    { src: 'images/recent-canvases/4CanvasCustomizations/Pinehurst-Customization-After.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Pinehurst-Customization-After.jpg', title: 'Pinehurst', subtitle: 'personalized update', badge: 'after', date: '2025-10-29' },
-                    { src: 'images/recent-canvases/4CanvasCustomizations/Pinehurst-Customization-Before.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Pinehurst-Customization-Before.jpg', title: 'Pinehurst', subtitle: 'original canvas', badge: 'before', date: '2025-10-29' },
-                    { src: 'images/recent-canvases/4CanvasCustomizations/Cameron-Stocking-BeforeFull.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/Cameron-Stocking-BeforeFull.jpeg', title: 'Cameron Stocking', subtitle: 'original canvas', badge: 'before', date: '2025-11-04' },
-                    { src: 'images/recent-canvases/4CanvasCustomizations/Cameron-Stocking-AfterFull.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/Cameron-Stocking-AfterFull.jpeg', title: 'Cameron Stocking', subtitle: 'personalized stocking', badge: 'after', date: '2025-11-05' }
+                    // "After" cards with linked "before" images - flip to see the original!
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Kathryn-StockingCustomization-After.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Kathryn-StockingCustomization-After.jpg', title: 'Kathryn Stocking', subtitle: 'tap to see original', badge: 'after', date: '2025-10-21' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-After.jpg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Lance-StockingCustomization-After.jpg', title: 'Lance Stocking', subtitle: 'tap to see original', badge: 'after', beforeSrc: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-Before.jpeg', date: '2025-10-26' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-After2.jpg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Lance-StockingCustomization-After2.jpg', title: 'Lance Stocking Detail', subtitle: 'tap to see original', badge: 'after', beforeSrc: 'images/recent-canvases/4CanvasCustomizations/Lance-StockingCustomization-Before.jpeg', date: '2025-10-26' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/MM-CanvasMonogram-After.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-MM-CanvasMonogram-After.jpg', title: 'MM Monogram', subtitle: 'tap to see original', badge: 'after', beforeSrc: 'images/recent-canvases/4CanvasCustomizations/MM-CanvasMonogram-Before.jpeg', date: '2025-11-04' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Pinehurst-Customization-After.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/hot-thumbnail-Pinehurst-Customization-After.jpg', title: 'Pinehurst', subtitle: 'tap to see original', badge: 'after', beforeSrc: 'images/recent-canvases/4CanvasCustomizations/Pinehurst-Customization-Before.jpeg', date: '2025-10-29' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Cameron-Stocking-AfterFull.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/Cameron-Stocking-AfterFull.jpeg', title: 'Cameron Stocking', subtitle: 'tap to see original', badge: 'after', beforeSrc: 'images/recent-canvases/4CanvasCustomizations/Cameron-Stocking-BeforeFull.jpeg', date: '2025-11-05' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Cameron-Stocking-AfterClose.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/Cameron-Stocking-AfterClose.jpeg', title: 'Cameron Stocking Close-up', subtitle: 'tap to see original', badge: 'after', beforeSrc: 'images/recent-canvases/4CanvasCustomizations/Cameron-Stocking-BeforeClose.jpeg', date: '2025-11-05' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/George-Stocking-After.jpg', thumb: 'images/recent-canvases/4CanvasCustomizations/thumb-George-Stocking-After.jpg', title: 'George Stocking', subtitle: 'tap to see original', badge: 'after', beforeSrc: 'images/recent-canvases/4CanvasCustomizations/George-Stocking-Before.jpg', date: '2025-12-06' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/PupOrnament-After.jpg', thumb: 'images/recent-canvases/4CanvasCustomizations/thumb-PupOrnament-After.jpg', title: 'Pup Ornament', subtitle: 'tap to see original', badge: 'after', beforeSrc: 'images/recent-canvases/4CanvasCustomizations/PupOrnament-Before.jpg', date: '2025-12-21' }
                 ]
             }
         };
@@ -652,10 +656,34 @@ class CardGallery {
         card.setAttribute('role', 'button');
         card.setAttribute('aria-label', `${cardData.title} - ${cardData.categoryName}`);
         
+        // Check if this card has a "before" image to flip to
+        const hasBeforeImage = !!cardData.beforeSrc;
+        if (hasBeforeImage) {
+            card.classList.add('flippable');
+        }
+        
         // Determine badge type
         let badgeHtml = '';
         if (cardData.badge) {
             badgeHtml = `<div class="card-status-badge ${cardData.badge}">${cardData.badge}</div>`;
+        }
+        
+        // Build card back HTML if this card has a "before" image
+        let cardBackHtml = '';
+        if (hasBeforeImage) {
+            cardBackHtml = `
+                <div class="card-face card-back">
+                    <div class="card-image-container card-back-image-container">
+                        <img class="card-image card-back-img" data-src="${cardData.beforeSrc}" alt="${cardData.title} - Before">
+                        <div class="card-category-badge" data-color="${cardData.categoryColor}">${cardData.categoryName}</div>
+                        <div class="card-status-badge before">before</div>
+                    </div>
+                    <div class="card-info">
+                        <h3 class="card-title">${cardData.title}</h3>
+                        <p class="card-subtitle">tap to see customized</p>
+                    </div>
+                </div>
+            `;
         }
         
         card.innerHTML = `
@@ -670,11 +698,12 @@ class CardGallery {
                     <p class="card-subtitle">${cardData.subtitle}</p>
                 </div>
             </div>
+            ${cardBackHtml}
         `;
         
-        // Lazy load image
-        const img = card.querySelector('.card-image');
-        const container = card.querySelector('.card-image-container');
+        // Lazy load front image
+        const img = card.querySelector('.card-front .card-image');
+        const container = card.querySelector('.card-front .card-image-container');
         
         img.onload = () => {
             container.classList.remove('loading');
@@ -698,10 +727,20 @@ class CardGallery {
             }
         }
         
-        // Load image after a short delay for animation
+        // Load front image after a short delay for animation
         setTimeout(() => {
             img.src = img.dataset.src;
         }, 50);
+        
+        // Lazy load back image if present
+        if (hasBeforeImage) {
+            const backImg = card.querySelector('.card-back-img');
+            if (backImg) {
+                setTimeout(() => {
+                    backImg.src = backImg.dataset.src;
+                }, 100);
+            }
+        }
         
         // Track tap state for this card
         let cardTapStart = { time: 0, x: 0, y: 0 };
@@ -730,9 +769,13 @@ class CardGallery {
                 // Check what was tapped
                 const target = document.elementFromPoint(touch.clientX, touch.clientY);
                 
-                // Go directly to full size view
                 if (card.classList.contains('active') || card.classList.contains('masonry-card')) {
-                    this.openFullview(cardData.src, cardData.title);
+                    // If card has a before image, flip it; otherwise go to fullview
+                    if (hasBeforeImage) {
+                        this.flipCard(card);
+                    } else {
+                        this.openFullview(cardData.src, cardData.title);
+                    }
                 }
             }
         }, { passive: false });
@@ -745,13 +788,41 @@ class CardGallery {
                 return;
             }
             
-            // Go directly to full size view
             if (card.classList.contains('active') || card.classList.contains('masonry-card')) {
-                this.openFullview(cardData.src, cardData.title);
+                // If card has a before image, flip it; otherwise go to fullview
+                if (hasBeforeImage) {
+                    this.flipCard(card);
+                } else {
+                    this.openFullview(cardData.src, cardData.title);
+                }
             }
         });
         
         return card;
+    }
+    
+    flipCard(card) {
+        // Only flip active/masonry cards
+        if (!card.classList.contains('active') && !card.classList.contains('masonry-card')) return;
+        if (card.classList.contains('flipping') || card.classList.contains('flipping-back')) return;
+        
+        const isFlipped = card.classList.contains('flipped');
+        
+        if (isFlipped) {
+            // Flip back to front (show "after")
+            card.classList.add('flipping-back');
+            setTimeout(() => {
+                card.classList.remove('flipped');
+                card.classList.remove('flipping-back');
+            }, 500);
+        } else {
+            // Flip to back (show "before")
+            card.classList.add('flipping');
+            setTimeout(() => {
+                card.classList.add('flipped');
+                card.classList.remove('flipping');
+            }, 500);
+        }
     }
     
     
