@@ -39,7 +39,7 @@ class CardGallery {
                     { src: 'images/recent-canvases/1CustomCanvases/RingBearerPillow.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-RingBearerPillow.jpg', title: 'Ring Bearer Pillow', subtitle: '', date: '2025-11-17' },
                     { src: 'images/recent-canvases/1CustomCanvases/UNOMaverickBagCharm.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-UNOMaverickBagCharm.jpg', title: 'UNO Maverick Charm', subtitle: '', date: '2025-11-10' },
                     { src: 'images/recent-canvases/1CustomCanvases/CustomBelt_HuskersFrenchiesGolfHikingChiefs.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-CustomBelt_HuskersFrenchiesGolfHikingChiefs.jpg', title: 'Custom Belt', subtitle: 'Huskers, Frenchies, Golf, Hiking, Chiefs', date: '2025-11-27' },
-                    { src: 'images/recent-canvases/1CustomCanvases/RAKACompanyLogoOrnament.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-RAKACompanyLogoOrnament.jpg', title: 'RAKA Logo Ornament', subtitle: 'company logo ornament', date: '2025-12-10' },
+                    { src: 'images/recent-canvases/1CustomCanvases/RAKACompanyLogoOrnament.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-RAKACompanyLogoOrnament.jpg', title: 'RAKA Logo Ornament', subtitle: '', date: '2025-12-10' },
                     { src: 'images/recent-canvases/1CustomCanvases/Spode-InspiredPupPlate.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-Spode-InspiredPupPlate.jpg', title: 'Spode-Inspired Pup Plate', subtitle: '', date: '2025-12-12' },
                     { src: 'images/recent-canvases/1CustomCanvases/VailBeanie.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-VailBeanie.jpg', title: 'Vail Beanie', subtitle: '', date: '2025-12-08' }
                 ]
@@ -746,6 +746,14 @@ class CardGallery {
         let cardTapStart = { time: 0, x: 0, y: 0 };
         let cardWasTapped = false;
         
+        // Helper to check if element is in the image area
+        const isInImageArea = (element) => {
+            if (!element) return false;
+            return element.closest('.card-image-container') !== null || 
+                   element.classList.contains('card-image') ||
+                   element.classList.contains('card-image-container');
+        };
+        
         // Touch start - record position
         card.addEventListener('touchstart', (e) => {
             cardTapStart.time = Date.now();
@@ -770,9 +778,14 @@ class CardGallery {
                 const target = document.elementFromPoint(touch.clientX, touch.clientY);
                 
                 if (card.classList.contains('active') || card.classList.contains('masonry-card')) {
-                    // If card has a before image, flip it; otherwise go to fullview
                     if (hasBeforeImage) {
-                        this.flipCard(card);
+                        // For flippable cards: image area → lightbox, info area → flip
+                        if (isInImageArea(target)) {
+                            // Open lightbox with after (first) and before (second)
+                            this.openBeforeAfterLightbox(cardData.src, cardData.beforeSrc, cardData.title);
+                        } else {
+                            this.flipCard(card);
+                        }
                     } else {
                         this.openFullview(cardData.src, cardData.title);
                     }
@@ -789,9 +802,14 @@ class CardGallery {
             }
             
             if (card.classList.contains('active') || card.classList.contains('masonry-card')) {
-                // If card has a before image, flip it; otherwise go to fullview
                 if (hasBeforeImage) {
-                    this.flipCard(card);
+                    // For flippable cards: image area → lightbox, info area → flip
+                    if (isInImageArea(e.target)) {
+                        // Open lightbox with after (first) and before (second)
+                        this.openBeforeAfterLightbox(cardData.src, cardData.beforeSrc, cardData.title);
+                    } else {
+                        this.flipCard(card);
+                    }
                 } else {
                     this.openFullview(cardData.src, cardData.title);
                 }
@@ -1052,10 +1070,116 @@ class CardGallery {
         img.src = src;
         img.alt = title;
         this.fullview.classList.add('active');
+        // Hide navigation for single image
+        this.hideFullviewNav();
+        // Clear multi-image state
+        this.fullviewImages = null;
+        this.fullviewIndex = 0;
+    }
+    
+    openBeforeAfterLightbox(afterSrc, beforeSrc, title) {
+        // Store images array: after first, before second
+        this.fullviewImages = [
+            { src: afterSrc, label: 'After' },
+            { src: beforeSrc, label: 'Before' }
+        ];
+        this.fullviewIndex = 0;
+        this.fullviewTitle = title;
+        
+        // Show first image (after)
+        this.showFullviewImage(0);
+        this.fullview.classList.add('active');
+        
+        // Show navigation
+        this.showFullviewNav();
+    }
+    
+    showFullviewImage(index) {
+        if (!this.fullviewImages || index < 0 || index >= this.fullviewImages.length) return;
+        
+        const img = this.fullview.querySelector('.card-fullview-image');
+        const imageData = this.fullviewImages[index];
+        img.src = imageData.src;
+        img.alt = `${this.fullviewTitle} - ${imageData.label}`;
+        this.fullviewIndex = index;
+        
+        // Update nav button states
+        this.updateFullviewNav();
+        
+        // Update label badge
+        this.updateFullviewLabel(imageData.label);
+    }
+    
+    showFullviewNav() {
+        let nav = this.fullview.querySelector('.fullview-nav');
+        if (!nav) {
+            // Create navigation elements
+            nav = document.createElement('div');
+            nav.className = 'fullview-nav';
+            nav.innerHTML = `
+                <button class="fullview-nav-prev" aria-label="Previous image">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+                <button class="fullview-nav-next" aria-label="Next image">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+                <div class="fullview-label"></div>
+            `;
+            this.fullview.appendChild(nav);
+            
+            // Attach event listeners
+            nav.querySelector('.fullview-nav-prev').addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (this.fullviewIndex > 0) {
+                    this.showFullviewImage(this.fullviewIndex - 1);
+                }
+            });
+            nav.querySelector('.fullview-nav-next').addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (this.fullviewImages && this.fullviewIndex < this.fullviewImages.length - 1) {
+                    this.showFullviewImage(this.fullviewIndex + 1);
+                }
+            });
+        }
+        nav.style.display = 'block';
+    }
+    
+    hideFullviewNav() {
+        const nav = this.fullview.querySelector('.fullview-nav');
+        if (nav) {
+            nav.style.display = 'none';
+        }
+    }
+    
+    updateFullviewNav() {
+        const nav = this.fullview.querySelector('.fullview-nav');
+        if (!nav || !this.fullviewImages) return;
+        
+        const prevBtn = nav.querySelector('.fullview-nav-prev');
+        const nextBtn = nav.querySelector('.fullview-nav-next');
+        
+        prevBtn.style.opacity = this.fullviewIndex > 0 ? '1' : '0.3';
+        prevBtn.style.pointerEvents = this.fullviewIndex > 0 ? 'auto' : 'none';
+        nextBtn.style.opacity = this.fullviewIndex < this.fullviewImages.length - 1 ? '1' : '0.3';
+        nextBtn.style.pointerEvents = this.fullviewIndex < this.fullviewImages.length - 1 ? 'auto' : 'none';
+    }
+    
+    updateFullviewLabel(label) {
+        const labelEl = this.fullview.querySelector('.fullview-label');
+        if (labelEl) {
+            labelEl.textContent = label;
+            labelEl.className = 'fullview-label ' + label.toLowerCase();
+        }
     }
     
     closeFullview() {
         this.fullview.classList.remove('active');
+        this.fullviewImages = null;
+        this.fullviewIndex = 0;
     }
     
     calculateCardWidth(card, img) {

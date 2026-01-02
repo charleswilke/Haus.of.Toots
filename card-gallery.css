@@ -1405,6 +1405,98 @@
     transform: scale(1.1) rotate(90deg);
 }
 
+/* Fullview navigation for before/after */
+.fullview-nav {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.fullview-nav-prev,
+.fullview-nav-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 56px;
+    height: 56px;
+    border: none;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    color: #E85563;
+    pointer-events: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.fullview-nav-prev {
+    left: 20px;
+}
+
+.fullview-nav-next {
+    right: 20px;
+}
+
+.fullview-nav-prev:hover,
+.fullview-nav-next:hover {
+    background: #FF6B7A;
+    color: white;
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 8px 24px rgba(255, 107, 122, 0.4);
+}
+
+.fullview-label {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px 20px;
+    font-family: 'Winky Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 20px;
+    pointer-events: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.fullview-label.after {
+    background: linear-gradient(135deg, rgba(255, 107, 122, 0.95) 0%, rgba(232, 85, 99, 0.95) 100%);
+    color: white;
+}
+
+.fullview-label.before {
+    background: linear-gradient(135deg, rgba(155, 150, 144, 0.95) 0%, rgba(74, 69, 66, 0.95) 100%);
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .fullview-nav-prev,
+    .fullview-nav-next {
+        width: 44px;
+        height: 44px;
+    }
+    
+    .fullview-nav-prev {
+        left: 10px;
+    }
+    
+    .fullview-nav-next {
+        right: 10px;
+    }
+    
+    .fullview-label {
+        bottom: 20px;
+        font-size: 0.8rem;
+        padding: 6px 16px;
+    }
+}
+
 /* Loading state */
 .card-image-container.loading {
     background: linear-gradient(90deg, #E8E4DF 25%, #F5F1EC 50%, #E8E4DF 75%);
