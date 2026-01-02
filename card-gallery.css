@@ -267,11 +267,11 @@
     z-index: 5;
 }
 
-/* Card Stack Container - Playing card aspect ratio (wider) */
+/* Card Stack Container - Tarot card aspect ratio (7:10) */
 .card-stack {
     position: relative;
-    width: 480px;
-    height: 560px; /* Wider aspect ratio for playing card feel */
+    width: 392px;
+    height: 560px; /* 7:10 tarot card aspect ratio */
     -webkit-transform-style: preserve-3d;
     transform-style: preserve-3d;
 }
@@ -279,14 +279,14 @@
 /* Larger cards on big screens */
 @media (min-width: 1200px) {
     .card-stack {
-        width: 530px;
+        width: 434px;
         height: 620px;
     }
 }
 
 @media (min-width: 1400px) {
     .card-stack {
-        width: 575px;
+        width: 469px;
         height: 670px;
     }
 }
@@ -294,7 +294,7 @@
 @media (max-width: 768px) {
     .card-stack {
         width: 100%;
-        max-width: 420px;
+        max-width: 364px;
         height: 520px;
     }
 }
@@ -381,7 +381,7 @@
         max-width: 1400px;
         height: auto;
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, max-content));
+        grid-template-columns: repeat(auto-fill, 280px);
         grid-auto-flow: row;
         column-gap: 1.75rem;
         row-gap: 2.5rem;
@@ -392,9 +392,6 @@
         transform: none;
         perspective: none;
         transform-style: flat;
-        /* Ensure proper wrapping */
-        overflow-wrap: break-word;
-        word-wrap: break-word;
 
         /* Center rows/columns when there isn't enough content to fill the viewport */
         min-height: 100%;
@@ -402,12 +399,11 @@
         justify-content: center;
     }
     
-    /* Cards in masonry grid */
+    /* Cards in masonry grid - 7:10 tarot aspect ratio */
     .card-gallery-overlay.masonry-mode .gallery-card {
         position: relative;
-        width: auto; /* Will be set by JavaScript based on image aspect ratio */
-        min-width: 280px;
-        height: 400px;
+        width: 280px;
+        height: 400px; /* 7:10 aspect ratio */
         transform: none !important;
         opacity: 1 !important;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -464,21 +460,21 @@
 /* Larger cards on bigger screens */
 @media (min-width: 1200px) {
     .card-gallery-overlay.masonry-mode .card-stack {
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        grid-template-columns: repeat(auto-fill, 294px);
         column-gap: 2.75rem;
         row-gap: 3rem;
         padding: 2.5rem;
     }
     
     .card-gallery-overlay.masonry-mode .gallery-card {
-        height: 420px;
-        min-width: 280px;
+        width: 294px;
+        height: 420px; /* 7:10 aspect ratio */
     }
 }
 
 @media (min-width: 1600px) {
     .card-gallery-overlay.masonry-mode .card-stack {
-        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        grid-template-columns: repeat(auto-fill, 315px);
         max-width: 1800px;
         column-gap: 3rem;
         row-gap: 3.5rem;
@@ -486,15 +482,15 @@
     }
     
     .card-gallery-overlay.masonry-mode .gallery-card {
-        height: 450px;
-        min-width: 280px;
+        width: 315px;
+        height: 450px; /* 7:10 aspect ratio */
     }
 }
 
 @media (max-width: 480px) {
     .card-stack {
         width: 88vw;
-        max-width: 380px;
+        max-width: 329px;
         height: 470px;
     }
     
