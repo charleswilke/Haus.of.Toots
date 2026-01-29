@@ -900,12 +900,44 @@
     background-image: url('images/haus_of_toots_canvas_13ct_512px.png');
     background-repeat: repeat;
     background-size: 300px 293px;
+    background-position: 0 0;
+    /* Ensure overlay sits under image/badges */
+    isolation: isolate;
+}
+
+/* Soft vignette over canvas texture on card back (matching front) */
+.card-back .card-back-image-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(255, 255, 255, 0.55) 0%,
+        rgba(255, 255, 255, 0.20) 45%,
+        rgba(26, 22, 20, 0.20) 100%
+    );
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* In masonry mode, card back image container needs explicit dimensions */
+.card-gallery-overlay.masonry-mode .card-back .card-back-image-container {
+    flex: none;
+    margin: 16px 16px 8px 16px;
+    min-height: 0;
 }
 
 .card-back .card-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    position: relative;
+    z-index: 1;
+}
+
+/* In masonry mode, card back image uses contain like front */
+.card-gallery-overlay.masonry-mode .card-back .card-image {
+    object-fit: contain;
 }
 
 .card-back .card-info {
@@ -952,22 +984,8 @@
     50%, 100% { opacity: 0; visibility: hidden; }
 }
 
-/* Decorative pattern on back */
-.card-back::before {
-    content: '';
-    position: absolute;
-    inset: 12px;
-    border: 2px solid rgba(255, 107, 122, 0.3);
-    border-radius: 10px;
-    background-image: 
-        repeating-linear-gradient(
-            45deg,
-            transparent,
-            transparent 10px,
-            rgba(255, 107, 122, 0.05) 10px,
-            rgba(255, 107, 122, 0.05) 20px
-        );
-}
+/* Note: Card back frame border is defined above at .card-back::before (lines 917-928) */
+/* The decorative pattern was removed to keep the card back matching the front styling */
 
 .card-back-content {
     position: relative;
@@ -1351,9 +1369,16 @@
     visibility: visible;
 }
 
-.card-fullview-image {
+.card-fullview-image-wrapper {
+    position: relative;
     max-width: 90%;
     max-height: 90%;
+    z-index: 1;
+}
+
+.card-fullview-image {
+    max-width: 100%;
+    max-height: 90vh;
     object-fit: contain;
     border-radius: 12px;
     box-shadow: 
@@ -1361,8 +1386,7 @@
         0 15px 35px rgba(0, 0, 0, 0.2),
         0 40px 80px rgba(0, 0, 0, 0.15);
     animation: zoomIn 0.3s ease;
-    position: relative;
-    z-index: 1;
+    display: block;
 }
 
 @keyframes zoomIn {
@@ -1447,18 +1471,18 @@
 
 .fullview-label {
     position: absolute;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 8px 20px;
+    top: 12px;
+    right: 12px;
+    padding: 6px 14px;
     font-family: 'Winky Sans', sans-serif;
-    font-size: 0.9rem;
+    font-size: 0.75rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
-    border-radius: 20px;
+    border-radius: 6px;
     pointer-events: none;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    display: none; /* Hidden by default, shown for before/after */
 }
 
 .fullview-label.after {
@@ -1487,9 +1511,10 @@
     }
     
     .fullview-label {
-        bottom: 20px;
-        font-size: 0.8rem;
-        padding: 6px 16px;
+        top: 8px;
+        right: 8px;
+        font-size: 0.65rem;
+        padding: 4px 10px;
     }
 }
 

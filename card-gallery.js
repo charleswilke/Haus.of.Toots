@@ -82,7 +82,12 @@ class CardGallery {
                     { src: 'images/recent-canvases/4CanvasCustomizations/Cameron-Stocking-AfterFull.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/Cameron-Stocking-AfterFull.jpeg', title: 'Cameron Stocking', subtitle: 'tap to see original', badge: 'after', beforeSrc: 'images/recent-canvases/4CanvasCustomizations/Cameron-Stocking-BeforeFull.jpeg', date: '2025-11-05' },
                     { src: 'images/recent-canvases/4CanvasCustomizations/Cameron-Stocking-AfterClose.jpeg', thumb: 'images/recent-canvases/4CanvasCustomizations/Cameron-Stocking-AfterClose.jpeg', title: 'Cameron Stocking Close-up', subtitle: 'tap to see original', badge: 'after', beforeSrc: 'images/recent-canvases/4CanvasCustomizations/Cameron-Stocking-BeforeClose.jpeg', date: '2025-11-05' },
                     { src: 'images/recent-canvases/4CanvasCustomizations/George-Stocking-After.jpg', thumb: 'images/recent-canvases/4CanvasCustomizations/thumb-George-Stocking-After.jpg', title: 'George Stocking', subtitle: 'tap to see original', badge: 'after', beforeSrc: 'images/recent-canvases/4CanvasCustomizations/George-Stocking-Before.jpg', date: '2025-12-06' },
-                    { src: 'images/recent-canvases/4CanvasCustomizations/PupOrnament-After.jpg', thumb: 'images/recent-canvases/4CanvasCustomizations/thumb-PupOrnament-After.jpg', title: 'Pup Ornament', subtitle: 'tap to see original', badge: 'after', beforeSrc: 'images/recent-canvases/4CanvasCustomizations/PupOrnament-Before.jpg', date: '2025-12-21' }
+                    { src: 'images/recent-canvases/4CanvasCustomizations/PupOrnament-After.jpg', thumb: 'images/recent-canvases/4CanvasCustomizations/thumb-PupOrnament-After.jpg', title: 'Pup Ornament', subtitle: 'tap to see original', badge: 'after', beforeSrc: 'images/recent-canvases/4CanvasCustomizations/PupOrnament-Before.jpg', date: '2025-12-21' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Joseph-Stocking-After.jpg', thumb: 'images/recent-canvases/4CanvasCustomizations/thumb-Joseph-Stocking-After.jpg', title: 'Joseph Stocking', subtitle: 'tap to see original', badge: 'after', beforeSrc: 'images/recent-canvases/4CanvasCustomizations/Joseph-Stocking-Before.jpg', date: '2026-01-15' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/Lizz-Stocking-After.jpg', thumb: 'images/recent-canvases/4CanvasCustomizations/thumb-Lizz-Stocking-After.jpg', title: 'Lizz Stocking', subtitle: 'tap to see original', badge: 'after', beforeSrc: 'images/recent-canvases/4CanvasCustomizations/Lizz-Stocking-Before.jpg', date: '2026-01-16' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/MonogramWreath-After.jpg', thumb: 'images/recent-canvases/4CanvasCustomizations/thumb-MonogramWreath-After.jpg', title: 'Monogram Wreath', subtitle: 'tap to see original', badge: 'after', beforeSrc: 'images/recent-canvases/4CanvasCustomizations/MonogramWreath-Before.jpg', date: '2026-01-20' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/SwimmerUpdate-After.jpg', thumb: 'images/recent-canvases/4CanvasCustomizations/thumb-SwimmerUpdate-After.jpg', title: 'Swimmer Update', subtitle: 'tap to see original', badge: 'after', beforeSrc: 'images/recent-canvases/4CanvasCustomizations/SwimmerUpdate-Before.jpg', date: '2026-01-22' },
+                    { src: 'images/recent-canvases/4CanvasCustomizations/WeddingCakeCustomization-After.jpg', thumb: 'images/recent-canvases/4CanvasCustomizations/thumb-WeddingCakeCustomization-After.jpg', title: 'Wedding Cake', subtitle: 'tap to see original', badge: 'after', beforeSrc: 'images/recent-canvases/4CanvasCustomizations/WeddingCakeCustomization-Before.jpg', date: '2026-01-25' }
                 ]
             }
         };
@@ -223,7 +228,10 @@ class CardGallery {
                         <line x1="6" y1="6" x2="18" y2="18"></line>
                     </svg>
                 </button>
-                <img class="card-fullview-image" src="" alt="">
+                <div class="card-fullview-image-wrapper">
+                    <img class="card-fullview-image" src="" alt="">
+                    <div class="fullview-label"></div>
+                </div>
             </div>
         `;
         
@@ -1127,7 +1135,6 @@ class CardGallery {
                         <polyline points="9 18 15 12 9 6"></polyline>
                     </svg>
                 </button>
-                <div class="fullview-label"></div>
             `;
             this.fullview.appendChild(nav);
             
@@ -1146,12 +1153,23 @@ class CardGallery {
             });
         }
         nav.style.display = 'block';
+        
+        // Show the label badge
+        const labelEl = this.fullview.querySelector('.fullview-label');
+        if (labelEl) {
+            labelEl.style.display = 'block';
+        }
     }
     
     hideFullviewNav() {
         const nav = this.fullview.querySelector('.fullview-nav');
         if (nav) {
             nav.style.display = 'none';
+        }
+        // Hide the label badge for single images
+        const labelEl = this.fullview.querySelector('.fullview-label');
+        if (labelEl) {
+            labelEl.style.display = 'none';
         }
     }
     
@@ -1202,7 +1220,7 @@ class CardGallery {
             // Card has 16px margin top, 8px margin bottom for image, plus info section
             const imageContainerHeight = cardHeight - 16 - 8 - infoHeight - 16;
             
-            // Set explicit height on the image container
+            // Set explicit height on the front image container
             const imageContainer = card.querySelector('.card-image-container');
             if (imageContainer) {
                 imageContainer.style.height = `${imageContainerHeight}px`;
@@ -1210,6 +1228,16 @@ class CardGallery {
                 // Use CSS aspect-ratio to let width be determined naturally
                 imageContainer.style.aspectRatio = `${imgWidth} / ${imgHeight}`;
                 imageContainer.style.width = 'auto'; // Let aspect-ratio determine width
+            }
+            
+            // Also set explicit height on the back image container (for before/after cards)
+            const backImageContainer = card.querySelector('.card-back-image-container');
+            if (backImageContainer) {
+                backImageContainer.style.height = `${imageContainerHeight}px`;
+                backImageContainer.style.flex = 'none';
+                // Back uses same aspect ratio as front for consistent card width
+                backImageContainer.style.aspectRatio = `${imgWidth} / ${imgHeight}`;
+                backImageContainer.style.width = 'auto';
             }
             
             // After image container width is set, calculate card width
