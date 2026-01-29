@@ -41,7 +41,8 @@ class CardGallery {
                     { src: 'images/recent-canvases/1CustomCanvases/CustomBelt_HuskersFrenchiesGolfHikingChiefs.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-CustomBelt_HuskersFrenchiesGolfHikingChiefs.jpg', title: 'Custom Belt', subtitle: 'Huskers, Frenchies, Golf, Hiking, Chiefs', date: '2025-11-27' },
                     { src: 'images/recent-canvases/1CustomCanvases/RAKACompanyLogoOrnament.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-RAKACompanyLogoOrnament.jpg', title: 'RAKA Logo Ornament', subtitle: '', date: '2025-12-10' },
                     { src: 'images/recent-canvases/1CustomCanvases/Spode-InspiredPupPlate.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-Spode-InspiredPupPlate.jpg', title: 'Spode-Inspired Pup Plate', subtitle: '', date: '2025-12-12' },
-                    { src: 'images/recent-canvases/1CustomCanvases/VailBeanie.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-VailBeanie.jpg', title: 'Vail Beanie', subtitle: '', date: '2025-12-08' }
+                    { src: 'images/recent-canvases/1CustomCanvases/VailBeanie.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-VailBeanie.jpg', title: 'Vail Beanie', subtitle: '', date: '2025-12-08' },
+                    { src: 'images/recent-canvases/1CustomCanvases/EngagementOrnament.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-EngagementOrnament.jpg', title: 'Engagement Ornament', subtitle: '', date: '2026-01-28' }
                 ]
             },
             'hot-originals': {
