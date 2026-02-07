@@ -12,12 +12,6 @@ class ShopifyClient {
      */
     async fetch(query, variables = {}) {
         try {
-            console.log('Shopify API Request:', {
-                endpoint: this.config.endpoint,
-                domain: this.config.domain,
-                hasToken: !!this.config.storefrontToken
-            });
-            
             const response = await fetch(this.config.endpoint, {
                 method: 'POST',
                 headers: {

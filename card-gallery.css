@@ -1658,3 +1658,42 @@
     outline-offset: 2px;
 }
 
+/* ===================================
+   INLINE MODE
+   Renders the gallery as page content
+   instead of a fixed overlay.
+   =================================== */
+
+.card-gallery-overlay.card-gallery-inline {
+    position: relative;
+    inset: auto;
+    z-index: 1;
+    opacity: 1;
+    visibility: visible;
+    min-height: 100vh;
+    overflow: visible;
+    transition: none;
+}
+
+/* Vignette & ambient layers use absolute instead of fixed */
+.card-gallery-overlay.card-gallery-inline::before,
+.card-gallery-overlay.card-gallery-inline::after {
+    position: absolute;
+}
+
+/* Hide the close button — the gallery IS the page */
+.card-gallery-overlay.card-gallery-inline .card-gallery-close {
+    display: none;
+}
+
+/* Let masonry mode scroll naturally with the page */
+.card-gallery-overlay.card-gallery-inline.masonry-mode {
+    overflow: visible;
+}
+
+/* Fullview still needs to be a fixed overlay (zoom into image) */
+.card-gallery-overlay.card-gallery-inline .card-fullview {
+    position: fixed;
+    z-index: 10001;
+}
+

@@ -18,60 +18,23 @@ class CardGallery {
         // Desktop masonry mode
         this.isMasonryMode = false;
         
-        // Gallery data
-        this.galleryData = {
-            'custom-canvases': {
-                name: 'Customs',
-                color: '#FFB7C2',
-                description: 'One-of-a-kind designs created from your ideas, memories, beloved pets, and more!',
-                images: [
-                    { src: 'images/recent-canvases/1CustomCanvases/CampFlannelFizz.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-CampFlannelFizz.jpg', title: 'Camp Flannel Fizz', subtitle: '', date: '2025-09-15' },
-                    { src: 'images/recent-canvases/1CustomCanvases/CowboyBear.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-CowboyBear.jpg', title: 'Cowboy Bear', subtitle: '', date: '2025-10-13' },
-                    { src: 'images/recent-canvases/1CustomCanvases/HappyHollowRectangle.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-HappyHollowRectangle.jpg', title: 'Happy Hollow Rectangle', subtitle: ' ', date: '2025-09-25' },
-                    { src: 'images/recent-canvases/1CustomCanvases/HappyHollowRound.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-HappyHollowRound.jpg', title: 'Happy Hollow Round', subtitle: '', date: '2025-09-26' },
-                    { src: 'images/recent-canvases/1CustomCanvases/Mazie.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Mazie.jpg', title: 'Mazie', subtitle: '', date: '2025-07-02' },
-                    { src: 'images/recent-canvases/1CustomCanvases/MommyOnly.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-MommyOnly.jpg', title: 'Mommy Only', subtitle: '', date: '2025-10-10' },
-                    { src: 'images/recent-canvases/1CustomCanvases/Smiley.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Smiley.jpg', title: 'Smiley', subtitle: '', date: '2025-07-02' },
-                    { src: 'images/recent-canvases/1CustomCanvases/Winston.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-Winston.jpg', title: 'Wilson', subtitle: '', date: '2025-11-02' },
-                    { src: 'images/recent-canvases/1CustomCanvases/YouAreMySunshine2.jpeg', thumb: 'images/recent-canvases/1CustomCanvases/hot-thumbnail-YouAreMySunshine2.jpg', title: 'You Are My Sunshine', subtitle: '', date: '2025-10-20' },
-                    { src: 'images/recent-canvases/1CustomCanvases/NotreDameLuggageTagInsert.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-NotreDameLuggageTagInsert.jpg', title: 'Notre Dame Luggage Tag', subtitle: '', date: '2025-11-18' },
-                    { src: 'images/recent-canvases/1CustomCanvases/PallMallCigaretteBox.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-PallMallCigaretteBox.jpg', title: 'Pall Mall Box', subtitle: '', date: '2025-11-02' },
-                    { src: 'images/recent-canvases/1CustomCanvases/RingBearerPillow.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-RingBearerPillow.jpg', title: 'Ring Bearer Pillow', subtitle: '', date: '2025-11-17' },
-                    { src: 'images/recent-canvases/1CustomCanvases/UNOMaverickBagCharm.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-UNOMaverickBagCharm.jpg', title: 'UNO Maverick Charm', subtitle: '', date: '2025-11-10' },
-                    { src: 'images/recent-canvases/1CustomCanvases/CustomBelt_HuskersFrenchiesGolfHikingChiefs.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-CustomBelt_HuskersFrenchiesGolfHikingChiefs.jpg', title: 'Custom Belt', subtitle: 'Huskers, Frenchies, Golf, Hiking, Chiefs', date: '2025-11-27' },
-                    { src: 'images/recent-canvases/1CustomCanvases/RAKACompanyLogoOrnament.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-RAKACompanyLogoOrnament.jpg', title: 'RAKA Logo Ornament', subtitle: '', date: '2025-12-10' },
-                    { src: 'images/recent-canvases/1CustomCanvases/Spode-InspiredPupPlate.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-Spode-InspiredPupPlate.jpg', title: 'Spode-Inspired Pup Plate', subtitle: '', date: '2025-12-12' },
-                    { src: 'images/recent-canvases/1CustomCanvases/VailBeanie.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-VailBeanie.jpg', title: 'Vail Beanie', subtitle: '', date: '2025-12-08' },
-                    { src: 'images/recent-canvases/1CustomCanvases/EngagementOrnament.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-EngagementOrnament.jpg', title: 'Engagement Ornament', subtitle: '', date: '2026-01-28' }
-                ]
-            },
-            'hot-originals': {
-                name: 'HoT Originals',
-                color: '#D97EAE',
-                description: 'Original designs straight from the Haus of Toots imagination.',
-                images: [
-                    { src: 'images/recent-canvases/2HoT-originals/SephoraHoliday.jpeg', thumb: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SephoraHoliday.jpg', title: 'Sephora Holiday', subtitle: '', date: '2025-07-09' },
-                    { src: 'images/recent-canvases/2HoT-originals/SephoraStandard.jpg', thumb: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SephoraStandard.jpg', title: 'Sephora Standard', subtitle: '', date: '2025-10-24' },
-                    { src: 'images/recent-canvases/2HoT-originals/SharpestTool.jpeg', thumb: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SharpestTool.jpg', title: 'Sharpest Tool', subtitle: '', date: '2025-06-10' }
-                ]
-            },
-            'digital-charts': {
-                name: 'Digital Charts',
-                color: '#F74560',
-                description: 'Painted canvases from purchased digital cross-stitch patterns.',
-                images: [
-                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/DuckHunt-by-TurtleStitchShop-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-DuckHunt-by-TurtleStitchShop-Etsy.jpg', title: 'Duck Hunt', subtitle: '', date: '2025-10-24' },
-                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/FuckOff-by-HoopModernStitch-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-FuckOff-by-HoopModernStitch-Etsy.jpg', title: 'Fuck Off', subtitle: 'bold modern statement', date: '2025-11-29' },
-                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/Kermit-w-PearlEarring-by-CherryMarryStore-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-Kermit-w-PearlEarring-by-CherryMarryStore-Etsy.jpg', title: 'Kermit with Pearl Earring', subtitle: 'Vermeer meets Muppets', date: '2025-05-26' },
-                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PeeWee-by-StitchedIts-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PeeWee-by-StitchedIts-Etsy.jpg', title: 'Pee-Wee Herman', subtitle: '', date: '2025-10-24' },
-                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PixelHearts-by-PixellPatterns-Etsy.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PixelHearts-by-PixellPatterns-Etsy.jpg', title: 'Pixel Hearts', subtitle: '', date: '2025-10-24' },
-                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/PopeKermit-by-CherryMarryStore.jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/hot-thumbnail-PopeKermit-by-CherryMarryStore.jpg', title: 'Pope Kermit', subtitle: 'blessed and iconic', date: '2025-05-26' },
-                    { src: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/Welcome to the Spritz Carlton (customized from a pattern by What\'s the Stitch).jpeg', thumb: 'images/recent-canvases/3PaintedFromPurchasedDigitalCharts/thumb-Welcome-Spritz-Carlton-customized-WhatstheStitch.jpg', title: 'Welcome to the Spritz Carlton', subtitle: 'customized from What\'s the Stitch pattern', date: '2025-12-18' }
-                ]
-            }
-        };
+        // Gallery data - loaded from shared gallery-data.js
+        this.galleryData = typeof GALLERY_DATA !== 'undefined' ? GALLERY_DATA : {};
+        
+        // Inline mode: render as page content instead of overlay
+        this.isInline = false;
+        this.inlineContainer = document.getElementById('card-gallery-container');
         
         this.init();
+        
+        // If an inline container exists, embed the gallery into the page
+        if (this.inlineContainer) {
+            this.isInline = true;
+            this.overlay.classList.add('card-gallery-inline');
+            this.overlay.removeAttribute('role');       // not a dialog when inline
+            this.overlay.removeAttribute('aria-modal');
+            this.open();
+        }
     }
 
     parseDateToTime(dateValue) {
@@ -214,7 +177,9 @@ class CardGallery {
             </div>
         `;
         
-        document.body.appendChild(this.overlay);
+        // Append to inline container if available, otherwise to body
+        const inlineTarget = document.getElementById('card-gallery-container');
+        (inlineTarget || document.body).appendChild(this.overlay);
         
         this.cardStack = this.overlay.querySelector('.card-stack');
         this.deckPreview = this.overlay.querySelector('.deck-preview');
@@ -361,7 +326,9 @@ class CardGallery {
         
         // Show overlay
         this.overlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
+        if (!this.isInline) {
+            document.body.style.overflow = 'hidden';
+        }
         
         // Render cards (arc or stack based on screen size)
         this.render();
@@ -434,6 +401,7 @@ class CardGallery {
     
     close() {
         if (!this.isOpen) return;
+        if (this.isInline) return; // Can't close when embedded in the page
         
         // Remove resize listener
         if (this.resizeHandler) {
