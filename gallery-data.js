@@ -28,7 +28,11 @@ const GALLERY_DATA = {
             { src: 'images/recent-canvases/1CustomCanvases/RAKACompanyLogoOrnament.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-RAKACompanyLogoOrnament.jpg', title: 'RAKA Logo Ornament', subtitle: '', date: '2025-12-10' },
             { src: 'images/recent-canvases/1CustomCanvases/Spode-InspiredPupPlate.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-Spode-InspiredPupPlate.jpg', title: 'Spode-Inspired Pup Plate', subtitle: '', date: '2025-12-12' },
             { src: 'images/recent-canvases/1CustomCanvases/VailBeanie.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-VailBeanie.jpg', title: 'Vail Beanie', subtitle: '', date: '2025-12-08' },
-            { src: 'images/recent-canvases/1CustomCanvases/EngagementOrnament.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-EngagementOrnament.jpg', title: 'Engagement Ornament', subtitle: '', date: '2026-01-28' }
+            { src: 'images/recent-canvases/1CustomCanvases/EngagementOrnament.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-EngagementOrnament.jpg', title: 'Engagement Ornament', subtitle: '', date: '2026-01-28' },
+            { src: 'images/recent-canvases/1CustomCanvases/LOTR-Map-Inspired-Belt.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-LOTR-Map-Inspired-Belt.jpg', title: 'LOTR Map Inspired Belt', subtitle: '', date: '2026-02-05' },
+            { src: 'images/recent-canvases/1CustomCanvases/RingBearerPillow2.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-RingBearerPillow2.jpg', title: 'Ring Bearer Pillow', subtitle: '', date: '2026-02-06' },
+            { src: 'images/recent-canvases/1CustomCanvases/StPatricksBoysUniformOrnament.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-StPatricksBoysUniformOrnament.jpg', title: 'St. Patrick\'s Boys Uniform Ornament', subtitle: '', date: '2026-02-07' },
+            { src: 'images/recent-canvases/1CustomCanvases/StPatricksGirlsUniformOrnament.jpg', thumb: 'images/recent-canvases/1CustomCanvases/thumb-StPatricksGirlsUniformOrnament.jpg', title: 'St. Patrick\'s Girls Uniform Ornament', subtitle: '', date: '2026-02-07' }
         ]
     },
     'hot-originals': {
