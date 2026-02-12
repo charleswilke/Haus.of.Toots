@@ -392,9 +392,13 @@ class ShopApp {
         const clearCartBtn = document.getElementById('clearCartBtn');
         clearCartBtn.addEventListener('click', () => this.handleClearCart());
 
-        // Checkout button
+        // Checkout button — prevent the default <a> navigation on the shop page
+        // so the async Shopify cart creation can complete before redirecting.
         const checkoutBtn = document.getElementById('checkoutBtn');
-        checkoutBtn.addEventListener('click', () => this.handleCheckout());
+        checkoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.handleCheckout();
+        });
 
         // Subscribe to cart changes
         cartManager.subscribe(() => this.updateCartUI());
