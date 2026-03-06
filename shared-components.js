@@ -69,7 +69,7 @@ const SharedComponents = {
         <div class="container">
             <div class="footer-content">
                 <div class="footer-links">
-                    <a href="/shop" class="footer-link">Shop Needlepoint</a>
+                    <a href="index.html" class="footer-link">Shop Needlepoint</a>
                     <span class="footer-divider">&bull;</span>
                     <a href="request.html" class="footer-link">Customs</a>
                 </div>
