@@ -12,7 +12,7 @@ const SharedComponents = {
             <a href="index.html" class="nav-brand">
                 <img src="images/hauslogo.png" alt="Haus of Toots logo" class="nav-brand-logo" width="800" height="885">
                 <span class="nav-brand-text">Haus <span class="highlight-contrast">of</span> Toots</span>
-                <span class="nav-brand-subtitle">- Custom & Customized Needlepoint Canvases</span>
+                <span class="nav-brand-subtitle">- Cute, Weird & Wildly Specific Needlepoint Canvases</span>
             </a>
             <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
                 <span class="nav-toggle-icon"></span>
@@ -22,8 +22,7 @@ const SharedComponents = {
             <div class="nav-links" id="navLinks">
                 <a href="about.html" class="nav-link">About</a>
                 <a href="gallery.html" class="nav-link">Gallery</a>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSd8y7MONwNWWYLNienG8kjcCDZd0De0kJl--dNNfpgUyw4Bfg/viewform?usp=dialog" target="_blank" rel="noopener noreferrer" class="nav-link">Request</a>
-                <a href="/shop" class="nav-link">Shop</a>
+                <a href="request.html" class="nav-link">Customs</a>
             </div>
             <button id="cartButton" class="nav-cart-button" aria-label="Open shopping cart">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -72,7 +71,7 @@ const SharedComponents = {
                 <div class="footer-links">
                     <a href="/shop" class="footer-link">Shop Needlepoint</a>
                     <span class="footer-divider">&bull;</span>
-                    <a href="index.html#request" class="footer-link">Request Custom Design</a>
+                    <a href="request.html" class="footer-link">Customs</a>
                 </div>
                 <div class="footer-social">
                     <a href="https://instagram.com/haus.of.toots" target="_blank" rel="noopener noreferrer" class="social-link needle-hover">
