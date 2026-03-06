@@ -65,33 +65,10 @@ class ShopApp {
 
         productsGrid.innerHTML = sortedProducts.map(product => this.createProductCard(product)).join('');
         
-        // Add event listeners to variant selectors
-        const variantSelectors = productsGrid.querySelectorAll('.product-variant-selector');
-        variantSelectors.forEach(select => {
-            select.addEventListener('change', (e) => {
-                e.stopPropagation(); // Prevent card click
-                this.handleVariantChange(e);
-            });
-        });
-
-        // Add event listeners to all "Add to Cart" buttons
-        const addToCartButtons = productsGrid.querySelectorAll('.add-to-cart-btn');
-        addToCartButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                e.stopPropagation(); // Prevent card click
-                this.handleAddToCart(e);
-            });
-        });
-
         // Add click listeners to product cards so any non-control click opens the detail view
         const productCards = productsGrid.querySelectorAll('.product-card');
         productCards.forEach(card => {
             card.addEventListener('click', (e) => {
-                // Don't open modal if clicking the add to cart button or variant selector
-                if (e.target.closest('.add-to-cart-btn') || 
-                    e.target.closest('.product-variant-selector')) {
-                    return;
-                }
                 const productId = card.getAttribute('data-product-id');
                 this.openProductModal(productId);
             });
@@ -177,10 +154,6 @@ class ShopApp {
     createProductCard(product) {
         const image = product.images?.edges?.[0]?.node;
         const variants = product.variants?.edges || [];
-        const availableVariants = variants.filter(v => v.node.availableForSale);
-        const firstVariant = availableVariants[0]?.node || variants[0]?.node;
-        const hasMultipleVariants = variants.length > 1;
-        const isHandPainted = this.isHandPainted(product);
 
         // Use transformedSrc for thumbnail if available, otherwise use url with size parameters
         const thumbnailUrl = image?.transformedSrc || (image?.url ? `${image.url}?width=400&height=400&crop=center` : null);
@@ -193,32 +166,7 @@ class ShopApp {
                     class="product-image product-image-clickable">`
             : `<div class="product-no-image">No image available</div>`;
 
-        // Get variant options (like Size, Canvas Count, etc.)
-        const variantOptions = this.getVariantOptionsForProduct(variants);
-        
-        // Current price (will update with variant selection)
-        const currentPrice = firstVariant?.priceV2 || product.priceRange?.minVariantPrice;
-        const priceFormatted = currentPrice 
-            ? `${this.formatPrice(currentPrice.amount, currentPrice.currencyCode)}`
-            : 'Price not available';
-
-        // Variant selector HTML
-        const variantSelectorHTML = hasMultipleVariants && variantOptions.length > 0
-            ? `<div class="product-variant-selector-wrapper">
-                <label class="product-variant-label">
-                    ${this.escapeHtml(variantOptions[0].name)}:
-                </label>
-                <select class="product-variant-selector" data-product-id="${product.id}">
-                    ${variants.map((variantEdge, index) => {
-                        const variant = variantEdge.node;
-                        const optionValue = variant.selectedOptions?.[0]?.value || variant.title;
-                        return `<option value="${variant.id}" ${index === 0 ? 'selected' : ''} ${!variant.availableForSale ? 'disabled' : ''}>
-                            ${this.escapeHtml(optionValue)}${!variant.availableForSale ? ' (Unavailable)' : ''}
-                        </option>`;
-                    }).join('')}
-                </select>
-            </div>`
-            : '';
+        const priceFormatted = this.formatPriceRange(product);
 
         const description = this.stripHtml(product.description || product.descriptionHtml || '');
 
@@ -239,115 +187,9 @@ class ShopApp {
                     <div class="product-price-section">
                         <span class="product-price" data-product-id="${product.id}">${priceFormatted}</span>
                     </div>
-                    ${variantSelectorHTML}
-                    <div class="product-footer">
-                        <button 
-                            class="add-to-cart-btn" 
-                            data-product='${this.escapeHtml(JSON.stringify(product))}'
-                            data-variant-id="${firstVariant?.id || ''}"
-                            ${!firstVariant?.availableForSale || !firstVariant?.id ? 'disabled' : ''}
-                        >
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="9" cy="21" r="1"></circle>
-                                <circle cx="20" cy="21" r="1"></circle>
-                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                            </svg>
-                            ${firstVariant?.availableForSale ? 'Add to Cart' : 'Unavailable'}
-                        </button>
-                    </div>
                 </div>
             </div>
         `;
-    }
-
-    /**
-     * Get variant options for a product
-     */
-    getVariantOptionsForProduct(variants) {
-        if (variants.length === 0) return [];
-        
-        const optionNames = [];
-        const firstVariant = variants[0]?.node;
-        
-        if (firstVariant?.selectedOptions) {
-            firstVariant.selectedOptions.forEach(option => {
-                if (!optionNames.includes(option.name) && option.name !== 'Title') {
-                    optionNames.push(option.name);
-                }
-            });
-        }
-        
-        return optionNames.map(name => ({ name }));
-    }
-
-    /**
-     * Handle variant selection change on product card
-     */
-    handleVariantChange(event) {
-        const select = event.target;
-        const selectedVariantId = select.value;
-        const productId = select.getAttribute('data-product-id');
-        
-        // Find the product
-        const product = this.products.find(p => p.id === productId);
-        if (!product) return;
-        
-        // Find the selected variant
-        const selectedVariant = product.variants.edges.find(v => v.node.id === selectedVariantId)?.node;
-        if (!selectedVariant) return;
-        
-        // Update the add to cart button with new variant ID
-        const card = select.closest('.product-card');
-        const addToCartBtn = card.querySelector('.add-to-cart-btn');
-        const priceDisplay = card.querySelector('.product-price');
-        
-        if (addToCartBtn) {
-            addToCartBtn.setAttribute('data-variant-id', selectedVariantId);
-            addToCartBtn.disabled = !selectedVariant.availableForSale;
-            addToCartBtn.innerHTML = `
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="9" cy="21" r="1"></circle>
-                    <circle cx="20" cy="21" r="1"></circle>
-                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                </svg>
-                ${selectedVariant.availableForSale ? 'Add to Cart' : 'Unavailable'}
-            `;
-        }
-        
-        // Update price display
-        if (priceDisplay && selectedVariant.priceV2) {
-            priceDisplay.textContent = this.formatPrice(selectedVariant.priceV2.amount, selectedVariant.priceV2.currencyCode);
-        }
-    }
-
-    /**
-     * Handle add to cart button click
-     */
-    handleAddToCart(event) {
-        const button = event.currentTarget;
-        const productData = JSON.parse(button.getAttribute('data-product'));
-        const variantId = button.getAttribute('data-variant-id');
-
-        if (!variantId) {
-            console.error('No variant ID found');
-            return;
-        }
-
-        // Add to cart
-        cartManager.addItem(productData, variantId, 1);
-
-        // Visual feedback
-        button.textContent = 'Added!';
-        setTimeout(() => {
-            button.innerHTML = `
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="9" cy="21" r="1"></circle>
-                    <circle cx="20" cy="21" r="1"></circle>
-                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                </svg>
-                Add to Cart
-            `;
-        }, 1000);
     }
 
     /**
@@ -832,6 +674,34 @@ class ShopApp {
         return formatter.format(parseFloat(amount));
     }
 
+    formatPriceRange(product) {
+        const variants = product?.variants?.edges?.map(edge => edge.node) || [];
+        const pricedVariants = variants.filter(variant => variant?.priceV2?.amount && variant?.priceV2?.currencyCode);
+
+        if (pricedVariants.length === 0) {
+            const minPrice = product?.priceRange?.minVariantPrice;
+            return minPrice ? this.formatPrice(minPrice.amount, minPrice.currencyCode) : 'Price not available';
+        }
+
+        const currencyCode = pricedVariants[0].priceV2.currencyCode;
+        const amounts = pricedVariants
+            .map(variant => parseFloat(variant.priceV2.amount))
+            .filter(amount => Number.isFinite(amount));
+
+        if (amounts.length === 0) {
+            return 'Price not available';
+        }
+
+        const minAmount = Math.min(...amounts);
+        const maxAmount = Math.max(...amounts);
+
+        if (minAmount === maxAmount) {
+            return this.formatPrice(minAmount, currencyCode);
+        }
+
+        return `${this.formatPrice(minAmount, currencyCode)} - ${this.formatPrice(maxAmount, currencyCode)}`;
+    }
+
     /**
      * Escape HTML to prevent XSS
      */
@@ -950,13 +820,11 @@ class ShopApp {
             </div>`
             : '';
 
-        const currentPrice = selectedVariant?.priceV2 || product.priceRange?.minVariantPrice;
-        const priceFormatted = currentPrice 
-            ? this.formatPrice(currentPrice.amount, currentPrice.currencyCode)
-            : '';
+        const priceRangeFormatted = this.formatPriceRange(product);
 
         const addToCartButtonHTML = `
             <div class="product-detail-actions">
+                ${priceRangeFormatted ? `<div class="product-detail-price">${priceRangeFormatted}</div>` : ''}
                 ${variantSelectorHTML}
                 <button class="product-detail-add-to-cart" 
                         data-product-id="${product.id}"
@@ -969,7 +837,6 @@ class ShopApp {
                             <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                         </svg>
                         <span class="add-to-cart-text">${selectedVariant?.availableForSale ? 'Add to Cart' : 'Unavailable'}</span>
-                        ${priceFormatted ? `<span class="add-to-cart-price">${priceFormatted}</span>` : ''}
                     </div>
                 </button>
             </div>
@@ -1089,8 +956,6 @@ class ShopApp {
             variantSelector.addEventListener('change', (e) => {
                 const selectedOption = e.target.options[e.target.selectedIndex];
                 const variantId = selectedOption.value;
-                const price = selectedOption.getAttribute('data-price');
-                const currency = selectedOption.getAttribute('data-currency');
                 
                 // Update add to cart button with new price
                 const addToCartBtn = document.querySelector('.product-detail-add-to-cart');
@@ -1098,10 +963,7 @@ class ShopApp {
                     addToCartBtn.setAttribute('data-variant-id', variantId);
                     const selectedVariant = variants.find(v => v.node.id === variantId)?.node;
                     addToCartBtn.disabled = !selectedVariant?.availableForSale;
-                    
-                    const priceFormatted = price && currency ? this.formatPrice(price, currency) : '';
-                    const priceHTML = priceFormatted ? `<span class="add-to-cart-price">${priceFormatted}</span>` : '';
-                    
+
                     addToCartBtn.innerHTML = `
                         <div class="add-to-cart-content">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1110,7 +972,6 @@ class ShopApp {
                                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                             </svg>
                             <span class="add-to-cart-text">${selectedVariant?.availableForSale ? 'Add to Cart' : 'Unavailable'}</span>
-                            ${priceHTML}
                         </div>
                     `;
                 }
@@ -1124,14 +985,7 @@ class ShopApp {
                 const variantId = addToCartBtn.getAttribute('data-variant-id');
                 if (variantId) {
                     cartManager.addItem(product, variantId, 1);
-                    
-                    // Get current price to preserve it in the button
-                    const selectedOption = document.querySelector('.product-detail-variant-selector')?.options[document.querySelector('.product-detail-variant-selector')?.selectedIndex];
-                    const price = selectedOption?.getAttribute('data-price');
-                    const currency = selectedOption?.getAttribute('data-currency');
-                    const priceFormatted = price && currency ? this.formatPrice(price, currency) : '';
-                    const priceHTML = priceFormatted ? `<span class="add-to-cart-price">${priceFormatted}</span>` : '';
-                    
+
                     addToCartBtn.innerHTML = `
                         <div class="add-to-cart-content">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1140,7 +994,6 @@ class ShopApp {
                                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                             </svg>
                             <span class="add-to-cart-text">Added!</span>
-                            ${priceHTML}
                         </div>
                     `;
                     
@@ -1153,7 +1006,6 @@ class ShopApp {
                                     <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                                 </svg>
                                 <span class="add-to-cart-text">Add to Cart</span>
-                                ${priceHTML}
                             </div>
                         `;
                     }, 1000);
