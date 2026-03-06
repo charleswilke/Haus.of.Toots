@@ -702,6 +702,14 @@ class ShopApp {
         return `${this.formatPrice(minAmount, currencyCode)} - ${this.formatPrice(maxAmount, currencyCode)}`;
     }
 
+    formatVariantPrice(variant) {
+        if (!variant?.priceV2?.amount || !variant?.priceV2?.currencyCode) {
+            return '';
+        }
+
+        return this.formatPrice(variant.priceV2.amount, variant.priceV2.currencyCode);
+    }
+
     /**
      * Escape HTML to prevent XSS
      */
@@ -779,8 +787,8 @@ class ShopApp {
         const variants = product.variants?.edges || [];
         const mainImage = images[0]?.node;
         const availableVariants = variants.filter(v => v.node.availableForSale);
-        const selectedVariant = availableVariants[0]?.node || variants[0]?.node;
         const hasMultipleVariants = variants.length > 1;
+        const selectedVariant = hasMultipleVariants ? null : (availableVariants[0]?.node || variants[0]?.node);
         const isHandPainted = this.isHandPainted(product);
         
         // Badge HTML for modal
@@ -789,7 +797,7 @@ class ShopApp {
             : `<span class="product-detail-badge product-detail-badge-digital">Digital Pattern</span>`;
 
         // Extract mesh size from title
-        const meshSize = this.extractMeshSize(product.title);
+        const meshSize = !hasMultipleVariants ? this.extractMeshSize(product.title) : null;
         const sizeHTML = meshSize 
             ? `<div class="product-detail-size">
                 <span class="product-detail-type-label">Size:</span>
@@ -797,48 +805,14 @@ class ShopApp {
             </div>`
             : '';
 
-        // Variant selector HTML (dropdown style for modal)
-        const variantSelectorHTML = hasMultipleVariants 
-            ? `<div class="product-detail-variant-selector-wrapper">
-                <label class="product-detail-variant-label">
-                    ${variants[0]?.node.selectedOptions?.[0]?.name || 'Options'}:
-                </label>
-                <select class="product-detail-variant-selector" data-product-id="${product.id}">
-                    ${variants.map((variantEdge, index) => {
-                        const variant = variantEdge.node;
-                        const optionValue = variant.selectedOptions?.[0]?.value || variant.title;
-                        const isFirst = index === 0 && variant.availableForSale;
-                        return `<option value="${variant.id}" 
-                                    data-price="${variant.priceV2.amount}" 
-                                    data-currency="${variant.priceV2.currencyCode}"
-                                    ${isFirst ? 'selected' : ''} 
-                                    ${!variant.availableForSale ? 'disabled' : ''}>
-                            ${this.escapeHtml(optionValue)}${!variant.availableForSale ? ' (Unavailable)' : ''}
-                        </option>`;
-                    }).join('')}
-                </select>
-            </div>`
-            : '';
-
-        const priceRangeFormatted = this.formatPriceRange(product);
-
-        const addToCartButtonHTML = `
+        const purchaseActionsHTML = `
             <div class="product-detail-actions">
-                ${priceRangeFormatted ? `<div class="product-detail-price">${priceRangeFormatted}</div>` : ''}
-                ${variantSelectorHTML}
-                <button class="product-detail-add-to-cart" 
-                        data-product-id="${product.id}"
-                        data-variant-id="${selectedVariant?.id || ''}"
-                        ${!selectedVariant?.availableForSale || !selectedVariant?.id ? 'disabled' : ''}>
-                    <div class="add-to-cart-content">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="9" cy="21" r="1"></circle>
-                            <circle cx="20" cy="21" r="1"></circle>
-                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                        </svg>
-                        <span class="add-to-cart-text">${selectedVariant?.availableForSale ? 'Add to Cart' : 'Unavailable'}</span>
-                    </div>
-                </button>
+                <div id="productDetailPrice">
+                    ${this.renderProductPriceDisplay(product, selectedVariant, hasMultipleVariants)}
+                </div>
+                <div id="productPurchaseActions">
+                    ${this.renderProductPurchaseActions(product, selectedVariant, hasMultipleVariants)}
+                </div>
             </div>
         `;
 
@@ -894,7 +868,7 @@ class ShopApp {
                             <h1 class="product-detail-title">${this.escapeHtml(product.title)}</h1>
                             ${sizeHTML}
                         </div>
-                        ${addToCartButtonHTML}
+                        ${purchaseActionsHTML}
                     </div>
                 </div>
                 ${descriptionHTML ? `<div class="product-detail-description-container">${descriptionHTML}</div>` : ''}
@@ -905,13 +879,13 @@ class ShopApp {
         this.scheduleProductModalScrollbarUpdate();
 
         // Add event listeners
-        this.attachProductModalListeners(product, variants);
+        this.attachProductModalListeners(product, variants, selectedVariant);
     }
 
     /**
      * Attach event listeners to product modal
      */
-    attachProductModalListeners(product, variants) {
+    attachProductModalListeners(product, variants, selectedVariant) {
         // Collect all full-size image URLs for lightbox
         const images = product.images?.edges || [];
         const allImageUrls = images.map(imgEdge => imgEdge.node.url);
@@ -950,41 +924,152 @@ class ShopApp {
             });
         });
 
-        // Variant selector dropdown in modal
-        const variantSelector = document.querySelector('.product-detail-variant-selector');
-        if (variantSelector) {
-            variantSelector.addEventListener('change', (e) => {
-                const selectedOption = e.target.options[e.target.selectedIndex];
-                const variantId = selectedOption.value;
-                
-                // Update add to cart button with new price
-                const addToCartBtn = document.querySelector('.product-detail-add-to-cart');
-                if (addToCartBtn) {
-                    addToCartBtn.setAttribute('data-variant-id', variantId);
-                    const selectedVariant = variants.find(v => v.node.id === variantId)?.node;
-                    addToCartBtn.disabled = !selectedVariant?.availableForSale;
+        this.attachProductVariantSelectionListeners(product, variants);
 
-                    addToCartBtn.innerHTML = `
+        this.attachProductPurchaseActionListeners(product, selectedVariant);
+    }
+
+    attachProductVariantSelectionListeners(product, variants) {
+        const priceRows = document.querySelectorAll('.product-detail-price-row[data-variant-id]');
+        priceRows.forEach(row => {
+            row.addEventListener('click', () => {
+                const variantId = row.getAttribute('data-variant-id');
+                const selectedVariant = variants.find(v => v.node.id === variantId)?.node;
+                const detailPrice = document.getElementById('productDetailPrice');
+                const purchaseActions = document.getElementById('productPurchaseActions');
+
+                if (detailPrice) {
+                    detailPrice.innerHTML = this.renderProductPriceDisplay(product, selectedVariant, true);
+                }
+
+                if (purchaseActions) {
+                    purchaseActions.innerHTML = this.renderProductPurchaseActions(product, selectedVariant, true);
+                    this.attachProductPurchaseActionListeners(product, selectedVariant);
+                }
+
+                this.attachProductVariantSelectionListeners(product, variants);
+                this.scheduleProductModalScrollbarUpdate();
+            });
+        });
+    }
+
+    renderProductPriceDisplay(product, selectedVariant, hasMultipleVariants) {
+        if (!hasMultipleVariants) {
+            const fallbackPrice = selectedVariant
+                ? this.formatVariantPrice(selectedVariant)
+                : this.formatPriceRange(product);
+            return fallbackPrice ? `<div class="product-detail-price">${fallbackPrice}</div>` : '';
+        }
+
+        const variants = product?.variants?.edges?.map(edge => edge.node) || [];
+        return `
+            <div class="product-detail-price-list">
+                ${variants.map(variant => {
+                    const optionValue = variant.selectedOptions?.[0]?.value || variant.title;
+                    const price = this.formatVariantPrice(variant);
+                    const rowClasses = [
+                        'product-detail-price-row',
+                        selectedVariant?.id === variant.id ? 'selected' : '',
+                        !variant.availableForSale ? 'unavailable' : ''
+                    ].filter(Boolean).join(' ');
+
+                    return `
+                        <button class="${rowClasses}" type="button" data-variant-id="${variant.id}">
+                            <span class="product-detail-price-option">${this.escapeHtml(optionValue)}</span>
+                            <span class="product-detail-price-value">${price}</span>
+                        </button>
+                    `;
+                }).join('')}
+            </div>
+        `;
+    }
+
+    renderProductPurchaseActions(product, selectedVariant, hasMultipleVariants = false) {
+        if (hasMultipleVariants && !selectedVariant) {
+            return `
+                <button class="product-detail-add-to-cart product-detail-select-prompt" type="button" disabled>
+                    <div class="add-to-cart-content">
+                        <span class="add-to-cart-text">Choose a Mesh Size to Continue</span>
+                    </div>
+                </button>
+            `;
+        }
+
+        if (selectedVariant?.availableForSale && selectedVariant?.id) {
+            return `
+                <div class="product-detail-purchase-row">
+                    <div class="product-detail-quantity-control" aria-label="Select quantity">
+                        <button type="button" class="product-detail-quantity-btn" data-action="decrease" aria-label="Decrease quantity">-</button>
+                        <span class="product-detail-quantity-value" aria-live="polite">1</span>
+                        <button type="button" class="product-detail-quantity-btn" data-action="increase" aria-label="Increase quantity">+</button>
+                    </div>
+                    <button class="product-detail-add-to-cart" 
+                            data-product-id="${product.id}"
+                            data-variant-id="${selectedVariant.id}"
+                            data-default-label="Add to Cart">
                         <div class="add-to-cart-content">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="9" cy="21" r="1"></circle>
                                 <circle cx="20" cy="21" r="1"></circle>
                                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                             </svg>
-                            <span class="add-to-cart-text">${selectedVariant?.availableForSale ? 'Add to Cart' : 'Unavailable'}</span>
+                            <span class="add-to-cart-text">Add to Cart</span>
                         </div>
-                    `;
-                }
-            });
+                    </button>
+                </div>
+            `;
         }
 
-        // Add to cart from modal
+        return `
+            <div class="product-detail-notify-group">
+                <button class="product-detail-notify-btn" type="button" data-variant-id="${selectedVariant?.id || ''}">
+                    Notify When Available
+                </button>
+                <form class="product-detail-notify-form hidden" novalidate>
+                    <label class="product-detail-notify-label" for="notifyEmailInput">Email Address</label>
+                    <div class="product-detail-notify-row">
+                        <input
+                            id="notifyEmailInput"
+                            class="product-detail-notify-input"
+                            type="email"
+                            name="email"
+                            inputmode="email"
+                            autocomplete="email"
+                            placeholder="you@example.com"
+                            required
+                        >
+                        <button type="submit" class="product-detail-notify-submit">Notify Me</button>
+                    </div>
+                    <p class="product-detail-notify-note">We&rsquo;ll email you when this option is back in stock.</p>
+                    <p class="product-detail-notify-feedback" aria-live="polite"></p>
+                </form>
+            </div>
+        `;
+    }
+
+    attachProductPurchaseActionListeners(product, selectedVariant) {
+        const quantityValue = document.querySelector('.product-detail-quantity-value');
+        const quantityButtons = document.querySelectorAll('.product-detail-quantity-btn');
+        quantityButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                if (!quantityValue) {
+                    return;
+                }
+
+                const currentQuantity = parseInt(quantityValue.textContent, 10) || 1;
+                const delta = button.getAttribute('data-action') === 'increase' ? 1 : -1;
+                const nextQuantity = Math.min(Math.max(currentQuantity + delta, 1), 99);
+                quantityValue.textContent = String(nextQuantity);
+            });
+        });
+
         const addToCartBtn = document.querySelector('.product-detail-add-to-cart');
         if (addToCartBtn) {
             addToCartBtn.addEventListener('click', () => {
                 const variantId = addToCartBtn.getAttribute('data-variant-id');
+                const selectedQuantity = parseInt(document.querySelector('.product-detail-quantity-value')?.textContent || '1', 10) || 1;
                 if (variantId) {
-                    cartManager.addItem(product, variantId, 1);
+                    cartManager.addItem(product, variantId, selectedQuantity);
 
                     addToCartBtn.innerHTML = `
                         <div class="add-to-cart-content">
@@ -993,11 +1078,12 @@ class ShopApp {
                                 <circle cx="20" cy="21" r="1"></circle>
                                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                             </svg>
-                            <span class="add-to-cart-text">Added!</span>
+                            <span class="add-to-cart-text">${selectedQuantity > 1 ? `Added ${selectedQuantity} Items!` : 'Added!'}</span>
                         </div>
                     `;
                     
                     setTimeout(() => {
+                        const defaultLabel = addToCartBtn.getAttribute('data-default-label') || 'Add to Cart';
                         addToCartBtn.innerHTML = `
                             <div class="add-to-cart-content">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1005,13 +1091,115 @@ class ShopApp {
                                     <circle cx="20" cy="21" r="1"></circle>
                                     <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                                 </svg>
-                                <span class="add-to-cart-text">Add to Cart</span>
+                                <span class="add-to-cart-text">${defaultLabel}</span>
                             </div>
                         `;
                     }, 1000);
                 }
             });
         }
+
+        const notifyBtn = document.querySelector('.product-detail-notify-btn');
+        const notifyForm = document.querySelector('.product-detail-notify-form');
+        const notifyInput = document.querySelector('.product-detail-notify-input');
+        const notifyFeedback = document.querySelector('.product-detail-notify-feedback');
+
+        if (notifyBtn && notifyForm && notifyInput && notifyFeedback && selectedVariant?.id) {
+            notifyBtn.addEventListener('click', () => {
+                notifyForm.classList.toggle('hidden');
+                notifyFeedback.textContent = '';
+                if (!notifyForm.classList.contains('hidden')) {
+                    notifyInput.focus();
+                }
+                this.scheduleProductModalScrollbarUpdate();
+            });
+
+            notifyForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const email = notifyInput.value.trim();
+                if (!email) {
+                    notifyFeedback.textContent = 'Enter an email address to get notified.';
+                    notifyFeedback.classList.add('is-error');
+                    notifyFeedback.classList.remove('is-success');
+                    return;
+                }
+
+                const submitBtn = notifyForm.querySelector('.product-detail-notify-submit');
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Submitting...';
+                notifyFeedback.textContent = '';
+                notifyFeedback.classList.remove('is-error', 'is-success');
+
+                try {
+                    await this.createStoqBackInStockIntent(product, selectedVariant, email);
+                    notifyFeedback.textContent = 'You’re on the list. We’ll let you know when it’s back.';
+                    notifyFeedback.classList.add('is-success');
+                    notifyForm.reset();
+                } catch (error) {
+                    console.error('Failed to create back-in-stock intent:', error);
+                    notifyFeedback.textContent = error.message || 'Unable to save your notification request right now.';
+                    notifyFeedback.classList.add('is-error');
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Notify Me';
+                    this.scheduleProductModalScrollbarUpdate();
+                }
+            });
+        }
+    }
+
+    extractShopifyNumericId(id) {
+        if (!id) return null;
+        const match = String(id).match(/(\d+)(?!.*\d)/);
+        return match ? parseInt(match[1], 10) : null;
+    }
+
+    async createStoqBackInStockIntent(product, variant, email) {
+        const shopifyProductId = this.extractShopifyNumericId(product?.id);
+        const shopifyVariantId = this.extractShopifyNumericId(variant?.id);
+
+        if (!shopifyProductId || !shopifyVariantId) {
+            throw new Error('Unable to identify this product option for notifications.');
+        }
+
+        const response = await fetch('https://app.stoqapp.com/api/v1/intents.json', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Shopify-Shop-Domain': SHOPIFY_CONFIG.domain
+            },
+            body: JSON.stringify({
+                intent: {
+                    shopify_variant_id: shopifyVariantId,
+                    shopify_product_id: shopifyProductId,
+                    channel: 'email',
+                    quantity: 1,
+                    source: 'api'
+                },
+                customer: {
+                    email,
+                    locale: navigator.language || 'en-US'
+                },
+                product: {
+                    variant_count: product?.variants?.edges?.length || 0,
+                    title: product?.title || '',
+                    variant_title: variant?.title || '',
+                    vendor: product?.vendor || ''
+                }
+            })
+        });
+
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok || (Array.isArray(data.errors) && data.errors.length > 0)) {
+            const firstError = Array.isArray(data.errors) && data.errors.length > 0
+                ? data.errors[0]
+                : 'Unable to save your notification request right now.';
+            throw new Error(firstError);
+        }
+
+        return data;
     }
 }
 
