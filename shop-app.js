@@ -83,34 +83,13 @@ class ShopApp {
             });
         });
 
-        // Add click listeners to product images for lightbox
-        const productImages = productsGrid.querySelectorAll('.product-image-clickable');
-        productImages.forEach(img => {
-            img.addEventListener('click', (e) => {
-                // On mobile, let the click propagate to open the product modal
-                if (this.isMobileDevice()) {
-                    return; // Don't stop propagation, let card click handler open modal
-                }
-                // On desktop, stop propagation and open lightbox
-                e.stopPropagation(); // Prevent card click
-                const fullImageUrl = img.getAttribute('data-full-image') || img.src;
-                const altText = img.getAttribute('alt') || '';
-                this.openLightbox([fullImageUrl], 0, [altText]);
-            });
-        });
-
-        // Add click listeners to product cards (but not the add to cart button, variant selector, or image on desktop)
+        // Add click listeners to product cards so any non-control click opens the detail view
         const productCards = productsGrid.querySelectorAll('.product-card');
         productCards.forEach(card => {
             card.addEventListener('click', (e) => {
                 // Don't open modal if clicking the add to cart button or variant selector
                 if (e.target.closest('.add-to-cart-btn') || 
                     e.target.closest('.product-variant-selector')) {
-                    return;
-                }
-                // On desktop, don't open modal if clicking image (image opens lightbox instead)
-                // On mobile, allow image clicks to open modal
-                if (!this.isMobileDevice() && e.target.closest('.product-image-clickable')) {
                     return;
                 }
                 const productId = card.getAttribute('data-product-id');
@@ -411,9 +390,50 @@ class ShopApp {
         const productModal = document.getElementById('productModal');
         const closeModalBtn = document.getElementById('closeProductModal');
         const overlay = productModal.querySelector('.product-modal-overlay');
+        const modalBody = document.getElementById('productModalBody');
+        const customScrollbar = document.getElementById('productModalScrollbar');
+        const customThumb = document.getElementById('productModalScrollbarThumb');
+
+        this.productModal = productModal;
+        this.productModalBody = modalBody;
+        this.productModalScrollbar = customScrollbar;
+        this.productModalScrollbarThumb = customThumb;
 
         closeModalBtn.addEventListener('click', () => this.closeProductModal());
         overlay.addEventListener('click', () => this.closeProductModal());
+
+        if (modalBody && customScrollbar && customThumb) {
+            modalBody.addEventListener('scroll', () => this.updateProductModalScrollbar());
+            modalBody.addEventListener('load', () => this.scheduleProductModalScrollbarUpdate(), true);
+
+            customScrollbar.addEventListener('pointerdown', (event) => {
+                if (event.target === customThumb) {
+                    return;
+                }
+
+                const trackRect = customScrollbar.getBoundingClientRect();
+                const clickOffset = event.clientY - trackRect.top;
+                const thumbHeight = customThumb.offsetHeight;
+                const thumbCenterOffset = clickOffset - (thumbHeight / 2);
+                this.scrollProductModalFromThumbOffset(thumbCenterOffset);
+            });
+
+            customThumb.addEventListener('pointerdown', (event) => this.startProductModalScrollbarDrag(event));
+
+            this.productModalMutationObserver = new MutationObserver(() => {
+                this.scheduleProductModalScrollbarUpdate();
+            });
+            this.productModalMutationObserver.observe(modalBody, { childList: true, subtree: true });
+
+            if (typeof ResizeObserver !== 'undefined') {
+                this.productModalResizeObserver = new ResizeObserver(() => {
+                    this.scheduleProductModalScrollbarUpdate();
+                });
+                this.productModalResizeObserver.observe(modalBody);
+            }
+
+            window.addEventListener('resize', () => this.scheduleProductModalScrollbarUpdate());
+        }
 
         // Close on Escape key
         document.addEventListener('keydown', (e) => {
@@ -421,6 +441,79 @@ class ShopApp {
                 this.closeProductModal();
             }
         });
+    }
+
+    scheduleProductModalScrollbarUpdate() {
+        if (this.productModalScrollbarFrame) {
+            cancelAnimationFrame(this.productModalScrollbarFrame);
+        }
+
+        this.productModalScrollbarFrame = requestAnimationFrame(() => {
+            this.updateProductModalScrollbar();
+        });
+    }
+
+    updateProductModalScrollbar() {
+        if (!this.productModalBody || !this.productModalScrollbar || !this.productModalScrollbarThumb) {
+            return;
+        }
+
+        const { scrollTop, scrollHeight, clientHeight } = this.productModalBody;
+        const maxScroll = scrollHeight - clientHeight;
+
+        if (maxScroll <= 0) {
+            this.productModalScrollbar.classList.add('hidden');
+            return;
+        }
+
+        this.productModalScrollbar.classList.remove('hidden');
+
+        const trackHeight = this.productModalScrollbar.clientHeight;
+        const thumbHeight = Math.max((clientHeight / scrollHeight) * trackHeight, 56);
+        const maxThumbTravel = trackHeight - thumbHeight;
+        const thumbOffset = maxThumbTravel * (scrollTop / maxScroll);
+
+        this.productModalScrollbarThumb.style.height = `${thumbHeight}px`;
+        this.productModalScrollbarThumb.style.transform = `translateY(${thumbOffset}px)`;
+    }
+
+    scrollProductModalFromThumbOffset(thumbOffset) {
+        if (!this.productModalBody || !this.productModalScrollbar || !this.productModalScrollbarThumb) {
+            return;
+        }
+
+        const trackHeight = this.productModalScrollbar.clientHeight;
+        const thumbHeight = this.productModalScrollbarThumb.offsetHeight;
+        const maxThumbTravel = Math.max(trackHeight - thumbHeight, 1);
+        const boundedOffset = Math.min(Math.max(thumbOffset, 0), maxThumbTravel);
+        const maxScroll = Math.max(this.productModalBody.scrollHeight - this.productModalBody.clientHeight, 0);
+
+        this.productModalBody.scrollTop = (boundedOffset / maxThumbTravel) * maxScroll;
+    }
+
+    startProductModalScrollbarDrag(event) {
+        if (!this.productModalScrollbarThumb) {
+            return;
+        }
+
+        event.preventDefault();
+
+        const thumbRect = this.productModalScrollbarThumb.getBoundingClientRect();
+        const pointerOffset = event.clientY - thumbRect.top;
+
+        const onPointerMove = (moveEvent) => {
+            const trackRect = this.productModalScrollbar.getBoundingClientRect();
+            const nextOffset = moveEvent.clientY - trackRect.top - pointerOffset;
+            this.scrollProductModalFromThumbOffset(nextOffset);
+        };
+
+        const onPointerUp = () => {
+            document.removeEventListener('pointermove', onPointerMove);
+            document.removeEventListener('pointerup', onPointerUp);
+        };
+
+        document.addEventListener('pointermove', onPointerMove);
+        document.addEventListener('pointerup', onPointerUp);
     }
 
     /**
@@ -768,11 +861,14 @@ class ShopApp {
     async openProductModal(productId) {
         const productModal = document.getElementById('productModal');
         const modalBody = document.getElementById('productModalBody');
+
+        clearTimeout(this.productModalCloseTimeout);
         
         // Show loading state
         modalBody.innerHTML = '<div class="product-detail-loading">Loading product details...</div>';
         productModal.classList.add('open');
         document.body.style.overflow = 'hidden';
+        this.scheduleProductModalScrollbarUpdate();
 
         try {
             // Fetch full product details
@@ -790,23 +886,18 @@ class ShopApp {
     closeProductModal() {
         const productModal = document.getElementById('productModal');
         const modalBody = document.getElementById('productModalBody');
-        
-        // Clear content immediately to prevent lingering
-        modalBody.innerHTML = '';
-        
-        // Hide modal immediately
-        productModal.style.visibility = 'hidden';
-        productModal.style.opacity = '0';
-        
-        // Remove open class
+
         productModal.classList.remove('open');
         document.body.style.overflow = '';
-        
-        // Reset styles after a brief delay to allow for next open animation
-        setTimeout(() => {
-            productModal.style.visibility = '';
-            productModal.style.opacity = '';
-        }, 300);
+        this.scheduleProductModalScrollbarUpdate();
+
+        // Let the close animation finish before clearing the content.
+        clearTimeout(this.productModalCloseTimeout);
+        this.productModalCloseTimeout = setTimeout(() => {
+            if (!productModal.classList.contains('open')) {
+                modalBody.innerHTML = '';
+            }
+        }, 360);
     }
 
     /**
@@ -942,6 +1033,9 @@ class ShopApp {
                 ${descriptionHTML ? `<div class="product-detail-description-container">${descriptionHTML}</div>` : ''}
             </div>
         `;
+
+        modalBody.scrollTop = 0;
+        this.scheduleProductModalScrollbarUpdate();
 
         // Add event listeners
         this.attachProductModalListeners(product, variants);
