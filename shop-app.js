@@ -1023,26 +1023,10 @@ class ShopApp {
         return `
             <div class="product-detail-notify-group">
                 <button class="product-detail-notify-btn" type="button" data-variant-id="${selectedVariant?.id || ''}">
-                    Notify When Available
+                    Join Waitlist on Shopify
                 </button>
-                <form class="product-detail-notify-form hidden" novalidate>
-                    <label class="product-detail-notify-label" for="notifyEmailInput">Email Address</label>
-                    <div class="product-detail-notify-row">
-                        <input
-                            id="notifyEmailInput"
-                            class="product-detail-notify-input"
-                            type="email"
-                            name="email"
-                            inputmode="email"
-                            autocomplete="email"
-                            placeholder="you@example.com"
-                            required
-                        >
-                        <button type="submit" class="product-detail-notify-submit">Notify Me</button>
-                    </div>
-                    <p class="product-detail-notify-note">We&rsquo;ll email you when this option is back in stock.</p>
-                    <p class="product-detail-notify-feedback" aria-live="polite"></p>
-                </form>
+                <p class="product-detail-notify-note">This opens the Shopify product page in a new tab so you can sign up there.</p>
+                <p class="product-detail-notify-feedback" aria-live="polite"></p>
             </div>
         `;
     }
@@ -1100,51 +1084,23 @@ class ShopApp {
         }
 
         const notifyBtn = document.querySelector('.product-detail-notify-btn');
-        const notifyForm = document.querySelector('.product-detail-notify-form');
-        const notifyInput = document.querySelector('.product-detail-notify-input');
         const notifyFeedback = document.querySelector('.product-detail-notify-feedback');
 
-        if (notifyBtn && notifyForm && notifyInput && notifyFeedback && selectedVariant?.id) {
+        if (notifyBtn && notifyFeedback && selectedVariant?.id) {
             notifyBtn.addEventListener('click', () => {
-                notifyForm.classList.toggle('hidden');
-                notifyFeedback.textContent = '';
-                if (!notifyForm.classList.contains('hidden')) {
-                    notifyInput.focus();
-                }
-                this.scheduleProductModalScrollbarUpdate();
-            });
-
-            notifyForm.addEventListener('submit', async (event) => {
-                event.preventDefault();
-
-                const email = notifyInput.value.trim();
-                if (!email) {
-                    notifyFeedback.textContent = 'Enter an email address to get notified.';
-                    notifyFeedback.classList.add('is-error');
-                    notifyFeedback.classList.remove('is-success');
-                    return;
-                }
-
-                const submitBtn = notifyForm.querySelector('.product-detail-notify-submit');
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'Submitting...';
                 notifyFeedback.textContent = '';
                 notifyFeedback.classList.remove('is-error', 'is-success');
 
                 try {
-                    await this.createStoqBackInStockIntent(product, selectedVariant, email);
-                    notifyFeedback.textContent = 'You’re on the list. We’ll let you know when it’s back.';
-                    notifyFeedback.classList.add('is-success');
-                    notifyForm.reset();
+                    const shopifyNotifyUrl = this.buildShopifyNotifyUrl(product, selectedVariant);
+                    window.open(shopifyNotifyUrl, '_blank', 'noopener,noreferrer');
                 } catch (error) {
-                    console.error('Failed to create back-in-stock intent:', error);
-                    notifyFeedback.textContent = error.message || 'Unable to save your notification request right now.';
+                    console.error('Failed to open Shopify waitlist page:', error);
+                    notifyFeedback.textContent = error.message || 'Waitlist signup is unavailable right now.';
                     notifyFeedback.classList.add('is-error');
-                } finally {
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Notify Me';
-                    this.scheduleProductModalScrollbarUpdate();
                 }
+
+                this.scheduleProductModalScrollbarUpdate();
             });
         }
     }
@@ -1155,51 +1111,15 @@ class ShopApp {
         return match ? parseInt(match[1], 10) : null;
     }
 
-    async createStoqBackInStockIntent(product, variant, email) {
-        const shopifyProductId = this.extractShopifyNumericId(product?.id);
+    buildShopifyNotifyUrl(product, variant) {
         const shopifyVariantId = this.extractShopifyNumericId(variant?.id);
+        const productHandle = product?.handle;
 
-        if (!shopifyProductId || !shopifyVariantId) {
+        if (!productHandle || !shopifyVariantId) {
             throw new Error('Unable to identify this product option for notifications.');
         }
 
-        const response = await fetch('https://app.stoqapp.com/api/v1/intents.json', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Shopify-Shop-Domain': SHOPIFY_CONFIG.domain
-            },
-            body: JSON.stringify({
-                intent: {
-                    shopify_variant_id: shopifyVariantId,
-                    shopify_product_id: shopifyProductId,
-                    channel: 'email',
-                    quantity: 1,
-                    source: 'api'
-                },
-                customer: {
-                    email,
-                    locale: navigator.language || 'en-US'
-                },
-                product: {
-                    variant_count: product?.variants?.edges?.length || 0,
-                    title: product?.title || '',
-                    variant_title: variant?.title || '',
-                    vendor: product?.vendor || ''
-                }
-            })
-        });
-
-        const data = await response.json().catch(() => ({}));
-
-        if (!response.ok || (Array.isArray(data.errors) && data.errors.length > 0)) {
-            const firstError = Array.isArray(data.errors) && data.errors.length > 0
-                ? data.errors[0]
-                : 'Unable to save your notification request right now.';
-            throw new Error(firstError);
-        }
-
-        return data;
+        return `https://${SHOPIFY_CONFIG.domain}/products/${encodeURIComponent(productHandle)}?variant=${shopifyVariantId}`;
     }
 }
 
