@@ -2222,6 +2222,10 @@ section {
     line-height: 1.7;
 }
 
+.request-emphasis {
+    font-weight: 700;
+}
+
 .contact-note {
     margin-top: var(--spacing-lg);
     padding-top: var(--spacing-md);
