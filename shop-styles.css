@@ -1284,6 +1284,21 @@
     margin-bottom: 0;
 }
 
+.product-detail-description ul,
+.product-detail-description ol {
+    margin: 0 0 var(--spacing-sm);
+    padding-left: 1.25rem;
+}
+
+.product-detail-description li {
+    margin-bottom: 0.35rem;
+    padding-left: 0.15rem;
+}
+
+.product-detail-description li:last-child {
+    margin-bottom: 0;
+}
+
 /* Add spacing before section headings like "Shop Notes:" and "Details:" */
 /* Target paragraphs that come after lists (which typically contain the main description) */
 .product-detail-description ul + p,
@@ -1699,10 +1714,39 @@
 
 /* Mobile - stacked layout */
 @media (max-width: 767px) {
+    .product-modal-content {
+        width: calc(100vw - 0.75rem);
+        max-height: calc(100vh - 0.75rem);
+        border-radius: 18px;
+    }
+
+    .product-modal-body {
+        padding: 1rem;
+        padding-right: 1rem;
+        padding-top: 1rem;
+        padding-bottom: 1.125rem;
+    }
+
+    .product-modal-scrollbar {
+        display: none;
+    }
+
+    .close-product-modal {
+        top: 0.75rem;
+        right: 0.75rem;
+        width: 36px;
+        height: 36px;
+        padding: 0.4rem;
+    }
+
+    .product-detail-content {
+        gap: 1rem;
+    }
+
     .product-detail-main-layout {
         display: flex;
         flex-direction: column;
-        gap: var(--spacing-md);
+        gap: 1rem;
     }
 
     .product-detail-info {
@@ -1712,14 +1756,39 @@
     .product-detail-header {
         order: 1;
         margin-bottom: 0;
+        padding-right: 3rem;
     }
 
     .product-detail-images {
         order: 2;
+        gap: 0.75rem;
     }
 
     .product-detail-actions {
         order: 3;
+        gap: 0.875rem;
+    }
+
+    .product-detail-description-container {
+        margin-top: 0;
+    }
+
+    .product-detail-description-container .product-detail-description {
+        padding: 1rem;
+    }
+
+    .product-detail-description ul,
+    .product-detail-description ol {
+        padding-left: 1.1rem;
+    }
+
+    .product-detail-thumbnails {
+        grid-template-columns: repeat(auto-fit, minmax(68px, 1fr));
+        gap: 0.5rem;
+    }
+
+    .product-detail-price-list {
+        padding: 0.75rem;
     }
 
     .shop-header-layout {
