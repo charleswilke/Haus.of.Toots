@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NDLPT Flash Sheet Collection - Haus of Toots</title>
+    <meta name="description" content="Browse the NDLPT Flash Sheet Collection by Haus of Toots, with bold needlepoint designs and room for future behind-the-scenes extras.">
+    <meta property="og:title" content="NDLPT Flash Sheet Collection - Haus of Toots">
+    <meta property="og:description" content="Browse the NDLPT Flash Sheet Collection by Haus of Toots, with bold needlepoint designs and room for future behind-the-scenes extras.">
+    <meta property="og:image" content="https://hausoftoots.com/images/flash.JPG">
+    <meta property="og:url" content="https://hausoftoots.com/flash">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="NDLPT Flash Sheet Collection - Haus of Toots">
+    <meta name="twitter:description" content="Browse the NDLPT Flash Sheet Collection by Haus of Toots, with bold needlepoint designs and room for future behind-the-scenes extras.">
+    <meta name="twitter:image" content="https://hausoftoots.com/images/flash.JPG">
+    <link rel="canonical" href="https://hausoftoots.com/flash">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="preload" href="images/flash.JPG" as="image">
+    <link rel="preconnect" href="https://haus-of-toots.myshopify.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Winky+Sans:wght@300;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="shop-styles.css">
+</head>
+<body
+    data-shop-collection="flash"
+    data-shop-collection-title="NDLPT Flash Sheet Collection"
+    data-shop-collection-aliases="flash, flash sheet, flash sheet series, ndlpt flash, ndlpt flash sheet, ndlpt flash sheet collection"
+    data-shop-empty-message="The NDLPT Flash Sheet Collection is getting stitched into the shop now. Check back soon for the first drop."
+>
+    <div id="shared-nav"></div>
+    <div id="shared-stitch-sidebar"></div>
+    <div id="shared-cursor-canvas"></div>
+    <script src="shared-components.js"></script>
+
+    <header class="series-header">
+        <div class="container">
+            <div class="series-header-layout">
+                <div class="series-image-panel">
+                    <img src="images/flash.JPG" alt="NDLPT Flash Sheet Collection artwork" class="series-header-image" width="1600" height="1200">
+                </div>
+                <div class="series-copy">
+                    <div class="stitched-border">
+                        <div class="series-copy-inner">
+                            <h1 class="hero-title">NDLPT <span class="highlight">Flash Sheet</span> Collection</h1>
+                            <p class="hero-description">A collection of bold, punchy canvases with tattoo-flash energy and plenty of personality.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="shop-section">
+        <div class="container">
+            <div id="loadingState" class="loading-state">
+                <div class="loading-spinner"></div>
+                <p>Loading products...</p>
+            </div>
+
+            <div id="errorState" class="error-state" style="display: none;">
+                <p>Oops! Unable to load this collection right now. Please try again later.</p>
+            </div>
+
+            <div id="productsGrid" class="products-grid" style="display: none;">
+                <!-- Products will be inserted here by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <div id="productModal" class="product-modal">
+        <div class="product-modal-overlay"></div>
+        <div class="product-modal-content">
+            <button id="closeProductModal" class="close-product-modal" aria-label="Close product details">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <div id="productModalBody" class="product-modal-body">
+                <!-- Product details will be loaded here -->
+            </div>
+            <div id="productModalScrollbar" class="product-modal-scrollbar hidden" aria-hidden="true">
+                <div class="product-modal-scrollbar-track"></div>
+                <div id="productModalScrollbarThumb" class="product-modal-scrollbar-thumb"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="imageLightbox" class="image-lightbox">
+        <div class="lightbox-overlay"></div>
+        <button id="closeLightbox" class="lightbox-close" aria-label="Close lightbox">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+        <button id="prevImage" class="lightbox-nav lightbox-prev" aria-label="Previous image">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </button>
+        <button id="nextImage" class="lightbox-nav lightbox-next" aria-label="Next image">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </button>
+        <div class="lightbox-content">
+            <img id="lightboxImage" src="" alt="" class="lightbox-image">
+            <div id="lightboxCaption" class="lightbox-caption"></div>
+        </div>
+    </div>
+
+    <div id="shared-footer"></div>
+    <div id="shared-cart-drawer"></div>
+    <script>SharedComponents.injectAll();</script>
+
+    <script src="shopify-config.js"></script>
+    <script src="shopify.js"></script>
+    <script src="shop-app.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

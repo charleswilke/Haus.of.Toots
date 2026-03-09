@@ -494,6 +494,7 @@ function initSmoothScroll() {
 // ===================================
 
 function initScrollAnimations() {
+    const shouldRevealImmediately = window.matchMedia('(max-width: 767px)').matches;
     const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -100px 0px'
@@ -510,6 +511,14 @@ function initScrollAnimations() {
     
     // Observe sections
     document.querySelectorAll('section').forEach(section => {
+        const isCollectionHub = section.classList.contains('collection-hub-section');
+
+        if (shouldRevealImmediately && isCollectionHub) {
+            section.style.opacity = '1';
+            section.style.animation = 'none';
+            return;
+        }
+
         section.style.opacity = '0';
         observer.observe(section);
     });

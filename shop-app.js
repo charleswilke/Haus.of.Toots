@@ -5,6 +5,7 @@
 class ShopApp {
     constructor() {
         this.products = [];
+        this.collectionContext = this.getCollectionContext();
         this.init();
     }
 
@@ -19,6 +20,73 @@ class ShopApp {
         await this.loadProducts();
     }
 
+    getCollectionContext() {
+        const { dataset } = document.body;
+        const collectionKey = (dataset.shopCollection || '').trim();
+
+        if (!collectionKey) {
+            return null;
+        }
+
+        const aliases = (dataset.shopCollectionAliases || '')
+            .split(',')
+            .map(alias => this.normalizeCollectionText(alias))
+            .filter(Boolean);
+
+        return {
+            key: collectionKey,
+            title: (dataset.shopCollectionTitle || '').trim() || collectionKey,
+            aliases,
+            emptyMessage: (dataset.shopEmptyMessage || '').trim()
+        };
+    }
+
+    normalizeCollectionText(value) {
+        return String(value || '')
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+    }
+
+    getCollectionSearchText(product) {
+        return this.normalizeCollectionText([
+            product.title,
+            product.handle,
+            product.productType,
+            product.description,
+            product.descriptionHtml,
+            ...(product.tags || [])
+        ].join(' '));
+    }
+
+    filterProductsForCollection(products) {
+        if (!this.collectionContext) {
+            return products;
+        }
+
+        const aliases = this.collectionContext.aliases.length
+            ? this.collectionContext.aliases
+            : [this.normalizeCollectionText(this.collectionContext.key)];
+
+        return products.filter(product => {
+            const searchableText = this.getCollectionSearchText(product);
+            return aliases.some(alias => searchableText.includes(alias));
+        });
+    }
+
+    getEmptyProductsMessage() {
+        if (this.collectionContext?.emptyMessage) {
+            return this.collectionContext.emptyMessage;
+        }
+
+        if (this.collectionContext?.title) {
+            return `No products are available in ${this.collectionContext.title} just yet. Please check back soon.`;
+        }
+
+        return 'No products available at this time.';
+    }
+
     /**
      * Load products from Shopify
      */
@@ -28,7 +96,8 @@ class ShopApp {
         const productsGrid = document.getElementById('productsGrid');
 
         try {
-            this.products = await shopifyClient.getProducts(24);
+            const products = await shopifyClient.getProducts(24);
+            this.products = this.filterProductsForCollection(products);
             
             // Hide loading, show products
             loadingState.style.display = 'none';
@@ -50,7 +119,11 @@ class ShopApp {
         const productsGrid = document.getElementById('productsGrid');
         
         if (this.products.length === 0) {
-            productsGrid.innerHTML = '<p style="text-align: center; color: var(--neutral-mid);">No products available at this time.</p>';
+            productsGrid.innerHTML = `
+                <div class="collection-empty-message">
+                    <p>${this.escapeHtml(this.getEmptyProductsMessage())}</p>
+                </div>
+            `;
             return;
         }
 

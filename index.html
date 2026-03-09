@@ -39,26 +39,10 @@
                 <div class="hero-content-side">
                     <div class="stitched-border">
                         <div class="hero-content">
-                            <div class="hero-photo-mobile">
-                                <div class="embroidery-hoop hero-hoop hero-hoop-mobile">
-                                    <div class="hoop-ring hero-hoop-ring"></div>
-                                    <div class="canvas-placeholder">
-                                        <img src="images/jessiebio.jpg" alt="Jessie Wilke" class="bio-photo" width="700" height="525">
-                                    </div>
-                                </div>
+                            <div class="hero-text-mobile hero-shop-intro">
+                                <p class="hero-kicker">Cute. Weird. Wildly specific.</p>
+                                <h1 class="hero-title hero-shop-title">Shop <span class="highlight">Haus of Toots</span> designs</h1>
                             </div>
-                            <div class="hero-text-mobile">
-                                <h2 class="hero-title">Hi, I'm <span class="highlight">Jessie!</span></h2>
-                                <p class="hero-description"> I paint cute, weird, and wildly specific custom needlepoint canvases!</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="hero-photo-side">
-                    <div class="embroidery-hoop hero-hoop">
-                        <div class="hoop-ring hero-hoop-ring"></div>
-                        <div class="canvas-placeholder">
-                            <img src="images/jessiebio.jpg" alt="Jessie Wilke" class="bio-photo" width="700" height="525">
                         </div>
                     </div>
                 </div>
@@ -66,68 +50,34 @@
         </div>
     </section>
 
-    <!-- Shop Section -->
-    <section class="shop-section">
+    <!-- Collection Hub -->
+    <section class="collection-hub-section">
         <div class="container">
-            <div id="loadingState" class="loading-state">
-                <div class="loading-spinner"></div>
-                <p>Loading products...</p>
-            </div>
+            <div class="collection-card-grid">
+                <a href="flash" class="collection-card collection-card-featured">
+                    <div class="collection-card-image-wrap">
+                        <img src="images/flash.JPG" alt="NDLPT Flash Sheet Collection card artwork" class="collection-card-image" width="1600" height="1200">
+                    </div>
+                    <div class="collection-card-content">
+                        <h3 class="collection-card-title">NDLPT Flash Sheet Collection</h3>
+                        <p class="collection-card-description">Bold canvases with a flash tattoo spirit: punchy, playful, and ready to stitch.</p>
+                        <span class="collection-card-link">Shop the NDLPT Flash Sheet Collection</span>
+                    </div>
+                </a>
 
-            <div id="errorState" class="error-state" style="display: none;">
-                <p>Oops! Unable to load products. Please try again later.</p>
-            </div>
-
-            <div id="productsGrid" class="products-grid" style="display: none;">
-                <!-- Products will be inserted here by JavaScript -->
+                <a href="village" class="collection-card">
+                    <div class="collection-card-image-wrap">
+                        <img src="images/village.jpg" alt="Holiday Village Expansion Series card artwork" class="collection-card-image" width="1600" height="1200">
+                    </div>
+                    <div class="collection-card-content">
+                        <h3 class="collection-card-title">Holiday Village Expansion Series</h3>
+                        <p class="collection-card-description">More canvases coming to this collection in May!</p>
+                        <span class="collection-card-link">Shop the Holiday Village Expansion Series</span>
+                    </div>
+                </a>
             </div>
         </div>
     </section>
-
-    <!-- Product Detail Modal -->
-    <div id="productModal" class="product-modal">
-        <div class="product-modal-overlay"></div>
-        <div class="product-modal-content">
-            <button id="closeProductModal" class="close-product-modal" aria-label="Close product details">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-            </button>
-            <div id="productModalBody" class="product-modal-body">
-                <!-- Product details will be loaded here -->
-            </div>
-            <div id="productModalScrollbar" class="product-modal-scrollbar hidden" aria-hidden="true">
-                <div class="product-modal-scrollbar-track"></div>
-                <div id="productModalScrollbarThumb" class="product-modal-scrollbar-thumb"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Image Lightbox -->
-    <div id="imageLightbox" class="image-lightbox">
-        <div class="lightbox-overlay"></div>
-        <button id="closeLightbox" class="lightbox-close" aria-label="Close lightbox">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-        </button>
-        <button id="prevImage" class="lightbox-nav lightbox-prev" aria-label="Previous image">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="15 18 9 12 15 6"></polyline>
-            </svg>
-        </button>
-        <button id="nextImage" class="lightbox-nav lightbox-next" aria-label="Next image">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="9 18 15 12 9 6"></polyline>
-            </svg>
-        </button>
-        <div class="lightbox-content">
-            <img id="lightboxImage" src="" alt="" class="lightbox-image">
-            <div id="lightboxCaption" class="lightbox-caption"></div>
-        </div>
-    </div>
 
     <div id="shared-footer"></div>
     <div id="shared-cart-drawer"></div>
@@ -135,9 +85,8 @@
 
     <script src="shopify-config.js"></script>
     <script src="shopify.js"></script>
-    <script src="gallery-data.js"></script>
-    <script src="shop-app.js"></script>
     <script src="script.js"></script>
+    <script src="cart-global.js"></script>
 </body>
 </html>
 

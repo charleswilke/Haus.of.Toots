@@ -4,6 +4,18 @@
 # Enable Rewrite Engine
 RewriteEngine On
 
+# Canonical short URLs for collection pages
+RewriteCond %{THE_REQUEST} \s/+flash-sheet-series\.html[\s?] [NC]
+RewriteRule ^flash-sheet-series\.html$ /flash [NC,L,R=301]
+RewriteCond %{THE_REQUEST} \s/+village-expansion-series\.html[\s?] [NC]
+RewriteRule ^village-expansion-series\.html$ /village [NC,L,R=301]
+
+RewriteRule ^flash-sheet-series/?$ /flash [NC,L,R=301]
+RewriteRule ^village-expansion-series/?$ /village [NC,L,R=301]
+
+RewriteRule ^flash/?$ flash-sheet-series.html [NC,L]
+RewriteRule ^village/?$ village-expansion-series.html [NC,L]
+
 # Redirect .html to clean URL first (removes .html from browser address bar)
 RewriteCond %{THE_REQUEST} /([^.]+)\.html [NC]
 RewriteRule ^ /%1 [NC,L,R=301]
