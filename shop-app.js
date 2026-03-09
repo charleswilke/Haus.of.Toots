@@ -23,6 +23,7 @@ class ShopApp {
     getCollectionContext() {
         const { dataset } = document.body;
         const collectionKey = (dataset.shopCollection || '').trim();
+        const collectionHandle = (dataset.shopCollectionHandle || collectionKey).trim();
 
         if (!collectionKey) {
             return null;
@@ -35,6 +36,7 @@ class ShopApp {
 
         return {
             key: collectionKey,
+            handle: collectionHandle,
             title: (dataset.shopCollectionTitle || '').trim() || collectionKey,
             aliases,
             emptyMessage: (dataset.shopEmptyMessage || '').trim()
@@ -96,8 +98,18 @@ class ShopApp {
         const productsGrid = document.getElementById('productsGrid');
 
         try {
-            const products = await shopifyClient.getProducts(24);
-            this.products = this.filterProductsForCollection(products);
+            if (this.collectionContext?.handle) {
+                const collectionProducts = await shopifyClient.getCollectionProducts(this.collectionContext.handle, 50);
+                if (collectionProducts) {
+                    this.products = collectionProducts;
+                } else {
+                    const products = await shopifyClient.getProducts(24);
+                    this.products = this.filterProductsForCollection(products);
+                }
+            } else {
+                const products = await shopifyClient.getProducts(24);
+                this.products = this.filterProductsForCollection(products);
+            }
             
             // Hide loading, show products
             loadingState.style.display = 'none';

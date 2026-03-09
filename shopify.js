@@ -111,6 +111,69 @@ class ShopifyClient {
     }
 
     /**
+     * Get products for a specific collection handle
+     */
+    async getCollectionProducts(handle, first = 50) {
+        const query = `
+            query GetCollectionProducts($handle: String!, $first: Int!) {
+                collection(handle: $handle) {
+                    id
+                    title
+                    handle
+                    products(first: $first) {
+                        edges {
+                            node {
+                                id
+                                handle
+                                title
+                                description
+                                descriptionHtml
+                                productType
+                                tags
+                                images(first: 1) {
+                                    edges {
+                                        node {
+                                            url
+                                            altText
+                                            transformedSrc(maxWidth: 400, maxHeight: 400, crop: CENTER)
+                                        }
+                                    }
+                                }
+                                variants(first: 50) {
+                                    edges {
+                                        node {
+                                            id
+                                            title
+                                            availableForSale
+                                            priceV2 {
+                                                amount
+                                                currencyCode
+                                            }
+                                            selectedOptions {
+                                                name
+                                                value
+                                            }
+                                        }
+                                    }
+                                }
+                                priceRange {
+                                    minVariantPrice {
+                                        amount
+                                        currencyCode
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        `;
+
+        const data = await this.fetch(query, { handle, first });
+        return data.collection?.products?.edges?.map(edge => edge.node) || null;
+    }
+
+    /**
      * Get a single product by handle with full details
      */
     async getProductByHandle(handle) {
