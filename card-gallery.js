@@ -207,22 +207,6 @@ class CardGallery {
         return `${normalized.slice(0, maxLength - 1).trimEnd()}...`;
     }
 
-    buildShopifyCardSubtitle(product) {
-        const productType = this.summarizeText(product.productType, 40);
-        if (productType) {
-            return productType;
-        }
-
-        const firstTag = (product.tags || [])
-            .map(tag => this.summarizeText(tag, 40))
-            .find(Boolean);
-        if (firstTag) {
-            return firstTag;
-        }
-
-        return this.summarizeText(this.stripHtml(product.description || product.descriptionHtml || ''), 56) || 'Shopify listing';
-    }
-
     mapShopifyProductToCard(product) {
         if (!product?.handle || !product?.title) {
             return null;
@@ -237,7 +221,7 @@ class CardGallery {
             src: image?.url || 'images/wordmarklogo.png',
             thumb: image?.transformedSrc || image?.url || 'images/wordmarklogo.png',
             title: product.title,
-            subtitle: this.buildShopifyCardSubtitle(product),
+            subtitle: '',
             date: product.updatedAt || '2000-01-01',
             shopifyUrl,
             shopifyHandle: product.handle
@@ -847,7 +831,7 @@ class CardGallery {
                 </div>
                 <div class="card-info">
                     <h3 class="card-title">${cardData.title}</h3>
-                    <p class="card-subtitle">${cardData.subtitle}</p>
+                    ${cardData.subtitle ? `<p class="card-subtitle">${cardData.subtitle}</p>` : ''}
                 </div>
             </div>
             ${cardBackHtml}
