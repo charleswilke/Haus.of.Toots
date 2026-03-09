@@ -24,6 +24,26 @@ jobs:
             echo "ERROR: .htaccess file not found!"
             exit 1
           fi
+
+      - name: Stamp asset version into HTML
+        run: |
+          export ASSET_VERSION="${GITHUB_SHA::7}"
+          echo "Using asset version: ${ASSET_VERSION}"
+          python - <<'PY'
+          import os
+          from pathlib import Path
+
+          version = os.environ["ASSET_VERSION"]
+
+          for path in Path(".").glob("*.html"):
+              content = path.read_text(encoding="utf-8")
+              if "__ASSET_VERSION__" not in content:
+                  continue
+              path.write_text(
+                  content.replace("__ASSET_VERSION__", version),
+                  encoding="utf-8"
+              )
+          PY
         
       - name: Deploy to DreamHost via SFTP
         uses: wlixcc/SFTP-Deploy-Action@v1.2.4

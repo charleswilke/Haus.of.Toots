@@ -16,6 +16,13 @@ RewriteRule ^village-expansion-series/?$ /village [NC,L,R=301]
 RewriteRule ^flash/?$ flash-sheet-series.html [NC,L]
 RewriteRule ^village/?$ village-expansion-series.html [NC,L]
 
+# Make HTML revalidate so visitors pick up new asset URLs quickly.
+<IfModule mod_headers.c>
+    <FilesMatch "\.(html?)$">
+        Header set Cache-Control "max-age=0, must-revalidate"
+    </FilesMatch>
+</IfModule>
+
 # Redirect .html to clean URL first (removes .html from browser address bar)
 RewriteCond %{THE_REQUEST} /([^.]+)\.html [NC]
 RewriteRule ^ /%1 [NC,L,R=301]
