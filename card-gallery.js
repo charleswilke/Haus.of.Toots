@@ -19,7 +19,9 @@ class CardGallery {
         this.isMasonryMode = false;
         
         // Gallery data - loaded from shared gallery-data.js
-        this.galleryData = typeof GALLERY_DATA !== 'undefined' ? GALLERY_DATA : {};
+        this.galleryData = this.cloneGalleryData(typeof GALLERY_DATA !== 'undefined' ? GALLERY_DATA : {});
+        this.shopifyProductsPromise = null;
+        this.shopifyProductsRequested = false;
         
         // Inline mode: render as page content instead of overlay
         this.isInline = false;
@@ -35,6 +37,18 @@ class CardGallery {
             this.overlay.removeAttribute('aria-modal');
             this.open();
         }
+    }
+
+    cloneGalleryData(galleryData) {
+        return Object.fromEntries(
+            Object.entries(galleryData).map(([categoryId, category]) => [
+                categoryId,
+                {
+                    ...category,
+                    images: Array.isArray(category.images) ? [...category.images] : []
+                }
+            ])
+        );
     }
 
     parseDateToTime(dateValue) {
@@ -64,6 +78,7 @@ class CardGallery {
         this.createOverlay();
         this.attachNavListeners();
         this.attachKeyboardListeners();
+        void this.appendShopifyProductsToGallery();
     }
     
     buildCards() {
@@ -91,6 +106,183 @@ class CardGallery {
         });
         
         this.filteredCards = [...this.cards];
+    }
+
+    getCardIdentity(card) {
+        if (!card) return '';
+        return [
+            card.shopifyUrl || '',
+            card.beforeSrc || '',
+            card.src || '',
+            card.title || ''
+        ].join('::');
+    }
+
+    updateFilteredCards() {
+        if (this.currentCategory === 'all') {
+            this.filteredCards = [...this.cards];
+            return;
+        }
+
+        this.filteredCards = this.cards.filter(card => card.category === this.currentCategory);
+    }
+
+    refreshGalleryAfterDataChange() {
+        const activeCardIdentity = this.getCardIdentity(this.filteredCards[this.currentIndex]);
+
+        this.buildCards();
+        this.updateFilteredCards();
+
+        if (this.filteredCards.length === 0) {
+            this.currentCategory = 'all';
+            this.filteredCards = [...this.cards];
+        }
+
+        const nextIndex = this.filteredCards.findIndex(card => this.getCardIdentity(card) === activeCardIdentity);
+        this.currentIndex = nextIndex >= 0 ? nextIndex : Math.min(this.currentIndex, Math.max(this.filteredCards.length - 1, 0));
+
+        this.refreshTabCounts();
+
+        if (this.isOpen) {
+            this.render();
+            this.renderDeckPreview();
+            this.updateCounter();
+            this.updateNavButtons();
+        }
+    }
+
+    refreshTabCounts() {
+        if (!this.overlay) {
+            return;
+        }
+
+        const allCount = this.overlay.querySelector('[data-category="all"] .tab-count');
+        if (allCount) {
+            allCount.textContent = this.cards.length;
+        }
+
+        this.overlay.querySelectorAll('.card-deck-tab[data-category]').forEach(tab => {
+            const categoryId = tab.dataset.category;
+            if (!categoryId || categoryId === 'all') {
+                return;
+            }
+
+            const tabCount = tab.querySelector('.tab-count');
+            if (tabCount) {
+                tabCount.textContent = this.galleryData[categoryId]?.images?.length || 0;
+            }
+        });
+    }
+
+    getOrCreateHotOriginalsCategory() {
+        if (!this.galleryData['hot-originals']) {
+            this.galleryData['hot-originals'] = {
+                name: 'HoT Originals',
+                displayName: 'HoT Originals',
+                color: '#D97EAE',
+                description: 'Original designs straight from the Haus of Toots imagination.',
+                images: []
+            };
+        }
+
+        return this.galleryData['hot-originals'];
+    }
+
+    stripHtml(html) {
+        const temp = document.createElement('div');
+        temp.innerHTML = html || '';
+        return temp.textContent || temp.innerText || '';
+    }
+
+    summarizeText(text, maxLength = 56) {
+        const normalized = String(text || '').replace(/\s+/g, ' ').trim();
+        if (!normalized) {
+            return '';
+        }
+
+        if (normalized.length <= maxLength) {
+            return normalized;
+        }
+
+        return `${normalized.slice(0, maxLength - 1).trimEnd()}...`;
+    }
+
+    buildShopifyCardSubtitle(product) {
+        const productType = this.summarizeText(product.productType, 40);
+        if (productType) {
+            return productType;
+        }
+
+        const firstTag = (product.tags || [])
+            .map(tag => this.summarizeText(tag, 40))
+            .find(Boolean);
+        if (firstTag) {
+            return firstTag;
+        }
+
+        return this.summarizeText(this.stripHtml(product.description || product.descriptionHtml || ''), 56) || 'Shopify listing';
+    }
+
+    mapShopifyProductToCard(product) {
+        if (!product?.handle || !product?.title) {
+            return null;
+        }
+
+        const image = product.images?.edges?.[0]?.node;
+        const shopifyUrl = typeof shopifyClient?.getProductListingUrl === 'function'
+            ? shopifyClient.getProductListingUrl(product.handle)
+            : `https://${SHOPIFY_CONFIG.domain}/products/${encodeURIComponent(product.handle)}`;
+
+        return {
+            src: image?.url || 'images/wordmarklogo.png',
+            thumb: image?.transformedSrc || image?.url || 'images/wordmarklogo.png',
+            title: product.title,
+            subtitle: this.buildShopifyCardSubtitle(product),
+            date: product.updatedAt || '2000-01-01',
+            shopifyUrl,
+            shopifyHandle: product.handle
+        };
+    }
+
+    async appendShopifyProductsToGallery() {
+        if (this.shopifyProductsRequested || typeof shopifyClient?.getAllProducts !== 'function') {
+            return this.shopifyProductsPromise;
+        }
+
+        this.shopifyProductsRequested = true;
+        this.shopifyProductsPromise = (async () => {
+            try {
+                const products = await shopifyClient.getAllProducts(50);
+                const mappedCards = products
+                    .map(product => this.mapShopifyProductToCard(product))
+                    .filter(Boolean);
+
+                if (mappedCards.length === 0) {
+                    return;
+                }
+
+                const hotOriginals = this.getOrCreateHotOriginalsCategory();
+                const existingUrls = new Set(
+                    hotOriginals.images
+                        .map(image => image.shopifyUrl)
+                        .filter(Boolean)
+                );
+                const newCards = mappedCards.filter(card => !existingUrls.has(card.shopifyUrl));
+
+                if (newCards.length === 0) {
+                    return;
+                }
+
+                hotOriginals.images = hotOriginals.images.concat(newCards);
+                this.refreshGalleryAfterDataChange();
+            } catch (error) {
+                console.error('Unable to append Shopify listings to the gallery:', error);
+            } finally {
+                this.shopifyProductsPromise = null;
+            }
+        })();
+
+        return this.shopifyProductsPromise;
     }
     
     createOverlay() {
@@ -296,7 +488,7 @@ class CardGallery {
                         const idx = parseInt(focusedCard.dataset.index);
                         const cardData = this.filteredCards[idx];
                         if (cardData) {
-                            this.openFullview(cardData.src, cardData.title);
+                            this.handleCardActivation(cardData, focusedCard);
                         }
                     }
                     break;
@@ -608,8 +800,13 @@ class CardGallery {
         card.className = 'gallery-card';
         card.dataset.index = index;
         card.dataset.categoryColor = cardData.categoryColor; // Add category color for border styling
-        card.setAttribute('role', 'button');
-        card.setAttribute('aria-label', `${cardData.title} - ${cardData.categoryName}`);
+        card.setAttribute('role', cardData.shopifyUrl ? 'link' : 'button');
+        card.setAttribute(
+            'aria-label',
+            cardData.shopifyUrl
+                ? `${cardData.title} - ${cardData.categoryName}. Opens Shopify listing.`
+                : `${cardData.title} - ${cardData.categoryName}`
+        );
         
         // Check if this card has a "before" image to flip to
         const hasBeforeImage = !!cardData.beforeSrc;
@@ -701,14 +898,6 @@ class CardGallery {
         let cardTapStart = { time: 0, x: 0, y: 0 };
         let cardWasTapped = false;
         
-        // Helper to check if element is in the image area
-        const isInImageArea = (element) => {
-            if (!element) return false;
-            return element.closest('.card-image-container') !== null || 
-                   element.classList.contains('card-image') ||
-                   element.classList.contains('card-image-container');
-        };
-        
         // Touch start - record position
         card.addEventListener('touchstart', (e) => {
             cardTapStart.time = Date.now();
@@ -733,17 +922,7 @@ class CardGallery {
                 const target = document.elementFromPoint(touch.clientX, touch.clientY);
                 
                 if (card.classList.contains('active') || card.classList.contains('masonry-card')) {
-                    if (hasBeforeImage) {
-                        // For flippable cards: image area → lightbox, info area → flip
-                        if (isInImageArea(target)) {
-                            // Open lightbox with after (first) and before (second)
-                            this.openBeforeAfterLightbox(cardData.src, cardData.beforeSrc, cardData.title);
-                        } else {
-                            this.flipCard(card);
-                        }
-                    } else {
-                        this.openFullview(cardData.src, cardData.title);
-                    }
+                    this.handleCardActivation(cardData, card, target);
                 }
             }
         }, { passive: false });
@@ -757,21 +936,31 @@ class CardGallery {
             }
             
             if (card.classList.contains('active') || card.classList.contains('masonry-card')) {
-                if (hasBeforeImage) {
-                    // For flippable cards: image area → lightbox, info area → flip
-                    if (isInImageArea(e.target)) {
-                        // Open lightbox with after (first) and before (second)
-                        this.openBeforeAfterLightbox(cardData.src, cardData.beforeSrc, cardData.title);
-                    } else {
-                        this.flipCard(card);
-                    }
-                } else {
-                    this.openFullview(cardData.src, cardData.title);
-                }
+                this.handleCardActivation(cardData, card, e.target);
             }
         });
         
         return card;
+    }
+
+    handleCardActivation(cardData, card, target = null) {
+        if (cardData.shopifyUrl) {
+            window.location.href = cardData.shopifyUrl;
+            return;
+        }
+
+        const hasBeforeImage = !!cardData.beforeSrc;
+        if (hasBeforeImage) {
+            const isInImageArea = !target || target.closest('.card-image-container') !== null;
+            if (isInImageArea) {
+                this.openBeforeAfterLightbox(cardData.src, cardData.beforeSrc, cardData.title);
+            } else if (card) {
+                this.flipCard(card);
+            }
+            return;
+        }
+
+        this.openFullview(cardData.src, cardData.title);
     }
     
     flipCard(card) {

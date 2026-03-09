@@ -7,6 +7,14 @@ class ShopifyClient {
         this.config = config;
     }
 
+    getProductListingUrl(handle) {
+        if (!handle) {
+            return null;
+        }
+
+        return `https://${this.config.domain}/products/${encodeURIComponent(handle)}`;
+    }
+
     /**
      * Make a GraphQL request to Shopify Storefront API
      */
@@ -59,6 +67,10 @@ class ShopifyClient {
         const query = `
             query GetProducts($first: Int!) {
                 products(first: $first) {
+                    pageInfo {
+                        hasNextPage
+                        endCursor
+                    }
                     edges {
                         node {
                             id
@@ -67,6 +79,7 @@ class ShopifyClient {
                             description
                             descriptionHtml
                             productType
+                            updatedAt
                             tags
                             images(first: 1) {
                                 edges {
@@ -111,6 +124,90 @@ class ShopifyClient {
     }
 
     /**
+     * Get a single page of products from the store
+     */
+    async getProductsPage(first = 50, after = null) {
+        const query = `
+            query GetProductsPage($first: Int!, $after: String) {
+                products(first: $first, after: $after) {
+                    pageInfo {
+                        hasNextPage
+                        endCursor
+                    }
+                    edges {
+                        node {
+                            id
+                            handle
+                            title
+                            description
+                            descriptionHtml
+                            productType
+                            updatedAt
+                            tags
+                            images(first: 1) {
+                                edges {
+                                    node {
+                                        url
+                                        altText
+                                        transformedSrc(maxWidth: 400, maxHeight: 400, crop: CENTER)
+                                    }
+                                }
+                            }
+                            variants(first: 50) {
+                                edges {
+                                    node {
+                                        id
+                                        title
+                                        availableForSale
+                                        priceV2 {
+                                            amount
+                                            currencyCode
+                                        }
+                                        selectedOptions {
+                                            name
+                                            value
+                                        }
+                                    }
+                                }
+                            }
+                            priceRange {
+                                minVariantPrice {
+                                    amount
+                                    currencyCode
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        `;
+
+        const data = await this.fetch(query, { first, after });
+        return {
+            products: data.products.edges.map(edge => edge.node),
+            pageInfo: data.products.pageInfo
+        };
+    }
+
+    /**
+     * Get every product from the store via pagination
+     */
+    async getAllProducts(pageSize = 50) {
+        const products = [];
+        let hasNextPage = true;
+        let after = null;
+
+        while (hasNextPage) {
+            const page = await this.getProductsPage(pageSize, after);
+            products.push(...page.products);
+            hasNextPage = Boolean(page.pageInfo?.hasNextPage);
+            after = page.pageInfo?.endCursor || null;
+        }
+
+        return products;
+    }
+
+    /**
      * Get products for a specific collection handle
      */
     async getCollectionProducts(handle, first = 50) {
@@ -129,6 +226,7 @@ class ShopifyClient {
                                 description
                                 descriptionHtml
                                 productType
+                            updatedAt
                                 tags
                                 images(first: 1) {
                                     edges {

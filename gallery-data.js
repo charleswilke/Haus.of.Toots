@@ -41,8 +41,6 @@ const GALLERY_DATA = {
         color: '#D97EAE',
         description: 'Original designs straight from the Haus of Toots imagination.',
         images: [
-            { src: 'images/recent-canvases/2HoT-originals/SephoraHoliday.jpeg', thumb: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SephoraHoliday.jpg', title: 'Sephora Holiday', subtitle: 'holiday edition design', date: '2025-07-09' },
-            { src: 'images/recent-canvases/2HoT-originals/SephoraStandard.jpg', thumb: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SephoraStandard.jpg', title: 'Sephora Standard', subtitle: 'original design', date: '2025-10-24' },
             { src: 'images/recent-canvases/2HoT-originals/SharpestTool.jpeg', thumb: 'images/recent-canvases/2HoT-originals/hot-thumbnail-SharpestTool.jpg', title: 'Sharpest Tool', subtitle: 'witty wordplay piece', date: '2025-06-10' }
         ]
     },
