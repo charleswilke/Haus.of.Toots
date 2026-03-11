@@ -1286,6 +1286,24 @@
     margin: 0;
 }
 
+.product-detail-price-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.product-detail-price-unavailable {
+    color: var(--neutral-mid);
+}
+
+.product-detail-stock-status {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--neutral-mid);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
 .product-detail-description-container .product-detail-description {
     color: var(--neutral-dark);
     line-height: 1.7;

@@ -1159,28 +1159,41 @@ class ShopApp {
             const fallbackPrice = selectedVariant
                 ? this.formatVariantPrice(selectedVariant)
                 : this.formatPriceRange(product);
-            return fallbackPrice ? `<div class="product-detail-price">${fallbackPrice}</div>` : '';
+            if (!fallbackPrice) {
+                return '';
+            }
+
+            const isUnavailable = selectedVariant?.availableForSale === false;
+            return `
+                <div class="product-detail-price-group">
+                    <div class="product-detail-price ${isUnavailable ? 'product-detail-price-unavailable' : ''}">${fallbackPrice}</div>
+                    ${isUnavailable ? '<span class="product-detail-stock-status">Currently Out of Stock</span>' : ''}
+                </div>
+            `;
         }
 
         const variants = product?.variants?.edges?.map(edge => edge.node) || [];
         return `
-            <div class="product-detail-price-list">
-                ${variants.map(variant => {
-                    const optionValue = variant.selectedOptions?.[0]?.value || variant.title;
-                    const price = this.formatVariantPrice(variant);
-                    const rowClasses = [
-                        'product-detail-price-row',
-                        selectedVariant?.id === variant.id ? 'selected' : '',
-                        !variant.availableForSale ? 'unavailable' : ''
-                    ].filter(Boolean).join(' ');
+            <div class="product-detail-price-group">
+                <div class="product-detail-price-list">
+                    ${variants.map(variant => {
+                        const optionValue = variant.selectedOptions?.[0]?.value || variant.title;
+                        const price = this.formatVariantPrice(variant);
+                        const rowClasses = [
+                            'product-detail-price-row',
+                            selectedVariant?.id === variant.id ? 'selected' : '',
+                            !variant.availableForSale ? 'unavailable' : ''
+                        ].filter(Boolean).join(' ');
 
-                    return `
-                        <button class="${rowClasses}" type="button" data-variant-id="${variant.id}">
-                            <span class="product-detail-price-option">${this.escapeHtml(optionValue)}</span>
-                            <span class="product-detail-price-value">${price}</span>
-                        </button>
-                    `;
-                }).join('')}
+                        return `
+                            <button class="${rowClasses}" type="button" data-variant-id="${variant.id}">
+                                <span class="product-detail-price-option">${this.escapeHtml(optionValue)}</span>
+                                <span class="product-detail-price-value">${price}</span>
+                            </button>
+                        `;
+                    }).join('')}
+                </div>
+                ${selectedVariant?.availableForSale === false ? '<span class="product-detail-stock-status">Currently Out of Stock</span>' : ''}
             </div>
         `;
     }
