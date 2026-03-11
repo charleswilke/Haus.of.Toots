@@ -5,6 +5,7 @@
 class ShopifyClient {
     constructor(config) {
         this.config = config;
+        this.inventorySource = 'unknown';
     }
 
     getProductListingUrl(handle) {
@@ -15,10 +16,7 @@ class ShopifyClient {
         return `https://${this.config.domain}/products/${encodeURIComponent(handle)}`;
     }
 
-    /**
-     * Make a GraphQL request to Shopify Storefront API
-     */
-    async fetch(query, variables = {}) {
+    async fetchRaw(query, variables = {}) {
         try {
             const response = await fetch(this.config.endpoint, {
                 method: 'POST',
@@ -44,20 +42,26 @@ class ShopifyClient {
                 }
             }
 
-            const json = await response.json();
-
-            // Check for GraphQL errors
-            if (json.errors) {
-                console.error('GraphQL Errors:', json.errors);
-                const errorMessage = json.errors[0]?.message || 'GraphQL request failed';
-                throw new Error(`GraphQL Error: ${errorMessage}`);
-            }
-
-            return json.data;
+            return response.json();
         } catch (error) {
             console.error('Shopify API Error:', error);
             throw error;
         }
+    }
+
+    /**
+     * Make a GraphQL request to Shopify Storefront API
+     */
+    async fetch(query, variables = {}) {
+        const json = await this.fetchRaw(query, variables);
+
+        if (json.errors) {
+            console.error('GraphQL Errors:', json.errors);
+            const errorMessage = json.errors[0]?.message || 'GraphQL request failed';
+            throw new Error(`GraphQL Error: ${errorMessage}`);
+        }
+
+        return json.data;
     }
 
     /**
@@ -96,6 +100,7 @@ class ShopifyClient {
                                         id
                                         title
                                         availableForSale
+                                        currentlyNotInStock
                                         priceV2 {
                                             amount
                                             currencyCode
@@ -159,6 +164,7 @@ class ShopifyClient {
                                         id
                                         title
                                         availableForSale
+                                        currentlyNotInStock
                                         priceV2 {
                                             amount
                                             currencyCode
@@ -243,6 +249,7 @@ class ShopifyClient {
                                             id
                                             title
                                             availableForSale
+                                            currentlyNotInStock
                                             priceV2 {
                                                 amount
                                                 currencyCode
@@ -303,6 +310,7 @@ class ShopifyClient {
                                 id
                                 title
                                 availableForSale
+                                currentlyNotInStock
                                 priceV2 {
                                     amount
                                     currencyCode
@@ -368,6 +376,7 @@ class ShopifyClient {
                                 id
                                 title
                                 availableForSale
+                                currentlyNotInStock
                                 priceV2 {
                                     amount
                                     currencyCode
@@ -399,6 +408,141 @@ class ShopifyClient {
 
         const data = await this.fetch(query, { id });
         return data.product;
+    }
+
+    async getVariantInventoryByIds(variantIds) {
+        const normalizedIds = [...new Set((variantIds || []).filter(Boolean))];
+        if (normalizedIds.length === 0) {
+            return {};
+        }
+
+        if (this.inventorySource !== 'server') {
+            try {
+                const storefrontInventory = await this.getVariantInventoryFromStorefront(normalizedIds);
+                this.inventorySource = 'storefront';
+                return storefrontInventory;
+            } catch (error) {
+                if (!this.shouldFallbackToServerInventory(error)) {
+                    throw error;
+                }
+
+                try {
+                    const serverInventory = await this.getVariantInventoryFromServer(normalizedIds);
+                    this.inventorySource = 'server';
+                    return serverInventory;
+                } catch (serverError) {
+                    if (error.partialInventory && Object.keys(error.partialInventory).length > 0) {
+                        this.inventorySource = 'storefront';
+                        return error.partialInventory;
+                    }
+
+                    throw serverError;
+                }
+            }
+        }
+
+        try {
+            return await this.getVariantInventoryFromServer(normalizedIds);
+        } catch (error) {
+            this.inventorySource = 'unknown';
+            try {
+                const storefrontInventory = await this.getVariantInventoryFromStorefront(normalizedIds);
+                this.inventorySource = 'storefront';
+                return storefrontInventory;
+            } catch (storefrontError) {
+                if (storefrontError.partialInventory && Object.keys(storefrontError.partialInventory).length > 0) {
+                    this.inventorySource = 'storefront';
+                    return storefrontError.partialInventory;
+                }
+
+                throw error;
+            }
+        }
+    }
+
+    async getVariantInventoryFromStorefront(variantIds) {
+        const query = `
+            query GetVariantInventory($ids: [ID!]!) {
+                nodes(ids: $ids) {
+                    ... on ProductVariant {
+                        id
+                        availableForSale
+                        currentlyNotInStock
+                        quantityAvailable
+                    }
+                }
+            }
+        `;
+
+        const json = await this.fetchRaw(query, { ids: variantIds });
+        const partialInventory = this.mapInventoryNodes(json.data?.nodes || [], 'storefront');
+
+        if (json.errors?.length) {
+            const inventoryError = new Error(json.errors[0]?.message || 'Unable to read Shopify inventory.');
+            inventoryError.code = 'SHOPIFY_INVENTORY_SCOPE_MISSING';
+            inventoryError.graphQLErrors = json.errors;
+            inventoryError.partialInventory = partialInventory;
+
+            if (this.shouldFallbackToServerInventory(inventoryError)) {
+                throw inventoryError;
+            }
+
+            console.error('GraphQL Errors:', json.errors);
+            throw inventoryError;
+        }
+
+        return partialInventory;
+    }
+
+    async getVariantInventoryFromServer(variantIds) {
+        const response = await fetch('/api/shopify/inventory', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ variantIds })
+        });
+
+        const payload = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+            throw new Error(payload?.error || 'Unable to fetch inventory from the server.');
+        }
+
+        return this.mapInventoryNodes(payload.items || [], payload.source || 'server');
+    }
+
+    mapInventoryNodes(nodes, source = 'unknown') {
+        return (nodes || []).reduce((result, node) => {
+            if (!node?.id) {
+                return result;
+            }
+
+            result[node.id] = normalizeInventoryRecord({
+                id: node.id,
+                availableForSale: node.availableForSale,
+                currentlyNotInStock: node.currentlyNotInStock,
+                quantityAvailable: node.quantityAvailable,
+                source
+            });
+
+            return result;
+        }, {});
+    }
+
+    shouldFallbackToServerInventory(error) {
+        if (!error) {
+            return false;
+        }
+
+        const graphQLErrors = error.graphQLErrors || [];
+        return graphQLErrors.some(graphQLError => {
+            const requiredAccess = graphQLError?.extensions?.requiredAccess || '';
+            const message = graphQLError?.message || error.message || '';
+            return requiredAccess.includes('unauthenticated_read_product_inventory')
+                || message.includes('unauthenticated_read_product_inventory')
+                || message.includes('quantityAvailable');
+        });
     }
 
     /**
@@ -553,6 +697,11 @@ class CartManager {
         return this.items;
     }
 
+    getVariantQuantity(variantId) {
+        const item = this.items.find(cartItem => cartItem.variantId === variantId);
+        return item ? item.quantity : 0;
+    }
+
     /**
      * Get total item count
      */
@@ -594,10 +743,162 @@ class CartManager {
     }
 }
 
+function normalizeInventoryRecord(record = {}) {
+    const quantityAvailable = Number.isFinite(record.quantityAvailable)
+        ? Math.max(0, Math.floor(record.quantityAvailable))
+        : null;
+
+    return {
+        id: record.id || null,
+        availableForSale: record.availableForSale !== false,
+        currentlyNotInStock: Boolean(record.currentlyNotInStock),
+        quantityAvailable,
+        source: record.source || 'unknown',
+        checkedAt: Date.now(),
+        error: record.error || null
+    };
+}
+
+function getVariantInventoryLimit(record) {
+    if (!record) {
+        return null;
+    }
+
+    if (record.availableForSale === false) {
+        return 0;
+    }
+
+    if (record.currentlyNotInStock) {
+        return null;
+    }
+
+    return Number.isFinite(record.quantityAvailable) ? record.quantityAvailable : null;
+}
+
+function getInventoryPresentation(record, quantity = 1, context = 'cart') {
+    if (!record) {
+        return {
+            limit: null,
+            canIncrease: true,
+            message: '',
+            tone: 'neutral'
+        };
+    }
+
+    const limit = getVariantInventoryLimit(record);
+
+    if (limit === null) {
+        return {
+            limit,
+            canIncrease: record.availableForSale !== false,
+            message: record.error ? 'Live stock is temporarily unavailable.' : '',
+            tone: record.error ? 'warning' : 'neutral'
+        };
+    }
+
+    if (limit <= 0 || record.availableForSale === false) {
+        return {
+            limit: 0,
+            canIncrease: false,
+            message: 'Sold out.',
+            tone: 'error'
+        };
+    }
+
+    if (quantity > limit) {
+        return {
+            limit,
+            canIncrease: false,
+            message: `Only ${limit} available. Reduce quantity to continue.`,
+            tone: 'error'
+        };
+    }
+
+    if (quantity === limit) {
+        return {
+            limit,
+            canIncrease: false,
+            message: context === 'modal' ? `Only ${limit} available.` : `Max ${limit} available in cart.`,
+            tone: 'warning'
+        };
+    }
+
+    if (limit <= 5) {
+        return {
+            limit,
+            canIncrease: true,
+            message: `Only ${limit} left.`,
+            tone: 'warning'
+        };
+    }
+
+    return {
+        limit,
+        canIncrease: true,
+        message: '',
+        tone: 'neutral'
+    };
+}
+
+class InventoryManager {
+    constructor(client, cacheTtlMs = 15000) {
+        this.client = client;
+        this.cacheTtlMs = cacheTtlMs;
+        this.cache = new Map();
+    }
+
+    async getVariantInventory(variantId, options = {}) {
+        const inventoryMap = await this.getVariantInventoryMap([variantId], options);
+        return inventoryMap[variantId] || null;
+    }
+
+    async getVariantInventoryMap(variantIds, { forceRefresh = false } = {}) {
+        const ids = [...new Set((variantIds || []).filter(Boolean))];
+        const results = {};
+        const uncachedIds = [];
+
+        ids.forEach(id => {
+            const cached = this.cache.get(id);
+            if (!forceRefresh && cached && (Date.now() - cached.checkedAt) < this.cacheTtlMs) {
+                results[id] = cached;
+                return;
+            }
+
+            uncachedIds.push(id);
+        });
+
+        if (uncachedIds.length > 0) {
+            try {
+                const freshInventory = await this.client.getVariantInventoryByIds(uncachedIds);
+                uncachedIds.forEach(id => {
+                    const normalizedRecord = normalizeInventoryRecord(
+                        freshInventory[id] || { id, error: 'Inventory unavailable.' }
+                    );
+                    this.cache.set(id, normalizedRecord);
+                    results[id] = normalizedRecord;
+                });
+            } catch (error) {
+                console.error('Inventory lookup failed:', error);
+                uncachedIds.forEach(id => {
+                    const fallbackRecord = normalizeInventoryRecord({
+                        id,
+                        error: error.message || 'Inventory unavailable.'
+                    });
+                    this.cache.set(id, fallbackRecord);
+                    results[id] = fallbackRecord;
+                });
+            }
+        }
+
+        return results;
+    }
+}
+
 // ===================================
 // INITIALIZE GLOBAL INSTANCES
 // ===================================
 
 const shopifyClient = new ShopifyClient(SHOPIFY_CONFIG);
 const cartManager = new CartManager();
+const inventoryManager = new InventoryManager(shopifyClient);
 

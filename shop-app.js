@@ -622,6 +622,7 @@ class ShopApp {
         if (items.length > 0) {
             cartFooter.style.display = 'block';
             cartTotal.textContent = this.formatPrice(totalPrice.toString(), currency);
+            this.refreshCartInventoryUI();
         } else {
             cartFooter.style.display = 'none';
         }
@@ -631,8 +632,6 @@ class ShopApp {
      * Create HTML for cart item
      */
     createCartItem(item) {
-        const itemTotal = parseFloat(item.price.amount) * item.quantity;
-        
         return `
             <div class="cart-item" data-variant-id="${item.variantId}">
                 ${item.productImage 
@@ -656,6 +655,7 @@ class ShopApp {
                             </svg>
                         </button>
                     </div>
+                    <p class="cart-item-stock-status" data-variant-id="${item.variantId}" aria-live="polite"></p>
                 </div>
             </div>
         `;
@@ -668,7 +668,7 @@ class ShopApp {
         // Quantity buttons
         document.querySelectorAll('.quantity-decrease').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const variantId = e.target.getAttribute('data-variant-id');
+                const variantId = e.currentTarget.getAttribute('data-variant-id');
                 const item = cartManager.getItems().find(i => i.variantId === variantId);
                 if (item) {
                     cartManager.updateQuantity(variantId, item.quantity - 1);
@@ -677,12 +677,21 @@ class ShopApp {
         });
 
         document.querySelectorAll('.quantity-increase').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const variantId = e.target.getAttribute('data-variant-id');
+            btn.addEventListener('click', async (e) => {
+                const variantId = e.currentTarget.getAttribute('data-variant-id');
                 const item = cartManager.getItems().find(i => i.variantId === variantId);
-                if (item) {
-                    cartManager.updateQuantity(variantId, item.quantity + 1);
+                if (!item) {
+                    return;
                 }
+
+                e.currentTarget.disabled = true;
+                const inventoryRecord = await inventoryManager.getVariantInventory(variantId, { forceRefresh: true });
+                if (!this.canIncreaseCartQuantity(item.quantity, inventoryRecord)) {
+                    this.applyCartInventoryState(variantId, item.quantity, inventoryRecord);
+                    return;
+                }
+
+                cartManager.updateQuantity(variantId, item.quantity + 1);
             });
         });
 
@@ -695,6 +704,103 @@ class ShopApp {
         });
     }
 
+    findCartItemElement(variantId) {
+        return Array.from(document.querySelectorAll('.cart-item'))
+            .find(element => element.getAttribute('data-variant-id') === variantId) || null;
+    }
+
+    setInventoryMessage(element, message, tone = 'neutral') {
+        if (!element) {
+            return;
+        }
+
+        element.textContent = message || '';
+        element.classList.toggle('is-visible', Boolean(message));
+        element.classList.toggle('is-warning', tone === 'warning');
+        element.classList.toggle('is-error', tone === 'error');
+    }
+
+    canIncreaseCartQuantity(currentQuantity, inventoryRecord) {
+        const limit = getVariantInventoryLimit(inventoryRecord);
+        if (limit === null) {
+            return inventoryRecord?.availableForSale !== false;
+        }
+
+        return currentQuantity < limit;
+    }
+
+    applyCartInventoryState(variantId, quantity, inventoryRecord) {
+        const cartItem = this.findCartItemElement(variantId);
+        if (!cartItem) {
+            return;
+        }
+
+        const increaseButton = cartItem.querySelector('.quantity-increase');
+        const presentation = getInventoryPresentation(inventoryRecord, quantity, 'cart');
+
+        if (increaseButton) {
+            increaseButton.disabled = !this.canIncreaseCartQuantity(quantity, inventoryRecord);
+        }
+
+        this.setInventoryMessage(
+            cartItem.querySelector('.cart-item-stock-status'),
+            presentation.message,
+            presentation.tone
+        );
+    }
+
+    async refreshCartInventoryUI(options = {}) {
+        const items = cartManager.getItems();
+        if (items.length === 0) {
+            return {};
+        }
+
+        const inventoryMap = await inventoryManager.getVariantInventoryMap(
+            items.map(item => item.variantId),
+            options
+        );
+
+        items.forEach(item => {
+            this.applyCartInventoryState(item.variantId, item.quantity, inventoryMap[item.variantId]);
+        });
+
+        return inventoryMap;
+    }
+
+    async validateCartInventory(options = {}) {
+        const items = cartManager.getItems();
+        if (items.length === 0) {
+            return { valid: true, issues: [] };
+        }
+
+        const inventoryMap = await this.refreshCartInventoryUI(options);
+        const issues = items.reduce((results, item) => {
+            const inventoryRecord = inventoryMap[item.variantId];
+            const limit = getVariantInventoryLimit(inventoryRecord);
+
+            if (limit === null) {
+                return results;
+            }
+
+            if (limit <= 0 || inventoryRecord?.availableForSale === false) {
+                results.push(`${item.productTitle} is no longer available.`);
+                return results;
+            }
+
+            if (item.quantity > limit) {
+                results.push(`${item.productTitle} only has ${limit} available right now.`);
+            }
+
+            return results;
+        }, []);
+
+        return {
+            valid: issues.length === 0,
+            issues,
+            inventoryMap
+        };
+    }
+
     /**
      * Handle clear cart
      */
@@ -702,6 +808,17 @@ class ShopApp {
         if (confirm('Are you sure you want to clear your cart?')) {
             cartManager.clearCart();
         }
+    }
+
+    resetCheckoutButton(checkoutBtn) {
+        checkoutBtn.disabled = false;
+        checkoutBtn.innerHTML = `
+            <span>Proceed to Checkout</span>
+            <svg class="needle-icon" width="20" height="20" viewBox="0 0 24 24">
+                <line x1="4" y1="12" x2="20" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="2" cy="12" r="2" fill="currentColor"/>
+            </svg>
+        `;
     }
 
     /**
@@ -721,6 +838,14 @@ class ShopApp {
         checkoutBtn.innerHTML = '<span>Processing...</span>';
 
         try {
+            const validationResult = await this.validateCartInventory({ forceRefresh: true });
+            if (!validationResult.valid) {
+                this.openCart();
+                alert(validationResult.issues.join('\n'));
+                this.resetCheckoutButton(checkoutBtn);
+                return;
+            }
+
             // Format line items for Shopify
             const lineItems = items.map(item => ({
                 variantId: item.variantId,
@@ -735,16 +860,7 @@ class ShopApp {
         } catch (error) {
             console.error('Checkout error:', error);
             alert('Sorry, there was an error creating your checkout. Please try again.');
-            
-            // Re-enable button
-            checkoutBtn.disabled = false;
-            checkoutBtn.innerHTML = `
-                <span>Proceed to Checkout</span>
-                <svg class="needle-icon" width="20" height="20" viewBox="0 0 24 24">
-                    <line x1="4" y1="12" x2="20" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <circle cx="2" cy="12" r="2" fill="currentColor"/>
-                </svg>
-            `;
+            this.resetCheckoutButton(checkoutBtn);
         }
     }
 
@@ -1082,25 +1198,28 @@ class ShopApp {
 
         if (selectedVariant?.availableForSale && selectedVariant?.id) {
             return `
-                <div class="product-detail-purchase-row">
-                    <div class="product-detail-quantity-control" aria-label="Select quantity">
-                        <button type="button" class="product-detail-quantity-btn" data-action="decrease" aria-label="Decrease quantity">-</button>
-                        <span class="product-detail-quantity-value" aria-live="polite">1</span>
-                        <button type="button" class="product-detail-quantity-btn" data-action="increase" aria-label="Increase quantity">+</button>
-                    </div>
-                    <button class="product-detail-add-to-cart" 
-                            data-product-id="${product.id}"
-                            data-variant-id="${selectedVariant.id}"
-                            data-default-label="Add to Cart">
-                        <div class="add-to-cart-content">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="9" cy="21" r="1"></circle>
-                                <circle cx="20" cy="21" r="1"></circle>
-                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                            </svg>
-                            <span class="add-to-cart-text">Add to Cart</span>
+                <div class="product-detail-purchase-group">
+                    <div class="product-detail-purchase-row">
+                        <div class="product-detail-quantity-control" aria-label="Select quantity">
+                            <button type="button" class="product-detail-quantity-btn" data-action="decrease" aria-label="Decrease quantity">-</button>
+                            <span class="product-detail-quantity-value" aria-live="polite">1</span>
+                            <button type="button" class="product-detail-quantity-btn" data-action="increase" aria-label="Increase quantity">+</button>
                         </div>
-                    </button>
+                        <button class="product-detail-add-to-cart" 
+                                data-product-id="${product.id}"
+                                data-variant-id="${selectedVariant.id}"
+                                data-default-label="Add to Cart">
+                            <div class="add-to-cart-content">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="9" cy="21" r="1"></circle>
+                                    <circle cx="20" cy="21" r="1"></circle>
+                                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                                </svg>
+                                <span class="add-to-cart-text">Add to Cart</span>
+                            </div>
+                        </button>
+                    </div>
+                    <p class="product-detail-stock-note" aria-live="polite"></p>
                 </div>
             `;
         }
@@ -1116,29 +1235,153 @@ class ShopApp {
         `;
     }
 
+    buildModalInventoryState(inventoryRecord, variantId, selectedQuantity) {
+        const safeSelectedQuantity = Math.max(selectedQuantity || 1, 1);
+        const existingQuantity = cartManager.getVariantQuantity(variantId);
+        const totalLimit = getVariantInventoryLimit(inventoryRecord);
+
+        if (totalLimit === null) {
+            return {
+                selectedQuantity: safeSelectedQuantity,
+                canAdd: inventoryRecord?.availableForSale !== false,
+                canIncrease: inventoryRecord?.availableForSale !== false,
+                canDecrease: safeSelectedQuantity > 1,
+                message: inventoryRecord?.error ? 'Live stock is temporarily unavailable.' : '',
+                tone: inventoryRecord?.error ? 'warning' : 'neutral'
+            };
+        }
+
+        const remainingQuantity = Math.max(totalLimit - existingQuantity, 0);
+        const clampedQuantity = remainingQuantity > 0
+            ? Math.min(safeSelectedQuantity, remainingQuantity)
+            : safeSelectedQuantity;
+
+        if (remainingQuantity <= 0 || inventoryRecord?.availableForSale === false) {
+            return {
+                selectedQuantity: 1,
+                canAdd: false,
+                canIncrease: false,
+                canDecrease: false,
+                message: existingQuantity > 0 ? 'All available stock is already in your cart.' : 'Sold out.',
+                tone: 'error'
+            };
+        }
+
+        const remainingLabel = remainingQuantity === 1
+            ? 'Only 1 more available.'
+            : `Only ${remainingQuantity} more available.`;
+        const firstTimeLabel = remainingQuantity === 1
+            ? 'Only 1 available.'
+            : `Only ${remainingQuantity} available.`;
+
+        let message = '';
+        let tone = 'neutral';
+
+        if (existingQuantity > 0) {
+            message = `${existingQuantity} already in cart. ${remainingLabel}`;
+            tone = 'warning';
+        } else if (remainingQuantity <= 5) {
+            message = firstTimeLabel;
+            tone = 'warning';
+        }
+
+        return {
+            selectedQuantity: clampedQuantity,
+            canAdd: true,
+            canIncrease: clampedQuantity < remainingQuantity,
+            canDecrease: clampedQuantity > 1,
+            message,
+            tone
+        };
+    }
+
+    applyModalInventoryState(state, { quantityValue, quantityButtons, addToCartBtn, stockNote }) {
+        if (quantityValue) {
+            quantityValue.textContent = String(state.selectedQuantity);
+        }
+
+        quantityButtons.forEach(button => {
+            const action = button.getAttribute('data-action');
+            if (action === 'increase') {
+                button.disabled = !state.canIncrease;
+            } else if (action === 'decrease') {
+                button.disabled = !state.canDecrease;
+            }
+        });
+
+        if (addToCartBtn) {
+            addToCartBtn.disabled = !state.canAdd;
+        }
+
+        this.setInventoryMessage(stockNote, state.message, state.tone);
+    }
+
     attachProductPurchaseActionListeners(product, selectedVariant) {
         const quantityValue = document.querySelector('.product-detail-quantity-value');
-        const quantityButtons = document.querySelectorAll('.product-detail-quantity-btn');
+        const quantityButtons = Array.from(document.querySelectorAll('.product-detail-quantity-btn'));
+        const addToCartBtn = document.querySelector('.product-detail-add-to-cart');
+        const stockNote = document.querySelector('.product-detail-stock-note');
+        const variantId = selectedVariant?.id;
+
+        const syncModalInventory = async ({ forceRefresh = false, requestedQuantity = null } = {}) => {
+            if (!quantityValue || !variantId) {
+                return null;
+            }
+
+            const inventoryRecord = await inventoryManager.getVariantInventory(variantId, { forceRefresh });
+            const currentQuantity = requestedQuantity ?? (parseInt(quantityValue.textContent, 10) || 1);
+            const state = this.buildModalInventoryState(inventoryRecord, variantId, currentQuantity);
+            this.applyModalInventoryState(state, { quantityValue, quantityButtons, addToCartBtn, stockNote });
+            return { inventoryRecord, state };
+        };
+
+        if (variantId && quantityValue) {
+            syncModalInventory();
+        }
+
         quantityButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                if (!quantityValue) {
+            button.addEventListener('click', async () => {
+                if (!quantityValue || !variantId) {
                     return;
                 }
 
                 const currentQuantity = parseInt(quantityValue.textContent, 10) || 1;
-                const delta = button.getAttribute('data-action') === 'increase' ? 1 : -1;
-                const nextQuantity = Math.min(Math.max(currentQuantity + delta, 1), 99);
-                quantityValue.textContent = String(nextQuantity);
+                if (button.getAttribute('data-action') === 'decrease') {
+                    const cachedInventory = await inventoryManager.getVariantInventory(variantId);
+                    const state = this.buildModalInventoryState(cachedInventory, variantId, currentQuantity - 1);
+                    this.applyModalInventoryState(state, { quantityValue, quantityButtons, addToCartBtn, stockNote });
+                    return;
+                }
+
+                const inventoryResult = await syncModalInventory({ forceRefresh: true, requestedQuantity: currentQuantity });
+                if (!inventoryResult?.state?.canIncrease) {
+                    return;
+                }
+
+                const nextState = this.buildModalInventoryState(
+                    inventoryResult.inventoryRecord,
+                    variantId,
+                    currentQuantity + 1
+                );
+                this.applyModalInventoryState(nextState, { quantityValue, quantityButtons, addToCartBtn, stockNote });
             });
         });
 
-        const addToCartBtn = document.querySelector('.product-detail-add-to-cart');
         if (addToCartBtn) {
-            addToCartBtn.addEventListener('click', () => {
-                const variantId = addToCartBtn.getAttribute('data-variant-id');
+            addToCartBtn.addEventListener('click', async () => {
                 const selectedQuantity = parseInt(document.querySelector('.product-detail-quantity-value')?.textContent || '1', 10) || 1;
                 if (variantId) {
-                    cartManager.addItem(product, variantId, selectedQuantity);
+                    const inventoryResult = await syncModalInventory({
+                        forceRefresh: true,
+                        requestedQuantity: selectedQuantity
+                    });
+
+                    if (!inventoryResult?.state?.canAdd) {
+                        return;
+                    }
+
+                    const quantityToAdd = inventoryResult.state.selectedQuantity;
+                    cartManager.addItem(product, variantId, quantityToAdd);
 
                     addToCartBtn.innerHTML = `
                         <div class="add-to-cart-content">
@@ -1147,7 +1390,7 @@ class ShopApp {
                                 <circle cx="20" cy="21" r="1"></circle>
                                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                             </svg>
-                            <span class="add-to-cart-text">${selectedQuantity > 1 ? `Added ${selectedQuantity} Items!` : 'Added!'}</span>
+                            <span class="add-to-cart-text">${quantityToAdd > 1 ? `Added ${quantityToAdd} Items!` : 'Added!'}</span>
                         </div>
                     `;
                     
@@ -1163,6 +1406,7 @@ class ShopApp {
                                 <span class="add-to-cart-text">${defaultLabel}</span>
                             </div>
                         `;
+                        syncModalInventory({ requestedQuantity: 1 });
                     }, 1000);
                 }
             });

@@ -125,6 +125,7 @@ if (typeof cartManager !== 'undefined') {
             if (items.length > 0) {
                 cartFooter.style.display = 'block';
                 cartTotal.textContent = formatPrice(totalPrice.toString(), currency);
+                refreshCartInventoryUI();
             } else {
                 cartFooter.style.display = 'none';
             }
@@ -158,6 +159,7 @@ if (typeof cartManager !== 'undefined') {
                             </svg>
                         </button>
                     </div>
+                    <p class="cart-item-stock-status" data-variant-id="${item.variantId}" aria-live="polite"></p>
                 </div>
             </div>
         `;
@@ -170,7 +172,7 @@ if (typeof cartManager !== 'undefined') {
         // Quantity buttons
         document.querySelectorAll('.quantity-decrease').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const variantId = e.target.getAttribute('data-variant-id');
+                const variantId = e.currentTarget.getAttribute('data-variant-id');
                 const item = cartManager.getItems().find(i => i.variantId === variantId);
                 if (item) {
                     cartManager.updateQuantity(variantId, item.quantity - 1);
@@ -179,12 +181,27 @@ if (typeof cartManager !== 'undefined') {
         });
 
         document.querySelectorAll('.quantity-increase').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const variantId = e.target.getAttribute('data-variant-id');
+            btn.addEventListener('click', async (e) => {
+                const variantId = e.currentTarget.getAttribute('data-variant-id');
                 const item = cartManager.getItems().find(i => i.variantId === variantId);
-                if (item) {
-                    cartManager.updateQuantity(variantId, item.quantity + 1);
+                if (!item) {
+                    return;
                 }
+
+                e.currentTarget.disabled = true;
+
+                const inventoryRecord = await inventoryManager.getVariantInventory(variantId, { forceRefresh: true });
+                const limit = getVariantInventoryLimit(inventoryRecord);
+                const canIncrease = limit === null
+                    ? inventoryRecord?.availableForSale !== false
+                    : item.quantity < limit;
+
+                if (!canIncrease) {
+                    applyCartInventoryState(variantId, item.quantity, inventoryRecord);
+                    return;
+                }
+
+                cartManager.updateQuantity(variantId, item.quantity + 1);
             });
         });
 
@@ -194,6 +211,61 @@ if (typeof cartManager !== 'undefined') {
                 const variantId = e.currentTarget.getAttribute('data-variant-id');
                 cartManager.removeItem(variantId);
             });
+        });
+    }
+
+    function findCartItemElement(variantId) {
+        return Array.from(document.querySelectorAll('.cart-item'))
+            .find(element => element.getAttribute('data-variant-id') === variantId) || null;
+    }
+
+    function setInventoryMessage(element, message, tone = 'neutral') {
+        if (!element) {
+            return;
+        }
+
+        element.textContent = message || '';
+        element.classList.toggle('is-visible', Boolean(message));
+        element.classList.toggle('is-warning', tone === 'warning');
+        element.classList.toggle('is-error', tone === 'error');
+    }
+
+    function applyCartInventoryState(variantId, quantity, inventoryRecord) {
+        const cartItem = findCartItemElement(variantId);
+        if (!cartItem) {
+            return;
+        }
+
+        const limit = getVariantInventoryLimit(inventoryRecord);
+        const increaseButton = cartItem.querySelector('.quantity-increase');
+        const presentation = getInventoryPresentation(inventoryRecord, quantity, 'cart');
+
+        if (increaseButton) {
+            increaseButton.disabled = limit === null
+                ? inventoryRecord?.availableForSale === false
+                : quantity >= limit;
+        }
+
+        setInventoryMessage(
+            cartItem.querySelector('.cart-item-stock-status'),
+            presentation.message,
+            presentation.tone
+        );
+    }
+
+    async function refreshCartInventoryUI(options = {}) {
+        const items = cartManager.getItems();
+        if (items.length === 0) {
+            return;
+        }
+
+        const inventoryMap = await inventoryManager.getVariantInventoryMap(
+            items.map(item => item.variantId),
+            options
+        );
+
+        items.forEach(item => {
+            applyCartInventoryState(item.variantId, item.quantity, inventoryMap[item.variantId]);
         });
     }
 
