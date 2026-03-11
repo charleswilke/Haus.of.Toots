@@ -3,6 +3,30 @@
     {
       "source": "/shop",
       "destination": "/shop.html"
+    },
+    {
+      "source": "/flash",
+      "destination": "/flash-sheet-series.html"
+    },
+    {
+      "source": "/village",
+      "destination": "/village-expansion-series.html"
+    },
+    {
+      "source": "/about",
+      "destination": "/about.html"
+    },
+    {
+      "source": "/gallery",
+      "destination": "/gallery.html"
+    },
+    {
+      "source": "/request",
+      "destination": "/request.html"
+    },
+    {
+      "source": "/customs",
+      "destination": "/request.html"
     }
   ]
 }
