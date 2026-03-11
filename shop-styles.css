@@ -553,6 +553,10 @@
 
 .product-price-section {
     margin-top: auto;
+    display: flex;
+    align-items: baseline;
+    gap: 0.65rem;
+    flex-wrap: wrap;
 }
 
 .product-price {
@@ -561,6 +565,18 @@
     color: var(--coral-primary);
     display: block;
     line-height: 1.2;
+}
+
+.product-price-unavailable {
+    color: var(--neutral-mid);
+}
+
+.product-waitlist-label {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--coral-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
 }
 
 /* Cart Button (Fixed) */

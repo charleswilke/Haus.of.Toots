@@ -239,6 +239,7 @@ class ShopApp {
     createProductCard(product) {
         const image = product.images?.edges?.[0]?.node;
         const variants = product.variants?.edges || [];
+        const isOutOfStock = this.isProductOutOfStock(product);
 
         // Use transformedSrc for thumbnail if available, otherwise use url with size parameters
         const thumbnailUrl = image?.transformedSrc || (image?.url ? `${image.url}?width=400&height=400&crop=center` : null);
@@ -270,7 +271,8 @@ class ShopApp {
                     <h3 class="product-title">${this.escapeHtml(product.title)}</h3>
                     ${description ? `<p class="product-description">${this.escapeHtml(description)}</p>` : ''}
                     <div class="product-price-section">
-                        <span class="product-price" data-product-id="${product.id}">${priceFormatted}</span>
+                        <span class="product-price ${isOutOfStock ? 'product-price-unavailable' : ''}" data-product-id="${product.id}">${priceFormatted}</span>
+                        ${isOutOfStock ? '<span class="product-waitlist-label">Join the Waitlist</span>' : ''}
                     </div>
                 </div>
             </div>
@@ -873,6 +875,12 @@ class ShopApp {
             currency: currencyCode
         });
         return formatter.format(parseFloat(amount));
+    }
+
+    isProductOutOfStock(product) {
+        const variants = product?.variants?.edges?.map(edge => edge.node).filter(Boolean) || [];
+
+        return variants.length > 0 && variants.every(variant => variant.availableForSale === false);
     }
 
     formatPriceRange(product) {
