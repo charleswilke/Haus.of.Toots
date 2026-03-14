@@ -33,6 +33,18 @@ class HomeApp {
                     <button class="filter-dropdown-option filter-dropdown-option-active" role="option" aria-selected="true" data-value="all">Show All</button>
                     <button class="filter-dropdown-option" role="option" aria-selected="false" data-value="in-stock">In Stock</button>
                 </div>
+            </div>
+            <div class="filter-dropdown" id="wholesaleDropdown">
+                <button class="filter-pill filter-pill-dropdown" id="wholesalePill" aria-haspopup="listbox" aria-expanded="false">
+                    <span class="filter-pill-label">Wholesale</span>
+                    <svg class="filter-pill-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                        <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <div class="filter-dropdown-menu" id="wholesaleMenu" role="listbox" aria-label="Wholesale">
+                    <a class="filter-dropdown-option" role="option" href="https://haus-of-toots.myshopify.com/pages/ws-account-login" target="_blank" rel="noopener noreferrer">Log in</a>
+                    <a class="filter-dropdown-option" role="option" href="https://haus-of-toots.myshopify.com/pages/ws-account-create" target="_blank" rel="noopener noreferrer">Create account</a>
+                </div>
             </div>`;
 
         const pill    = document.getElementById('availabilityPill');
@@ -72,6 +84,23 @@ class HomeApp {
             if (!document.getElementById('availabilityDropdown')?.contains(e.target)) {
                 pill.setAttribute('aria-expanded', 'false');
                 menu.classList.remove('filter-dropdown-menu-open');
+            }
+        });
+
+        const wholesalePill = document.getElementById('wholesalePill');
+        const wholesaleMenu = document.getElementById('wholesaleMenu');
+
+        wholesalePill.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = wholesalePill.getAttribute('aria-expanded') === 'true';
+            wholesalePill.setAttribute('aria-expanded', String(!isOpen));
+            wholesaleMenu.classList.toggle('filter-dropdown-menu-open', !isOpen);
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!document.getElementById('wholesaleDropdown')?.contains(e.target)) {
+                wholesalePill.setAttribute('aria-expanded', 'false');
+                wholesaleMenu.classList.remove('filter-dropdown-menu-open');
             }
         });
     }
