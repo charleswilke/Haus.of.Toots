@@ -214,6 +214,28 @@ class ShopifyClient {
     }
 
     /**
+     * Get all collections from the store
+     */
+    async getCollections(first = 20) {
+        const query = `
+            query GetCollections($first: Int!) {
+                collections(first: $first) {
+                    edges {
+                        node {
+                            id
+                            title
+                            handle
+                        }
+                    }
+                }
+            }
+        `;
+
+        const data = await this.fetch(query, { first });
+        return data.collections.edges.map(edge => edge.node);
+    }
+
+    /**
      * Get products for a specific collection handle
      */
     async getCollectionProducts(handle, first = 50) {

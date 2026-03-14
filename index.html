@@ -17,6 +17,7 @@
     <link rel="canonical" href="https://hausoftoots.com/">
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link rel="preload" href="images/haus_of_toots_canvas_13ct_512px.png" as="image">
+    <link rel="preconnect" href="https://haus-of-toots.myshopify.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Winky+Sans:wght@300&display=swap" rel="stylesheet">
@@ -79,12 +80,40 @@
         </div>
     </section>
 
+    <!-- Filter Bar -->
+    <section class="home-filter-section">
+        <div class="container">
+            <div class="home-filter-bar" id="homeFilterBar" role="group" aria-label="Browse filters">
+                <!-- Pills injected by index-app.js -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Browse Products -->
+    <section class="home-browse-section">
+        <div class="container">
+            <div id="homeLoadingState" class="loading-state">
+                <div class="loading-spinner"></div>
+                <p>Loading products...</p>
+            </div>
+
+            <div id="homeErrorState" class="error-state" style="display: none;">
+                <p>Unable to load products right now. Please try again later.</p>
+            </div>
+
+            <div id="homeProductsGrid" class="products-grid" style="display: none;">
+                <!-- Products inserted by index-app.js -->
+            </div>
+        </div>
+    </section>
+
     <div id="shared-footer"></div>
     <div id="shared-cart-drawer"></div>
     <script>SharedComponents.injectAll();</script>
 
     <script src="shopify-config.js?v=__ASSET_VERSION__"></script>
     <script src="shopify.js?v=__ASSET_VERSION__"></script>
+    <script src="index-app.js?v=__ASSET_VERSION__"></script>
     <script src="script.js?v=__ASSET_VERSION__"></script>
     <script src="cart-global.js?v=__ASSET_VERSION__"></script>
 </body>
