@@ -22,6 +22,7 @@ const SharedComponents = {
             <div class="nav-links" id="navLinks">
                 <a href="about.html" class="nav-link">About</a>
                 <a href="gallery.html" class="nav-link">Gallery</a>
+                <a href="index.html" class="nav-link">Shop</a>
                 <a href="request.html" class="nav-link">Customs</a>
             </div>
             <button id="cartButton" class="nav-cart-button" aria-label="Open shopping cart">
