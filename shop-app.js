@@ -566,16 +566,14 @@ class ShopApp {
     openCart() {
         const cartDrawer = document.getElementById('cartDrawer');
         cartDrawer.classList.add('open');
-        document.body.style.overflow = 'hidden';
     }
 
     /**
-     * Close cart drawer
+     * Close cart basket
      */
     closeCart() {
         const cartDrawer = document.getElementById('cartDrawer');
         cartDrawer.classList.remove('open');
-        document.body.style.overflow = '';
     }
 
     /**
@@ -586,6 +584,12 @@ class ShopApp {
         const totalItems = cartManager.getTotalItems();
         const totalPrice = cartManager.getTotalPrice();
         const currency = cartManager.getCurrency();
+
+        // Show/hide cart peek button
+        const cartButton = document.getElementById('cartButton');
+        if (cartButton) {
+            cartButton.classList.toggle('has-items', totalItems > 0);
+        }
 
         // Update cart count badge
         const cartCount = document.getElementById('cartCount');

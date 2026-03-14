@@ -624,54 +624,58 @@
     display: none;
 }
 
-/* Cart Drawer */
+/* Cart Basket — drops from below nav */
 .cart-drawer {
     position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    inset: 0;
     z-index: 2000;
     visibility: hidden;
-    transition: visibility 0.3s;
+    pointer-events: none;
+    transition: visibility 0.35s;
 }
 
 .cart-drawer.open {
     visibility: visible;
+    pointer-events: auto;
 }
 
 .cart-drawer-overlay {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    opacity: 0;
-    transition: opacity 0.3s var(--transition-smooth);
-}
-
-.cart-drawer.open .cart-drawer-overlay {
-    opacity: 1;
+    inset: 0;
+    background: transparent;
+    cursor: default;
 }
 
 .cart-drawer-content {
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    max-width: 450px;
+    top: 70px;
+    right: 1.25rem;
+    width: 380px;
+    max-width: calc(100vw - 2.5rem);
+    max-height: 72vh;
     background: var(--white);
-    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+    border-radius: 0 0 16px 16px;
+    border-top: 3px solid var(--coral-primary);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.14), 0 2px 8px rgba(255, 107, 122, 0.15);
     display: flex;
     flex-direction: column;
-    transform: translateX(100%);
-    transition: transform 0.3s var(--transition-smooth);
+    overflow: hidden;
+    z-index: 1;
+    transform-origin: top right;
+    transform: translateY(-12px) scaleY(0.9);
+    opacity: 0;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
 }
 
 .cart-drawer.open .cart-drawer-content {
-    transform: translateX(0);
+    animation: basketDrop 0.42s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes basketDrop {
+    0%   { transform: translateY(-20px) scaleY(0.85); opacity: 0; }
+    55%  { transform: translateY(7px) scaleY(1.02); opacity: 1; }
+    75%  { transform: translateY(-3px) scaleY(0.99); }
+    100% { transform: translateY(0) scaleY(1); opacity: 1; }
 }
 
 .cart-header {
@@ -1917,7 +1921,12 @@
     }
 
     .cart-drawer-content {
+        top: 60px;
+        right: 0;
+        left: 0;
+        width: 100%;
         max-width: 100%;
+        border-radius: 0 0 12px 12px;
     }
 
     .cart-button {

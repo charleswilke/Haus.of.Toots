@@ -24,17 +24,29 @@ const SharedComponents = {
                 <a href="gallery.html" class="nav-link">Gallery</a>
                 <a href="index.html" class="nav-link">Shop</a>
                 <a href="request.html" class="nav-link">Customs</a>
+                <div class="nav-dropdown" id="wholesaleNavDropdown">
+                    <button class="nav-dropdown-trigger" id="wholesaleNavTrigger" aria-haspopup="true" aria-expanded="false">
+                        Wholesale
+                        <svg class="nav-dropdown-chevron" width="10" height="10" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                            <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <div class="nav-dropdown-menu" id="wholesaleNavMenu" role="menu">
+                        <a href="https://haus-of-toots.myshopify.com/pages/ws-account-login" class="nav-dropdown-item" role="menuitem" target="_blank" rel="noopener noreferrer">Log in</a>
+                        <a href="https://haus-of-toots.myshopify.com/pages/ws-account-create" class="nav-dropdown-item" role="menuitem" target="_blank" rel="noopener noreferrer">Create account</a>
+                    </div>
+                </div>
             </div>
-            <button id="cartButton" class="nav-cart-button" aria-label="Open shopping cart">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="9" cy="21" r="1"></circle>
-                    <circle cx="20" cy="21" r="1"></circle>
-                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                </svg>
-                <span id="cartCount" class="nav-cart-count">0 items</span>
-            </button>
         </div>
-    </nav>`;
+    </nav>
+    <button id="cartButton" class="nav-cart-peek" aria-label="Open shopping cart">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+        <span id="cartCount" class="nav-cart-count">0 items</span>
+    </button>`;
     },
 
     stitchSidebar() {

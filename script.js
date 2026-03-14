@@ -679,7 +679,7 @@ if (navToggle && navLinksContainer) {
     });
     
     // Close menu when clicking on a link or cart button
-    navLinksContainer.querySelectorAll('.nav-link, .nav-cart-button').forEach(element => {
+    navLinksContainer.querySelectorAll('.nav-link').forEach(element => {
         element.addEventListener('click', () => {
             navToggle.setAttribute('aria-expanded', 'false');
             navLinksContainer.classList.remove('active');
@@ -700,10 +700,31 @@ if (navToggle && navLinksContainer) {
     
     // Close menu on window resize if it's larger than 768px
     window.addEventListener('resize', () => {
-        if (window.innerWidth > 768) {
+        if (window.innerWidth > 808) {
             navToggle.setAttribute('aria-expanded', 'false');
             navLinksContainer.classList.remove('active');
             document.body.style.overflow = '';
+        }
+    });
+}
+
+// Wholesale nav dropdown toggle
+const wholesaleNavTrigger = document.getElementById('wholesaleNavTrigger');
+const wholesaleNavMenu = document.getElementById('wholesaleNavMenu');
+
+if (wholesaleNavTrigger && wholesaleNavMenu) {
+    wholesaleNavTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = wholesaleNavTrigger.getAttribute('aria-expanded') === 'true';
+        wholesaleNavTrigger.setAttribute('aria-expanded', String(!isOpen));
+        wholesaleNavMenu.classList.toggle('open', !isOpen);
+    });
+
+    document.addEventListener('click', (e) => {
+        const dropdown = document.getElementById('wholesaleNavDropdown');
+        if (dropdown && !dropdown.contains(e.target)) {
+            wholesaleNavTrigger.setAttribute('aria-expanded', 'false');
+            wholesaleNavMenu.classList.remove('open');
         }
     });
 }

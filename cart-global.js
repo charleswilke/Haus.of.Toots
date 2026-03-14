@@ -9,7 +9,7 @@ if (typeof cartManager !== 'undefined') {
     document.addEventListener('DOMContentLoaded', () => {
         setupCartListeners();
         updateCartUI();
-        
+
         // Subscribe to cart changes
         cartManager.subscribe(() => updateCartUI());
     });
@@ -59,18 +59,16 @@ if (typeof cartManager !== 'undefined') {
         const cartDrawer = document.getElementById('cartDrawer');
         if (cartDrawer) {
             cartDrawer.classList.add('open');
-            document.body.style.overflow = 'hidden';
         }
     }
 
     /**
-     * Close cart drawer
+     * Close cart basket
      */
     function closeCart() {
         const cartDrawer = document.getElementById('cartDrawer');
         if (cartDrawer) {
             cartDrawer.classList.remove('open');
-            document.body.style.overflow = '';
         }
     }
 
@@ -82,6 +80,12 @@ if (typeof cartManager !== 'undefined') {
         const totalItems = cartManager.getTotalItems();
         const totalPrice = cartManager.getTotalPrice();
         const currency = cartManager.getCurrency();
+
+        // Show/hide cart peek button
+        const cartButton = document.getElementById('cartButton');
+        if (cartButton) {
+            cartButton.classList.toggle('has-items', totalItems > 0);
+        }
 
         // Update cart count badge
         const cartCount = document.getElementById('cartCount');
