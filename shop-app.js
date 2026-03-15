@@ -1082,9 +1082,9 @@ class ShopApp {
                             ${sizeHTML}
                         </div>
                         ${purchaseActionsHTML}
+                        ${descriptionHTML}
                     </div>
                 </div>
-                ${descriptionHTML ? `<div class="product-detail-description-container">${descriptionHTML}</div>` : ''}
             </div>
         `;
 
