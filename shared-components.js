@@ -24,18 +24,7 @@ const SharedComponents = {
                 <a href="gallery.html" class="nav-link">Gallery</a>
                 <a href="index.html" class="nav-link">Shop</a>
                 <a href="request.html" class="nav-link">Customs</a>
-                <div class="nav-dropdown" id="wholesaleNavDropdown">
-                    <button class="nav-dropdown-trigger" id="wholesaleNavTrigger" aria-haspopup="true" aria-expanded="false">
-                        Wholesale
-                        <svg class="nav-dropdown-chevron" width="10" height="10" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                            <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-                    <div class="nav-dropdown-menu" id="wholesaleNavMenu" role="menu">
-                        <a href="https://haus-of-toots.myshopify.com/pages/ws-account-login" class="nav-dropdown-item" role="menuitem" target="_blank" rel="noopener noreferrer">Log in</a>
-                        <a href="https://haus-of-toots.myshopify.com/pages/ws-account-create" class="nav-dropdown-item" role="menuitem" target="_blank" rel="noopener noreferrer">Create account</a>
-                    </div>
-                </div>
+                <a href="https://haus-of-toots.myshopify.com/pages/ws-account-create" class="nav-link" target="_blank" rel="noopener noreferrer">Wholesale</a>
             </div>
         </div>
     </nav>

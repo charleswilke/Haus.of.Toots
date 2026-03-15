@@ -708,24 +708,4 @@ if (navToggle && navLinksContainer) {
     });
 }
 
-// Wholesale nav dropdown toggle
-const wholesaleNavTrigger = document.getElementById('wholesaleNavTrigger');
-const wholesaleNavMenu = document.getElementById('wholesaleNavMenu');
-
-if (wholesaleNavTrigger && wholesaleNavMenu) {
-    wholesaleNavTrigger.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isOpen = wholesaleNavTrigger.getAttribute('aria-expanded') === 'true';
-        wholesaleNavTrigger.setAttribute('aria-expanded', String(!isOpen));
-        wholesaleNavMenu.classList.toggle('open', !isOpen);
-    });
-
-    document.addEventListener('click', (e) => {
-        const dropdown = document.getElementById('wholesaleNavDropdown');
-        if (dropdown && !dropdown.contains(e.target)) {
-            wholesaleNavTrigger.setAttribute('aria-expanded', 'false');
-            wholesaleNavMenu.classList.remove('open');
-        }
-    });
-}
 
