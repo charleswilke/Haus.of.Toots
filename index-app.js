@@ -2,15 +2,19 @@
 // HOME PAGE APP
 // ===================================
 
-class HomeApp {
+class HomeApp extends ShopApp {
     constructor() {
-        this.allProducts = [];
-        this.activeFilter = 'all';
-        this.inStockOnly = false;
-        this.init();
+        super(); // calls ShopApp constructor → this.init() → HomeApp.init()
     }
 
     async init() {
+        this.allProducts = [];
+        this.activeFilter = 'all';
+        this.inStockOnly = false;
+        this.setupCartListeners();
+        this.setupProductModalListeners();
+        this.setupLightboxListeners();
+        this.updateCartUI();
         this.buildFilterBar();
         await this.loadAllProducts();
     }
@@ -74,7 +78,6 @@ class HomeApp {
                 menu.classList.remove('filter-dropdown-menu-open');
             }
         });
-
     }
 
     // ─── Product Loading ──────────────────────────────────────────────────────
@@ -113,6 +116,12 @@ class HomeApp {
         }
 
         grid.innerHTML = products.map(p => this.createProductCard(p)).join('');
+
+        grid.querySelectorAll('.product-card').forEach(card => {
+            card.addEventListener('click', () => {
+                this.openProductModal(card.getAttribute('data-product-id'));
+            });
+        });
     }
 
     createProductCard(product) {
@@ -120,21 +129,22 @@ class HomeApp {
         const isOutOfStock = this.isProductOutOfStock(product);
         const thumbnailUrl = image?.transformedSrc
             || (image?.url ? `${image.url}?width=400&height=400&crop=center` : null);
-        const productUrl = shopifyClient.getProductListingUrl(product.handle);
 
         const imageHTML = thumbnailUrl
             ? `<img src="${thumbnailUrl}" alt="${this.escapeAttr(image.altText || product.title)}" class="product-image">`
             : `<div class="product-no-image">No image available</div>`;
 
         const category = this.getProductCategory(product);
-        const cardClasses = category
-            ? `product-card product-card-${category} home-product-card`
-            : 'product-card home-product-card';
+        const cardClasses = [
+            'product-card',
+            category ? `product-card-${category}` : '',
+            'home-product-card'
+        ].filter(Boolean).join(' ');
 
-        const priceFormatted = this.formatPrice(product);
+        const priceFormatted = this.formatPriceRange(product);
 
         return `
-            <a href="${this.escapeAttr(productUrl)}" target="_blank" rel="noopener noreferrer" class="${cardClasses}">
+            <div class="${cardClasses}" data-product-id="${product.id}">
                 <div class="product-image-container">
                     ${imageHTML}
                     ${isOutOfStock ? '<div class="product-out-of-stock-badge">Out of Stock</div>' : ''}
@@ -146,7 +156,7 @@ class HomeApp {
                         ${isOutOfStock ? '<span class="product-waitlist-label">Join the Waitlist</span>' : ''}
                     </div>
                 </div>
-            </a>`;
+            </div>`;
     }
 
     // ─── Helpers ──────────────────────────────────────────────────────────────
@@ -156,37 +166,10 @@ class HomeApp {
         return variants.some(e => e.node.availableForSale);
     }
 
-    isProductOutOfStock(product) {
-        const variants = product.variants?.edges || [];
-        if (variants.length === 0) return false;
-        return variants.every(e => !e.node.availableForSale);
-    }
-
-    getProductCategory(product) {
-        const type = (product.productType || '').toLowerCase();
-        const tags = (product.tags || []).map(t => t.toLowerCase());
-
-        if (type.includes('customization') || tags.some(t => t.includes('customization'))) {
-            return 'customizations';
-        }
-        if (type.includes('custom') || tags.some(t => t.includes('custom') && !t.includes('customization'))) {
-            return 'custom-canvases';
-        }
-        if (type.includes('hot original') || type.includes('originals') ||
-            tags.some(t => t.includes('hot original') || t.includes('originals'))) {
-            return 'hot-originals';
-        }
-        if (type.includes('digital') || type.includes('chart') ||
-            tags.some(t => t.includes('digital') || t.includes('chart'))) {
-            return 'digital-charts';
-        }
-        return null;
-    }
-
-    formatPrice(product) {
-        const amount = parseFloat(product.priceRange?.minVariantPrice?.amount || 0);
-        const currency = product.priceRange?.minVariantPrice?.currencyCode || 'USD';
-        return new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(amount);
+    escapeAttr(str) {
+        return String(str || '')
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;');
     }
 
     showLoading() {
@@ -214,19 +197,6 @@ class HomeApp {
         if (loading) loading.style.display = 'none';
         if (error)   error.style.display   = 'block';
         if (grid)    grid.style.display    = 'none';
-    }
-
-    escapeHtml(str) {
-        return String(str || '')
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;');
-    }
-
-    escapeAttr(str) {
-        return String(str || '')
-            .replace(/&/g, '&amp;')
-            .replace(/"/g, '&quot;');
     }
 }
 

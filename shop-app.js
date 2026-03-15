@@ -1477,10 +1477,12 @@ class ShopApp {
     }
 }
 
-// Initialize the shop when DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => new ShopApp());
-} else {
-    new ShopApp();
+// Initialize the shop when DOM is ready (collection pages only)
+if (document.body.dataset.shopCollection) {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => new ShopApp());
+    } else {
+        new ShopApp();
+    }
 }
 
