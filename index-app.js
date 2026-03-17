@@ -16,7 +16,37 @@ class HomeApp extends ShopApp {
         this.setupLightboxListeners();
         this.updateCartUI();
         this.buildFilterBar();
+        this.initTicker();
         await this.loadAllProducts();
+    }
+
+    // ─── Announcement Ticker ──────────────────────────────────────────────────
+
+    initTicker() {
+        const ticker = document.querySelector('.ticker');
+        if (!ticker) return;
+
+        const speed = 24; // px per second — adjust to taste
+        let halfWidth = 0;
+        let pos = 0;
+        let lastTime = null;
+
+        // Measure once after layout settles so scrollWidth is stable
+        requestAnimationFrame(() => {
+            halfWidth = ticker.scrollWidth / 2;
+
+            const step = (timestamp) => {
+                if (lastTime !== null) {
+                    pos -= speed * (timestamp - lastTime) / 1000;
+                    if (pos <= -halfWidth) pos += halfWidth;
+                    ticker.style.transform = `translateX(${pos}px)`;
+                }
+                lastTime = timestamp;
+                requestAnimationFrame(step);
+            };
+
+            requestAnimationFrame(step);
+        });
     }
 
     // ─── Filter Bar ───────────────────────────────────────────────────────────
