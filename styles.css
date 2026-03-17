@@ -708,7 +708,9 @@ section {
 .stitched-border {
     position: relative;
     padding: var(--spacing-md) var(--spacing-lg);
-    background: var(--white);
+    background:
+        linear-gradient(rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.72)),
+        url('images/paint.jpg') center / cover;
     border-radius: var(--border-radius);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     border: 3px dashed var(--coral-primary);
@@ -806,7 +808,9 @@ section {
 }
 
 .hero-content-side .stitched-border {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(250, 248, 245, 0.98) 100%);
+    background:
+        linear-gradient(rgba(255, 255, 255, 0.58), rgba(255, 255, 255, 0.58)),
+        url('images/paint.jpg') center / cover;
     transition: transform 0.32s var(--transition-smooth), box-shadow 0.32s var(--transition-smooth);
 }
 
