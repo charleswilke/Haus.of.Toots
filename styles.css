@@ -783,7 +783,7 @@ section {
 
 .hero-logo {
     width: 100%;
-    max-width: 300px;
+    max-width: 240px;
     height: auto;
     display: block;
     transition: transform 0.3s var(--transition-smooth), filter 0.3s var(--transition-smooth);
@@ -2699,7 +2699,7 @@ section {
     }
     
     .hero-logo {
-        max-width: 270px;
+        max-width: 216px;
     }
 }
 
@@ -2778,7 +2778,7 @@ section {
     }
 
     .hero-logo {
-        max-width: 240px;
+        max-width: 192px;
     }
     
     .hero-logo-side {
@@ -2890,7 +2890,7 @@ section {
     }
 
     .hero-logo {
-        max-width: 235px;
+        max-width: 188px;
     }
     
     .hero-logo-side {
@@ -2975,7 +2975,7 @@ section {
         }
         
         .hero-logo {
-            max-width: 220px;
+            max-width: 176px;
         }
         
         .container {
