@@ -218,8 +218,8 @@ class CardGallery {
             : `https://${SHOPIFY_CONFIG.domain}/products/${encodeURIComponent(product.handle)}`;
 
         return {
-            src: image?.url || 'images/wordmarklogo.png',
-            thumb: image?.transformedSrc || image?.url || 'images/wordmarklogo.png',
+            src: image?.url || 'images/wordmarklogo.webp',
+            thumb: image?.transformedSrc || image?.url || 'images/wordmarklogo.webp',
             title: product.title,
             subtitle: '',
             date: product.updatedAt || '2000-01-01',
@@ -281,7 +281,7 @@ class CardGallery {
             <!-- Header -->
             <header class="card-gallery-header">
                 <div class="card-gallery-brand">
-                    <img src="images/hauslogo.png" alt="Haus of Toots" class="card-gallery-logo">
+                    <img src="images/hauslogo.webp" alt="Haus of Toots" class="card-gallery-logo">
                     <h2 class="card-gallery-title">The Canvas Collection</h2>
                 </div>
                 <button class="card-gallery-close" aria-label="Close gallery">

@@ -10,7 +10,7 @@ const SharedComponents = {
     <nav class="top-nav">
         <div class="nav-container">
             <a href="index.html" class="nav-brand">
-                <img src="images/hauslogo.png" alt="Haus of Toots logo" class="nav-brand-logo" width="800" height="885">
+                <img src="images/hauslogo.webp" alt="Haus of Toots logo" class="nav-brand-logo" width="800" height="885">
                 <span class="nav-brand-text">Haus <span class="highlight-contrast">of</span> Toots</span>
                 <span class="nav-brand-subtitle">- Cute, Weird & Wildly Specific Needlepoint Canvases</span>
             </a>

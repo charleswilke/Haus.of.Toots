@@ -9,7 +9,7 @@
     inset: 0;
     z-index: 10000;
     background-color: #FAF8F5;
-    background-image: url('images/haus_of_toots_canvas_13ct_512px.png');
+    background-image: url('images/haus_of_toots_canvas_13ct_512px.webp');
     background-repeat: repeat;
     background-size: 512px 500px;
     display: flex;
@@ -741,7 +741,7 @@
     position: relative;
     /* Canvas texture behind "contain" images */
     background-color: #F5F1EC;
-    background-image: url('images/haus_of_toots_canvas_13ct_512px.png');
+    background-image: url('images/haus_of_toots_canvas_13ct_512px.webp');
     background-repeat: repeat;
     background-size: 300px 293px;
     background-position: 0 0;
@@ -897,7 +897,7 @@
     overflow: hidden;
     position: relative;
     background-color: #F5F1EC;
-    background-image: url('images/haus_of_toots_canvas_13ct_512px.png');
+    background-image: url('images/haus_of_toots_canvas_13ct_512px.webp');
     background-repeat: repeat;
     background-size: 300px 293px;
     background-position: 0 0;
@@ -1338,7 +1338,7 @@
     inset: 0;
     z-index: 10001;
     background-color: #FAF8F5;
-    background-image: url('images/haus_of_toots_canvas_13ct_512px.png');
+    background-image: url('images/haus_of_toots_canvas_13ct_512px.webp');
     background-repeat: repeat;
     background-size: 512px 500px;
     display: flex;
