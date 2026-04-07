@@ -4,7 +4,12 @@
       "Bash(find:*)",
       "Bash(grep:*)",
       "Bash(git:*)",
-      "Bash(find . -type f \\\\\\(-name *.js -o -name *.jsx -o -name *.ts -o -name *.tsx -o -name *.svelte -o -name *.vue -o -name *.html \\\\\\))"
+      "Bash(find . -type f \\\\\\(-name *.js -o -name *.jsx -o -name *.ts -o -name *.tsx -o -name *.svelte -o -name *.vue -o -name *.html \\\\\\))",
+      "Bash(find /d/HausOfToots -type f \\\\\\(-iname *.jpg -o -iname *.jpeg -o -iname *.png -o -iname *.gif -o -iname *.webp \\\\\\))",
+      "Bash(ffmpeg -version)",
+      "Bash(npx --version)",
+      "Bash(npm list:*)",
+      "Bash(pip show:*)"
     ]
   }
 }
