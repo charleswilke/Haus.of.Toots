@@ -9,7 +9,8 @@
       "Bash(ffmpeg -version)",
       "Bash(npx --version)",
       "Bash(npm list:*)",
-      "Bash(pip show:*)"
+      "Bash(pip show:*)",
+      "mcp__Claude_Preview__preview_start"
     ]
   }
 }
