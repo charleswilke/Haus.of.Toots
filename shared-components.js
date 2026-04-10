@@ -84,6 +84,13 @@ const SharedComponents = {
                         </svg>
                         <span>@haus.of.toots</span>
                     </a>
+                    <a href="mailto:jessie@hausoftoots.com" class="social-link needle-hover">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                        <span>jessie@hausoftoots.com</span>
+                    </a>
                 </div>
                 <div class="footer-credits">
                     <p>Made with <span class="heart">&hearts;</span></p>
