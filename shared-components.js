@@ -68,11 +68,7 @@ const SharedComponents = {
     footer() {
         return `
     <footer class="site-footer">
-        <div class="footer-stitch-seam">
-            <svg viewBox="0 0 1200 14" preserveAspectRatio="xMinYMid meet" fill="none" stroke="var(--coral-primary)" stroke-width="2.5" stroke-linecap="round">
-                ${Array.from({length: 134}, (_, i) => `<line x1="${i * 9}" y1="12" x2="${i * 9 + 10}" y2="2"/>`).join('')}
-            </svg>
-        </div>
+        <div class="footer-stitch-seam"></div>
         <div class="container">
             <div class="footer-content">
                 <div class="footer-links">
