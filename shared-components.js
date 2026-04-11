@@ -68,15 +68,20 @@ const SharedComponents = {
     footer() {
         return `
     <footer class="site-footer">
+        <div class="footer-stitch-seam">
+            <svg viewBox="0 0 1200 14" preserveAspectRatio="xMinYMid meet" fill="none" stroke="var(--coral-primary)" stroke-width="2.5" stroke-linecap="round">
+                ${Array.from({length: 134}, (_, i) => `<line x1="${i * 9}" y1="12" x2="${i * 9 + 10}" y2="2"/>`).join('')}
+            </svg>
+        </div>
         <div class="container">
             <div class="footer-content">
                 <div class="footer-links">
                     <a href="index.html" class="footer-link">Shop Needlepoint</a>
-                    <span class="footer-divider">&bull;</span>
+                    <span class="footer-divider"><svg width="24" height="16" viewBox="0 0 24 16" fill="none" stroke="var(--coral-primary)" stroke-width="2.5" stroke-linecap="round"><line x1="2" y1="14" x2="10" y2="2"/><line x1="14" y1="14" x2="22" y2="2"/></svg></span>
                     <a href="request.html" class="footer-link">Customs</a>
                 </div>
                 <div class="footer-social">
-                    <a href="https://instagram.com/haus.of.toots" target="_blank" rel="noopener noreferrer" class="social-link needle-hover">
+                    <a href="https://instagram.com/haus.of.toots" target="_blank" rel="noopener noreferrer" class="social-link">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
                             <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
@@ -84,7 +89,7 @@ const SharedComponents = {
                         </svg>
                         <span>@haus.of.toots</span>
                     </a>
-                    <a href="mailto:jessie@hausoftoots.com" class="social-link needle-hover">
+                    <a href="mailto:jessie@hausoftoots.com" class="social-link">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
                             <polyline points="22,6 12,13 2,6"></polyline>
@@ -93,7 +98,7 @@ const SharedComponents = {
                     </a>
                 </div>
                 <div class="footer-credits">
-                    <p>Made with <span class="heart">&hearts;</span></p>
+                    <p class="made-with">Made with <span class="heart">&hearts;</span></p>
                     <p class="copyright">&copy; ${new Date().getFullYear()} Haus of Toots. Designs and customizations by Jessie Wilke.</p>
                 </div>
             </div>

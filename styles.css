@@ -2363,10 +2363,31 @@ section {
    =================================== */
 
 .site-footer {
-    background: var(--neutral-dark);
+    position: relative;
+    background:
+        linear-gradient(rgba(74, 69, 66, 0.88), rgba(74, 69, 66, 0.88)),
+        url('images/haus_of_toots_canvas_13ct_512px.webp') repeat;
+    background-size: auto, 512px 500px;
     color: var(--cream);
     padding: var(--spacing-lg) 0 var(--spacing-md);
+    padding-top: calc(var(--spacing-lg) + 12px);
     text-align: center;
+    overflow: visible;
+}
+
+.footer-stitch-seam {
+    position: absolute;
+    top: -7px;
+    left: 0;
+    width: 100%;
+    height: 14px;
+    z-index: 1;
+}
+
+.footer-stitch-seam svg {
+    display: block;
+    width: 100%;
+    height: 100%;
 }
 
 .footer-content {
@@ -2396,18 +2417,26 @@ section {
 }
 
 .footer-divider {
-    color: var(--neutral-mid);
+    color: var(--coral-primary);
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+}
+
+.footer-divider svg {
+    display: block;
 }
 
 .footer-social {
     margin-bottom: var(--spacing-sm);
     display: flex;
     flex-wrap: wrap;
-    gap: var(--spacing-sm);
+    gap: var(--spacing-md);
     justify-content: center;
 }
 
 .social-link {
+    position: relative;
     display: inline-flex;
     align-items: center;
     gap: var(--spacing-sm);
@@ -2416,18 +2445,66 @@ section {
     font-size: 1.125rem;
     font-weight: 500;
     padding: 0.75rem 1.5rem;
-    border: 2px solid var(--coral-primary);
+    background: rgba(255, 255, 255, 0.08);
+    border: 2px solid rgba(255, 255, 255, 0.15);
     border-radius: var(--border-radius);
     transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.social-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 2.5px solid var(--coral-primary);
+    border-radius: calc(var(--border-radius) - 2px);
+    opacity: 0;
+    clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+    transition: opacity 0.2s ease;
+    pointer-events: none;
 }
 
 .social-link:hover {
-    background: var(--coral-primary);
+    background: rgba(255, 107, 122, 0.1);
+    border-color: rgba(255, 255, 255, 0.25);
     transform: translateY(-2px);
+}
+
+.social-link:hover::before {
+    opacity: 1;
+    animation: stitchTrace 0.6s ease-out forwards;
+}
+
+.social-link:active {
+    transform: translateY(0px) scale(0.97);
+    background: rgba(255, 107, 122, 0.2);
+}
+
+@keyframes stitchTrace {
+    0% {
+        clip-path: polygon(0 100%, 0 100%, 0 100%, 0 100%);
+    }
+    33% {
+        clip-path: polygon(0 100%, 0 0, 0 0, 0 100%);
+    }
+    66% {
+        clip-path: polygon(0 100%, 0 0, 100% 0, 100% 100%);
+    }
+    100% {
+        clip-path: polygon(0 100%, 0 0, 100% 0, 100% 100%);
+    }
 }
 
 .social-link svg {
     flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+
+.social-link:hover svg {
+    transform: rotate(-8deg) scale(1.1);
 }
 
 .footer-credits {
@@ -2437,6 +2514,12 @@ section {
 .footer-credits p {
     margin-bottom: var(--spacing-xs);
     font-size: 0.95rem;
+}
+
+.footer-credits .made-with {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    color: var(--cream);
 }
 
 .heart {
@@ -2454,6 +2537,13 @@ section {
 .copyright {
     font-size: 0.875rem;
     opacity: 0.7;
+}
+
+@media (max-width: 640px) {
+    .footer-social {
+        flex-direction: column;
+        align-items: center;
+    }
 }
 
 /* ===================================
@@ -2712,14 +2802,14 @@ section {
    =================================== */
 @media (min-width: 768px) and (max-width: 1024px) {
     .hero-layout {
-        grid-template-columns: minmax(200px, 0.85fr) minmax(0, 1.15fr);
-        gap: var(--spacing-md);
+        grid-template-columns: minmax(200px, 0.8fr) minmax(0, 1.2fr);
+        gap: var(--spacing-sm);
     }
-    
+
     .hero-logo-side {
         order: 1;
     }
-    
+
     .hero-content-side {
         order: 2;
         padding: 0;
@@ -2730,7 +2820,7 @@ section {
         padding: 0 calc(var(--spacing-sm) + 33px);
         box-sizing: border-box;
     }
-    
+
     .hero-content-side {
         padding: 0;
         overflow: visible;
@@ -2740,62 +2830,61 @@ section {
     
     .stitched-border {
         margin: 0 auto;
-        padding: var(--spacing-sm);
+        padding: var(--spacing-md);
         box-sizing: border-box;
         width: 100%;
         max-width: 100%;
         position: relative;
     }
-    
+
     .hero-content {
         display: block;
-        text-align: left;
+        text-align: center;
     }
 
     .hero-text-mobile {
         flex: 0 1 auto;
         max-width: 100%;
-        text-align: left;
+        text-align: center;
     }
 
     .hero-shop-intro {
-        align-items: flex-start;
+        align-items: center;
     }
 
     .hero-kicker {
         margin-bottom: 0.6rem;
     }
-    
+
     .hero-title {
-        text-align: left;
+        text-align: center;
         margin-bottom: var(--spacing-xs);
     }
-    
+
     .hero-description {
-        text-align: left;
+        text-align: center;
         margin-bottom: var(--spacing-sm);
     }
 
     .hero-shop-title {
-        max-width: 12ch;
-        font-size: clamp(2.3rem, 4vw, 3.3rem);
+        max-width: 10ch;
+        font-size: clamp(2.5rem, 5vw, 3.3rem);
+        margin: 0 auto;
     }
 
     .hero-logo {
-        max-width: 192px;
+        max-width: 200px;
     }
-    
+
     .hero-logo-side {
         padding: var(--spacing-xs);
+        justify-content: flex-start;
+        margin-left: -2rem;
     }
-    
+
     .hero {
         min-height: auto;
         padding: var(--spacing-sm) 0;
-    }
-    
-    .hero-layout {
-        gap: var(--spacing-sm);
     }
     
     /* Reduce section padding for iPad mini to show more content on load */
