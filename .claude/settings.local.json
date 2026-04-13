@@ -10,7 +10,11 @@
       "Bash(npx --version)",
       "Bash(npm list:*)",
       "Bash(pip show:*)",
-      "mcp__Claude_Preview__preview_start"
+      "mcp__Claude_Preview__preview_start",
+      "Bash(while read:*)",
+      "Bash(do echo:*)",
+      "Read(//Users/cwilke/Documents/GitHub/Haus.of.Toots/**)",
+      "Bash(done)"
     ]
   }
 }
