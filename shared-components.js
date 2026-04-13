@@ -22,7 +22,7 @@ const SharedComponents = {
             <div class="nav-links" id="navLinks">
                 <a href="index.html" class="nav-link">Shop</a>
                 <a href="https://haus-of-toots.myshopify.com/pages/ws-account-create" class="nav-link" target="_blank" rel="noopener noreferrer">Wholesale</a>
-                <a href="request.html" class="nav-link">Customs</a>
+                <a href="mailto:jessie@hausoftoots.com" class="nav-link">Contact</a>
                 <a href="about.html" class="nav-link">About</a>
                 <a href="gallery.html" class="nav-link">Gallery</a>
             </div>
@@ -71,12 +71,8 @@ const SharedComponents = {
         <div class="footer-stitch-seam"></div>
         <div class="container">
             <div class="footer-content">
-                <div class="footer-links">
-                    <a href="index.html" class="footer-link">Shop Needlepoint</a>
-                    <span class="footer-divider"><svg width="24" height="16" viewBox="0 0 24 16" fill="none" stroke="var(--coral-primary)" stroke-width="2.5" stroke-linecap="round"><line x1="2" y1="14" x2="10" y2="2"/><line x1="14" y1="14" x2="22" y2="2"/></svg></span>
-                    <a href="request.html" class="footer-link">Customs</a>
-                </div>
                 <div class="footer-social">
+                    <a href="index.html" class="footer-shop-button">Shop Needlepoint</a>
                     <a href="https://instagram.com/haus.of.toots" target="_blank" rel="noopener noreferrer" class="social-link">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
@@ -90,7 +86,7 @@ const SharedComponents = {
                             <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
                             <polyline points="22,6 12,13 2,6"></polyline>
                         </svg>
-                        <span>jessie@hausoftoots.com</span>
+                        <span>Contact</span>
                     </a>
                 </div>
                 <div class="footer-credits">

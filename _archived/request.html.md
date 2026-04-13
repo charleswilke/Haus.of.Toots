@@ -1,3 +1,13 @@
+# Archived: request.html (Customs Page)
+
+**Archived on:** 2026-04-12
+**Reason:** Customs temporarily paused — Jessie is at capacity with existing SKUs. This page will be restored when customs reopen.
+
+To restore: copy the HTML below back to `request.html` in the project root, re-add the nav/footer links in `shared-components.js`, and restore the `/request` and `/customs` rewrites in `vercel.json`.
+
+---
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -188,3 +198,4 @@
     <script src="cart-global.js?v=__ASSET_VERSION__"></script>
 </body>
 </html>
+```

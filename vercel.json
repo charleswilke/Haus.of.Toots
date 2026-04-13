@@ -19,14 +19,6 @@
     {
       "source": "/gallery",
       "destination": "/gallery.html"
-    },
-    {
-      "source": "/request",
-      "destination": "/request.html"
-    },
-    {
-      "source": "/customs",
-      "destination": "/request.html"
     }
   ]
 }

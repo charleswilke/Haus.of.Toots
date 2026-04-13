@@ -2394,42 +2394,31 @@ section {
     align-items: center;
 }
 
-.footer-links {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.footer-link {
-    color: var(--cream);
-    text-decoration: none;
-    transition: color 0.3s ease;
-    font-weight: 500;
-}
-
-.footer-link:hover {
-    color: var(--coral-light);
-}
-
-.footer-divider {
-    color: var(--coral-primary);
-    display: inline-flex;
-    align-items: center;
-    line-height: 1;
-}
-
-.footer-divider svg {
-    display: block;
-}
-
 .footer-social {
     margin-bottom: var(--spacing-sm);
     display: flex;
     flex-wrap: wrap;
     gap: var(--spacing-md);
     justify-content: center;
+    align-items: stretch;
+}
+
+.footer-shop-button {
+    display: inline-flex;
+    align-items: center;
+    color: var(--cream);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.125rem;
+    padding: 0.75rem 1.5rem;
+    border: 2px solid var(--coral-primary);
+    border-radius: var(--border-radius);
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.footer-shop-button:hover {
+    background: var(--coral-primary);
+    color: #fff;
 }
 
 .social-link {
@@ -2540,6 +2529,7 @@ section {
     .footer-social {
         flex-direction: column;
         align-items: center;
+        gap: var(--spacing-xs);
     }
 }
 
