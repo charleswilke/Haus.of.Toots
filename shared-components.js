@@ -71,7 +71,14 @@ const SharedComponents = {
         <div class="container">
             <div class="footer-content">
                 <div class="footer-social">
-                    <a href="index.html" class="footer-shop-button">Shop Needlepoint</a>
+                    <a href="index.html" class="footer-shop-button social-link">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                        <span>Shop NDLPT</span>
+                    </a>
                     <a href="https://instagram.com/haus.of.toots" target="_blank" rel="noopener noreferrer" class="social-link">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
