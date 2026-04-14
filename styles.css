@@ -659,7 +659,7 @@ section {
 }
 
 /* Hide subtitle on smaller screens to give nav links more room */
-@media (max-width: 1112px) {
+@media (max-width: 920px) {
     .nav-brand-subtitle {
         display: none;
     }
