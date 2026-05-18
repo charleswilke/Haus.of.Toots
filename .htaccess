@@ -15,6 +15,7 @@ RewriteRule ^village-expansion-series/?$ /village [NC,L,R=301]
 
 RewriteRule ^flash/?$ flash-sheet-series.html [NC,L]
 RewriteRule ^village/?$ village-expansion-series.html [NC,L]
+RewriteRule ^just-landed/?$ just-landed.html [NC,L]
 
 # Make HTML revalidate so visitors pick up new asset URLs quickly.
 <IfModule mod_headers.c>

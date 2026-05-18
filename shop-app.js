@@ -216,6 +216,19 @@ class ShopApp {
     }
 
     /**
+     * Detect sticker products (multi-select, no mesh size)
+     */
+    isStickerProduct(product) {
+        if (!product) return false;
+        const title = (product.title || '').toLowerCase();
+        const productType = (product.productType || '').toLowerCase();
+        const tags = (product.tags || []).map(tag => tag.toLowerCase());
+        return title.includes('sticker') ||
+               productType.includes('sticker') ||
+               tags.some(tag => tag.includes('sticker'));
+    }
+
+    /**
      * Extract mesh size from product title
      */
     extractMeshSize(title) {
@@ -1144,6 +1157,57 @@ class ShopApp {
 
     attachProductVariantSelectionListeners(product, variants) {
         const priceRows = document.querySelectorAll('.product-detail-price-row[data-variant-id]');
+
+        if (this.isStickerProduct(product) && variants.length > 1) {
+            this.prefetchStickerInventory(product, variants);
+
+            const stepperButtons = document.querySelectorAll('.product-detail-price-row-sticker .sticker-qty-btn');
+            stepperButtons.forEach(btn => {
+                btn.addEventListener('click', async (event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    if (btn.disabled) return;
+                    const row = btn.closest('.product-detail-price-row');
+                    if (!row || row.classList.contains('unavailable')) return;
+                    const qtyEl = row.querySelector('.sticker-qty-value');
+                    const decBtn = row.querySelector('.sticker-qty-btn[data-action="decrease"]');
+                    if (!qtyEl) return;
+                    const action = btn.getAttribute('data-action');
+                    const variantId = row.getAttribute('data-variant-id');
+                    const variant = variants.find(v => v.node.id === variantId)?.node;
+                    let qty = parseInt(qtyEl.textContent, 10) || 0;
+
+                    if (action === 'increase') {
+                        const record = await inventoryManager.getVariantInventory(variantId, { forceRefresh: true });
+                        const limit = getVariantInventoryLimit(record);
+                        if (limit !== null) {
+                            const existing = cartManager.getVariantQuantity(variantId);
+                            const maxAddable = Math.max(limit - existing, 0);
+                            if (qty >= maxAddable) {
+                                if (variant) this.applyStickerRowInventory(row, variant, record);
+                                this.updateStickerPurchaseSummary(product, variants);
+                                return;
+                            }
+                        }
+                        qty += 1;
+                    } else {
+                        qty = Math.max(0, qty - 1);
+                    }
+
+                    qtyEl.textContent = String(qty);
+                    row.classList.toggle('selected', qty > 0);
+                    if (decBtn) decBtn.disabled = qty <= 0;
+
+                    if (variant) {
+                        const cached = await inventoryManager.getVariantInventory(variantId);
+                        this.applyStickerRowInventory(row, variant, cached);
+                    }
+                    this.updateStickerPurchaseSummary(product, variants);
+                });
+            });
+            return;
+        }
+
         priceRows.forEach(row => {
             row.addEventListener('click', () => {
                 const variantId = row.getAttribute('data-variant-id');
@@ -1166,6 +1230,222 @@ class ShopApp {
         });
     }
 
+    renderStickerPurchaseActions(product, selections) {
+        const totalCount = selections.reduce((sum, s) => sum + (s.qty || 0), 0);
+
+        if (totalCount === 0) {
+            return `
+                <button class="product-detail-add-to-cart product-detail-select-prompt" type="button" disabled>
+                    <div class="add-to-cart-content">
+                        <span class="add-to-cart-text">Choose Stickers to Continue</span>
+                    </div>
+                </button>
+            `;
+        }
+
+        const totalAmount = selections.reduce((sum, s) => {
+            return sum + parseFloat(s.variant.priceV2?.amount || 0) * s.qty;
+        }, 0);
+        const currencyCode = selections[0]?.variant?.priceV2?.currencyCode || 'USD';
+        const totalFormatted = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: currencyCode
+        }).format(totalAmount);
+
+        const stickerLabel = totalCount === 1 ? '1 Sticker' : `${totalCount} Stickers`;
+        const buttonLabel = `Add ${stickerLabel} (${totalFormatted})`;
+
+        return `
+            <div class="product-detail-purchase-group">
+                <div class="product-detail-purchase-row">
+                    <button class="product-detail-add-to-cart product-detail-add-stickers"
+                            data-product-id="${product.id}"
+                            data-default-label="${buttonLabel}">
+                        <div class="add-to-cart-content">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="20" cy="21" r="1"></circle>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            </svg>
+                            <span class="add-to-cart-text">${buttonLabel}</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    async prefetchStickerInventory(product, variants) {
+        try {
+            const ids = variants.map(v => v.node.id);
+            const inventoryMap = await inventoryManager.getVariantInventoryMap(ids);
+            variants.forEach(({ node: variant }) => {
+                const row = document.querySelector(
+                    `.product-detail-price-row-sticker[data-variant-id="${variant.id}"]`
+                );
+                if (!row) return;
+                this.applyStickerRowInventory(row, variant, inventoryMap[variant.id]);
+            });
+        } catch (err) {
+            console.warn('Sticker inventory prefetch failed:', err);
+        }
+    }
+
+    applyStickerRowInventory(row, variant, inventoryRecord) {
+        if (!row) return;
+        const qtyEl = row.querySelector('.sticker-qty-value');
+        const incBtn = row.querySelector('.sticker-qty-btn[data-action="increase"]');
+        const decBtn = row.querySelector('.sticker-qty-btn[data-action="decrease"]');
+        const note = row.querySelector('.sticker-row-stock-note');
+        const limit = getVariantInventoryLimit(inventoryRecord);
+        const existing = cartManager.getVariantQuantity(variant.id);
+        let modalQty = qtyEl ? parseInt(qtyEl.textContent, 10) || 0 : 0;
+
+        if (limit === 0 || inventoryRecord?.availableForSale === false) {
+            row.classList.add('unavailable');
+            row.classList.remove('selected');
+            if (qtyEl) qtyEl.textContent = '0';
+            if (incBtn) incBtn.disabled = true;
+            if (decBtn) decBtn.disabled = true;
+            if (note) note.textContent = existing > 0 ? 'Max reached in cart' : 'Sold out';
+            return;
+        }
+
+        row.classList.remove('unavailable');
+
+        if (limit === null) {
+            if (incBtn) incBtn.disabled = false;
+            if (decBtn) decBtn.disabled = modalQty <= 0;
+            if (note) note.textContent = inventoryRecord?.error ? 'Live stock unavailable' : '';
+            return;
+        }
+
+        const maxAddable = Math.max(limit - existing, 0);
+        if (modalQty > maxAddable) {
+            modalQty = maxAddable;
+            if (qtyEl) qtyEl.textContent = String(modalQty);
+            row.classList.toggle('selected', modalQty > 0);
+        }
+        if (incBtn) incBtn.disabled = modalQty >= maxAddable;
+        if (decBtn) decBtn.disabled = modalQty <= 0;
+
+        if (note) {
+            const remainingAfterModal = maxAddable - modalQty;
+            if (existing > 0 && remainingAfterModal <= 0) {
+                note.textContent = `${existing} in cart — max reached`;
+            } else if (existing > 0) {
+                note.textContent = `${existing} in cart, ${remainingAfterModal} more available`;
+            } else if (remainingAfterModal <= 0) {
+                note.textContent = 'Max reached';
+            } else if (remainingAfterModal <= 5) {
+                note.textContent = remainingAfterModal === 1
+                    ? 'Only 1 left'
+                    : `Only ${remainingAfterModal} left`;
+            } else {
+                note.textContent = '';
+            }
+        }
+    }
+
+    getSelectedStickerVariants(variants) {
+        const rows = Array.from(
+            document.querySelectorAll('.product-detail-price-row-sticker[data-variant-id]')
+        );
+
+        const selections = [];
+        rows.forEach(row => {
+            const variantId = row.getAttribute('data-variant-id');
+            const qtyEl = row.querySelector('.sticker-qty-value');
+            const qty = qtyEl ? parseInt(qtyEl.textContent, 10) || 0 : 0;
+            if (qty <= 0) return;
+            const variant = variants.find(v => v.node.id === variantId)?.node;
+            if (variant) selections.push({ variant, qty });
+        });
+        return selections;
+    }
+
+    updateStickerPurchaseSummary(product, variants) {
+        const selectedVariants = this.getSelectedStickerVariants(variants);
+        const purchaseActions = document.getElementById('productPurchaseActions');
+        if (purchaseActions) {
+            purchaseActions.innerHTML = this.renderStickerPurchaseActions(product, selectedVariants);
+            this.attachStickerAddToCartListener(product, variants);
+        }
+        this.scheduleProductModalScrollbarUpdate();
+    }
+
+    attachStickerAddToCartListener(product, variants) {
+        const addBtn = document.querySelector('.product-detail-add-stickers');
+        if (!addBtn) return;
+
+        addBtn.addEventListener('click', async () => {
+            const selections = this.getSelectedStickerVariants(variants);
+            if (selections.length === 0) return;
+
+            const ids = selections.map(s => s.variant.id);
+            const inventoryMap = await inventoryManager.getVariantInventoryMap(ids, { forceRefresh: true });
+            const adjusted = [];
+            selections.forEach(({ variant, qty }) => {
+                const record = inventoryMap[variant.id];
+                const limit = getVariantInventoryLimit(record);
+                const existing = cartManager.getVariantQuantity(variant.id);
+                let finalQty = qty;
+                if (limit !== null) {
+                    const maxAddable = Math.max(limit - existing, 0);
+                    finalQty = Math.min(qty, maxAddable);
+                }
+                if (finalQty > 0) {
+                    adjusted.push({ variant, qty: finalQty });
+                }
+
+                const row = document.querySelector(
+                    `.product-detail-price-row-sticker[data-variant-id="${variant.id}"]`
+                );
+                if (row) {
+                    const qtyEl = row.querySelector('.sticker-qty-value');
+                    if (qtyEl) qtyEl.textContent = String(finalQty);
+                    row.classList.toggle('selected', finalQty > 0);
+                    this.applyStickerRowInventory(row, variant, record);
+                }
+            });
+
+            if (adjusted.length === 0) {
+                this.updateStickerPurchaseSummary(product, variants);
+                return;
+            }
+
+            adjusted.forEach(({ variant, qty }) => {
+                cartManager.addItem(product, variant.id, qty);
+            });
+
+            const totalCount = adjusted.reduce((sum, s) => sum + s.qty, 0);
+            const label = totalCount === 1 ? '1 Sticker Added!' : `${totalCount} Stickers Added!`;
+
+            addBtn.innerHTML = `
+                <div class="add-to-cart-content">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="add-to-cart-text">${label}</span>
+                </div>
+            `;
+
+            setTimeout(() => {
+                document.querySelectorAll('.product-detail-price-row-sticker').forEach(row => {
+                    row.classList.remove('selected');
+                    const qtyEl = row.querySelector('.sticker-qty-value');
+                    if (qtyEl) qtyEl.textContent = '0';
+                    const decBtn = row.querySelector('.sticker-qty-btn[data-action="decrease"]');
+                    if (decBtn && !row.classList.contains('unavailable')) decBtn.disabled = true;
+                });
+                this.updateStickerPurchaseSummary(product, variants);
+                this.prefetchStickerInventory(product, variants);
+            }, 1000);
+        });
+    }
+
     renderProductPriceDisplay(product, selectedVariant, hasMultipleVariants) {
         if (!hasMultipleVariants) {
             const fallbackPrice = selectedVariant
@@ -1185,6 +1465,11 @@ class ShopApp {
         }
 
         const variants = product?.variants?.edges?.map(edge => edge.node) || [];
+
+        if (this.isStickerProduct(product)) {
+            return this.renderStickerVariantList(product, variants);
+        }
+
         return `
             <div class="product-detail-price-group">
                 <div class="product-detail-price-list">
@@ -1210,7 +1495,43 @@ class ShopApp {
         `;
     }
 
+    renderStickerVariantList(product, variants) {
+        return `
+            <div class="product-detail-price-group">
+                <div class="product-detail-price-list">
+                    ${variants.map(variant => {
+                        const optionValue = variant.selectedOptions?.[0]?.value || variant.title;
+                        const price = this.formatVariantPrice(variant);
+                        const isUnavailable = !variant.availableForSale;
+                        const rowClasses = [
+                            'product-detail-price-row',
+                            'product-detail-price-row-sticker',
+                            isUnavailable ? 'unavailable' : ''
+                        ].filter(Boolean).join(' ');
+
+                        return `
+                            <div class="${rowClasses}" data-variant-id="${variant.id}">
+                                <span class="product-detail-price-option">${this.escapeHtml(optionValue)}</span>
+                                <span class="product-detail-price-value">${price}</span>
+                                <div class="sticker-qty-stepper" role="group" aria-label="Quantity for ${this.escapeHtml(optionValue)}">
+                                    <button type="button" class="sticker-qty-btn" data-action="decrease" disabled aria-label="Decrease quantity">&minus;</button>
+                                    <span class="sticker-qty-value" data-variant-id="${variant.id}" aria-live="polite">0</span>
+                                    <button type="button" class="sticker-qty-btn" data-action="increase" ${isUnavailable ? 'disabled' : ''} aria-label="Increase quantity">+</button>
+                                </div>
+                                <span class="sticker-row-stock-note" aria-live="polite"></span>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+        `;
+    }
+
     renderProductPurchaseActions(product, selectedVariant, hasMultipleVariants = false) {
+        if (hasMultipleVariants && this.isStickerProduct(product)) {
+            return this.renderStickerPurchaseActions(product, []);
+        }
+
         if (hasMultipleVariants && !selectedVariant) {
             return `
                 <button class="product-detail-add-to-cart product-detail-select-prompt" type="button" disabled>
@@ -1342,6 +1663,11 @@ class ShopApp {
     }
 
     attachProductPurchaseActionListeners(product, selectedVariant) {
+        if (this.isStickerProduct(product) && (product.variants?.edges?.length || 0) > 1) {
+            this.attachStickerAddToCartListener(product, product.variants?.edges || []);
+            return;
+        }
+
         const quantityValue = document.querySelector('.product-detail-quantity-value');
         const quantityButtons = Array.from(document.querySelectorAll('.product-detail-quantity-btn'));
         const addToCartBtn = document.querySelector('.product-detail-add-to-cart');

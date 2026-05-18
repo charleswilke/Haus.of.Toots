@@ -2,4 +2,5 @@
 # This allows /shop to work instead of /shop.html
 
 /shop /shop.html 200
+/just-landed /just-landed.html 200
 

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Just Landed - Haus of Toots</title>
+    <meta name="description" content="Just landed at Haus of Toots: the JOANN Storefront needlepoint canvas (holiday + non-holiday, 13- or 18-mesh) and the new NDLPT Flash Sheet sticker packs.">
+    <meta property="og:title" content="Just Landed - Haus of Toots">
+    <meta property="og:description" content="Just landed at Haus of Toots: the JOANN Storefront needlepoint canvas (holiday + non-holiday, 13- or 18-mesh) and the new NDLPT Flash Sheet sticker packs.">
+    <meta property="og:image" content="https://hausoftoots.com/images/joann.webp">
+    <meta property="og:url" content="https://hausoftoots.com/just-landed">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Just Landed - Haus of Toots">
+    <meta name="twitter:description" content="Just landed at Haus of Toots: the JOANN Storefront needlepoint canvas (holiday + non-holiday, 13- or 18-mesh) and the new NDLPT Flash Sheet sticker packs.">
+    <meta name="twitter:image" content="https://hausoftoots.com/images/joann.webp">
+    <link rel="canonical" href="https://hausoftoots.com/just-landed">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="preload" href="images/joann.webp" as="image">
+    <link rel="preconnect" href="https://haus-of-toots.myshopify.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Winky+Sans:wght@300;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=__ASSET_VERSION__">
+    <link rel="stylesheet" href="shop-styles.css?v=__ASSET_VERSION__">
+</head>
+<body
+    data-shop-collection="just-landed"
+    data-shop-collection-handle="just-landed"
+    data-shop-collection-title="Just Landed"
+    data-shop-collection-aliases="just landed, joann, joann storefront, flash sheet stickers, ndlpt flash sheet stickers"
+    data-shop-empty-message="Just Landed is getting stitched into the shop now. Check back soon."
+>
+    <div id="shared-nav"></div>
+    <div id="shared-stitch-sidebar"></div>
+    <div id="shared-cursor-canvas"></div>
+    <script src="shared-components.js?v=__ASSET_VERSION__"></script>
+
+    <header class="series-header series-header-solo">
+        <div class="container">
+            <div class="series-image-panel series-image-panel-solo">
+                <div class="landed-callout-tag landed-callout-tag-top">
+                    <span>JOANN Standard and Holiday Storefronts</span>
+                    <span class="landed-callout-plus landed-callout-desktop-only" aria-hidden="true">+</span>
+                    <span class="landed-callout-desktop-only">NDLPT Flash Sheet Stickers</span>
+                </div>
+                <div class="landed-callout-tag landed-callout-tag-bottom" aria-hidden="true">
+                    <span>NDLPT Flash Sheet Stickers</span>
+                </div>
+                <img src="images/joann.webp" alt="JOANN Storefront needlepoint canvases (holiday and non-holiday) framed with NDLPT Flash Sheet stickers" class="series-header-image" width="1600" height="1167">
+            </div>
+        </div>
+    </header>
+
+    <section class="shop-section">
+        <div class="container">
+            <div id="loadingState" class="loading-state">
+                <div class="loading-spinner"></div>
+                <p>Loading products...</p>
+            </div>
+
+            <div id="errorState" class="error-state" style="display: none;">
+                <p>Oops! Unable to load this collection right now. Please try again later.</p>
+            </div>
+
+            <div id="productsGrid" class="products-grid" style="display: none;">
+                <!-- Products will be inserted here by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <div id="productModal" class="product-modal">
+        <div class="product-modal-overlay"></div>
+        <div class="product-modal-content">
+            <button id="closeProductModal" class="close-product-modal" aria-label="Close product details">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <div id="productModalBody" class="product-modal-body">
+                <!-- Product details will be loaded here -->
+            </div>
+            <div id="productModalScrollbar" class="product-modal-scrollbar hidden" aria-hidden="true">
+                <div class="product-modal-scrollbar-track"></div>
+                <div id="productModalScrollbarThumb" class="product-modal-scrollbar-thumb"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="imageLightbox" class="image-lightbox">
+        <div class="lightbox-overlay"></div>
+        <button id="closeLightbox" class="lightbox-close" aria-label="Close lightbox">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+        <button id="prevImage" class="lightbox-nav lightbox-prev" aria-label="Previous image">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </button>
+        <button id="nextImage" class="lightbox-nav lightbox-next" aria-label="Next image">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </button>
+        <div class="lightbox-content">
+            <img id="lightboxImage" src="" alt="" class="lightbox-image">
+            <div id="lightboxCaption" class="lightbox-caption"></div>
+        </div>
+    </div>
+
+    <div id="shared-footer"></div>
+    <div id="shared-cart-drawer"></div>
+    <script>SharedComponents.injectAll();</script>
+
+    <script src="shopify-config.js?v=__ASSET_VERSION__"></script>
+    <script src="shopify.js?v=__ASSET_VERSION__"></script>
+    <script src="shop-app.js?v=__ASSET_VERSION__"></script>
+    <script src="script.js?v=__ASSET_VERSION__"></script>
+</body>
+</html>

@@ -14,7 +14,8 @@
       "Bash(while read:*)",
       "Bash(do echo:*)",
       "Read(//Users/cwilke/Documents/GitHub/Haus.of.Toots/**)",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(/usr/bin/sips -g pixelWidth -g pixelHeight /Users/cwilke/Documents/GitHub/Haus.of.Toots/images/joann.jpeg)"
     ]
   }
 }

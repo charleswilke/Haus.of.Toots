@@ -13,6 +13,10 @@
       "destination": "/village-expansion-series.html"
     },
     {
+      "source": "/just-landed",
+      "destination": "/just-landed.html"
+    },
+    {
       "source": "/about",
       "destination": "/about.html"
     },
