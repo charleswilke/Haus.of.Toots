@@ -86,9 +86,11 @@ async function animateLogo() {
         const maxY = Math.max(...ys);
         const range = maxY - minY || 1;
 
-        // Smoke = the isolated trail of crosses in the top ~12% of the artwork
-        // (above the roofline, drifting up from the chimney).
-        const smokeCutoff = minY + range * 0.12;
+        // Smoke = the 4 crosses rising from the chimney. Each cross is rendered
+        // as 2 overlapping path strokes, so the top 8 paths by Y are the smoke.
+        const SMOKE_PATH_COUNT = 8;
+        const sortedYs = [...ys].sort((a, b) => a - b);
+        const smokeCutoff = (sortedYs[SMOKE_PATH_COUNT - 1] + sortedYs[SMOKE_PATH_COUNT]) / 2;
 
         // Stitch-in order: bottom → top, so the house builds from the ground up
         // and the smoke is the last thing to appear before it starts drifting.
