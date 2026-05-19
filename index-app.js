@@ -158,6 +158,8 @@ class HomeApp extends ShopApp {
                 this.openProductModal(card.getAttribute('data-product-id'));
             });
         });
+
+        if (window.applyMasonry) window.applyMasonry(grid);
     }
 
     createProductCard(product) {
@@ -184,10 +186,12 @@ class HomeApp extends ShopApp {
             <div class="${cardClasses}" data-product-id="${product.id}">
                 <div class="product-image-container">
                     ${imageHTML}
-                    ${isOutOfStock ? '<div class="product-out-of-stock-badge">Out of Stock</div>' : ''}
                 </div>
                 <div class="product-info">
-                    <h3 class="product-title">${this.escapeHtml(product.title)}</h3>
+                    <div class="product-title-row">
+                        <h3 class="product-title">${this.escapeHtml(product.title)}</h3>
+                        ${isOutOfStock ? '<span class="product-out-of-stock-badge">Out of Stock</span>' : ''}
+                    </div>
                     <div class="product-price-section">
                         <span class="product-price ${isOutOfStock ? 'product-price-unavailable' : ''}">${priceFormatted}</span>
                         ${isOutOfStock ? '<span class="product-waitlist-label">Join the Waitlist</span>' : ''}
@@ -224,7 +228,7 @@ class HomeApp extends ShopApp {
         const grid    = document.getElementById('homeProductsGrid');
         if (loading) loading.style.display = 'none';
         if (error)   error.style.display   = 'none';
-        if (grid)    grid.style.display    = 'grid';
+        if (grid)    grid.style.display    = '';
     }
 
     showError() {

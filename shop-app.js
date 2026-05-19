@@ -113,7 +113,7 @@ class ShopApp {
             
             // Hide loading, show products
             loadingState.style.display = 'none';
-            productsGrid.style.display = 'grid';
+            productsGrid.style.display = '';
             
             // Render products
             this.renderProducts();
@@ -158,6 +158,8 @@ class ShopApp {
                 this.openProductModal(productId);
             });
         });
+
+        if (window.applyMasonry) window.applyMasonry(productsGrid);
     }
 
     /**
@@ -284,8 +286,10 @@ class ShopApp {
                     ${imageHTML}
                 </div>
                 <div class="product-info">
-                    <h3 class="product-title">${this.escapeHtml(product.title)}</h3>
-                    ${description ? `<p class="product-description">${this.escapeHtml(description)}</p>` : ''}
+                    <div class="product-title-row">
+                        <h3 class="product-title">${this.escapeHtml(product.title)}</h3>
+                        ${isOutOfStock ? '<span class="product-out-of-stock-badge">Out of Stock</span>' : ''}
+                    </div>
                     <div class="product-price-section">
                         <span class="product-price ${isOutOfStock ? 'product-price-unavailable' : ''}" data-product-id="${product.id}">${priceFormatted}</span>
                         ${isOutOfStock ? '<span class="product-waitlist-label">Join the Waitlist</span>' : ''}

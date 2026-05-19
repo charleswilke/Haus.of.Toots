@@ -625,10 +625,18 @@
 
 /* Products Grid */
 .products-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    display: flex;
+    align-items: flex-start;
     gap: var(--spacing-md);
     margin-top: var(--spacing-md);
+}
+
+.products-grid > .masonry-column {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
 }
 
 /* Product Card */
@@ -739,6 +747,37 @@
 .product-badge-digital {
     background: linear-gradient(135deg, #8B7FD9 0%, #6B5FB5 100%);
     color: var(--white);
+}
+
+/* Title row — keeps the out-of-stock badge inline with the product title */
+.product-title-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--spacing-sm);
+}
+
+.product-title-row .product-title {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+/* Out of Stock tag — muted, sits next to the title */
+.product-out-of-stock-badge {
+    flex: 0 0 auto;
+    align-self: flex-start;
+    margin-top: 0.15rem;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    font-family: 'Winky Sans', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    background: var(--linen, #F5EFE6);
+    color: var(--neutral-mid, #7A5C60);
+    border: 1px solid rgba(122, 92, 96, 0.18);
 }
 
 .product-image {
@@ -2253,7 +2292,10 @@
 
 @media (max-width: 767px) {
     .products-grid {
-        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: var(--spacing-sm);
+    }
+
+    .products-grid > .masonry-column {
         gap: var(--spacing-sm);
     }
 

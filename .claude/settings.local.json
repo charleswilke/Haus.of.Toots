@@ -15,7 +15,8 @@
       "Bash(do echo:*)",
       "Read(//Users/cwilke/Documents/GitHub/Haus.of.Toots/**)",
       "Bash(done)",
-      "Bash(/usr/bin/sips -g pixelWidth -g pixelHeight /Users/cwilke/Documents/GitHub/Haus.of.Toots/images/joann.jpeg)"
+      "Bash(/usr/bin/sips -g pixelWidth -g pixelHeight /Users/cwilke/Documents/GitHub/Haus.of.Toots/images/joann.jpeg)",
+      "Bash(npm install *)"
     ]
   }
 }

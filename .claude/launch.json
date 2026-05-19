@@ -8,9 +8,9 @@
       "port": 3000
     },
     {
-      "name": "Python HTTP Server",
-      "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8000"],
+      "name": "Static Server",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["-y", "serve", "-l", "8000", "."],
       "port": 8000
     }
   ]

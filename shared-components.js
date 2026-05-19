@@ -173,3 +173,73 @@ const SharedComponents = {
 
 // Auto-inject when the script runs (synchronous, before DOMContentLoaded)
 SharedComponents.injectAll();
+
+/**
+ * Masonry layout helper.
+ * Distributes children of `grid` into N flex columns using a shortest-column-first
+ * algorithm so cards stack at their natural heights with no empty columns.
+ */
+window.applyMasonry = function applyMasonry(grid) {
+    if (!grid) return;
+    const cards = Array.from(grid.children).filter(c => !c.classList.contains('masonry-column'));
+    // Flatten any prior column wrappers (preserve original order)
+    grid.querySelectorAll(':scope > .masonry-column').forEach(col => {
+        Array.from(col.children).forEach(child => cards.push(child));
+        col.remove();
+    });
+    if (cards.length === 0) return;
+
+    // Tag with original order so re-runs (e.g. after images load) keep the sort.
+    cards.forEach((card, i) => {
+        if (card.dataset.masonryOrder === undefined || card.dataset.masonryOrder === '') {
+            card.dataset.masonryOrder = String(i);
+        }
+    });
+    cards.sort((a, b) => Number(a.dataset.masonryOrder) - Number(b.dataset.masonryOrder));
+
+    const w = grid.offsetWidth;
+    let cols;
+    if (w < 600) cols = 1;
+    else if (w < 900) cols = 2;
+    else cols = 3;
+    cols = Math.min(cols, cards.length);
+
+    grid.innerHTML = '';
+    const colDivs = [];
+    for (let i = 0; i < cols; i++) {
+        const c = document.createElement('div');
+        c.className = 'masonry-column';
+        grid.appendChild(c);
+        colDivs.push(c);
+    }
+
+    cards.forEach(card => {
+        let shortest = colDivs[0];
+        for (const c of colDivs) {
+            if (c.offsetHeight < shortest.offsetHeight) shortest = c;
+        }
+        shortest.appendChild(card);
+    });
+
+    // Re-balance once images settle, since card heights aren't final until then.
+    const imgs = grid.querySelectorAll('img');
+    let pending = 0;
+    imgs.forEach(img => {
+        if (img.complete) return;
+        pending++;
+        const done = () => {
+            pending--;
+            if (pending === 0) window.applyMasonry(grid);
+        };
+        img.addEventListener('load', done, { once: true });
+        img.addEventListener('error', done, { once: true });
+    });
+};
+
+let __masonryResizeTimer;
+window.addEventListener('resize', () => {
+    clearTimeout(__masonryResizeTimer);
+    __masonryResizeTimer = setTimeout(() => {
+        document.querySelectorAll('.products-grid').forEach(g => window.applyMasonry(g));
+    }, 150);
+});
