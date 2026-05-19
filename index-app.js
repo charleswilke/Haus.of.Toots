@@ -130,6 +130,12 @@ class HomeApp extends ShopApp {
         if (this.inStockOnly) {
             products = products.filter(p => this.isProductInStock(p));
         }
+        products.sort((a, b) => {
+            const aIn = this.isProductInStock(a);
+            const bIn = this.isProductInStock(b);
+            if (aIn === bIn) return 0;
+            return aIn ? -1 : 1;
+        });
         this.renderProducts(products);
     }
 
