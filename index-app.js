@@ -157,8 +157,9 @@ class HomeApp extends ShopApp {
     createProductCard(product) {
         const image = product.images?.edges?.[0]?.node;
         const isOutOfStock = this.isProductOutOfStock(product);
-        const thumbnailUrl = image?.transformedSrc
-            || (image?.url ? `${image.url}?width=400&height=400&crop=center` : null);
+        const thumbnailUrl = image?.url
+            ? `${image.url}${image.url.includes('?') ? '&' : '?'}width=600`
+            : null;
 
         const imageHTML = thumbnailUrl
             ? `<img src="${thumbnailUrl}" alt="${this.escapeAttr(image.altText || product.title)}" class="product-image">`

@@ -254,9 +254,12 @@ class ShopApp {
         const variants = product.variants?.edges || [];
         const isOutOfStock = this.isProductOutOfStock(product);
 
-        // Use transformedSrc for thumbnail if available, otherwise use url with size parameters
-        const thumbnailUrl = image?.transformedSrc || (image?.url ? `${image.url}?width=400&height=400&crop=center` : null);
+        // Use the full image URL with a width param so the card image keeps its natural aspect ratio
+        // (transformedSrc returns a 400x400 cropped square; use the original instead).
         const fullImageUrl = image?.url || null;
+        const thumbnailUrl = fullImageUrl
+            ? `${fullImageUrl}${fullImageUrl.includes('?') ? '&' : '?'}width=600`
+            : null;
         
         const imageHTML = thumbnailUrl 
             ? `<img src="${thumbnailUrl}" 
@@ -409,6 +412,10 @@ class ShopApp {
         }
 
         this.productModalScrollbar.classList.remove('hidden');
+
+        const cap = this.productModalBody.querySelector('.product-detail-title-bar');
+        const capHeight = cap?.getBoundingClientRect().height || 0;
+        this.productModalScrollbar.style.top = capHeight > 0 ? `${capHeight + 12}px` : '';
 
         const trackHeight = this.productModalScrollbar.clientHeight;
         const thumbHeight = Math.max((clientHeight / scrollHeight) * trackHeight, 56);
@@ -1033,11 +1040,11 @@ class ShopApp {
 
         const purchaseActionsHTML = `
             <div class="product-detail-actions">
-                <div id="productDetailPrice">
-                    ${this.renderProductPriceDisplay(product, selectedVariant, hasMultipleVariants)}
-                </div>
                 <div id="productPurchaseActions">
                     ${this.renderProductPurchaseActions(product, selectedVariant, hasMultipleVariants)}
+                </div>
+                <div id="productDetailPrice">
+                    ${this.renderProductPriceDisplay(product, selectedVariant, hasMultipleVariants)}
                 </div>
             </div>
         `;
@@ -1046,10 +1053,11 @@ class ShopApp {
         const allImageUrls = images.map(imgEdge => imgEdge.node.url);
         const allImageCaptions = images.map(imgEdge => imgEdge.node.altText || product.title);
         
-        // Use transformedSrc (thumbnail) for main display if available, otherwise use full URL
-        // Store full URL in data attribute for lightbox
-        const mainImageDisplayUrl = mainImage.transformedSrc || mainImage.url;
+        // Use the full image URL with a width param so the main image keeps its natural aspect ratio
+        // (transformedSrc returns a 400x400 cropped square — fine for thumbnails, wrong here).
         const mainImageFullUrl = mainImage.url;
+        const mainImageSep = mainImageFullUrl.includes('?') ? '&' : '?';
+        const mainImageDisplayUrl = `${mainImageFullUrl}${mainImageSep}width=1200`;
 
         const imagesHTML = images.length > 0 ? `
             <div class="product-detail-images">
@@ -1087,17 +1095,17 @@ class ShopApp {
 
         modalBody.innerHTML = `
             <div class="product-detail-content">
+                <div class="product-detail-title-bar">
+                    <h1 class="product-detail-title">${this.escapeHtml(product.title)}</h1>
+                    ${sizeHTML}
+                </div>
                 <div class="product-detail-main-layout">
                     ${imagesHTML}
                     <div class="product-detail-info">
-                        <div class="product-detail-header">
-                            <h1 class="product-detail-title">${this.escapeHtml(product.title)}</h1>
-                            ${sizeHTML}
-                        </div>
                         ${purchaseActionsHTML}
-                        ${descriptionHTML}
                     </div>
                 </div>
+                ${descriptionHTML}
             </div>
         `;
 
@@ -1134,13 +1142,13 @@ class ShopApp {
                 thumbnails.forEach(t => t.classList.remove('active'));
                 thumb.classList.add('active');
                 if (mainImage) {
-                    // Use the thumbnail's src (which is already transformedSrc) for display
-                    const thumbnailDisplayUrl = thumb.src;
                     const fullUrl = thumb.getAttribute('data-full-image') || thumb.getAttribute('data-image-url');
-                    
-                    mainImage.src = thumbnailDisplayUrl;
                     if (fullUrl) {
+                        const sep = fullUrl.includes('?') ? '&' : '?';
+                        mainImage.src = `${fullUrl}${sep}width=1200`;
                         mainImage.setAttribute('data-full-image', fullUrl);
+                    } else {
+                        mainImage.src = thumb.src;
                     }
                     mainImage.alt = thumb.getAttribute('data-image-alt') || thumb.getAttribute('alt');
                 }
@@ -1203,6 +1211,21 @@ class ShopApp {
                         this.applyStickerRowInventory(row, variant, cached);
                     }
                     this.updateStickerPurchaseSummary(product, variants);
+                });
+            });
+
+            document.querySelectorAll('.product-detail-price-row-sticker').forEach(row => {
+                row.addEventListener('click', (event) => {
+                    if (event.target.closest('.sticker-qty-btn')) return;
+                    if (row.classList.contains('unavailable')) return;
+                    const qtyEl = row.querySelector('.sticker-qty-value');
+                    if (!qtyEl) return;
+                    const qty = parseInt(qtyEl.textContent, 10) || 0;
+                    if (qty > 0) return;
+                    const incBtn = row.querySelector('.sticker-qty-btn[data-action="increase"]');
+                    if (incBtn && !incBtn.disabled) {
+                        incBtn.click();
+                    }
                 });
             });
             return;
