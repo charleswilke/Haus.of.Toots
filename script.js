@@ -1,18 +1,79 @@
 // ===================================
 // LOGO ENTRANCE ANIMATION
 // ===================================
+// Progressive enhancement: swap the raster <img> for an inline SVG so each
+// of the 236 cross-stitches can be individually animated. The smoke crosses
+// rising from the chimney then loop forever. Falls back to a simple fade
+// if anything goes wrong.
 
-function animateLogo() {
-    const logo = document.getElementById('hausLogo');
-    if (logo) {
-        logo.style.opacity = '0';
-        logo.style.transform = 'translateY(-20px)';
-        
+async function animateLogo() {
+    const img = document.getElementById('hausLogo');
+    if (!img) return;
+
+    const fallback = () => {
+        img.style.opacity = '0';
+        img.style.transform = 'translateY(-20px)';
         setTimeout(() => {
-            logo.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
-            logo.style.opacity = '1';
-            logo.style.transform = 'translateY(0)';
+            img.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+            img.style.opacity = '1';
+            img.style.transform = 'translateY(0)';
         }, 200);
+    };
+
+    try {
+        const res = await fetch('images/HausOfToots.svg');
+        if (!res.ok) throw new Error('svg fetch failed');
+        const text = await res.text();
+        const doc = new DOMParser().parseFromString(text, 'image/svg+xml');
+        const svg = doc.querySelector('svg');
+        if (!svg) throw new Error('no svg root');
+
+        // Mirror the <img>'s positioning/class hooks so existing CSS keeps working.
+        svg.setAttribute('class', img.className);
+        svg.id = img.id;
+        svg.setAttribute('role', 'img');
+        svg.setAttribute('aria-label', img.alt || 'Haus of Toots');
+        svg.removeAttribute('width');
+        svg.removeAttribute('height');
+
+        img.replaceWith(svg);
+
+        const paths = Array.from(svg.querySelectorAll('path'));
+        if (!paths.length) return;
+
+        // The source SVG hardcodes fill via inline style on every path, which beats
+        // stylesheet rules. Strip it so .hero-logo's --logo-stitch-color can theme.
+        paths.forEach(p => p.style.removeProperty('fill'));
+
+        // getBoundingClientRect requires the SVG to be laid out — it's in the DOM now.
+        const rects = paths.map(p => p.getBoundingClientRect());
+        const ys = rects.map(r => r.top + r.height / 2);
+        const minY = Math.min(...ys);
+        const maxY = Math.max(...ys);
+        const range = maxY - minY || 1;
+
+        // Smoke = the isolated trail of crosses in the top ~12% of the artwork
+        // (above the roofline, drifting up from the chimney).
+        const smokeCutoff = minY + range * 0.12;
+
+        // Stitch-in order: bottom → top, so the house builds from the ground up
+        // and the smoke is the last thing to appear before it starts drifting.
+        const indexed = paths.map((p, i) => ({ p, cy: ys[i] }));
+        indexed.sort((a, b) => b.cy - a.cy);
+
+        const totalStaggerMs = 1400;
+        indexed.forEach((entry, i) => {
+            const delay = (i / indexed.length) * totalStaggerMs;
+            entry.p.style.setProperty('--stitch-delay', `${delay}ms`);
+            entry.p.classList.add('logo-stitch');
+            if (entry.cy < smokeCutoff) {
+                entry.p.classList.add('logo-smoke');
+                // Stagger each smoke cross's drift loop so they don't pulse in sync.
+                entry.p.style.setProperty('--smoke-offset', `${Math.random() * 2.5}s`);
+            }
+        });
+    } catch (e) {
+        fallback();
     }
 }
 
