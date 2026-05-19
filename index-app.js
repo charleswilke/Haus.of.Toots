@@ -173,12 +173,7 @@ class HomeApp extends ShopApp {
             ? `<img src="${thumbnailUrl}" alt="${this.escapeAttr(image.altText || product.title)}" class="product-image">`
             : `<div class="product-no-image">No image available</div>`;
 
-        const category = this.getProductCategory(product);
-        const cardClasses = [
-            'product-card',
-            category ? `product-card-${category}` : '',
-            'home-product-card'
-        ].filter(Boolean).join(' ');
+        const cardClasses = 'product-card home-product-card';
 
         const priceFormatted = this.formatPriceRange(product);
 

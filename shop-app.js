@@ -176,48 +176,6 @@ class ShopApp {
     }
 
     /**
-     * Determine product category from tags/productType
-     * Returns category key for CSS class and color mapping
-     */
-    getProductCategory(product) {
-        const productType = (product.productType || '').toLowerCase();
-        const tags = (product.tags || []).map(tag => tag.toLowerCase());
-        
-        // Check for customizations
-        if (productType.includes('customization') || 
-            tags.some(tag => tag.includes('customization'))) {
-            return 'customizations';
-        }
-        
-        // Check for custom canvases
-        if (productType.includes('custom') || 
-            tags.some(tag => tag.includes('custom') && !tag.includes('customization'))) {
-            return 'custom-canvases';
-        }
-        
-        // Check for HoT originals
-        if (productType.includes('hot original') || 
-            productType.includes('originals') ||
-            tags.some(tag => tag.includes('hot original') || tag.includes('originals'))) {
-            return 'hot-originals';
-        }
-        
-        // Check for digital charts
-        if (productType.includes('digital') || 
-            productType.includes('chart') ||
-            tags.some(tag => tag.includes('digital') || tag.includes('chart'))) {
-            return 'digital-charts';
-        }
-        
-        // Default: if hand painted, treat as custom-canvases, otherwise no category
-        if (this.isHandPainted(product)) {
-            return 'custom-canvases';
-        }
-        
-        return null;
-    }
-
-    /**
      * Detect sticker products (multi-select, no mesh size)
      */
     isStickerProduct(product) {
@@ -274,11 +232,7 @@ class ShopApp {
 
         const description = this.stripHtml(product.description || product.descriptionHtml || '');
 
-        // Get category for border color
-        const category = this.getProductCategory(product);
-        const cardClasses = category 
-            ? `product-card product-card-${category}`
-            : 'product-card';
+        const cardClasses = 'product-card';
 
         return `
             <div class="${cardClasses}" data-product-id="${product.id}">
