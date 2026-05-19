@@ -38,12 +38,46 @@ async function animateLogo() {
 
         img.replaceWith(svg);
 
-        const paths = Array.from(svg.querySelectorAll('path'));
+        let paths = Array.from(svg.querySelectorAll('path'));
         if (!paths.length) return;
 
         // The source SVG hardcodes fill via inline style on every path, which beats
         // stylesheet rules. Strip it so .hero-logo's --logo-stitch-color can theme.
         paths.forEach(p => p.style.removeProperty('fill'));
+
+        // The source SVG includes the "Haus of Toots" wordmark under the house.
+        // We only want the house. There's a clean ~7% vertical gap between the
+        // two — drop anything that lives below it, then recrop the viewBox.
+        const svgRect = svg.getBoundingClientRect();
+        const wordmarkCutoff = svgRect.top + svgRect.height * 0.74;
+        paths.forEach(p => {
+            const r = p.getBoundingClientRect();
+            if (r.top + r.height / 2 > wordmarkCutoff) p.remove();
+        });
+        paths = Array.from(svg.querySelectorAll('path'));
+        if (!paths.length) return;
+
+        // Recrop viewBox to the house's actual extent so it fills the container.
+        // svg.getBBox() would include a hidden placeholder <rect> from the source
+        // file, so union the path bboxes ourselves instead. Convert each path's
+        // client rect back into viewBox units.
+        const svgRect2 = svg.getBoundingClientRect();
+        const vb = svg.viewBox.baseVal;
+        const scale = vb.width / svgRect2.width;
+        let bx0 = Infinity, by0 = Infinity, bx1 = -Infinity, by1 = -Infinity;
+        paths.forEach(p => {
+            const r = p.getBoundingClientRect();
+            const x0 = (r.left - svgRect2.left) * scale + vb.x;
+            const y0 = (r.top - svgRect2.top) * scale + vb.y;
+            const x1 = x0 + r.width * scale;
+            const y1 = y0 + r.height * scale;
+            if (x0 < bx0) bx0 = x0;
+            if (y0 < by0) by0 = y0;
+            if (x1 > bx1) bx1 = x1;
+            if (y1 > by1) by1 = y1;
+        });
+        const pad = 4;
+        svg.setAttribute('viewBox', `${bx0 - pad} ${by0 - pad} ${bx1 - bx0 + pad * 2} ${by1 - by0 + pad * 2}`);
 
         // getBoundingClientRect requires the SVG to be laid out — it's in the DOM now.
         const rects = paths.map(p => p.getBoundingClientRect());
