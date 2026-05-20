@@ -273,9 +273,10 @@
 }
 
 .landed-callout-plus {
-    font-size: 1.05em;
+    font-size: 1.4em;
     color: var(--accent-heading);
     line-height: 1;
+    transform: translateY(-2px);
 }
 
 @media (min-width: 760px) {
