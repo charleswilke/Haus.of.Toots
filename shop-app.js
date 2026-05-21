@@ -1553,10 +1553,25 @@ class ShopApp {
 
         return `
             <div class="product-detail-notify-group">
-                <button class="product-detail-notify-btn" type="button" data-variant-id="${selectedVariant?.id || ''}">
-                    Join Waitlist on Shopify
-                </button>
-                <p class="product-detail-notify-note">This opens the Shopify product page in a new tab so you can sign up there.</p>
+                <p class="product-detail-notify-heading">Join the waitlist</p>
+                <p class="product-detail-notify-note">We'll email you the moment this option is back in stock.</p>
+                <form class="product-detail-notify-form" data-variant-id="${selectedVariant?.id || ''}" novalidate>
+                    <input class="product-detail-notify-input"
+                           type="email"
+                           name="email"
+                           aria-label="Email address"
+                           autocomplete="email"
+                           inputmode="email"
+                           placeholder="you@example.com"
+                           required>
+                    <label class="product-detail-notify-optin">
+                        <input type="checkbox" name="accepts_marketing">
+                        <span>Also send me Haus of Toots updates</span>
+                    </label>
+                    <button class="product-detail-notify-btn" type="submit">
+                        Notify Me
+                    </button>
+                </form>
                 <p class="product-detail-notify-feedback" aria-live="polite"></p>
             </div>
         `;
@@ -1744,26 +1759,116 @@ class ShopApp {
             });
         }
 
-        const notifyBtn = document.querySelector('.product-detail-notify-btn');
+        const notifyForm = document.querySelector('.product-detail-notify-form');
         const notifyFeedback = document.querySelector('.product-detail-notify-feedback');
 
-        if (notifyBtn && notifyFeedback && selectedVariant?.id) {
-            notifyBtn.addEventListener('click', () => {
+        if (notifyForm && notifyFeedback && selectedVariant?.id) {
+            notifyForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const submitBtn = notifyForm.querySelector('.product-detail-notify-btn');
+                const emailInput = notifyForm.querySelector('.product-detail-notify-input');
+                const optInInput = notifyForm.querySelector('input[name="accepts_marketing"]');
+                const email = (emailInput?.value || '').trim();
+
                 notifyFeedback.textContent = '';
                 notifyFeedback.classList.remove('is-error', 'is-success');
 
-                try {
-                    const shopifyNotifyUrl = this.buildShopifyNotifyUrl(product, selectedVariant);
-                    window.open(shopifyNotifyUrl, '_blank', 'noopener,noreferrer');
-                } catch (error) {
-                    console.error('Failed to open Shopify waitlist page:', error);
-                    notifyFeedback.textContent = error.message || 'Waitlist signup is unavailable right now.';
+                if (!email || !emailInput.checkValidity()) {
+                    notifyFeedback.textContent = 'Please enter a valid email address.';
                     notifyFeedback.classList.add('is-error');
+                    emailInput?.focus();
+                    return;
                 }
 
-                this.scheduleProductModalScrollbarUpdate();
+                const originalLabel = submitBtn?.textContent;
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Adding you…';
+                }
+
+                try {
+                    await this.submitRestockIntent({
+                        email,
+                        acceptsMarketing: !!optInInput?.checked,
+                        product,
+                        variant: selectedVariant
+                    });
+                    notifyFeedback.textContent = "You're on the list! We'll email you when this option is back.";
+                    notifyFeedback.classList.add('is-success');
+                    notifyForm.reset();
+                } catch (error) {
+                    console.error('Restock Rocket signup failed:', error);
+                    let fallbackUrl = null;
+                    try {
+                        fallbackUrl = this.buildShopifyNotifyUrl(product, selectedVariant);
+                    } catch (_) {}
+                    notifyFeedback.innerHTML = fallbackUrl
+                        ? `Sorry, we couldn't sign you up. <a href="${fallbackUrl}" target="_blank" rel="noopener noreferrer">Try signing up on Shopify →</a>`
+                        : 'Sorry, waitlist signup is temporarily unavailable. Please try again later.';
+                    notifyFeedback.classList.add('is-error');
+                } finally {
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = originalLabel || 'Notify Me';
+                    }
+                    this.scheduleProductModalScrollbarUpdate();
+                }
             });
         }
+    }
+
+    async submitRestockIntent({ email, acceptsMarketing, product, variant }) {
+        const shopifyVariantId = this.extractShopifyNumericId(variant?.id);
+        const shopifyProductId = this.extractShopifyNumericId(product?.id);
+
+        if (!shopifyVariantId || !shopifyProductId) {
+            throw new Error('Unable to identify this product option.');
+        }
+
+        const SHOPIFY_MARKET_ID = 92481683490;
+        const variantCount = product?.variants?.edges?.length || 1;
+        const variantTitle = variant?.selectedOptions?.[0]?.value || variant?.title || '';
+
+        const payload = {
+            intent: {
+                shopify_variant_id: shopifyVariantId,
+                shopify_product_id: shopifyProductId,
+                shopify_market_id: SHOPIFY_MARKET_ID,
+                country: 'US',
+                quantity: 1,
+                source: 'haus-of-toots-site'
+            },
+            customer: {
+                accepts_marketing: !!acceptsMarketing,
+                locale: 'en',
+                shopify_market_id: SHOPIFY_MARKET_ID,
+                email
+            },
+            product: {
+                title: product?.title || '',
+                variant_title: variantTitle,
+                variant_count: variantCount,
+                vendor: product?.vendor || 'Haus of Toots',
+                sku: variant?.sku || ''
+            }
+        };
+
+        const response = await fetch('/api/restock-intent', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+            throw new Error(`Waitlist proxy responded ${response.status}`);
+        }
+
+        const data = await response.json().catch(() => ({}));
+        if (data?.errors && Object.keys(data.errors).length > 0) {
+            throw new Error('Restock Rocket reported a validation error.');
+        }
+        return data;
     }
 
     extractShopifyNumericId(id) {

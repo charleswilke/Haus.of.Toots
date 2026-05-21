@@ -331,6 +331,7 @@ class ShopifyClient {
                             node {
                                 id
                                 title
+                                sku
                                 availableForSale
                                 currentlyNotInStock
                                 priceV2 {
@@ -397,6 +398,7 @@ class ShopifyClient {
                             node {
                                 id
                                 title
+                                sku
                                 availableForSale
                                 currentlyNotInStock
                                 priceV2 {
