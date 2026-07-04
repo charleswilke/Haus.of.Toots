@@ -20,12 +20,13 @@
     <link rel="canonical" href="https://hausoftoots.com/">
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link rel="preload" href="images/haus_of_toots_canvas_13ct_512px.webp" as="image">
+    <link rel="preload" href="images/HausOfToots.svg" as="fetch" crossorigin="anonymous">
     <link rel="preconnect" href="https://haus-of-toots.myshopify.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Winky+Sans:wght@300;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=__ASSET_VERSION__">
-    <link rel="stylesheet" href="shop-styles.css?v=__ASSET_VERSION__">
+    <link rel="stylesheet" href="styles.css?v=20260703">
+    <link rel="stylesheet" href="shop-styles.css?v=20260703">
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -57,14 +58,14 @@
     <div id="shared-nav"></div>
     <div id="shared-stitch-sidebar"></div>
     <div id="shared-cursor-canvas"></div>
-    <script src="shared-components.js?v=__ASSET_VERSION__"></script>
+    <script src="shared-components.js?v=20260703" defer></script>
 
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
             <div class="hero-layout">
                 <div class="hero-logo-side">
-                    <img src="images/hauslogo.webp" alt="Haus of Toots" class="hero-logo" id="hausLogo" width="328" height="437">
+                    <img src="images/hauslogo.webp" alt="Haus of Toots" class="hero-logo" id="hausLogo" width="328" height="437" fetchpriority="high">
                 </div>
                 <div class="hero-content-side">
                     <div class="stitched-border">
@@ -104,7 +105,7 @@
             <div class="collection-card-grid">
                 <a href="flash" class="collection-card collection-card-featured">
                     <div class="collection-card-image-wrap">
-                        <img src="images/flash.webp" alt="NDLPT Flash Sheet Collection card artwork" class="collection-card-image" width="1200" height="843">
+                        <img src="images/flash.webp" alt="NDLPT Flash Sheet Collection card artwork" class="collection-card-image" width="1200" height="843" loading="lazy">
                     </div>
                     <div class="collection-card-content">
                         <h3 class="collection-card-title">NDLPT Flash Sheet Collection</h3>
@@ -115,7 +116,7 @@
 
                 <a href="village" class="collection-card">
                     <div class="collection-card-image-wrap">
-                        <img src="images/village.webp" alt="Holiday Village Expansion Series card artwork" class="collection-card-image" width="1200" height="861">
+                        <img src="images/village.webp" alt="Holiday Village Expansion Series card artwork" class="collection-card-image" width="1200" height="861" loading="lazy">
                     </div>
                     <div class="collection-card-content">
                         <h3 class="collection-card-title">Holiday Village Expansion Series</h3>
@@ -211,13 +212,12 @@
 
     <div id="shared-footer"></div>
     <div id="shared-cart-drawer"></div>
-    <script>SharedComponents.injectAll();</script>
 
-    <script src="shopify-config.js?v=__ASSET_VERSION__"></script>
-    <script src="shopify.js?v=__ASSET_VERSION__"></script>
-    <script src="shop-app.js?v=__ASSET_VERSION__"></script>
-    <script src="index-app.js?v=__ASSET_VERSION__"></script>
-    <script src="script.js?v=__ASSET_VERSION__"></script>
+    <script src="shopify-config.js?v=20260703" defer></script>
+    <script src="shopify.js?v=20260703" defer></script>
+    <script src="shop-app.js?v=20260703" defer></script>
+    <script src="index-app.js?v=20260703" defer></script>
+    <script src="script.js?v=20260703" defer></script>
 </body>
 </html>
 

@@ -130,7 +130,7 @@ const SharedComponents = {
                     <span id="cartTotal" class="cart-total-amount">$0.00</span>
                 </div>
                 <button id="clearCartBtn" class="clear-cart-btn">Clear Cart</button>
-                <a href="/shop" id="checkoutBtn" class="checkout-btn">
+                <a href="/" id="checkoutBtn" class="checkout-btn">
                     <span>Proceed to Checkout</span>
                     <svg class="needle-icon" width="20" height="20" viewBox="0 0 24 24">
                         <line x1="4" y1="12" x2="20" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -144,7 +144,8 @@ const SharedComponents = {
 
     /**
      * Inject all shared components into placeholder elements.
-     * Call this at the top of <body> or in a synchronous <script>.
+     * Runs automatically when this script executes. Load with `defer` so the
+     * whole document (including the footer placeholders) is parsed first.
      *
      * Expected placeholders:
      *   <div id="shared-nav"></div>
@@ -171,7 +172,7 @@ const SharedComponents = {
     }
 };
 
-// Auto-inject when the script runs (synchronous, before DOMContentLoaded)
+// Auto-inject when the script runs (deferred: after parse, before DOMContentLoaded)
 SharedComponents.injectAll();
 
 /**

@@ -1,29 +1,50 @@
 {
-  "rewrites": [
+  "cleanUrls": true,
+  "redirects": [
     {
       "source": "/shop",
-      "destination": "/shop.html"
+      "destination": "/",
+      "permanent": true
     },
     {
+      "source": "/flash-sheet-series",
+      "destination": "/flash",
+      "permanent": true
+    },
+    {
+      "source": "/village-expansion-series",
+      "destination": "/village",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
       "source": "/flash",
-      "destination": "/flash-sheet-series.html"
+      "destination": "/flash-sheet-series"
     },
     {
       "source": "/village",
-      "destination": "/village-expansion-series.html"
+      "destination": "/village-expansion-series"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/images/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
     },
     {
-      "source": "/just-landed",
-      "destination": "/just-landed.html"
-    },
-    {
-      "source": "/about",
-      "destination": "/about.html"
-    },
-    {
-      "source": "/gallery",
-      "destination": "/gallery.html"
+      "source": "/(.*)\\.(css|js)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, stale-while-revalidate=604800"
+        }
+      ]
     }
   ]
 }
-
