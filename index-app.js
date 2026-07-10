@@ -17,7 +17,34 @@ class HomeApp extends ShopApp {
         this.updateCartUI();
         this.buildFilterBar();
         this.initTicker();
+        this.setupNewsletterForm();
         await this.loadAllProducts();
+    }
+
+    // ─── Newsletter Signup (rough-in) ─────────────────────────────────────────
+
+    setupNewsletterForm() {
+        const form = document.getElementById('newsletterForm');
+        const input = document.getElementById('newsletterEmail');
+        const feedback = document.getElementById('newsletterFeedback');
+        if (!form || !input || !feedback) return;
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = input.value.trim();
+            feedback.classList.remove('is-success', 'is-error');
+
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                feedback.textContent = "Hmm, that email doesn't look quite right. Try again?";
+                feedback.classList.add('is-error');
+                return;
+            }
+
+            // TODO: wire to a real mailing list (Shopify marketing consent or ESP) before launch
+            feedback.textContent = "You're on the list! Tiny shop updates, coming your way.";
+            feedback.classList.add('is-success');
+            form.reset();
+        });
     }
 
     // ─── Announcement Ticker ──────────────────────────────────────────────────
