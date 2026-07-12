@@ -203,6 +203,11 @@
     object-position: center;
 }
 
+/* Keep temporary launch art cohesive until the final product photography arrives. */
+.is-placeholder-image {
+    filter: saturate(0.82) contrast(0.96);
+}
+
 .just-landed-col {
     display: flex;
     flex-direction: column;
@@ -381,19 +386,9 @@
     border-radius: 11px;
 }
 
-/* Hero shop CTAs — side by side under the title */
-.hero-shop-buttons {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.6rem;
-    margin-top: var(--spacing-md);
-}
-
-.hero-shop-buttons .cta-button {
-    width: auto;
-    font-size: 0.9rem;
-    padding: 0.7rem 1rem;
+/* Compact homepage hero now that collection actions live directly below it. */
+.hero-shop {
+    padding: var(--spacing-md) 0 var(--spacing-sm);
 }
 
 @media (max-width: 900px) {
@@ -431,6 +426,19 @@
 .collection-card:hover {
     transform: translateY(-8px);
     border-color: rgba(255, 107, 122, 0.45);
+    box-shadow: 0 18px 44px rgba(74, 69, 66, 0.14);
+}
+
+.collection-card:focus-visible,
+.just-landed-cta:focus-visible,
+.newsletter-btn:focus-visible {
+    outline: 3px solid var(--accent-heading);
+    outline-offset: 4px;
+}
+
+.collection-card:focus-visible {
+    transform: translateY(-4px);
+    border-color: rgba(203, 108, 230, 0.65);
     box-shadow: 0 18px 44px rgba(74, 69, 66, 0.14);
 }
 
@@ -530,7 +538,11 @@
     pointer-events: none;
 }
 
-/* Perks strip — value props below the collection cards */
+/* Perks strip — value props immediately above the footer */
+.home-footer-perks {
+    padding: 0 0 var(--spacing-md);
+}
+
 .perks-strip {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -614,6 +626,10 @@
     border: 2px solid rgba(203, 108, 230, 0.32);
     border-radius: 24px;
     box-shadow: 0 14px 36px rgba(74, 69, 66, 0.08);
+}
+
+.newsletter-bar[hidden] {
+    display: none;
 }
 
 .newsletter-intro {
@@ -719,6 +735,10 @@
     color: #b64d5b;
 }
 
+.newsletter-feedback.is-preview {
+    color: var(--neutral-dark);
+}
+
 @media (max-width: 640px) {
     .newsletter-form {
         flex-direction: column;
@@ -726,6 +746,25 @@
 
     .newsletter-btn {
         width: 100%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .just-landed-banner,
+    .just-landed-cta,
+    .just-landed-cta::after,
+    .collection-card,
+    .collection-card-image,
+    .collection-card-link::after,
+    .newsletter-btn {
+        transition: none;
+    }
+
+    .just-landed-banner:hover,
+    .collection-card:hover,
+    .collection-card:focus-visible,
+    .newsletter-btn:hover {
+        transform: none;
     }
 }
 
@@ -3001,4 +3040,3 @@ a.home-product-card:hover .product-title {
         font-size: 0.825rem;
     }
 }
-

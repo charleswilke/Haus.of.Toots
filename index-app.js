@@ -40,10 +40,9 @@ class HomeApp extends ShopApp {
                 return;
             }
 
-            // TODO: wire to a real mailing list (Shopify marketing consent or ESP) before launch
-            feedback.textContent = "You're on the list! Tiny shop updates, coming your way.";
-            feedback.classList.add('is-success');
-            form.reset();
+            // Preview safeguard: do not imply an address was stored until a real list is connected.
+            feedback.textContent = "Signup is still being stitched together — your email wasn't sent or saved yet.";
+            feedback.classList.add('is-preview');
         });
     }
 
