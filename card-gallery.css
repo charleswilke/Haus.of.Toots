@@ -375,16 +375,15 @@
         transform-style: flat;
     }
     
-    /* Make card stack a masonry grid container */
+    /* Make card stack a masonry container: 4 equal columns, cards packed tightly */
     .card-gallery-overlay.masonry-mode .card-stack {
         width: 100%;
         max-width: 1400px;
         height: auto;
-        display: grid;
-        grid-template-columns: repeat(auto-fill, 280px);
-        grid-auto-flow: row;
-        column-gap: 1.75rem;
-        row-gap: 2.5rem;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 1.75rem;
         padding: 2rem;
         margin: 0 auto;
         position: relative;
@@ -392,18 +391,23 @@
         transform: none;
         perspective: none;
         transform-style: flat;
-
-        /* Center rows/columns when there isn't enough content to fill the viewport */
-        min-height: 100%;
-        align-content: center;
-        justify-content: center;
     }
-    
-    /* Cards in masonry grid - 7:10 tarot aspect ratio */
+
+    /* Each masonry column stacks cards vertically; JS deals cards into the
+       shortest column so rows pack tightly (Pinterest-style) */
+    .card-gallery-overlay.masonry-mode .masonry-column {
+        flex: 1 1 0;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        row-gap: 2.5rem;
+    }
+
+    /* Cards in masonry grid - uniform width, height follows the image */
     .card-gallery-overlay.masonry-mode .gallery-card {
         position: relative;
-        width: 280px;
-        height: 400px; /* 7:10 aspect ratio */
+        width: 100%;
+        height: auto;
         transform: none !important;
         opacity: 1 !important;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -457,33 +461,27 @@
     }
 }
 
-/* Larger cards on bigger screens */
+/* Roomier gutters on bigger screens (columns stay at 4, cards flex to fill) */
 @media (min-width: 1200px) {
     .card-gallery-overlay.masonry-mode .card-stack {
-        grid-template-columns: repeat(auto-fill, 294px);
-        column-gap: 2.75rem;
-        row-gap: 3rem;
+        gap: 2.25rem;
         padding: 2.5rem;
     }
-    
-    .card-gallery-overlay.masonry-mode .gallery-card {
-        width: 294px;
-        height: 420px; /* 7:10 aspect ratio */
+
+    .card-gallery-overlay.masonry-mode .masonry-column {
+        row-gap: 3rem;
     }
 }
 
 @media (min-width: 1600px) {
     .card-gallery-overlay.masonry-mode .card-stack {
-        grid-template-columns: repeat(auto-fill, 315px);
         max-width: 1800px;
-        column-gap: 3rem;
-        row-gap: 3.5rem;
+        gap: 2.5rem;
         padding: 3rem;
     }
-    
-    .card-gallery-overlay.masonry-mode .gallery-card {
-        width: 315px;
-        height: 450px; /* 7:10 aspect ratio */
+
+    .card-gallery-overlay.masonry-mode .masonry-column {
+        row-gap: 3.5rem;
     }
 }
 
@@ -623,9 +621,10 @@
     z-index: 2;
 }
 
-/* In masonry mode, card front matches card height */
+/* In masonry mode, the front sits in normal flow so it defines the card's height */
 .card-gallery-overlay.masonry-mode .card-front {
-    height: 100%;
+    position: relative;
+    height: auto;
 }
 
 /* Hide front when flipped - timed with animation */
@@ -764,14 +763,21 @@
     z-index: 0;
 }
 
-/* In masonry mode, image container has explicit dimensions set by JS */
+/* In masonry mode, image container hugs the image's natural height */
 .card-gallery-overlay.masonry-mode .card-image-container {
-    flex: none; /* Override flex: 1 - dimensions set explicitly by JS */
+    flex: none;
     margin: 16px 16px 8px 16px;
     min-height: 0;
+    height: auto;
+}
+
+/* Placeholder height while the image lazy-loads (prevents collapsed cards) */
+.card-gallery-overlay.masonry-mode .card-image-container.loading {
+    min-height: 220px;
 }
 
 .card-image {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -780,11 +786,11 @@
     z-index: 1;
 }
 
-/* In masonry mode, image fills container maintaining aspect ratio */
+/* In masonry mode, image renders at its natural aspect ratio (no letterboxing) */
 .card-gallery-overlay.masonry-mode .card-image {
     width: 100%;
-    height: 100%;
-    object-fit: contain; /* Use contain to maintain aspect ratio without cropping */
+    height: auto;
+    object-fit: unset;
 }
 
 .gallery-card:hover .card-image {
@@ -920,9 +926,10 @@
     z-index: 0;
 }
 
-/* In masonry mode, card back image container needs explicit dimensions */
+/* In masonry mode, card back fills the card (whose height the front image sets),
+   so its image container flexes into the space and letterboxes with "contain" */
 .card-gallery-overlay.masonry-mode .card-back .card-back-image-container {
-    flex: none;
+    flex: 1;
     margin: 16px 16px 8px 16px;
     min-height: 0;
 }
