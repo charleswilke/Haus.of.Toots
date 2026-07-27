@@ -10,8 +10,9 @@
     {
       "name": "Static Server",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["-y", "serve", "-l", "8000", "."],
-      "port": 8000
+      "runtimeArgs": ["-y", "serve", "."],
+      "port": 8000,
+      "autoPort": true
     }
   ]
 }

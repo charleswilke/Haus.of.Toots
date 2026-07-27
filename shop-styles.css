@@ -137,7 +137,9 @@
     display: block;
     position: relative;
     overflow: hidden;
-    padding: 0.7rem 1.25rem;
+    /* Top padding matches the side padding so the images sit evenly inset;
+       the Just Landed tab overlaps the frame rather than needing its own room. */
+    padding: 1.25rem 1.25rem 0.7rem;
     margin-bottom: var(--spacing-md);
     background:
         linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 240, 244, 0.88) 100%),
@@ -158,17 +160,19 @@
 
 .just-landed-kicker {
     position: absolute;
-    top: 0;
+    top: -1.25rem;
     left: 1.75rem;
+    /* Pulled up into the banner's top padding and sat on top of the frame, so
+       the rounded bottom stays visible while overlapping the image slightly. */
     z-index: 2;
     display: inline-flex;
     align-items: center;
-    padding: 0.45rem 1rem 0.55rem;
+    padding: 0.3rem 0.85rem 0.4rem;
     background: var(--accent-heading);
     color: var(--white);
     border-radius: 0 0 12px 12px;
     font-family: var(--font-display);
-    font-size: 1.2rem;
+    font-size: 1rem;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     line-height: 1;
@@ -246,6 +250,9 @@
         "title cta"
         "description description";
     align-items: center;
+    /* Pack rows to the top so the two columns' images, titles, and CTAs stay
+       on the same baselines when one column's description runs longer. */
+    align-content: start;
     gap: 0.65rem;
     min-width: 0;
 }
@@ -448,6 +455,11 @@
 @media (max-width: 640px) {
     .just-landed-banner {
         padding: 1rem 1.1rem 1.25rem;
+    }
+
+    /* Track this breakpoint's smaller top padding so the tag isn't clipped. */
+    .just-landed-kicker {
+        top: -1rem;
     }
 }
 
