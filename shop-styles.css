@@ -441,7 +441,10 @@
         text-align: center;
     }
 
-    .just-landed-col-title {
+    /* Both need an explicit center: their base rules set text-align: left,
+       which beats the centering they would otherwise inherit from the column. */
+    .just-landed-col-title,
+    .just-landed-col-text {
         text-align: center;
     }
 
