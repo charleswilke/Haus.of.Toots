@@ -547,26 +547,11 @@ class CardGallery {
             this.render();
             this.updateNavButtons();
         } else if (this.isMasonryMode && this.isOpen) {
-            // Recalculate card widths when container size changes
-            // This ensures cards wrap properly when screen size changes
-            this.recalculateMasonryCardWidths();
+            // Card heights shift with column width, so re-pack the columns
+            this.balanceMasonryColumns();
         }
     }
-    
-    recalculateMasonryCardWidths() {
-        if (!this.isMasonryMode || !this.cardStack) return;
-        
-        const cards = this.cardStack.querySelectorAll('.masonry-card');
-        cards.forEach(card => {
-            const img = card.querySelector('.card-image');
-            if (img && img.complete && img.naturalWidth > 0) {
-                requestAnimationFrame(() => {
-                    this.calculateCardWidth(card, img);
-                });
-            }
-        });
-    }
-    
+
     render() {
         if (this.isMasonryMode) {
             this.renderMasonry();
@@ -843,24 +828,11 @@ class CardGallery {
         
         img.onload = () => {
             container.classList.remove('loading');
-            
-            // In masonry mode, calculate card width based on image aspect ratio
-            if (this.isMasonryMode && card.classList.contains('masonry-card')) {
-                // Use requestAnimationFrame to ensure layout is ready
-                requestAnimationFrame(() => {
-                    this.calculateCardWidth(card, img);
-                });
-            }
         };
-        
+
         // Also handle case where image is already loaded
         if (img.complete && img.naturalWidth > 0) {
             container.classList.remove('loading');
-            if (this.isMasonryMode && card.classList.contains('masonry-card')) {
-                requestAnimationFrame(() => {
-                    this.calculateCardWidth(card, img);
-                });
-            }
         }
         
         // Load front image after a short delay for animation
@@ -1058,18 +1030,58 @@ class CardGallery {
             return;
         }
         
-        // Render all filtered cards in a grid
+        // Build 4 columns, then deal cards into them (Pinterest-style packing)
+        const columnCount = 4;
+        const columns = [];
+        for (let i = 0; i < columnCount; i++) {
+            const col = document.createElement('div');
+            col.className = 'masonry-column';
+            this.cardStack.appendChild(col);
+            columns.push(col);
+        }
+
         this.filteredCards.forEach((cardData, index) => {
             const card = this.createCardElement(cardData, index);
             card.classList.add('masonry-card');
             card.setAttribute('tabindex', '0');
-            this.cardStack.appendChild(card);
+            card.dataset.masonryOrder = index;
+            // Initial deal is round-robin; real heights aren't known until images load
+            columns[index % columnCount].appendChild(card);
         });
-        
-        // After a brief delay to ensure layout, calculate widths for any already-loaded images
-        setTimeout(() => {
-            this.recalculateMasonryCardWidths();
-        }, 200);
+
+        // Once every front image has loaded (or failed), rebalance by real heights
+        const imgs = this.cardStack.querySelectorAll('.card-front .card-image');
+        let pending = imgs.length;
+        const done = () => {
+            pending--;
+            if (pending === 0) this.balanceMasonryColumns();
+        };
+        imgs.forEach(img => {
+            img.addEventListener('load', done, { once: true });
+            img.addEventListener('error', done, { once: true });
+        });
+    }
+
+    // Redistribute cards into the shortest column first, preserving original order
+    balanceMasonryColumns() {
+        if (!this.isMasonryMode || !this.cardStack) return;
+
+        const columns = Array.from(this.cardStack.querySelectorAll('.masonry-column'));
+        const cards = Array.from(this.cardStack.querySelectorAll('.masonry-card'))
+            .sort((a, b) => Number(a.dataset.masonryOrder) - Number(b.dataset.masonryOrder));
+        if (columns.length === 0 || cards.length === 0) return;
+
+        // Measure everything before moving anything so reflow can't skew the math
+        const heights = new Map(cards.map(card => [card, card.offsetHeight]));
+        const columnHeights = columns.map(() => 0);
+        cards.forEach(card => {
+            let shortest = 0;
+            for (let i = 1; i < columns.length; i++) {
+                if (columnHeights[i] < columnHeights[shortest]) shortest = i;
+            }
+            columns[shortest].appendChild(card);
+            columnHeights[shortest] += heights.get(card);
+        });
     }
     
     navigateTo(targetIndex) {
@@ -1320,56 +1332,6 @@ class CardGallery {
         this.fullviewIndex = 0;
     }
     
-    calculateCardWidth(card, img) {
-        // Get the card's fixed height from computed styles
-        const cardHeight = card.offsetHeight;
-        
-        // Get image natural dimensions
-        const imgWidth = img.naturalWidth;
-        const imgHeight = img.naturalHeight;
-        
-        if (!imgWidth || !imgHeight || !cardHeight) return;
-        
-        // Get card info section height (title + subtitle + padding)
-        const cardInfo = card.querySelector('.card-info');
-        // Wait for next frame to ensure info height is calculated
-        requestAnimationFrame(() => {
-            const infoHeight = cardInfo ? cardInfo.offsetHeight : 60;
-            
-            // Calculate available height for image container
-            // Card has 16px margin top, 8px margin bottom for image, plus info section
-            const imageContainerHeight = cardHeight - 16 - 8 - infoHeight - 16;
-            
-            // Set explicit height on the front image container
-            const imageContainer = card.querySelector('.card-image-container');
-            if (imageContainer) {
-                imageContainer.style.height = `${imageContainerHeight}px`;
-                imageContainer.style.flex = 'none'; // Override flex: 1
-                // Use CSS aspect-ratio to let width be determined naturally
-                imageContainer.style.aspectRatio = `${imgWidth} / ${imgHeight}`;
-                imageContainer.style.width = 'auto'; // Let aspect-ratio determine width
-            }
-            
-            // Also set explicit height on the back image container (for before/after cards)
-            const backImageContainer = card.querySelector('.card-back-image-container');
-            if (backImageContainer) {
-                backImageContainer.style.height = `${imageContainerHeight}px`;
-                backImageContainer.style.flex = 'none';
-                // Back uses same aspect ratio as front for consistent card width
-                backImageContainer.style.aspectRatio = `${imgWidth} / ${imgHeight}`;
-                backImageContainer.style.width = 'auto';
-            }
-            
-            // After image container width is set, calculate card width
-            requestAnimationFrame(() => {
-                if (imageContainer) {
-                    const imageContainerWidth = imageContainer.offsetWidth;
-                    const naturalCardWidth = imageContainerWidth + 32; // + margins
-                    card.style.width = `${naturalCardWidth}px`;
-                }
-            });
-        });
-    }
 }
 
 // Initialize when DOM is ready
