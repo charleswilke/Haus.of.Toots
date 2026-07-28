@@ -1594,13 +1594,28 @@ class ShopApp {
                     </div>
                     <p class="product-detail-stock-note" aria-live="polite"></p>
 ${preorderNote}                </div>
+                ${isPreorder ? this.renderNotifyGroup(selectedVariant, { preorder: true }) : ''}
             `;
         }
 
+        return this.renderNotifyGroup(selectedVariant);
+    }
+
+    /**
+     * The waitlist form. Shown on its own for sold-out variants, and alongside
+     * the Preorder button for backordered ones so shoppers who would rather
+     * wait for a restock than commit to a long lead time have an option.
+     */
+    renderNotifyGroup(selectedVariant, { preorder = false } = {}) {
+        const heading = preorder ? 'Rather wait for a restock?' : 'Join the waitlist';
+        const note = preorder
+            ? "Skip the preorder and we'll email you if this option comes back in stock instead."
+            : "We'll email you the moment this option is back in stock.";
+
         return `
-            <div class="product-detail-notify-group">
-                <p class="product-detail-notify-heading">Join the waitlist</p>
-                <p class="product-detail-notify-note">We'll email you the moment this option is back in stock.</p>
+            <div class="product-detail-notify-group${preorder ? ' product-detail-notify-group-preorder' : ''}">
+                <p class="product-detail-notify-heading">${heading}</p>
+                <p class="product-detail-notify-note">${note}</p>
                 <form class="product-detail-notify-form" data-variant-id="${selectedVariant?.id || ''}" novalidate>
                     <input class="product-detail-notify-input"
                            type="email"

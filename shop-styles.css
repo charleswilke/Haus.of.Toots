@@ -2260,6 +2260,35 @@
     border: 1px dashed rgba(255, 107, 122, 0.35);
 }
 
+/* Secondary to the Preorder button it sits beneath: muted fill and a little
+   separation so the primary action stays the obvious one. */
+.product-detail-notify-group-preorder {
+    margin-top: 0.9rem;
+    background: rgba(122, 92, 96, 0.05);
+    border-color: rgba(122, 92, 96, 0.22);
+}
+
+.product-detail-notify-group-preorder .product-detail-notify-heading {
+    font-size: 0.92rem;
+    color: var(--neutral-dark);
+}
+
+/* Outline rather than filled, so it does not compete with the Preorder
+   button directly above it. */
+.product-detail-notify-group-preorder .product-detail-notify-btn {
+    background: var(--white);
+    color: var(--coral-dark);
+    border-color: rgba(232, 85, 99, 0.45);
+    box-shadow: none;
+    font-size: 0.92rem;
+    padding: 0.7rem 1.1rem;
+}
+
+.product-detail-notify-group-preorder .product-detail-notify-btn:hover:not(:disabled) {
+    background: rgba(255, 107, 122, 0.08);
+    box-shadow: none;
+}
+
 .product-detail-notify-heading {
     margin: 0;
     font-weight: 700;
