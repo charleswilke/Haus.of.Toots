@@ -1035,11 +1035,11 @@ class ShopApp {
 
         const purchaseActionsHTML = `
             <div class="product-detail-actions">
-                <div id="productPurchaseActions">
-                    ${this.renderProductPurchaseActions(product, selectedVariant, hasMultipleVariants)}
-                </div>
                 <div id="productDetailPrice">
                     ${this.renderProductPriceDisplay(product, selectedVariant, hasMultipleVariants)}
+                </div>
+                <div id="productPurchaseActions">
+                    ${this.renderProductPurchaseActions(product, selectedVariant, hasMultipleVariants)}
                 </div>
             </div>
         `;
