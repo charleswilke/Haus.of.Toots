@@ -213,6 +213,7 @@ class ShopApp {
         const image = product.images?.edges?.[0]?.node;
         const variants = product.variants?.edges || [];
         const isOutOfStock = this.isProductOutOfStock(product);
+        const isPreorder = !isOutOfStock && this.isProductPreorder(product);
 
         // Use the full image URL with a width param so the card image keeps its natural aspect ratio
         // (transformedSrc returns a 400x400 cropped square; use the original instead).
@@ -243,6 +244,7 @@ class ShopApp {
                     <div class="product-title-row">
                         <h3 class="product-title">${this.escapeHtml(product.title)}</h3>
                         ${isOutOfStock ? '<span class="product-out-of-stock-badge">Out of Stock</span>' : ''}
+                        ${isPreorder ? '<span class="product-preorder-badge">Preorder</span>' : ''}
                     </div>
                     <div class="product-price-section">
                         <span class="product-price ${isOutOfStock ? 'product-price-unavailable' : ''}" data-product-id="${product.id}">${priceFormatted}</span>
@@ -702,6 +704,7 @@ class ShopApp {
         element.classList.toggle('is-visible', Boolean(message));
         element.classList.toggle('is-warning', tone === 'warning');
         element.classList.toggle('is-error', tone === 'error');
+        element.classList.toggle('is-preorder', tone === 'preorder');
     }
 
     canIncreaseCartQuantity(currentQuantity, inventoryRecord) {
@@ -863,6 +866,40 @@ class ShopApp {
         const variants = product?.variants?.edges?.map(edge => edge.node).filter(Boolean) || [];
 
         return variants.length > 0 && variants.every(variant => variant.availableForSale === false);
+    }
+
+    /**
+     * A variant is on preorder when Shopify still lets it sell but it has no
+     * stock behind it. With the "continue selling when out of stock" inventory
+     * policy, availableForSale stays true past zero, so currentlyNotInStock is
+     * the only signal that separates a preorder from a genuine in-stock sale.
+     */
+    isVariantPreorder(variant) {
+        return variant?.availableForSale === true && variant?.currentlyNotInStock === true;
+    }
+
+    /**
+     * Badge the card only when everything a shopper could actually buy is a
+     * preorder. A product with one in-stock mesh size and one oversold size
+     * still ships today, so it should not read as a preorder at the grid level.
+     */
+    isProductPreorder(product) {
+        const variants = product?.variants?.edges?.map(edge => edge.node).filter(Boolean) || [];
+        const purchasable = variants.filter(variant => variant.availableForSale !== false);
+
+        return purchasable.length > 0 && purchasable.every(variant => this.isVariantPreorder(variant));
+    }
+
+    renderStockStatus(variant) {
+        if (variant?.availableForSale === false) {
+            return '<span class="product-detail-stock-status">Currently Out of Stock</span>';
+        }
+
+        if (this.isVariantPreorder(variant)) {
+            return '<span class="product-detail-stock-status product-detail-stock-status-preorder">Preorder</span>';
+        }
+
+        return '';
     }
 
     formatPriceRange(product) {
@@ -1440,7 +1477,7 @@ class ShopApp {
             return `
                 <div class="product-detail-price-group">
                     <div class="product-detail-price ${isUnavailable ? 'product-detail-price-unavailable' : ''}">${fallbackPrice}</div>
-                    ${isUnavailable ? '<span class="product-detail-stock-status">Currently Out of Stock</span>' : ''}
+                    ${this.renderStockStatus(selectedVariant)}
                 </div>
             `;
         }
@@ -1471,7 +1508,7 @@ class ShopApp {
                         `;
                     }).join('')}
                 </div>
-                ${selectedVariant?.availableForSale === false ? '<span class="product-detail-stock-status">Currently Out of Stock</span>' : ''}
+                ${this.renderStockStatus(selectedVariant)}
             </div>
         `;
     }
@@ -1524,6 +1561,15 @@ class ShopApp {
         }
 
         if (selectedVariant?.availableForSale && selectedVariant?.id) {
+            const isPreorder = this.isVariantPreorder(selectedVariant);
+            const buttonLabel = isPreorder ? 'Preorder' : 'Add to Cart';
+            const preorderNote = isPreorder ? `
+                        <div class="product-detail-preorder-note">
+                            <p>Additional inventory has been ordered and is expected to arrive in 1–2 months. Beyond that, preorders could take up to 4–6 months to arrive.</p>
+                            <p><strong>Shipping:</strong> ASAP once inventory arrives. Orders will be fulfilled in the sequence received.</p>
+                        </div>
+                    ` : '';
+
             return `
                 <div class="product-detail-purchase-group">
                     <div class="product-detail-purchase-row">
@@ -1532,22 +1578,22 @@ class ShopApp {
                             <span class="product-detail-quantity-value" aria-live="polite">1</span>
                             <button type="button" class="product-detail-quantity-btn" data-action="increase" aria-label="Increase quantity">+</button>
                         </div>
-                        <button class="product-detail-add-to-cart" 
+                        <button class="product-detail-add-to-cart${isPreorder ? ' product-detail-add-to-cart-preorder' : ''}"
                                 data-product-id="${product.id}"
                                 data-variant-id="${selectedVariant.id}"
-                                data-default-label="Add to Cart">
+                                data-default-label="${buttonLabel}">
                             <div class="add-to-cart-content">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <circle cx="9" cy="21" r="1"></circle>
                                     <circle cx="20" cy="21" r="1"></circle>
                                     <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                                 </svg>
-                                <span class="add-to-cart-text">Add to Cart</span>
+                                <span class="add-to-cart-text">${buttonLabel}</span>
                             </div>
                         </button>
                     </div>
                     <p class="product-detail-stock-note" aria-live="polite"></p>
-                </div>
+${preorderNote}                </div>
             `;
         }
 

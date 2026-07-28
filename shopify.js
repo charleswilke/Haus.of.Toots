@@ -812,11 +812,34 @@ function getInventoryPresentation(record, quantity = 1, context = 'cart') {
     const limit = getVariantInventoryLimit(record);
 
     if (limit === null) {
+        if (record.error) {
+            return {
+                limit,
+                canIncrease: record.availableForSale !== false,
+                message: 'Live stock is temporarily unavailable.',
+                tone: 'warning'
+            };
+        }
+
+        // A null limit means unbounded, which covers two very different cases:
+        // stock we simply could not measure, and a variant selling past zero on
+        // backorder. Only the latter should be labelled to the shopper.
+        if (record.currentlyNotInStock && record.availableForSale !== false) {
+            return {
+                limit,
+                canIncrease: true,
+                message: context === 'cart'
+                    ? 'Preorder — ships when inventory arrives.'
+                    : 'Preorder — this item is not in stock yet.',
+                tone: 'preorder'
+            };
+        }
+
         return {
             limit,
             canIncrease: record.availableForSale !== false,
-            message: record.error ? 'Live stock is temporarily unavailable.' : '',
-            tone: record.error ? 'warning' : 'neutral'
+            message: '',
+            tone: 'neutral'
         };
     }
 
