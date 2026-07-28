@@ -137,7 +137,9 @@
     display: block;
     position: relative;
     overflow: hidden;
-    padding: 0.7rem 1.25rem;
+    /* Top padding matches the side padding so the images sit evenly inset;
+       the Just Landed tab overlaps the frame rather than needing its own room. */
+    padding: 1.25rem 1.25rem 0.7rem;
     margin-bottom: var(--spacing-md);
     background:
         linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 240, 244, 0.88) 100%),
@@ -158,17 +160,19 @@
 
 .just-landed-kicker {
     position: absolute;
-    top: 0;
+    top: -1.25rem;
     left: 1.75rem;
+    /* Pulled up into the banner's top padding and sat on top of the frame, so
+       the rounded bottom stays visible while overlapping the image slightly. */
     z-index: 2;
     display: inline-flex;
     align-items: center;
-    padding: 0.45rem 1rem 0.55rem;
+    padding: 0.3rem 0.85rem 0.4rem;
     background: var(--accent-heading);
     color: var(--white);
     border-radius: 0 0 12px 12px;
     font-family: var(--font-display);
-    font-size: 1.2rem;
+    font-size: 1rem;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     line-height: 1;
@@ -178,9 +182,28 @@
 
 .just-landed-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.5rem;
-    align-items: center;
+    align-items: stretch;
+    position: relative;
+}
+
+.just-landed-divider {
+    position: absolute;
+    z-index: 2;
+    top: 1rem;
+    bottom: 1rem;
+    left: 50%;
+    width: 3px;
+    transform: translateX(-50%);
+    border-radius: 999px;
+    background: repeating-linear-gradient(
+        to bottom,
+        rgba(203, 108, 230, 0.72) 0 9px,
+        transparent 9px 16px
+    );
+    filter: drop-shadow(0 2px 3px rgba(203, 108, 230, 0.18));
+    pointer-events: none;
 }
 
 .just-landed-image-wrap {
@@ -191,7 +214,8 @@
     background: rgba(255, 255, 255, 0.9);
     border: 1px solid rgba(255, 107, 122, 0.18);
     box-shadow: 0 12px 30px rgba(74, 69, 66, 0.12);
-    aspect-ratio: 16 / 10;
+    aspect-ratio: 16 / 9;
+    text-decoration: none;
 }
 
 .just-landed-image {
@@ -201,21 +225,59 @@
     border-radius: 14px;
     object-fit: cover;
     object-position: center;
+    transition: transform 0.35s var(--transition-smooth);
+}
+
+.just-landed-image-wrap:hover .just-landed-image {
+    transform: scale(1.025);
+}
+
+.just-landed-image-wrap:focus-visible {
+    outline: 3px solid var(--accent-heading);
+    outline-offset: 4px;
+}
+
+/* Keep temporary launch art cohesive until the final product photography arrives. */
+.is-placeholder-image {
+    filter: saturate(0.82) contrast(0.96);
 }
 
 .just-landed-col {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+        "image image"
+        "title cta"
+        "description description";
+    align-items: center;
+    /* Pack rows to the top so the two columns' images, titles, and CTAs stay
+       on the same baselines when one column's description runs longer. */
+    align-content: start;
+    gap: 0.65rem;
+    min-width: 0;
+}
+
+.just-landed-col .just-landed-image-wrap {
+    grid-area: image;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.just-landed-col .just-landed-cta {
+    grid-area: cta;
+    align-self: center;
+    margin: 0;
 }
 
 .just-landed-col-title {
+    grid-area: title;
     font-family: var(--font-display);
     font-size: clamp(1.3rem, 1.75vw, 1.7rem);
     font-weight: 400;
     color: var(--coral-dark);
     line-height: 1.08;
     margin: 0;
+    text-align: left;
 }
 
 .just-landed-col-title-accent {
@@ -315,10 +377,12 @@
 }
 
 .just-landed-col-text {
+    grid-area: description;
     font-size: 0.94rem;
     line-height: 1.45;
     color: var(--neutral-dark);
     margin: 0;
+    text-align: left;
 }
 
 .just-landed-cta {
@@ -338,21 +402,22 @@
     transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s ease, background 0.28s ease;
 }
 
-.just-landed-cta::after {
-    content: "→";
-    font-size: 1.15em;
-    line-height: 1;
-    transition: transform 0.25s ease;
-}
-
 .just-landed-banner:hover .just-landed-cta {
     transform: translateY(-2px);
     background: linear-gradient(135deg, var(--coral-primary) 0%, var(--coral-dark) 100%);
     box-shadow: 0 12px 28px rgba(255, 132, 151, 0.5);
 }
 
-.just-landed-banner:hover .just-landed-cta::after {
-    transform: translateX(5px);
+/* Per-column CTAs: only lift the one being hovered, not both */
+.just-landed-banner:hover .just-landed-cta:not(:hover) {
+    transform: none;
+    background: linear-gradient(135deg, var(--coral-light) 0%, var(--coral-primary) 100%);
+    box-shadow: 0 6px 18px rgba(255, 132, 151, 0.38);
+}
+
+/* Compact homepage hero now that collection actions live directly below it. */
+.hero-shop {
+    padding: var(--spacing-md) 0 var(--spacing-sm);
 }
 
 @media (max-width: 900px) {
@@ -361,19 +426,45 @@
         gap: 1.1rem;
     }
 
+    .just-landed-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .just-landed-col-title {
+        text-align: center;
+    }
+
+    .just-landed-col .just-landed-cta {
+        margin-top: 0.35rem;
+    }
+
     .just-landed-image-wrap {
         order: -1;
         aspect-ratio: 16 / 9;
     }
+
+    .just-landed-divider {
+        display: none;
+    }
+
 }
 
 @media (max-width: 640px) {
     .just-landed-banner {
         padding: 1rem 1.1rem 1.25rem;
     }
+
+    /* Track this breakpoint's smaller top padding so the tag isn't clipped. */
+    .just-landed-kicker {
+        top: -1rem;
+    }
 }
 
 .collection-card {
+    position: relative;
     display: flex;
     flex-direction: column;
     background: rgba(255, 255, 255, 0.94);
@@ -389,6 +480,19 @@
 .collection-card:hover {
     transform: translateY(-8px);
     border-color: rgba(255, 107, 122, 0.45);
+    box-shadow: 0 18px 44px rgba(74, 69, 66, 0.14);
+}
+
+.collection-card:focus-visible,
+.just-landed-cta:focus-visible,
+.newsletter-btn:focus-visible {
+    outline: 3px solid var(--accent-heading);
+    outline-offset: 4px;
+}
+
+.collection-card:focus-visible {
+    transform: translateY(-4px);
+    border-color: rgba(203, 108, 230, 0.65);
     box-shadow: 0 18px 44px rgba(74, 69, 66, 0.14);
 }
 
@@ -459,6 +563,263 @@
 
 .collection-card:hover .collection-card-link::after {
     transform: translateX(4px);
+}
+
+/* Three-up collection card grid */
+.collection-card-grid-three {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.collection-card-grid-three .collection-card-title {
+    font-size: clamp(1.6rem, 2.2vw, 2rem);
+}
+
+.collection-card-badge {
+    position: absolute;
+    top: 0.9rem;
+    left: 0.9rem;
+    z-index: 2;
+    padding: 0.35rem 0.9rem 0.45rem;
+    background: var(--accent-heading);
+    color: var(--white);
+    border-radius: 999px;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1;
+    box-shadow: 0 4px 14px rgba(203, 108, 230, 0.32);
+    pointer-events: none;
+}
+
+/* Perks strip — value props immediately above the footer */
+.home-footer-perks {
+    padding: 0 0 var(--spacing-md);
+}
+
+.perks-strip {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: var(--spacing-md);
+    padding: 1.4rem 1.5rem;
+    background: rgba(255, 255, 255, 0.94);
+    border: 2px solid rgba(255, 107, 122, 0.16);
+    border-radius: 24px;
+    box-shadow: 0 14px 36px rgba(74, 69, 66, 0.08);
+}
+
+.perk-item {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding-left: 1.25rem;
+    border-left: 1px solid rgba(155, 150, 144, 0.25);
+}
+
+.perk-item:first-child {
+    border-left: none;
+    padding-left: 0;
+}
+
+.perk-icon {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(255, 132, 151, 0.14);
+    color: var(--coral-primary);
+}
+
+.perk-title {
+    margin: 0 0 0.15rem;
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: var(--coral-dark);
+}
+
+.perk-text {
+    margin: 0;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: var(--neutral-mid);
+}
+
+@media (max-width: 1000px) {
+    .perks-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.25rem 1rem;
+    }
+
+    .perk-item {
+        border-left: none;
+        padding-left: 0;
+    }
+}
+
+@media (max-width: 560px) {
+    .perks-strip {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Newsletter signup bar */
+.newsletter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.5rem;
+    margin-top: var(--spacing-md);
+    padding: 1.25rem 1.5rem;
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 240, 244, 0.88) 100%),
+        url('images/paint.webp') center / cover;
+    border: 2px solid rgba(203, 108, 230, 0.32);
+    border-radius: 24px;
+    box-shadow: 0 14px 36px rgba(74, 69, 66, 0.08);
+}
+
+.newsletter-bar[hidden] {
+    display: none;
+}
+
+.newsletter-intro {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1 1 320px;
+}
+
+.newsletter-icon {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(203, 108, 230, 0.14);
+    color: var(--accent-heading);
+}
+
+.newsletter-title {
+    margin: 0 0 0.15rem;
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 400;
+    color: var(--accent-heading);
+    line-height: 1.1;
+}
+
+.newsletter-text {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.4;
+    color: var(--neutral-mid);
+}
+
+.newsletter-form {
+    display: flex;
+    gap: 0.6rem;
+    flex: 1 1 380px;
+    margin: 0;
+}
+
+.newsletter-input {
+    flex: 1;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 0.75rem 1.1rem;
+    border-radius: 999px;
+    border: 1px solid rgba(155, 150, 144, 0.45);
+    background: var(--white);
+    color: #2b2620;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.2s var(--transition-smooth), box-shadow 0.2s var(--transition-smooth);
+}
+
+.newsletter-input:focus {
+    outline: none;
+    border-color: var(--coral-primary);
+    box-shadow: 0 0 0 3px rgba(255, 107, 122, 0.18);
+}
+
+.newsletter-btn {
+    flex-shrink: 0;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 999px;
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    background: linear-gradient(135deg, var(--coral-light) 0%, var(--coral-primary) 100%);
+    box-shadow: 0 6px 18px rgba(255, 132, 151, 0.38);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s ease, background 0.28s ease;
+}
+
+.newsletter-btn:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, var(--coral-primary) 0%, var(--coral-dark) 100%);
+    box-shadow: 0 12px 28px rgba(255, 132, 151, 0.5);
+}
+
+.newsletter-feedback {
+    width: 100%;
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.newsletter-feedback:empty {
+    display: none;
+}
+
+.newsletter-feedback.is-success {
+    color: #2f7a52;
+}
+
+.newsletter-feedback.is-error {
+    color: #b64d5b;
+}
+
+.newsletter-feedback.is-preview {
+    color: var(--neutral-dark);
+}
+
+@media (max-width: 640px) {
+    .newsletter-form {
+        flex-direction: column;
+    }
+
+    .newsletter-btn {
+        width: 100%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .just-landed-banner,
+    .just-landed-cta,
+    .just-landed-image,
+    .collection-card,
+    .collection-card-image,
+    .collection-card-link::after,
+    .newsletter-btn {
+        transition: none;
+    }
+
+    .just-landed-banner:hover,
+    .collection-card:hover,
+    .collection-card:focus-visible,
+    .newsletter-btn:hover {
+        transform: none;
+    }
 }
 
 .series-header {
@@ -2733,4 +3094,3 @@ a.home-product-card:hover .product-title {
         font-size: 0.825rem;
     }
 }
-

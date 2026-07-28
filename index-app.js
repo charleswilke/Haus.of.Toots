@@ -17,7 +17,33 @@ class HomeApp extends ShopApp {
         this.updateCartUI();
         this.buildFilterBar();
         this.initTicker();
+        this.setupNewsletterForm();
         await this.loadAllProducts();
+    }
+
+    // ─── Newsletter Signup (rough-in) ─────────────────────────────────────────
+
+    setupNewsletterForm() {
+        const form = document.getElementById('newsletterForm');
+        const input = document.getElementById('newsletterEmail');
+        const feedback = document.getElementById('newsletterFeedback');
+        if (!form || !input || !feedback) return;
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = input.value.trim();
+            feedback.classList.remove('is-success', 'is-error');
+
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                feedback.textContent = "Hmm, that email doesn't look quite right. Try again?";
+                feedback.classList.add('is-error');
+                return;
+            }
+
+            // Preview safeguard: do not imply an address was stored until a real list is connected.
+            feedback.textContent = "Signup is still being stitched together — your email wasn't sent or saved yet.";
+            feedback.classList.add('is-preview');
+        });
     }
 
     // ─── Announcement Ticker ──────────────────────────────────────────────────

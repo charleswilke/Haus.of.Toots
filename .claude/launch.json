@@ -4,14 +4,15 @@
     {
       "name": "Vercel Dev Server",
       "runtimeExecutable": "vercel",
-      "runtimeArgs": ["dev", "--listen", "0.0.0.0"],
+      "runtimeArgs": ["dev", "--yes", "--listen", "0.0.0.0"],
       "port": 3000
     },
     {
       "name": "Static Server",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["-y", "serve", "-l", "8000", "."],
-      "port": 8000
+      "runtimeArgs": ["-y", "serve", "."],
+      "port": 8000,
+      "autoPort": true
     }
   ]
 }

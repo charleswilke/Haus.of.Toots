@@ -25,8 +25,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Winky+Sans:wght@300;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=20260703">
-    <link rel="stylesheet" href="shop-styles.css?v=20260712a">
+    <link rel="stylesheet" href="styles.css?v=20260704">
+    <link rel="stylesheet" href="shop-styles.css?v=20260726">
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -61,7 +61,7 @@
     <script src="shared-components.js?v=20260703" defer></script>
 
     <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero hero-shop">
         <div class="container">
             <div class="hero-layout">
                 <div class="hero-logo-side">
@@ -84,46 +84,85 @@
     <!-- Collection Hub -->
     <section class="collection-hub-section">
         <div class="container">
-            <a href="just-landed" class="just-landed-banner" aria-label="Just Landed: JOANN Storefront canvases and NDLPT Flash Sheet sticker packs">
+            <div class="just-landed-banner">
                 <div class="just-landed-grid">
                     <div class="just-landed-col just-landed-col-left">
                         <span class="just-landed-kicker">Just Landed!</span>
-                        <h3 class="just-landed-col-title">Our beloved JOANN<br><span class="just-landed-col-title-accent">Now in Needlepoint</span></h3>
-                        <p class="just-landed-col-text">Pour one out for JOANN… and stitch one up while you're at it. A love letter to the craft store that raised us, in 13- or 18-mesh. Holiday or non-holiday.</p>
+                        <a href="just-landed" class="just-landed-image-wrap" aria-label="Shop the Village Expansion Series">
+                            <img src="images/village-expansion-720.webp" srcset="images/village-expansion-400.webp 400w, images/village-expansion-720.webp 720w, images/village-expansion-1040.webp 1040w" sizes="(max-width: 808px) 100vw, 520px" alt="Village Expansion Series canvases pinned to a corkboard: American Girl Place and The Container Store storefronts, each in holiday and everyday versions" class="just-landed-image" width="1200" height="858" loading="lazy">
+                        </a>
+                        <h3 class="just-landed-col-title">The Village Expansion Series<br><span class="just-landed-col-title-accent">grows again</span></h3>
+                        <p class="just-landed-col-text">New tiny storefronts are moving into the neighborhood. Stitch them solo, collect the whole block, or pretend you're a tiny mayor with excellent taste.</p>
+                        <a href="just-landed" class="just-landed-cta">Shop the Village</a>
                     </div>
-                    <div class="just-landed-image-wrap">
-                        <img src="images/joann-card.webp" alt="JOANN Storefront needlepoint canvases (holiday and non-holiday) framed with NDLPT Flash Sheet stickers" class="just-landed-image" width="1000" height="729" loading="lazy">
-                    </div>
+                    <span class="just-landed-divider" aria-hidden="true"></span>
                     <div class="just-landed-col just-landed-col-right">
-                        <h3 class="just-landed-col-title">The Flash Sheet<br><span class="just-landed-col-title-accent">Stuck on You</span></h3>
-                        <p class="just-landed-col-text">All eight NDLPT Flash Sheet designs, sticker-ified. For your laptop, water bottle, planner, sketchbook… anywhere that needs a little Toots energy.</p>
-                        <span class="just-landed-cta">Shop New Arrivals</span>
+                        <a href="just-landed" class="just-landed-image-wrap" aria-label="Shop Flash Sheet Needle Minders">
+                            <img src="images/needleminders-720.webp" srcset="images/needleminders-400.webp 400w, images/needleminders-720.webp 720w, images/needleminders-1040.webp 1040w" sizes="(max-width: 808px) 100vw, 520px" alt="Six Flash Sheet Needle Minders on pink Haus of Toots backing cards: two NDLPT hearts, the Stitch Club swallow, Thread Licker lips, Thread Chicken rooster, and Frog It frog" class="just-landed-image" width="1200" height="900" loading="lazy">
+                        </a>
+                        <h3 class="just-landed-col-title">Flash Sheet<br><span class="just-landed-col-title-accent">Needle Minders</span></h3>
+                        <p class="just-landed-col-text">Your favorite flash sheet weirdos, now ready to hold your needle like a tiny responsible adult.</p>
+                        <a href="just-landed" class="just-landed-cta">Shop Needle Minders</a>
                     </div>
                 </div>
-            </a>
+            </div>
 
-            <div class="collection-card-grid">
-                <a href="flash" class="collection-card collection-card-featured">
+            <div class="collection-card-grid collection-card-grid-three">
+                <a href="just-landed" class="collection-card">
+                    <span class="collection-card-badge">New</span>
+                    <div class="collection-card-image-wrap">
+                        <img src="images/village-expansion-400.webp" srcset="images/village-expansion-400.webp 400w, images/village-expansion-720.webp 720w, images/village-expansion-1040.webp 1040w" sizes="(max-width: 768px) 100vw, 360px" alt="Village Expansion Series card artwork: American Girl Place and The Container Store needlepoint storefronts" class="collection-card-image" width="1200" height="858" loading="lazy">
+                    </div>
+                    <div class="collection-card-content">
+                        <h3 class="collection-card-title">Village Expansion Series</h3>
+                        <p class="collection-card-description">New canvases just moved into the collection!</p>
+                        <span class="collection-card-link">Shop the Village Expansion</span>
+                    </div>
+                </a>
+
+                <a href="just-landed" class="collection-card">
+                    <span class="collection-card-badge">New</span>
+                    <div class="collection-card-image-wrap">
+                        <img src="images/needleminders-400.webp" srcset="images/needleminders-400.webp 400w, images/needleminders-720.webp 720w, images/needleminders-1040.webp 1040w" sizes="(max-width: 768px) 100vw, 360px" alt="Flash Sheet Needle Minders on pink Haus of Toots backing cards" class="collection-card-image" width="1200" height="900" loading="lazy">
+                    </div>
+                    <div class="collection-card-content">
+                        <h3 class="collection-card-title">Flash Sheet Needle Minders</h3>
+                        <p class="collection-card-description">Flash sheet favorites, now ready to mind your needle.</p>
+                        <span class="collection-card-link">Shop Needle Minders</span>
+                    </div>
+                </a>
+
+                <a href="flash" class="collection-card">
                     <div class="collection-card-image-wrap">
                         <img src="images/flash.webp" alt="NDLPT Flash Sheet Collection card artwork" class="collection-card-image" width="1200" height="843" loading="lazy">
                     </div>
                     <div class="collection-card-content">
                         <h3 class="collection-card-title">NDLPT Flash Sheet Collection</h3>
-                        <p class="collection-card-description">Bold canvases with a flash tattoo spirit: punchy, playful, and ready to stitch. Restocks coming in August!</p>
-                        <span class="collection-card-link">Shop the NDLPT Flash Sheet Collection</span>
+                        <p class="collection-card-description">Bold, playful, and ready to stitch. Restocks coming in August!</p>
+                        <span class="collection-card-link">Shop Flash Sheets</span>
                     </div>
                 </a>
+            </div>
 
-                <a href="village" class="collection-card">
-                    <div class="collection-card-image-wrap">
-                        <img src="images/village.webp" alt="Holiday Village Expansion Series card artwork" class="collection-card-image" width="1200" height="861" loading="lazy">
+            <!-- Kept for a future launch; remove `hidden` when Jessie is ready to collect emails. -->
+            <div class="newsletter-bar" hidden>
+                <div class="newsletter-intro">
+                    <span class="newsletter-icon">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                    </span>
+                    <div class="newsletter-copy">
+                        <h4 class="newsletter-title">Stay in the Loop</h4>
+                        <p class="newsletter-text">Be the first to hear about new drops, restocks, and tiny shop updates.</p>
                     </div>
-                    <div class="collection-card-content">
-                        <h3 class="collection-card-title">Holiday Village Expansion Series</h3>
-                        <p class="collection-card-description">More canvases coming to this collection in July!</p>
-                        <span class="collection-card-link">Shop the Holiday Village Expansion Series</span>
-                    </div>
-                </a>
+                </div>
+                <form class="newsletter-form" id="newsletterForm" novalidate>
+                    <input type="email" id="newsletterEmail" class="newsletter-input" placeholder="Enter your email" autocomplete="email" inputmode="email" required aria-label="Email address" aria-describedby="newsletterFeedback">
+                    <button type="submit" class="newsletter-btn">Join the List</button>
+                </form>
+                <p class="newsletter-feedback" id="newsletterFeedback" role="status"></p>
             </div>
         </div>
     </section>
@@ -136,9 +175,13 @@
             </div>
             <div class="ticker-wrap" aria-hidden="true">
                 <div class="ticker">
+                    <span class="ticker-item">JUST LANDED: NEW VILLAGE EXPANSION CANVASES + FLASH SHEET NEEDLE MINDERS!</span>
+                    <span class="ticker-sep">✦</span>
                     <span class="ticker-item">NDLPT FLASH SHEET RESTOCKS COMING IN AUGUST!</span>
                     <span class="ticker-sep">✦</span>
                     <span class="ticker-item">@HAUS.OF.TOOTS ON TIKTOK & INSTAGRAM</span>
+                    <span class="ticker-sep">✦</span>
+                    <span class="ticker-item">JUST LANDED: NEW VILLAGE EXPANSION CANVASES + FLASH SHEET NEEDLE MINDERS!</span>
                     <span class="ticker-sep">✦</span>
                     <span class="ticker-item">NDLPT FLASH SHEET RESTOCKS COMING IN AUGUST!</span>
                     <span class="ticker-sep">✦</span>
@@ -210,14 +253,72 @@
         </div>
     </div>
 
+    <aside class="home-footer-perks" aria-label="Why shop Haus of Toots">
+        <div class="container">
+            <div class="perks-strip">
+                <div class="perk-item">
+                    <span class="perk-icon">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </span>
+                    <div class="perk-copy">
+                        <h4 class="perk-title">Designed by Jessie</h4>
+                        <p class="perk-text">Original &amp; exclusive NDLPT designs</p>
+                    </div>
+                </div>
+                <div class="perk-item">
+                    <span class="perk-icon">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="1" y="3" width="15" height="13" rx="1"></rect>
+                            <path d="M16 8h4l3 3v5h-7V8z"></path>
+                            <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                            <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                        </svg>
+                    </span>
+                    <div class="perk-copy">
+                        <h4 class="perk-title">Fast Shipping</h4>
+                        <p class="perk-text">Carefully packed &amp; quick to ship</p>
+                    </div>
+                </div>
+                <div class="perk-item">
+                    <span class="perk-icon">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                    </span>
+                    <div class="perk-copy">
+                        <h4 class="perk-title">Small Biz Energy</h4>
+                        <p class="perk-text">Thank you for supporting our shop</p>
+                    </div>
+                </div>
+                <div class="perk-item">
+                    <span class="perk-icon">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 4l1.8 5.2L19 11l-5.2 1.8L12 18l-1.8-5.2L5 11l5.2-1.8z"></path>
+                            <path d="M19 3v3"></path>
+                            <path d="M17.5 4.5h3"></path>
+                            <path d="M5 17.5v3"></path>
+                            <path d="M3.5 19h3"></path>
+                        </svg>
+                    </span>
+                    <div class="perk-copy">
+                        <h4 class="perk-title">Stitch the Weird</h4>
+                        <p class="perk-text">Because normal is overrated</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
     <div id="shared-footer"></div>
     <div id="shared-cart-drawer"></div>
 
     <script src="shopify-config.js?v=20260703" defer></script>
     <script src="shopify.js?v=20260703" defer></script>
     <script src="shop-app.js?v=20260703" defer></script>
-    <script src="index-app.js?v=20260703" defer></script>
+    <script src="index-app.js?v=20260711" defer></script>
     <script src="script.js?v=20260703" defer></script>
 </body>
 </html>
-
