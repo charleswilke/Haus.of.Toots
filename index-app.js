@@ -3,12 +3,18 @@
 // ===================================
 
 class HomeApp extends ShopApp {
+    // Products rendered per scroll batch. Divides evenly into the masonry's
+    // 1/2/3 column layouts so a batch never leaves a ragged part-row.
+    static BATCH_SIZE = 6;
+
     constructor() {
         super(); // calls ShopApp constructor → this.init() → HomeApp.init()
     }
 
     async init() {
         this.allProducts = [];
+        this.filteredProducts = [];
+        this.visibleCount = 0;
         this.activeFilter = 'all';
         this.inStockOnly = false;
         this.setupCartListeners();
@@ -162,12 +168,13 @@ class HomeApp extends ShopApp {
             if (aIn === bIn) return 0;
             return aIn ? -1 : 1;
         });
-        this.renderProducts(products);
-    }
 
-    renderProducts(products) {
+        this.filteredProducts = products;
+        this.visibleCount = 0;
+
         const grid = document.getElementById('homeProductsGrid');
         if (!grid) return;
+        grid.innerHTML = '';
 
         if (products.length === 0) {
             grid.innerHTML = `
@@ -177,15 +184,70 @@ class HomeApp extends ShopApp {
             return;
         }
 
-        grid.innerHTML = products.map(p => this.createProductCard(p)).join('');
+        this.renderNextBatch();
+        this.watchForMoreProducts();
+    }
 
-        grid.querySelectorAll('.product-card').forEach(card => {
+    /**
+     * Appends the next slice of the catalog. Products arrive a batch at a time so
+     * the perks strip sits right under the ticker on first paint and gets pushed
+     * down as the shopper scrolls, rather than the whole grid landing at once.
+     */
+    renderNextBatch() {
+        const grid = document.getElementById('homeProductsGrid');
+        if (!grid) return;
+
+        const start = this.visibleCount;
+        const batch = this.filteredProducts.slice(start, start + HomeApp.BATCH_SIZE);
+        if (batch.length === 0) return;
+
+        const staging = document.createElement('div');
+        staging.innerHTML = batch.map(p => this.createProductCard(p)).join('');
+
+        Array.from(staging.children).forEach((card, i) => {
+            // Masonry sorts on this, so stamp it before the columns get rebuilt —
+            // otherwise appended cards jump ahead of the ones already on screen.
+            card.dataset.masonryOrder = String(start + i);
             card.addEventListener('click', () => {
                 this.openProductModal(card.getAttribute('data-product-id'));
             });
+            grid.appendChild(card);
         });
 
+        this.visibleCount = start + batch.length;
         if (window.applyMasonry) window.applyMasonry(grid);
+    }
+
+    renderRemainingProducts() {
+        while (this.visibleCount < this.filteredProducts.length) this.renderNextBatch();
+    }
+
+    watchForMoreProducts() {
+        const sentinel = document.getElementById('homeGridSentinel');
+        if (!sentinel || !('IntersectionObserver' in window)) {
+            // Nothing to trip the next batch — render it all rather than stranding
+            // products the shopper can never scroll to.
+            this.renderRemainingProducts();
+            return;
+        }
+
+        if (!this.moreProductsObserver) {
+            this.moreProductsObserver = new IntersectionObserver((entries) => {
+                if (!entries.some(e => e.isIntersecting)) return;
+                if (this.visibleCount >= this.filteredProducts.length) {
+                    this.moreProductsObserver.unobserve(sentinel);
+                    return;
+                }
+                this.renderNextBatch();
+                // Re-observing re-fires the callback, so a batch too short to fill
+                // the viewport keeps loading until the sentinel is pushed off screen.
+                this.moreProductsObserver.unobserve(sentinel);
+                this.moreProductsObserver.observe(sentinel);
+            }, { rootMargin: '400px 0px' });
+        }
+
+        this.moreProductsObserver.unobserve(sentinel);
+        this.moreProductsObserver.observe(sentinel);
     }
 
     createProductCard(product) {

@@ -197,7 +197,9 @@
     <!-- Browse Products -->
     <section class="home-browse-section">
         <div class="container">
-            <div id="homeLoadingState" class="loading-state">
+            <!-- Compact so the perks strip sits just under the ticker while products load,
+                 instead of a tall spinner holding open an empty stretch of page. -->
+            <div id="homeLoadingState" class="loading-state loading-state-inline">
                 <div class="loading-spinner"></div>
                 <p>Loading products...</p>
             </div>
@@ -209,6 +211,9 @@
             <div id="homeProductsGrid" class="products-grid" style="display: none;">
                 <!-- Products inserted by index-app.js -->
             </div>
+
+            <!-- Scrolling this into view loads the next batch of products. -->
+            <div id="homeGridSentinel" class="home-grid-sentinel" aria-hidden="true"></div>
         </div>
     </section>
 

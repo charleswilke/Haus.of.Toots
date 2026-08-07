@@ -976,6 +976,24 @@
     gap: var(--spacing-md);
 }
 
+/* Compact variant: keeps the page from reserving a screenful of empty space
+   while products are still in flight. */
+.loading-state-inline {
+    flex-direction: row;
+    padding: var(--spacing-sm) 0;
+    gap: 0.75rem;
+}
+
+.loading-state-inline .loading-spinner {
+    width: 22px;
+    height: 22px;
+    border-width: 3px;
+}
+
+.loading-state-inline p {
+    margin: 0;
+}
+
 .loading-spinner {
     width: 50px;
     height: 50px;
@@ -3159,6 +3177,11 @@
 /* Home Browse Products Section */
 .home-browse-section {
     padding: var(--spacing-md) 0 var(--spacing-xl);
+}
+
+/* Trip wire for the next product batch — takes up no room of its own. */
+.home-grid-sentinel {
+    height: 1px;
 }
 
 /* Make home product cards behave as links */
