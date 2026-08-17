@@ -15,13 +15,10 @@ class HomeApp extends ShopApp {
         this.allProducts = [];
         this.filteredProducts = [];
         this.visibleCount = 0;
-        this.activeFilter = 'all';
-        this.inStockOnly = false;
         this.setupCartListeners();
         this.setupProductModalListeners();
         this.setupLightboxListeners();
         this.updateCartUI();
-        this.buildFilterBar();
         this.initTicker();
         this.setupNewsletterForm();
         await this.loadAllProducts();
@@ -81,74 +78,13 @@ class HomeApp extends ShopApp {
         });
     }
 
-    // ─── Filter Bar ───────────────────────────────────────────────────────────
-
-    buildFilterBar() {
-        const filterBar = document.getElementById('homeFilterBar');
-        if (!filterBar) return;
-
-        filterBar.innerHTML = `
-            <div class="filter-dropdown" id="availabilityDropdown">
-                <button class="filter-pill filter-pill-dropdown" id="availabilityPill" aria-haspopup="listbox" aria-expanded="false">
-                    <span class="filter-pill-label" id="availabilityLabel">Availability</span>
-                    <svg class="filter-pill-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                        <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </button>
-                <div class="filter-dropdown-menu" id="availabilityMenu" role="listbox" aria-label="Availability">
-                    <button class="filter-dropdown-option filter-dropdown-option-active" role="option" aria-selected="true" data-value="all">Show All</button>
-                    <button class="filter-dropdown-option" role="option" aria-selected="false" data-value="in-stock">In Stock</button>
-                </div>
-            </div>`;
-
-        const pill    = document.getElementById('availabilityPill');
-        const menu    = document.getElementById('availabilityMenu');
-        const label   = document.getElementById('availabilityLabel');
-        const options = menu.querySelectorAll('.filter-dropdown-option');
-
-        pill.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const isOpen = pill.getAttribute('aria-expanded') === 'true';
-            pill.setAttribute('aria-expanded', String(!isOpen));
-            menu.classList.toggle('filter-dropdown-menu-open', !isOpen);
-        });
-
-        options.forEach(opt => {
-            opt.addEventListener('click', () => {
-                options.forEach(o => {
-                    o.classList.remove('filter-dropdown-option-active');
-                    o.setAttribute('aria-selected', 'false');
-                });
-                opt.classList.add('filter-dropdown-option-active');
-                opt.setAttribute('aria-selected', 'true');
-
-                const value = opt.dataset.value;
-                const isFiltered = value === 'in-stock';
-                label.textContent = isFiltered ? 'Availability: In Stock' : 'Availability';
-                pill.classList.toggle('filter-pill-active', isFiltered);
-                pill.setAttribute('aria-expanded', 'false');
-                menu.classList.remove('filter-dropdown-menu-open');
-
-                this.inStockOnly = isFiltered;
-                this.renderFilteredProducts();
-            });
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!document.getElementById('availabilityDropdown')?.contains(e.target)) {
-                pill.setAttribute('aria-expanded', 'false');
-                menu.classList.remove('filter-dropdown-menu-open');
-            }
-        });
-    }
-
     // ─── Product Loading ──────────────────────────────────────────────────────
 
     async loadAllProducts() {
         try {
             this.allProducts = await shopifyClient.getAllProducts(50);
             this.showGrid();
-            this.renderFilteredProducts();
+            this.renderProducts();
         } catch (error) {
             console.error('Failed to load products:', error);
             this.showError();
@@ -157,11 +93,8 @@ class HomeApp extends ShopApp {
 
     // ─── Rendering ────────────────────────────────────────────────────────────
 
-    renderFilteredProducts() {
+    renderProducts() {
         let products = [...this.allProducts];
-        if (this.inStockOnly) {
-            products = products.filter(p => this.isProductInStock(p));
-        }
         products.sort((a, b) => {
             const aIn = this.isProductInStock(a);
             const bIn = this.isProductInStock(b);
