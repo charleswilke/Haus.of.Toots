@@ -189,9 +189,8 @@ class HomeApp extends ShopApp {
     }
 
     /**
-     * Appends the next slice of the catalog. Products arrive a batch at a time so
-     * the perks strip sits right under the ticker on first paint and gets pushed
-     * down as the shopper scrolls, rather than the whole grid landing at once.
+     * Appends the next slice of the catalog so the first paint stays compact and
+     * the rest of the grid arrives as the shopper scrolls.
      */
     renderNextBatch() {
         const grid = document.getElementById('homeProductsGrid');
