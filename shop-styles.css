@@ -837,11 +837,34 @@
     padding: var(--spacing-lg) 0 var(--spacing-md);
 }
 
+/* Large centered image, with the title and description stacked beneath it. */
 .series-header-layout {
     display: grid;
-    grid-template-columns: minmax(0, 3fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--spacing-md);
-    align-items: center;
+    justify-items: center;
+}
+
+.series-header-layout > * {
+    width: 100%;
+}
+
+.series-header-layout .series-image-panel {
+    max-width: 900px;
+}
+
+.series-header-layout .series-copy {
+    max-width: 760px;
+}
+
+/* Pin the alignment so it no longer flips at the narrower breakpoints: the
+   title centers under the image, the description stays left for readability. */
+.series-header-layout .series-copy .hero-title {
+    text-align: center;
+}
+
+.series-header-layout .series-copy .hero-description {
+    text-align: left;
 }
 
 .series-image-panel {
@@ -886,6 +909,12 @@
     line-height: 1.55;
     color: var(--neutral-mid);
     margin-bottom: 0;
+}
+
+/* Shopify descriptions arrive as several paragraphs; space them without
+   adding a trailing gap inside the stitched border. */
+.series-copy .hero-description + .hero-description {
+    margin-top: 0.7rem;
 }
 
 .collection-story-section {

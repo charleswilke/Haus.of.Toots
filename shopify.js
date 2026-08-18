@@ -245,6 +245,7 @@ class ShopifyClient {
                     id
                     title
                     handle
+                    descriptionHtml
                     products(first: $first) {
                         edges {
                             node {
@@ -297,7 +298,17 @@ class ShopifyClient {
         `;
 
         const data = await this.fetch(query, { handle, first });
-        return data.collection?.products?.edges?.map(edge => edge.node) || null;
+        const collection = data.collection;
+
+        if (!collection) {
+            return null;
+        }
+
+        return {
+            title: collection.title || '',
+            descriptionHtml: collection.descriptionHtml || '',
+            products: collection.products?.edges?.map(edge => edge.node) || []
+        };
     }
 
     /**

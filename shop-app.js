@@ -90,6 +90,62 @@ class ShopApp {
     }
 
     /**
+     * Pull the paragraph text out of Shopify's description HTML.
+     * Returns an array of paragraphs, each split into its own lines.
+     */
+    parseCollectionDescription(descriptionHtml) {
+        if (!descriptionHtml) {
+            return [];
+        }
+
+        const parsed = new DOMParser().parseFromString(descriptionHtml, 'text/html');
+        parsed.body.querySelectorAll('br').forEach(br => br.replaceWith('\n'));
+
+        const blocks = parsed.body.querySelectorAll('p, li');
+        const sources = blocks.length ? Array.from(blocks) : [parsed.body];
+
+        return sources
+            .map(node => node.textContent.replace(/[^\S\n]+/g, ' ').trim())
+            .filter(Boolean)
+            .map(text => text.split('\n').map(line => line.trim()).filter(Boolean));
+    }
+
+    /**
+     * Swap the hardcoded hero copy for the collection description set in Shopify.
+     * The paragraphs are rebuilt from text nodes rather than injected as markup,
+     * and an empty description leaves the copy already in the page untouched.
+     */
+    applyCollectionDescription(descriptionHtml) {
+        const existing = document.querySelector('.series-copy .hero-description');
+        if (!existing) {
+            return;
+        }
+
+        const paragraphs = this.parseCollectionDescription(descriptionHtml);
+        if (!paragraphs.length) {
+            return;
+        }
+
+        const fragment = document.createDocumentFragment();
+
+        paragraphs.forEach(lines => {
+            const paragraph = document.createElement('p');
+            paragraph.className = existing.className;
+
+            lines.forEach((line, index) => {
+                if (index > 0) {
+                    paragraph.appendChild(document.createElement('br'));
+                }
+                paragraph.appendChild(document.createTextNode(line));
+            });
+
+            fragment.appendChild(paragraph);
+        });
+
+        existing.replaceWith(fragment);
+    }
+
+    /**
      * Load products from Shopify
      */
     async loadProducts() {
@@ -99,9 +155,10 @@ class ShopApp {
 
         try {
             if (this.collectionContext?.handle) {
-                const collectionProducts = await shopifyClient.getCollectionProducts(this.collectionContext.handle, 50);
-                if (collectionProducts) {
-                    this.products = collectionProducts;
+                const collection = await shopifyClient.getCollectionProducts(this.collectionContext.handle, 50);
+                if (collection) {
+                    this.products = collection.products;
+                    this.applyCollectionDescription(collection.descriptionHtml);
                 } else {
                     const products = await shopifyClient.getProducts(24);
                     this.products = this.filterProductsForCollection(products);
