@@ -886,9 +886,13 @@
     box-shadow: 0 8px 24px rgba(74, 69, 66, 0.08);
 }
 
+/* The bottom padding is smaller than the top on purpose. The title's tight
+   line-height lets its glyphs sit above their line box, while the last line of
+   body copy carries leading below it, so equal padding reads as bottom-heavy.
+   Trimming ~7px makes the visible gaps match. */
 .series-copy .stitched-border {
     margin: 0;
-    padding: 0.8rem 0.95rem;
+    padding: 0.8rem 0.95rem 0.35rem;
 }
 
 .series-copy-inner {
