@@ -833,8 +833,11 @@
     }
 }
 
+/* No bottom padding: .shop-section already contributes spacing-md below, and
+   stacking both put twice as much air under the description box as the layout
+   gap puts between the image and the box. */
 .series-header {
-    padding: var(--spacing-lg) 0 var(--spacing-md);
+    padding: var(--spacing-lg) 0 0;
 }
 
 /* Large centered image, with the title and description stacked beneath it. */
