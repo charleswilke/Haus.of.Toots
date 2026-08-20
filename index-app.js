@@ -143,6 +143,11 @@ class HomeApp extends ShopApp {
             card.addEventListener('click', () => {
                 this.openProductModal(card.getAttribute('data-product-id'));
             });
+            card.addEventListener('keydown', (e) => {
+                if (e.key !== 'Enter' && e.key !== ' ') return;
+                e.preventDefault();
+                card.click();
+            });
             grid.appendChild(card);
         });
 
@@ -183,36 +188,8 @@ class HomeApp extends ShopApp {
     }
 
     createProductCard(product) {
-        const image = product.images?.edges?.[0]?.node;
-        const isOutOfStock = this.isProductOutOfStock(product);
-        const thumbnailUrl = image?.url
-            ? `${image.url}${image.url.includes('?') ? '&' : '?'}width=600`
-            : null;
-
-        const imageHTML = thumbnailUrl
-            ? `<img src="${thumbnailUrl}" alt="${this.escapeAttr(image.altText || product.title)}" class="product-image">`
-            : `<div class="product-no-image">No image available</div>`;
-
-        const cardClasses = 'product-card home-product-card';
-
-        const priceFormatted = this.formatPriceRange(product);
-
-        return `
-            <div class="${cardClasses}" data-product-id="${product.id}">
-                <div class="product-image-container">
-                    ${imageHTML}
-                </div>
-                <div class="product-info">
-                    <div class="product-title-row">
-                        <h3 class="product-title">${this.escapeHtml(product.title)}</h3>
-                        ${isOutOfStock ? '<span class="product-out-of-stock-badge">Out of Stock</span>' : ''}
-                    </div>
-                    <div class="product-price-section">
-                        <span class="product-price ${isOutOfStock ? 'product-price-unavailable' : ''}">${priceFormatted}</span>
-                        ${isOutOfStock ? '<span class="product-waitlist-label">Join the Waitlist</span>' : ''}
-                    </div>
-                </div>
-            </div>`;
+        return super.createProductCard(product)
+            .replace('class="product-card"', 'class="product-card home-product-card"');
     }
 
     // ─── Helpers ──────────────────────────────────────────────────────────────

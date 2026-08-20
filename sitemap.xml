@@ -21,6 +21,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://hausoftoots.com/accessories</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://hausoftoots.com/gallery</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>

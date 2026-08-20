@@ -22,8 +22,11 @@ class ShopApp {
 
     getCollectionContext() {
         const { dataset } = document.body;
-        const collectionKey = (dataset.shopCollection || '').trim();
-        const collectionHandle = (dataset.shopCollectionHandle || collectionKey).trim();
+        const tag = (dataset.shopTag || '').trim();
+        const collectionKey = (dataset.shopCollection || tag).trim();
+        const collectionHandle = tag
+            ? ''
+            : (dataset.shopCollectionHandle || collectionKey).trim();
 
         if (!collectionKey) {
             return null;
@@ -37,6 +40,7 @@ class ShopApp {
         return {
             key: collectionKey,
             handle: collectionHandle,
+            tag,
             title: (dataset.shopCollectionTitle || '').trim() || collectionKey,
             aliases,
             emptyMessage: (dataset.shopEmptyMessage || '').trim()
@@ -65,6 +69,13 @@ class ShopApp {
     filterProductsForCollection(products) {
         if (!this.collectionContext) {
             return products;
+        }
+
+        if (this.collectionContext.tag) {
+            const targetTag = this.collectionContext.tag.toLowerCase();
+            return products.filter(product =>
+                (product.tags || []).some(tag => String(tag).trim().toLowerCase() === targetTag)
+            );
         }
 
         const aliases = this.collectionContext.aliases.length
@@ -164,7 +175,9 @@ class ShopApp {
                     this.products = this.filterProductsForCollection(products);
                 }
             } else {
-                const products = await shopifyClient.getProducts(24);
+                const products = this.collectionContext?.tag
+                    ? await shopifyClient.getAllProducts(50)
+                    : await shopifyClient.getProducts(24);
                 this.products = this.filterProductsForCollection(products);
             }
             
@@ -213,6 +226,11 @@ class ShopApp {
             card.addEventListener('click', (e) => {
                 const productId = card.getAttribute('data-product-id');
                 this.openProductModal(productId);
+            });
+            card.addEventListener('keydown', (e) => {
+                if (e.key !== 'Enter' && e.key !== ' ') return;
+                e.preventDefault();
+                card.click();
             });
         });
 
@@ -279,23 +297,26 @@ class ShopApp {
             ? `${fullImageUrl}${fullImageUrl.includes('?') ? '&' : '?'}width=600`
             : null;
         
-        const imageHTML = thumbnailUrl 
-            ? `<img src="${thumbnailUrl}" 
-                    data-full-image="${fullImageUrl}" 
-                    alt="${image.altText || product.title}" 
+        const imageHTML = thumbnailUrl
+            ? `<img src="${thumbnailUrl}"
+                    data-full-image="${fullImageUrl}"
+                    alt="${this.escapeHtml(image.altText || product.title)}"
                     class="product-image product-image-clickable">`
             : `<div class="product-no-image">No image available</div>`;
 
-        const priceFormatted = this.formatPriceRange(product);
-
-        const description = this.stripHtml(product.description || product.descriptionHtml || '');
+        const cardPriceFormatted = this.formatProductCardPrice(product);
+        const cardPriceHTML = cardPriceFormatted.startsWith('From ')
+            ? `<span class="product-price-prefix">From</span> <span class="product-price-amount">${this.escapeHtml(cardPriceFormatted.slice(5))}</span>`
+            : `<span class="product-price-amount">${this.escapeHtml(cardPriceFormatted)}</span>`;
+        const cardMeta = this.getProductCardMeta(product);
 
         const cardClasses = 'product-card';
 
         return `
-            <div class="${cardClasses}" data-product-id="${product.id}">
+            <div class="${cardClasses}" data-product-id="${product.id}" role="button" tabindex="0" aria-label="View ${this.escapeHtml(product.title)}">
                 <div class="product-image-container">
                     ${imageHTML}
+                    <span class="product-original-badge">Haus original</span>
                 </div>
                 <div class="product-info">
                     <div class="product-title-row">
@@ -303,8 +324,9 @@ class ShopApp {
                         ${isOutOfStock ? '<span class="product-out-of-stock-badge">Out of Stock</span>' : ''}
                         ${isPreorder ? '<span class="product-preorder-badge">Preorder</span>' : ''}
                     </div>
+                    ${cardMeta ? `<p class="product-card-meta">${this.escapeHtml(cardMeta)}</p>` : ''}
                     <div class="product-price-section">
-                        <span class="product-price ${isOutOfStock ? 'product-price-unavailable' : ''}" data-product-id="${product.id}">${priceFormatted}</span>
+                        <span class="product-price ${isOutOfStock ? 'product-price-unavailable' : ''}" data-product-id="${product.id}">${cardPriceHTML}</span>
                         ${isOutOfStock ? '<span class="product-waitlist-label">Join the Waitlist</span>' : ''}
                     </div>
                 </div>
@@ -985,6 +1007,69 @@ class ShopApp {
         }
 
         return `${this.formatPrice(minAmount, currencyCode)} - ${this.formatPrice(maxAmount, currencyCode)}`;
+    }
+
+    formatProductCardPrice(product) {
+        const variants = product?.variants?.edges?.map(edge => edge.node) || [];
+        const pricedVariants = variants.filter(variant => variant?.priceV2?.amount && variant?.priceV2?.currencyCode);
+
+        if (pricedVariants.length === 0) {
+            const minPrice = product?.priceRange?.minVariantPrice;
+            return minPrice
+                ? this.formatCompactPrice(minPrice.amount, minPrice.currencyCode)
+                : 'Price not available';
+        }
+
+        const currencyCode = pricedVariants[0].priceV2.currencyCode;
+        const amounts = pricedVariants
+            .map(variant => parseFloat(variant.priceV2.amount))
+            .filter(amount => Number.isFinite(amount));
+
+        if (amounts.length === 0) return 'Price not available';
+
+        const minAmount = Math.min(...amounts);
+        const maxAmount = Math.max(...amounts);
+        const minimum = this.formatCompactPrice(minAmount, currencyCode);
+
+        return minAmount === maxAmount ? minimum : `From ${minimum}`;
+    }
+
+    formatCompactPrice(amount, currencyCode = 'USD') {
+        const numericAmount = parseFloat(amount);
+        const usesWholeAmount = Number.isInteger(numericAmount);
+        const formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: currencyCode,
+            minimumFractionDigits: usesWholeAmount ? 0 : 2,
+            maximumFractionDigits: 2
+        });
+        return formatter.format(numericAmount);
+    }
+
+    getProductCardMeta(product) {
+        const variants = product?.variants?.edges?.map(edge => edge.node).filter(Boolean) || [];
+        const meshValues = [];
+
+        variants.forEach(variant => {
+            (variant.selectedOptions || []).forEach(option => {
+                if (!/mesh/i.test(option?.name || '')) return;
+                const value = String(option?.value || '').match(/\d+/)?.[0];
+                if (value && !meshValues.includes(value)) meshValues.push(value);
+            });
+        });
+
+        if (meshValues.length > 0) {
+            return `${meshValues.join(' & ')} mesh`;
+        }
+
+        const meshTag = (product?.tags || []).find(tag => /^\d+\s*mesh$/i.test(String(tag).trim()));
+        if (meshTag) return String(meshTag).toLowerCase();
+
+        const title = String(product?.title || '');
+        if (/needle minder/i.test(title)) return 'Magnetic needle minders';
+        if (/sticker/i.test(title)) return 'Sticker collection';
+
+        return String(product?.productType || '').replace(/^hand painted\s+/i, '').trim();
     }
 
     formatVariantPrice(variant) {
@@ -2007,12 +2092,11 @@ ${preorderNote}                </div>
     }
 }
 
-// Initialize the shop when DOM is ready (collection pages only)
-if (document.body.dataset.shopCollection) {
+// Initialize the shop when DOM is ready (collection and tag-driven pages only)
+if (document.body.dataset.shopCollection || document.body.dataset.shopTag) {
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => new ShopApp());
     } else {
         new ShopApp();
     }
 }
-
