@@ -9,11 +9,10 @@ const SharedComponents = {
         return `
     <nav class="top-nav">
         <div class="nav-container">
-            <a href="index.html" class="nav-brand">
-                <img src="images/hauslogo.webp" alt="Haus of Toots logo" class="nav-brand-logo" width="800" height="885">
-                <span class="nav-brand-text">Haus <span class="highlight-contrast">of</span> Toots</span>
-                <span class="nav-brand-subtitle">- Cute, Weird & Wildly Specific Needlepoint Canvases</span>
+            <a href="index.html" class="nav-brand" aria-label="Haus of Toots home">
+                <img src="images/nav-wordmark.webp" alt="Haus of Toots" class="nav-brand-logo" width="520" height="247">
             </a>
+            <span class="nav-tagline">Cute, Weird &amp; Wildly Specific Needlepoint Canvases</span>
             <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
                 <span class="nav-toggle-icon"></span>
                 <span class="nav-toggle-icon"></span>

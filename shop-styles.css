@@ -970,6 +970,11 @@
         grid-template-columns: 1fr;
     }
 
+    /* Flash sheet card leads the stacked list; stays center on desktop */
+    .collection-card-mobile-first {
+        order: -1;
+    }
+
     .series-header-image {
         min-height: 280px;
     }

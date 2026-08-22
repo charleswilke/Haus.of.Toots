@@ -210,10 +210,9 @@ section {
 }
 
 .nav-brand {
-    text-decoration: none;
     display: flex;
-    align-items: baseline;
-    gap: 0.5rem;
+    align-items: center;
+    flex-shrink: 0;
     transition: transform 0.3s var(--transition-smooth);
 }
 
@@ -222,31 +221,24 @@ section {
 }
 
 .nav-brand-logo {
-    height: 42px;
+    height: 52px;
     width: auto;
     display: block;
-    margin-bottom: -2px;
 }
 
-.nav-brand-text {
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    font-weight: 400;
-    color: var(--coral-dark);
-    letter-spacing: 1px;
-    line-height: 1.2;
-    margin-bottom: -2px;
-}
-
-.nav-brand-subtitle {
+/* Tagline sits beside the wordmark, in the space before the nav links */
+.nav-tagline {
+    flex: 1;
+    text-align: left;
+    /* Same gap from the wordmark as the wordmark has from the frame edge */
+    padding: 0 var(--spacing-md);
     font-family: var(--font-body);
-    font-size: 0.875rem;
-    font-weight: 400;
+    font-size: 0.9375rem;
+    font-weight: 500;
     color: var(--neutral-mid);
     letter-spacing: 0.2px;
     white-space: nowrap;
     line-height: 1.2;
-    margin-bottom: 4px;
 }
 
 .nav-toggle {
@@ -636,31 +628,15 @@ section {
         padding: 0.5rem var(--spacing-sm);
     }
     
-    .nav-brand {
-        align-items: center;
-        gap: 0.4rem;
-    }
-    
     .nav-brand-logo {
-        height: 32px;
-        margin-bottom: 0;
-    }
-    
-    .nav-brand-text {
-        font-size: 1.25rem;
-        margin-bottom: 0;
-    }
-    
-    .nav-brand-subtitle {
-        font-size: 0.75rem;
-        margin-bottom: 0;
+        height: 40px;
     }
     
 }
 
-/* Hide subtitle on smaller screens to give nav links more room */
-@media (max-width: 960px) {
-    .nav-brand-subtitle {
+/* Hide tagline when it would collide with the wordmark or nav links */
+@media (max-width: 1000px) {
+    .nav-tagline {
         display: none;
     }
 }
