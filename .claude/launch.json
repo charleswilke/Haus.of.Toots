@@ -2,6 +2,12 @@
   "version": "0.0.1",
   "configurations": [
     {
+      "name": "hot-site",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["-y", "serve", "-l", "8787", "."],
+      "port": 8787
+    },
+    {
       "name": "hot-theme",
       "runtimeExecutable": "shopify",
       "runtimeArgs": [

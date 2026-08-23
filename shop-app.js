@@ -319,18 +319,31 @@ class ShopApp {
                 </div>
                 <div class="product-info">
                     <div class="product-title-row">
-                        <h3 class="product-title">${this.escapeHtml(product.title)}</h3>
+                        <h3 class="product-title" title="${this.escapeHtml(product.title)}">${this.escapeHtml(this.truncateCardTitle(product.title))}</h3>
                         ${isOutOfStock ? '<span class="product-out-of-stock-badge">Out of Stock</span>' : ''}
                         ${isPreorder ? '<span class="product-preorder-badge">Preorder</span>' : ''}
                     </div>
-                    ${cardMeta ? `<p class="product-card-meta">${this.escapeHtml(cardMeta)}</p>` : ''}
-                    <div class="product-price-section">
-                        <span class="product-price ${isOutOfStock ? 'product-price-unavailable' : ''}" data-product-id="${product.id}">${cardPriceHTML}</span>
-                        ${isOutOfStock ? '<span class="product-waitlist-label">Join the Waitlist</span>' : ''}
+                    <div class="product-card-footer">
+                        ${cardMeta ? `<p class="product-card-meta">${this.escapeHtml(cardMeta)}</p>` : ''}
+                        <div class="product-price-section">
+                            <span class="product-price ${isOutOfStock ? 'product-price-unavailable' : ''}" data-product-id="${product.id}">${cardPriceHTML}</span>
+                        </div>
                     </div>
+                    ${isOutOfStock ? '<p class="product-waitlist-label">Join the Waitlist</p>' : ''}
                 </div>
             </div>
         `;
+    }
+
+    /**
+     * Shorten long card titles at a word boundary so the 2-line clamp
+     * ends cleanly instead of mid-word.
+     */
+    truncateCardTitle(title, max = 46) {
+        if (!title || title.length <= max) return title;
+        const cut = title.slice(0, max);
+        const atWord = cut.lastIndexOf(' ');
+        return `${(atWord > max * 0.6 ? cut.slice(0, atWord) : cut).replace(/[\s(\-–,:]+$/, '')}…`;
     }
 
     /**
