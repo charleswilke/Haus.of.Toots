@@ -316,7 +316,6 @@ class ShopApp {
             <div class="${cardClasses}" data-product-id="${product.id}" role="button" tabindex="0" aria-label="View ${this.escapeHtml(product.title)}">
                 <div class="product-image-container">
                     ${imageHTML}
-                    <span class="product-original-badge">Haus original</span>
                 </div>
                 <div class="product-info">
                     <div class="product-title-row">

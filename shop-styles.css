@@ -1149,22 +1149,6 @@
     margin-bottom: 0;
 }
 
-.product-original-badge {
-    position: absolute;
-    z-index: 1;
-    left: 0.65rem;
-    bottom: 0.65rem;
-    padding: 0.28rem 0.5rem;
-    background: rgba(255, 248, 239, 0.94);
-    color: var(--neutral-dark);
-    border: 1px solid rgba(90, 64, 54, 0.2);
-    font-family: var(--font-body);
-    font-size: 0.64rem;
-    font-weight: 600;
-    line-height: 1;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-}
 
 /* Product Badge */
 .product-badge {
