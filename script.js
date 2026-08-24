@@ -121,6 +121,7 @@ class ScrollStitchSidebar {
     constructor() {
         this.stitchContainer = document.getElementById('stitchContainer');
         this.needle = document.getElementById('needle');
+        this.enabled = !!(this.stitchContainer && this.needle);
         this.stitches = [];
         this.stitchSize = 3.36; // Size of each stitch (42% of original 8)
         // Authentic needlepoint spacing: stitches share holes
@@ -129,10 +130,12 @@ class ScrollStitchSidebar {
         this.numStitches = Math.floor(1000 / this.spacing); // Calculate how many stitches fit
         this.stitchSpeed = 0.8; // Speed multiplier - higher = stitches appear closer together as you scroll
         
-        this.createStitches();
+        if (this.enabled) {
+            this.createStitches();
+        }
         window.lastScrollY = 0;
     }
-    
+
     createStitches() {
         // Create all X stitch elements
         for (let i = 0; i < this.numStitches; i++) {
@@ -171,6 +174,10 @@ class ScrollStitchSidebar {
     }
     
     update(scrollPercent) {
+        if (!this.enabled || !Number.isFinite(scrollPercent)) {
+            return;
+        }
+
         // Update needle position
         const needleY = scrollPercent * 1000;
         this.needle.setAttribute('transform', `translate(30, ${needleY})`);
@@ -245,8 +252,10 @@ class ScrollStitchSidebar {
 let scrollStitchSidebar;
 
 function updateScrollStitch() {
-    const scrollPercent = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
-    
+    // Guard against 0/0 → NaN when the page is no taller than the viewport
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollPercent = maxScroll > 0 ? Math.min(window.scrollY / maxScroll, 1) : 0;
+
     if (scrollStitchSidebar) {
         scrollStitchSidebar.update(scrollPercent);
     }
