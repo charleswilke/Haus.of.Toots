@@ -530,7 +530,7 @@ class CardGallery {
     
     checkMasonryMode() {
         const wasMasonryMode = this.isMasonryMode;
-        this.isMasonryMode = window.innerWidth >= 1024;
+        this.isMasonryMode = window.innerWidth >= 768;
         
         if (this.isMasonryMode) {
             this.overlay.classList.add('masonry-mode');
@@ -547,9 +547,18 @@ class CardGallery {
             this.render();
             this.updateNavButtons();
         } else if (this.isMasonryMode && this.isOpen) {
-            // Card heights shift with column width, so re-pack the columns
-            this.balanceMasonryColumns();
+            if (this.masonryColumnCount !== this.getMasonryColumnCount()) {
+                // Column count changes with viewport width, so rebuild the grid
+                this.render();
+            } else {
+                // Card heights shift with column width, so re-pack the columns
+                this.balanceMasonryColumns();
+            }
         }
+    }
+
+    getMasonryColumnCount() {
+        return window.innerWidth >= 1024 ? 4 : 3;
     }
 
     render() {
@@ -769,6 +778,10 @@ class CardGallery {
         card.className = 'gallery-card';
         card.dataset.index = index;
         card.dataset.categoryColor = cardData.categoryColor; // Add category color for border styling
+        // Alternate the asymmetric corner diagonal card-to-card (product card corner variation)
+        if (index % 2 === 1) {
+            card.classList.add('corner-flip');
+        }
         card.setAttribute('role', cardData.shopifyUrl ? 'link' : 'button');
         card.setAttribute(
             'aria-label',
@@ -1030,8 +1043,9 @@ class CardGallery {
             return;
         }
         
-        // Build 4 columns, then deal cards into them (Pinterest-style packing)
-        const columnCount = 4;
+        // Build columns sized to the viewport, then deal cards into them (Pinterest-style packing)
+        const columnCount = this.getMasonryColumnCount();
+        this.masonryColumnCount = columnCount;
         const columns = [];
         for (let i = 0; i < columnCount; i++) {
             const col = document.createElement('div');

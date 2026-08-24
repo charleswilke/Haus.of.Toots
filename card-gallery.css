@@ -142,7 +142,7 @@
     padding: 0.5rem 1.25rem;
     border: 2px solid rgba(255, 179, 186, 0.3);
     background: rgba(255, 107, 122, 0.1);
-    border-radius: 25px;
+    border-radius: 4px 16px 4px 16px;
     font-family: 'Winky Sans', sans-serif;
     font-size: 0.875rem;
     font-weight: 600;
@@ -249,8 +249,17 @@
     margin-left: 0.5rem;
     padding: 0.125rem 0.5rem;
     background: rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
+    border-radius: 2px 8px 2px 8px;
     font-size: 0.75rem;
+}
+
+/* Alternate the corner diagonal tab-to-tab, matching the cards */
+.card-deck-tab:nth-child(even) {
+    border-radius: 16px 4px 16px 4px;
+}
+
+.card-deck-tab:nth-child(even) .tab-count {
+    border-radius: 8px 2px 8px 2px;
 }
 
 /* Main Card Area */
@@ -302,7 +311,7 @@
 /* ========================================
    MOBILE PEEK LAYOUT (show adjacent cards)
    ======================================== */
-@media (max-width: 1023px) {
+@media (max-width: 767px) {
     .card-gallery-wrapper {
         overflow: visible;
     }
@@ -347,9 +356,9 @@
 }
 
 /* ========================================
-   MASONRY GRID LAYOUT FOR DESKTOP (1024px+)
+   MASONRY GRID LAYOUT (tablet & desktop, 768px+)
    ======================================== */
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
     /* Allow scrolling in masonry mode */
     .card-gallery-overlay.masonry-mode {
         overflow-y: auto;
@@ -419,7 +428,7 @@
     }
     
     .card-gallery-overlay.masonry-mode .gallery-card:hover {
-        transform: translateY(-8px) !important;
+        transform: translateY(-5px) !important;
         z-index: 10;
     }
     
@@ -592,9 +601,10 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    border-radius: 16px;
-    background: #FAF8F5; /* Solid fallback background */
-    box-shadow: 
+    border-radius: 4px 22px 4px 22px;
+    background: #fffdf9; /* Solid fallback background */
+    border: 1px solid rgba(90, 64, 54, 0.22);
+    box-shadow:
         /* Tight shadow for depth */
         0 2px 4px rgba(0, 0, 0, 0.1),
         /* Medium cast shadow */
@@ -606,7 +616,7 @@
         /* Inner highlight */
         0 0 0 1px rgba(255, 255, 255, 0.1) inset;
     /* Use visibility approach instead of backface-visibility */
-    transition: visibility 0s linear 0.3s, opacity 0.3s ease;
+    transition: visibility 0s linear 0.3s, opacity 0.3s ease, border-color 0.32s ease;
     /* Ensure cards are fully opaque */
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
@@ -614,7 +624,11 @@
 
 /* Card Front */
 .card-front {
-    background: linear-gradient(145deg, #FAF8F5 0%, #F5F1EC 100%);
+    background:
+        linear-gradient(90deg, rgba(90, 64, 54, 0.035) 1px, transparent 1px),
+        linear-gradient(rgba(90, 64, 54, 0.035) 1px, transparent 1px),
+        #fffdf9;
+    background-size: 8px 8px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -652,48 +666,53 @@
     50%, 100% { opacity: 1; visibility: visible; }
 }
 
-/* Card Frame Border (trading card style) with rounded corners */
+/* Stitched frame border (matching product cards) with asymmetric corners */
 .card-front::before {
     content: '';
     position: absolute;
-    inset: 8px;
-    border: 3px solid #FF6B7A; /* Default fallback color */
-    border-radius: 10px;
+    inset: 6px;
+    border: 1px dashed rgba(232, 85, 99, 0.35); /* Default fallback color */
+    border-radius: 2px 16px 2px 16px;
     pointer-events: none;
     z-index: 2;
-    /* Add subtle gradient-like effect with layered box-shadows */
-    box-shadow: 
-        inset 0 0 0 1px rgba(255, 179, 186, 0.6),
-        inset 0 0 0 2px rgba(255, 107, 122, 0.4);
 }
 
-/* Category-specific border colors */
+/* Category-specific stitch colors */
 .gallery-card[data-category-color="#FFB7C2"] .card-front::before {
-    border-color: #FFB7C2;
-    box-shadow: 
-        inset 0 0 0 1px rgba(255, 183, 194, 0.6),
-        inset 0 0 0 2px rgba(255, 132, 151, 0.4);
+    border-color: rgba(255, 132, 151, 0.45);
 }
 
 .gallery-card[data-category-color="#D97EAE"] .card-front::before {
-    border-color: #D97EAE;
-    box-shadow: 
-        inset 0 0 0 1px rgba(217, 126, 174, 0.6),
-        inset 0 0 0 2px rgba(192, 106, 154, 0.4);
+    border-color: rgba(217, 126, 174, 0.5);
 }
 
 .gallery-card[data-category-color="#F74560"] .card-front::before {
-    border-color: #F74560;
-    box-shadow: 
-        inset 0 0 0 1px rgba(247, 69, 96, 0.6),
-        inset 0 0 0 2px rgba(232, 58, 82, 0.4);
+    border-color: rgba(247, 69, 96, 0.45);
 }
 
 .gallery-card[data-category-color="#F06F51"] .card-front::before {
-    border-color: #F06F51;
-    box-shadow: 
-        inset 0 0 0 1px rgba(240, 111, 81, 0.6),
-        inset 0 0 0 2px rgba(232, 90, 58, 0.4);
+    border-color: rgba(240, 111, 81, 0.5);
+}
+
+/* Corner variation — alternating cards flip the asymmetric diagonal,
+   echoing the product/collection card corner language */
+.gallery-card.corner-flip .card-face {
+    border-radius: 22px 4px 22px 4px;
+}
+
+.gallery-card.corner-flip .card-front::before,
+.gallery-card.corner-flip .card-back::before {
+    border-radius: 16px 2px 16px 2px;
+}
+
+.gallery-card.corner-flip .card-image-container,
+.gallery-card.corner-flip .card-back .card-back-image-container {
+    border-radius: 15px 2px 15px 2px;
+}
+
+.gallery-card.corner-flip .card-category-badge,
+.gallery-card.corner-flip .card-status-badge {
+    border-radius: 10px 2px 10px 2px;
 }
 
 /* Holographic shimmer effect */
@@ -734,8 +753,8 @@
 /* Card Image Area */
 .card-image-container {
     flex: 1;
-    margin: 16px 16px 8px 16px;
-    border-radius: 8px;
+    margin: 12px 12px 6px 12px;
+    border-radius: 2px 15px 2px 15px;
     overflow: hidden;
     position: relative;
     /* Canvas texture behind "contain" images */
@@ -766,7 +785,7 @@
 /* In masonry mode, image container hugs the image's natural height */
 .card-gallery-overlay.masonry-mode .card-image-container {
     flex: none;
-    margin: 16px 16px 8px 16px;
+    margin: 12px 12px 6px 12px;
     min-height: 0;
     height: auto;
 }
@@ -794,7 +813,12 @@
 }
 
 .gallery-card:hover .card-image {
-    transform: scale(1.05);
+    transform: scale(1.02);
+}
+
+/* Coral border warm-up on hover (matching product cards) */
+.gallery-card:hover .card-face {
+    border-color: rgba(232, 85, 99, 0.42);
 }
 
 /* Category Badge */
@@ -810,7 +834,7 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    border-radius: 4px;
+    border-radius: 2px 10px 2px 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     z-index: 5;
 }
@@ -843,7 +867,7 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    border-radius: 4px;
+    border-radius: 2px 10px 2px 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     z-index: 5;
 }
@@ -860,31 +884,39 @@
 
 /* Card Info Area */
 .card-info {
-    padding: 12px 16px 16px;
+    padding: 8px 16px 14px;
     text-align: center;
     position: relative;
     z-index: 2;
 }
 
 .card-title {
-    font-family: 'Chewy', cursive;
+    font-family: 'Fraunces', Georgia, serif;
     font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
     color: #4A4542;
     margin: 0 0 4px 0;
-    line-height: 1.2;
+    line-height: 1.12;
 }
 
 .card-subtitle {
     font-family: 'Winky Sans', sans-serif;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.055em;
+    text-transform: uppercase;
     color: #9B9690;
     margin: 0;
-    font-style: italic;
 }
 
 /* Card Back */
 .card-back {
-    background: linear-gradient(145deg, #FAF8F5 0%, #F5F1EC 100%);
+    background:
+        linear-gradient(90deg, rgba(90, 64, 54, 0.035) 1px, transparent 1px),
+        linear-gradient(rgba(90, 64, 54, 0.035) 1px, transparent 1px),
+        #fffdf9;
+    background-size: 8px 8px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -898,8 +930,8 @@
 /* Card back with image (for before/after flip) */
 .card-back .card-back-image-container {
     flex: 1;
-    margin: 16px 16px 8px 16px;
-    border-radius: 8px;
+    margin: 12px 12px 6px 12px;
+    border-radius: 2px 15px 2px 15px;
     overflow: hidden;
     position: relative;
     background-color: #F5F1EC;
@@ -930,7 +962,7 @@
    so its image container flexes into the space and letterboxes with "contain" */
 .card-gallery-overlay.masonry-mode .card-back .card-back-image-container {
     flex: 1;
-    margin: 16px 16px 8px 16px;
+    margin: 12px 12px 6px 12px;
     min-height: 0;
 }
 
@@ -952,18 +984,15 @@
     text-align: center;
 }
 
-/* Card back frame border (matching front) */
+/* Card back stitched frame (muted gray thread for the "before" side) */
 .card-back::before {
     content: '';
     position: absolute;
-    inset: 8px;
-    border: 3px solid #9B9690;
-    border-radius: 10px;
+    inset: 6px;
+    border: 1px dashed rgba(122, 105, 96, 0.45);
+    border-radius: 2px 16px 2px 16px;
     pointer-events: none;
     z-index: 2;
-    box-shadow: 
-        inset 0 0 0 1px rgba(155, 150, 144, 0.6),
-        inset 0 0 0 2px rgba(74, 69, 66, 0.4);
 }
 
 /* Show back when flipped - timed with animation */
@@ -1220,7 +1249,7 @@
 .deck-mini-card {
     width: 48px;
     height: 68px;
-    border-radius: 6px;
+    border-radius: 2px 8px 2px 8px;
     overflow: hidden;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -1246,6 +1275,11 @@
     box-shadow: 0 4px 12px rgba(255, 107, 122, 0.4);
 }
 
+/* Mini cards alternate the corner diagonal like the full-size cards */
+.deck-mini-card:nth-child(even) {
+    border-radius: 8px 2px 8px 2px;
+}
+
 @media (min-width: 900px) {
     .deck-mini-card {
         width: 56px;
@@ -1257,7 +1291,11 @@
     .deck-mini-card {
         width: 64px;
         height: 90px;
-        border-radius: 8px;
+        border-radius: 2px 10px 2px 10px;
+    }
+
+    .deck-mini-card:nth-child(even) {
+        border-radius: 10px 2px 10px 2px;
     }
 }
 
