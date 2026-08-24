@@ -359,42 +359,6 @@ class CursorTrail {
 }
 
 // ===================================
-// ROTATING CAROUSEL (auto-rotating images in hoops)
-// ===================================
-
-class RotatingCarousel {
-    constructor() {
-        // Find all rotating carousels
-        this.carousels = document.querySelectorAll('.rotating-carousel');
-        
-        if (this.carousels.length > 0) {
-            this.initializeCarousels();
-        }
-    }
-    
-    initializeCarousels() {
-        this.carousels.forEach(carousel => {
-            const images = carousel.querySelectorAll('.rotating-image');
-            if (images.length > 1) {
-                let currentIndex = 0;
-                
-                setInterval(() => {
-                    // Remove active from current
-                    images[currentIndex].classList.remove('active');
-                    
-                    // Move to next image
-                    currentIndex = (currentIndex + 1) % images.length;
-                    
-                    // Add active to next
-                    images[currentIndex].classList.add('active');
-                }, 3000);
-            }
-        });
-    }
-}
-
-
-// ===================================
 // EMAIL LINK STITCHING EFFECT
 // ===================================
 
@@ -631,25 +595,6 @@ function initScrollAnimations() {
 }
 
 // ===================================
-// EMBROIDERY HOOP ROTATION
-// ===================================
-
-function initHoopInteractions() {
-    const hoops = document.querySelectorAll('.embroidery-hoop');
-    
-    hoops.forEach(hoop => {
-        hoop.addEventListener('mouseenter', function() {
-            this.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
-            this.style.transform = 'rotate(5deg) scale(1.05)';
-        });
-        
-        hoop.addEventListener('mouseleave', function() {
-            this.style.transform = 'rotate(0deg) scale(1)';
-        });
-    });
-}
-
-// ===================================
 // INITIALIZE EVERYTHING
 // ===================================
 
@@ -683,9 +628,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Cursor trail
     const cursorTrail = new CursorTrail();
     
-    // Rotating carousel (auto-rotating images in hoops)
-    const rotatingCarousel = new RotatingCarousel();
-    
     // Email link stitching effect - apply to all links in about section
     const aboutLinks = document.querySelectorAll('.about-text a, .about-card a');
     aboutLinks.forEach(link => {
@@ -700,10 +642,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Scroll animations
     initScrollAnimations();
-    
-    // Hoop interactions
-    initHoopInteractions();
-    
+
 });
 
 
