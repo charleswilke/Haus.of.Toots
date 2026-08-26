@@ -139,6 +139,17 @@
     object-fit: contain;
 }
 
+/* The round Kick Ass badge is tall and narrow, so the shared height
+   leaves it looking undersized; give it more room and absorb the
+   difference in its bottom margin to keep the row roughly aligned */
+.lns-shop-card[data-city="nashville"] .lns-card-logo {
+    height: 96px;
+    /* the needle pokes above the circle, so nudge the badge up to put
+       the circle itself level with the neighboring logos */
+    margin-top: -12px;
+    margin-bottom: 0;
+}
+
 .lns-card-city {
     font-family: var(--font-body);
     font-weight: 600;
