@@ -25,7 +25,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Winky+Sans:wght@300;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css?v=20260825">
     <link rel="stylesheet" href="shop-styles.css?v=20260823c">
-    <link rel="stylesheet" href="lns-map.css?v=20260826">
+    <link rel="stylesheet" href="lns-map.css?v=20260826b">
 </head>
 <body>
     <div id="shared-nav"></div>
@@ -1077,7 +1077,7 @@
                 { name: "Barbara's Needlepoint", addr: '1708 S Western Ave Unit 1, Sioux Falls, SD 57105', url: 'http://www.barbarasneedlepoint.com/', logo: 'images/lns/barbaras.webp', bg: '#A4D1D4' }
             ]},
             'omaha': { city: 'Omaha, NE', geo: { d: 'M0.0 0.0L63.5 0.0L69.0 3.6L71.0 2.0L78.2 2.4L79.1 3.5L84.2 5.3L85.1 7.6L87.6 7.9L88.1 12.7L89.4 15.1L90.6 15.7L90.2 16.7L91.3 18.3L91.1 22.4L92.1 22.3L92.0 23.3L92.9 23.5L92.9 27.6L93.9 27.9L93.4 29.7L94.3 32.1L93.4 34.8L95.0 36.5L94.7 37.7L96.1 37.6L95.6 38.6L96.5 41.0L98.0 42.0L99.1 44.1L98.7 45.1L100.0 45.8L22.9 45.8L22.9 30.5L0.0 30.5L0.0 0.0Z', w: 100, h: 45.8, x: 91.5, y: 26.6, coords: '41.26° N · 96.05° W' }, shops: [
-                { name: 'Village Needleworks', addr: '8721 Shamrock Rd, Omaha, NE 68114', url: 'http://www.villageneedleworks.com/', logo: 'images/lns/village-needleworks.webp', bg: '#44A9D2' }
+                { name: 'Village Needleworks', addr: '8721 Shamrock Rd, Omaha, NE 68114', url: 'http://www.villageneedleworks.com/', logo: 'images/lns/village-needleworks.webp' }
             ]},
             'kansas-city': { city: 'Kansas City, MO', geo: { d: 'M0.1 0.5L60.5 0.0L62.2 1.4L63.6 3.9L65.2 4.5L63.8 8.3L65.9 16.8L75.7 26.4L76.5 32.2L77.7 33.3L80.4 31.6L84.8 33.7L83.3 36.1L83.7 38.3L80.9 43.4L81.2 45.9L87.4 50.5L87.2 52.2L88.8 51.7L93.8 55.8L93.8 58.8L95.2 61.5L93.7 63.6L95.8 68.3L97.1 69.2L97.6 67.8L100.0 69.7L98.3 77.1L95.9 76.3L94.8 79.3L94.2 77.2L93.1 77.2L93.9 81.0L92.3 82.3L93.5 83.3L91.1 83.3L92.5 85.9L91.1 87.8L80.8 88.2L85.3 83.0L85.5 80.8L84.2 78.6L17.2 78.6L17.7 27.9L14.0 26.7L13.3 23.7L10.0 20.7L12.2 16.6L13.4 16.9L12.6 13.9L9.5 14.1L5.2 10.8L5.7 9.5L2.3 5.7L1.1 2.7L1.7 1.4L0.0 1.6L0.1 0.5Z', w: 100, h: 88.2, x: 17.6, y: 31.1, coords: '38.98° N · 94.59° W' }, shops: [
                 { name: 'KC Needlepoint', addr: '8050 Wornall Rd, Kansas City, MO 64114', url: 'http://www.kcneedlepoint.com/', logo: 'images/lns/kc-needlepoint.webp' }
@@ -1117,9 +1117,6 @@
                     img.className = 'lns-modal-logo';
                     img.src = shop.logo;
                     img.alt = shop.name + ' logo';
-                    // Tile takes on the logo's own edge color so it reads
-                    // as filled without crop-damaging wordmark logos.
-                    if (shop.bg) img.style.backgroundColor = shop.bg;
                     entry.appendChild(img);
                 } else {
                     const ph = document.createElement('div');

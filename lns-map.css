@@ -133,7 +133,7 @@
 
 .lns-card-logo {
     display: block;
-    height: 64px;
+    height: 80px;
     max-width: 70%;
     margin: 0 auto var(--spacing-xs);
     object-fit: contain;
