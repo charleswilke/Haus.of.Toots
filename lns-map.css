@@ -1,0 +1,415 @@
+/* ===================================
+   HoT@LNS — hex-tile shop map + shop cards
+   =================================== */
+
+.lns-page {
+    padding: var(--spacing-md) 0 var(--spacing-xl);
+    min-height: 100vh;
+}
+
+/* --- Map frame --- */
+
+.lns-map-frame {
+    position: relative;
+    /* same paint texture + white veil as the about page's container */
+    background:
+        linear-gradient(rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.72)),
+        url('images/paint.webp') center / cover;
+    border: 2px dashed var(--coral-light);
+    border-radius: 16px;
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    box-shadow: 0 8px 30px rgba(232, 85, 99, 0.08);
+}
+
+/* Visually hidden page title (the map speaks for itself) */
+.lns-sr-title {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+.lns-map {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.lns-map-hint {
+    text-align: center;
+    color: var(--neutral-mid);
+    font-size: 0.9rem;
+    margin-top: var(--spacing-sm);
+    margin-bottom: 0;
+}
+
+/* --- Hex tiles --- */
+
+.hx {
+    stroke: var(--white);
+    stroke-width: 1;
+}
+
+.hx1 { fill: #F3EDE6; }  /* linen */
+.hx2 { fill: #FBE7EA; }  /* blush */
+.hx3 { fill: #FAF6F0; }  /* cream */
+.hx4 { fill: #FFD9DF; }  /* coral fleck */
+
+/* --- Markers --- */
+
+.lns-marker {
+    cursor: pointer;
+}
+
+.hx-marker {
+    fill: var(--coral-primary);
+    stroke: var(--white);
+    stroke-width: 2;
+    filter: drop-shadow(0 3px 4px rgba(208, 69, 82, 0.35));
+    transition: fill 0.2s ease;
+}
+
+.lns-marker:hover .hx-marker,
+.lns-marker:focus .hx-marker {
+    fill: var(--coral-dark);
+}
+
+.lns-marker-heart {
+    fill: var(--white);
+    pointer-events: none;
+}
+
+.lns-marker-label {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 13.5px;
+    fill: var(--neutral-dark);
+    stroke: var(--cream);
+    stroke-width: 3px;
+    paint-order: stroke;
+    stroke-linejoin: round;
+    transition: fill 0.2s ease;
+}
+
+.lns-marker:hover .lns-marker-label,
+.lns-marker:focus .lns-marker-label {
+    fill: var(--coral-dark);
+}
+
+/* --- Shop cards --- */
+
+.lns-shop-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.lns-shop-card {
+    position: relative;
+    background: var(--white);
+    border: 2px solid var(--neutral-light);
+    border-radius: 12px;
+    padding: 1.5rem var(--spacing-sm) var(--spacing-sm);
+    text-align: center;
+    scroll-margin-top: 110px;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.lns-shop-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--coral-light);
+    box-shadow: 0 10px 24px rgba(232, 85, 99, 0.12);
+}
+
+/* Brief coral flash when a map marker drops you on a card */
+.lns-shop-card:target,
+.lns-shop-card.lns-flash {
+    border-color: var(--coral-primary);
+    box-shadow: 0 0 0 4px rgba(255, 107, 122, 0.2);
+}
+
+.lns-card-logo {
+    display: block;
+    height: 64px;
+    max-width: 70%;
+    margin: 0 auto var(--spacing-xs);
+    object-fit: contain;
+}
+
+.lns-card-city {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--neutral-mid);
+    margin-bottom: 0.35rem;
+}
+
+.lns-card-name {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.35rem;
+    color: var(--coral-dark);
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+}
+
+.lns-card-addr {
+    font-size: 0.95rem;
+    color: var(--neutral-dark);
+    line-height: 1.5;
+    margin-bottom: var(--spacing-sm);
+}
+
+.lns-card-link {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--white);
+    background: var(--coral-primary);
+    padding: 0.5rem 1.25rem;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.lns-card-link:hover {
+    background: var(--coral-dark);
+    transform: scale(1.05);
+}
+
+.lns-card-nolink {
+    display: inline-block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--neutral-mid);
+    padding: 0.5rem 0;
+}
+
+/* --- Shop modal (tap a marker) --- */
+
+.lns-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 4000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-sm);
+}
+
+.lns-modal[hidden] {
+    display: none;
+}
+
+.lns-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(74, 69, 66, 0.45);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+
+.lns-modal-card {
+    position: relative;
+    width: 100%;
+    max-width: 385px;
+    max-height: calc(100vh - 2 * var(--spacing-sm));
+    overflow-y: auto;
+    background: var(--white);
+    border: 2px dashed var(--coral-light);
+    border-radius: 16px;
+    padding: var(--spacing-md) var(--spacing-md) 0.9rem;
+    box-shadow: 0 20px 60px rgba(74, 69, 66, 0.3);
+    animation: lnsModalPop 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+@keyframes lnsModalPop {
+    from { transform: scale(0.9); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+}
+
+.lns-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--linen);
+    border: none;
+    border-radius: 50%;
+    color: var(--neutral-dark);
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.lns-modal-close:hover {
+    background: var(--coral-primary);
+    color: var(--white);
+    transform: rotate(90deg);
+}
+
+/* Geo header: state silhouette with a heart on the city, plus coordinates */
+.lns-modal-geo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 0.4rem;
+}
+
+.lns-modal-state {
+    flex: none;
+    width: 64px;
+    height: 64px;
+    /* let border-hugging hearts (Sioux Falls, KC…) overhang the state edge */
+    overflow: visible;
+}
+
+.lns-modal-state-shape {
+    fill: #FBE7EA;
+    stroke: var(--coral-light);
+    stroke-width: 2;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+}
+
+.lns-modal-state-heart {
+    fill: var(--coral-primary);
+    stroke: var(--white);
+    stroke-width: 1.5;
+    paint-order: stroke;
+    stroke-linejoin: round;
+}
+
+.lns-modal-geo-text {
+    text-align: left;
+}
+
+.lns-modal-city {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.6rem;
+    color: var(--coral-dark);
+    letter-spacing: 1px;
+    margin-bottom: 0.1rem;
+}
+
+.lns-modal-coords {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
+    color: var(--coral-primary);
+}
+
+.lns-modal-shop {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    text-align: left;
+    padding: 0.75rem 0;
+}
+
+.lns-modal-shop:last-child {
+    padding-bottom: 0.2rem;
+}
+
+.lns-modal-shop + .lns-modal-shop {
+    border-top: 1px dashed var(--neutral-light);
+}
+
+/* Logo: centered hero row. Fixed height, natural width, so each tile hugs
+   its logo's shape (tall square for crests, wide banner for wordmarks). */
+.lns-modal-logo {
+    display: block;
+    margin: 0 auto;
+    height: 104px;
+    width: auto;
+    max-width: 100%;
+    background: var(--white);
+    border: 1px solid var(--neutral-light);
+    border-radius: 10px;
+    padding: 7px;
+}
+
+.lns-modal-logo-ph {
+    margin: 0 auto;
+    width: 72px;
+    height: 72px;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #FBE7EA;
+    color: var(--coral-primary);
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+}
+
+.lns-modal-shop-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.lns-modal-shop-text {
+    flex: 0 1 auto;
+    min-width: 0;
+}
+
+.lns-modal-shop-name {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.15rem;
+    color: var(--neutral-dark);
+    line-height: 1.25;
+    margin-bottom: 0.15rem;
+}
+
+.lns-modal-shop-addr {
+    font-size: 0.875rem;
+    color: var(--neutral-mid);
+    line-height: 1.45;
+}
+
+/* Always break street / "City, ST ZIP": keeps the text block at its real
+   width so the Visit Site button sits close beside it */
+.lns-addr-locality {
+    display: block;
+    white-space: nowrap;
+}
+
+.lns-modal-shop .lns-card-link {
+    flex: none;
+    white-space: nowrap;
+    font-size: 0.8rem;
+    padding: 0.35rem 1rem;
+}
+
+.lns-modal-shop .lns-card-nolink {
+    padding: 0;
+    font-size: 0.85rem;
+}
+
+/* --- Responsive --- */
+
+@media (max-width: 768px) {
+    .lns-map-frame {
+        padding: var(--spacing-sm);
+    }
+
+    /* Labels get dense on small screens; markers + numbers still tell the story */
+    .lns-marker-label {
+        display: none;
+    }
+}
