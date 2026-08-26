@@ -106,7 +106,9 @@ const SHOPS = [
 const COSLAT = Math.cos((38.5 * Math.PI) / 180);
 const LON0 = -125.5, LAT0 = 49.8;
 const SCALE = 22; // px per degree of latitude
-const PAD = { left: 30, top: 26, right: 96, bottom: 30 };
+// right/bottom sit tighter than left/top: content is sparse near those
+// edges (east-coast labels, gulf tip), so equal padding reads loose
+const PAD = { left: 30, top: 26, right: 51, bottom: 12 };
 function project(lon, lat) {
   return {
     x: PAD.left + (lon - LON0) * COSLAT * SCALE,
