@@ -38,6 +38,21 @@
     height: auto;
 }
 
+/* Stitched house watermark in the map's open bottom-right corner.
+   Multiply blends the stitches into the paper texture and the
+   hue-rotate re-dyes the purple source thread coral */
+.lns-map-watermark {
+    position: absolute;
+    right: 1.25rem;
+    bottom: 1rem;
+    width: min(105px, 16vw);
+    opacity: 0.26;
+    mix-blend-mode: multiply;
+    filter: hue-rotate(78deg) saturate(1.1);
+    pointer-events: none;
+    user-select: none;
+}
+
 .lns-map-hint {
     text-align: center;
     color: var(--neutral-mid);
@@ -506,6 +521,11 @@
 
     /* Labels get dense on small screens; markers + numbers still tell the story */
     .lns-marker-label {
+        display: none;
+    }
+
+    /* Not enough open corner for the watermark on a small map */
+    .lns-map-watermark {
         display: none;
     }
 }
