@@ -1045,11 +1045,16 @@ svg.hero-logo .logo-smoke {
     margin: 0 auto;
 }
 
-.about-content .section-title {
-    text-align: center;
+.about-content .stitched-border {
+    padding-top: 1.3rem;
 }
 
-.stitched-border > p:first-child {
+.about-content .section-title {
+    text-align: center;
+    margin-bottom: 0.15rem;
+}
+
+.about-byline {
     margin-bottom: 1.5rem;
     padding-bottom: 1.5rem;
     border-bottom: 2px dashed var(--neutral-light);
@@ -1059,14 +1064,14 @@ svg.hero-logo .logo-smoke {
     text-align: center;
 }
 
-.stitched-border > p:first-child a {
+.about-byline a {
     color: var(--coral-primary);
     text-decoration: none;
     font-weight: 600;
     transition: color 0.3s ease;
 }
 
-.stitched-border > p:first-child a:hover {
+.about-byline a:hover {
     color: var(--coral-dark);
 }
 
