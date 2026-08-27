@@ -89,6 +89,7 @@ const OUTLINE = [
 
 // --- Shops ---
 const SHOPS = [
+  { name: "Angel City Stitchery", url: "https://www.angelcitystitchery.com/", addr: "13347 Washington Blvd Ste B, Los Angeles, CA 90066", city: "Los Angeles", state: "CA", lat: 33.9926, lon: -118.4436 },
   { name: "Sunny Stitches", url: "http://www.sunnystitchesdenver.com/", addr: "1927 E Kentucky Ave, Denver, CO 80209", city: "Denver", state: "CO", lat: 39.692, lon: -104.973 },
   { name: "The Needle Works", url: "http://theneedleworks.com/", addr: "4401 Medical Pkwy, Austin, TX 78756", city: "Austin", state: "TX", lat: 30.3078, lon: -97.7387 },
   { name: "Hibiscus Needlepoint", url: "https://hibiscusneedlepoint.com/", addr: "1206 W 38th St #1201, Austin, TX 78705", city: "Austin", state: "TX", lat: 30.304, lon: -97.74 },
@@ -186,6 +187,7 @@ cities.sort((a, b) => a.lon - b.lon);
 
 // --- Label placement (dx, dy relative to marker, anchor) ---
 const LABELS = {
+  "Los Angeles": { dx: 20,  dy: 4,   anchor: "start" },
   "Denver":      { dx: 0,   dy: -20, anchor: "middle" },
   "Austin":      { dx: 4,   dy: 26,  anchor: "middle" },
   "Dallas":      { dx: 20,  dy: 4,   anchor: "start" },
