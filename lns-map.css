@@ -302,7 +302,7 @@
 .lns-modal-card {
     position: relative;
     width: 100%;
-    max-width: 385px;
+    max-width: 470px;
     max-height: calc(100vh - 2 * var(--spacing-sm));
     overflow-y: auto;
     background: var(--white);
@@ -395,10 +395,12 @@
     color: var(--coral-primary);
 }
 
+/* Each shop is a row: logo | name + address | Visit Site button.
+   The narrow-screen media query below stacks it back up. */
 .lns-modal-shop {
     display: flex;
-    flex-direction: column;
-    gap: 0.55rem;
+    align-items: center;
+    gap: 0.9rem;
     text-align: left;
     padding: 0.75rem 0;
 }
@@ -418,25 +420,21 @@
 .lns-modal-logo-link {
     display: block;
     width: fit-content;
-    margin: 0 auto;
+    flex: none;
 }
 
 .lns-modal-logo {
     display: block;
-    margin: 0 auto;
-    height: 104px;
+    height: 64px;
     width: auto;
-    max-width: 100%;
-    background: var(--white);
-    border: 1px solid var(--neutral-light);
-    border-radius: 10px;
-    padding: 7px;
+    max-width: 110px;
+    object-fit: contain;
 }
 
 .lns-modal-logo-ph {
-    margin: 0 auto;
-    width: 72px;
-    height: 72px;
+    flex: none;
+    width: 52px;
+    height: 52px;
     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     display: flex;
     align-items: center;
@@ -444,14 +442,16 @@
     background: #FBE7EA;
     color: var(--coral-primary);
     font-family: var(--font-display);
-    font-size: 1.6rem;
+    font-size: 1.3rem;
 }
 
 .lns-modal-shop-info {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     gap: 1rem;
+    flex: 1;
+    min-width: 0;
 }
 
 .lns-modal-shop-text {
@@ -491,6 +491,7 @@
 .lns-modal-shop .lns-card-nolink {
     padding: 0;
     font-size: 0.85rem;
+    white-space: nowrap;
 }
 
 /* --- Responsive --- */
@@ -503,5 +504,34 @@
     /* Labels get dense on small screens; markers + numbers still tell the story */
     .lns-marker-label {
         display: none;
+    }
+}
+
+/* Phones: the three-column shop row doesn't fit, stack it back up */
+@media (max-width: 480px) {
+    .lns-modal-shop {
+        flex-direction: column;
+        gap: 0.55rem;
+    }
+
+    .lns-modal-logo-link {
+        margin: 0 auto;
+    }
+
+    .lns-modal-logo {
+        height: 104px;
+        max-width: 100%;
+    }
+
+    .lns-modal-logo-ph {
+        width: 72px;
+        height: 72px;
+        margin: 0 auto;
+        font-size: 1.6rem;
+    }
+
+    .lns-modal-shop-info {
+        justify-content: center;
+        width: 100%;
     }
 }
