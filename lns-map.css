@@ -400,6 +400,7 @@
 .lns-modal-shop {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.9rem;
     text-align: left;
     padding: 0.75rem 0;
@@ -446,12 +447,13 @@
 }
 
 /* Button rides right beside the text block instead of pinning to the
-   modal edge, so the gap stays snug however short the address is */
+   modal edge, so the gap stays snug however short the address is —
+   and the info block doesn't stretch, letting the whole logo/text/
+   button cluster center under the city title */
 .lns-modal-shop-info {
     display: flex;
     align-items: center;
     gap: 1.25rem;
-    flex: 1;
     min-width: 0;
 }
 
