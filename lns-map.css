@@ -194,6 +194,15 @@
     transform: scale(1.05);
 }
 
+/* Stretch the Visit Site link over the whole card, so clicking anywhere
+   on a card opens the shop's site (cards without a link stay inert) */
+.lns-shop-card .lns-card-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+}
+
 .lns-card-nolink {
     display: inline-block;
     font-size: 0.9rem;

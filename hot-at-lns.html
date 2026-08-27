@@ -25,7 +25,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Winky+Sans:wght@300;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css?v=20260825">
     <link rel="stylesheet" href="shop-styles.css?v=20260823c">
-    <link rel="stylesheet" href="lns-map.css?v=20260826d">
+    <link rel="stylesheet" href="lns-map.css?v=20260826e">
 </head>
 <body>
     <div id="shared-nav"></div>
@@ -1131,7 +1131,20 @@
                     img.className = 'lns-modal-logo';
                     img.src = shop.logo;
                     img.alt = shop.name + ' logo';
-                    entry.appendChild(img);
+                    if (shop.url) {
+                        // Duplicate of the Visit Site link below, so keep it
+                        // out of the tab order and screen-reader flow.
+                        const logoLink = document.createElement('a');
+                        logoLink.href = shop.url;
+                        logoLink.target = '_blank';
+                        logoLink.rel = 'noopener noreferrer';
+                        logoLink.setAttribute('aria-hidden', 'true');
+                        logoLink.tabIndex = -1;
+                        logoLink.appendChild(img);
+                        entry.appendChild(logoLink);
+                    } else {
+                        entry.appendChild(img);
+                    }
                 } else {
                     const ph = document.createElement('div');
                     ph.className = 'lns-modal-logo-ph';
