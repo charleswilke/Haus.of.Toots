@@ -25,7 +25,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Winky+Sans:wght@300;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css?v=20260825">
     <link rel="stylesheet" href="shop-styles.css?v=20260823c">
-    <link rel="stylesheet" href="lns-map.css?v=20260826e">
+    <link rel="stylesheet" href="lns-map.css?v=20260827">
 </head>
 <body>
     <div id="shared-nav"></div>
@@ -1110,6 +1110,96 @@
             ]}
         };
 
+        // Clicking an address (card or modal) opens a small menu offering
+        // to copy it or open it in Google Maps, instead of following the
+        // card's stretched Visit Site link.
+        const lnsAddrMenu = (function () {
+            let open = null;
+
+            function close() {
+                if (open) { open.remove(); open = null; }
+            }
+
+            function copyText(text) {
+                if (navigator.clipboard && window.isSecureContext) {
+                    return navigator.clipboard.writeText(text);
+                }
+                return new Promise((resolve, reject) => {
+                    const ta = document.createElement('textarea');
+                    ta.value = text;
+                    ta.style.position = 'fixed';
+                    ta.style.opacity = '0';
+                    document.body.appendChild(ta);
+                    ta.select();
+                    try {
+                        document.execCommand('copy') ? resolve() : reject();
+                    } finally {
+                        ta.remove();
+                    }
+                });
+            }
+
+            function toggle(el) {
+                const wasOpen = open && open.parentElement === el;
+                close();
+                if (wasOpen) return;
+                // innerText keeps the <br> as a newline
+                const address = el.innerText.trim().replace(/\s*\n\s*/g, ', ');
+
+                const menu = document.createElement('div');
+                menu.className = 'lns-addr-menu';
+
+                const copyBtn = document.createElement('button');
+                copyBtn.type = 'button';
+                copyBtn.textContent = 'Copy address';
+                copyBtn.addEventListener('click', () => {
+                    copyText(address).then(() => {
+                        copyBtn.textContent = 'Copied!';
+                        setTimeout(() => {
+                            menu.remove();
+                            if (open === menu) open = null;
+                        }, 900);
+                    }).catch(close);
+                });
+
+                const mapsBtn = document.createElement('button');
+                mapsBtn.type = 'button';
+                mapsBtn.textContent = 'Open in Maps';
+                mapsBtn.addEventListener('click', () => {
+                    window.open('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(address), '_blank', 'noopener');
+                    close();
+                });
+
+                menu.append(copyBtn, mapsBtn);
+                el.appendChild(menu);
+                open = menu;
+            }
+
+            document.addEventListener('click', (e) => {
+                const addr = e.target.closest('.lns-addr-btn');
+                if (!addr) { close(); return; }
+                if (e.target.closest('.lns-addr-menu')) return;
+                toggle(addr);
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') { close(); return; }
+                if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('lns-addr-btn')) {
+                    e.preventDefault();
+                    toggle(e.target);
+                }
+            });
+
+            function activate(el) {
+                el.classList.add('lns-addr-btn');
+                el.setAttribute('role', 'button');
+                el.tabIndex = 0;
+            }
+
+            document.querySelectorAll('.lns-card-addr').forEach(activate);
+
+            return { activate };
+        })();
+
         (function () {
             const modal = document.getElementById('lnsModal');
             const cardEl = modal.querySelector('.lns-modal-card');
@@ -1178,6 +1268,7 @@
                 } else {
                     addr.textContent = shop.addr;
                 }
+                lnsAddrMenu.activate(addr);
                 text.appendChild(addr);
 
                 info.appendChild(text);

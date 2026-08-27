@@ -189,8 +189,15 @@
     transition: background 0.2s ease, transform 0.2s ease;
 }
 
+/* No transform here: a transform would make the link the containing
+   block for its stretched ::after, collapsing the card overlay on
+   hover and flickering the cursor */
 .lns-card-link:hover {
     background: var(--coral-dark);
+}
+
+/* The modal button has no stretched overlay, so it keeps its pop */
+.lns-modal-shop .lns-card-link:hover {
     transform: scale(1.05);
 }
 
@@ -201,6 +208,63 @@
     position: absolute;
     inset: 0;
     border-radius: 12px;
+}
+
+/* Addresses sit above the stretched card link and open their own
+   little copy / open-in-maps menu instead of the shop site.
+   The class is added by script so the pointer never lies if JS fails. */
+.lns-addr-btn {
+    position: relative;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.lns-addr-btn:hover {
+    color: var(--coral-dark);
+    text-decoration: underline dotted;
+    text-underline-offset: 3px;
+}
+
+.lns-addr-menu {
+    position: absolute;
+    left: 50%;
+    top: calc(100% + 0.25rem);
+    transform: translateX(-50%);
+    z-index: 5;
+    display: flex;
+    gap: 0.25rem;
+    background: var(--white);
+    border: 2px solid var(--coral-light);
+    border-radius: 999px;
+    padding: 0.25rem 0.35rem;
+    box-shadow: 0 8px 20px rgba(232, 85, 99, 0.18);
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: default;
+}
+
+.lns-addr-menu button {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--coral-dark);
+    background: none;
+    border: none;
+    border-radius: 999px;
+    padding: 0.3rem 0.7rem;
+    cursor: pointer;
+}
+
+.lns-addr-menu button:hover {
+    background: var(--coral-primary);
+    color: var(--white);
+}
+
+/* The modal scrolls (overflow: auto), which would clip a menu opening
+   downward past its edge — flip it above the address there */
+.lns-modal-shop .lns-addr-menu {
+    top: auto;
+    bottom: calc(100% + 0.25rem);
 }
 
 .lns-card-nolink {
