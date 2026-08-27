@@ -413,6 +413,14 @@
 
 /* Logo: centered hero row. Fixed height, natural width, so each tile hugs
    its logo's shape (tall square for crests, wide banner for wordmarks). */
+/* Hug the logo, so the link's hover/click area is the visible logo
+   only — not an invisible full-width band across the modal */
+.lns-modal-logo-link {
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+}
+
 .lns-modal-logo {
     display: block;
     margin: 0 auto;
