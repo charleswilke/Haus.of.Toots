@@ -445,11 +445,12 @@
     font-size: 1.3rem;
 }
 
+/* Button rides right beside the text block instead of pinning to the
+   modal edge, so the gap stays snug however short the address is */
 .lns-modal-shop-info {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
+    gap: 1.25rem;
     flex: 1;
     min-width: 0;
 }
