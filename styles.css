@@ -326,6 +326,7 @@ section {
     transition: all 0.3s var(--transition-smooth);
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    white-space: nowrap;
 }
 
 /* Keep the wordmark casing (HoT@LNS) despite the uppercase nav style */
