@@ -329,11 +329,6 @@ section {
     white-space: nowrap;
 }
 
-/* Keep the wordmark casing (HoT@LNS) despite the uppercase nav style */
-.nav-link--caseful {
-    text-transform: none;
-}
-
 .nav-link::after {
     content: '';
     position: absolute;
