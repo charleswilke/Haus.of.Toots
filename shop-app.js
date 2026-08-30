@@ -290,18 +290,26 @@ class ShopApp {
         const isOutOfStock = this.isProductOutOfStock(product);
         const isPreorder = !isOutOfStock && this.isProductPreorder(product);
 
-        // Use the full image URL with a width param so the card image keeps its natural aspect ratio
-        // (transformedSrc returns a 400x400 cropped square; use the original instead).
+        // Keep the natural aspect ratio while letting the browser choose a right-sized,
+        // compressed Shopify rendition for the active card layout.
         const fullImageUrl = image?.url || null;
-        const thumbnailUrl = fullImageUrl
-            ? `${fullImageUrl}${fullImageUrl.includes('?') ? '&' : '?'}width=600`
+        const imageParam = fullImageUrl?.includes('?') ? '&' : '?';
+        const thumbnailUrl = fullImageUrl ? `${fullImageUrl}${imageParam}width=480&quality=75` : null;
+        const thumbnailSrcset = fullImageUrl
+            ? [360, 480, 600]
+                .map(width => `${fullImageUrl}${imageParam}width=${width}&quality=75 ${width}w`)
+                .join(', ')
             : null;
         
         const imageHTML = thumbnailUrl
             ? `<img src="${thumbnailUrl}"
+                    srcset="${thumbnailSrcset}"
+                    sizes="(max-width: 599px) calc(100vw - 32px), (max-width: 899px) calc((100vw - 80px) / 2), 360px"
                     data-full-image="${fullImageUrl}"
                     alt="${this.escapeHtml(image.altText || product.title)}"
-                    class="product-image product-image-clickable">`
+                    class="product-image product-image-clickable"
+                    loading="lazy"
+                    decoding="async">`
             : `<div class="product-no-image">No image available</div>`;
 
         const cardPriceFormatted = this.formatProductCardPrice(product);

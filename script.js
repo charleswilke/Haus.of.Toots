@@ -1,116 +1,28 @@
 // ===================================
 // LOGO ENTRANCE ANIMATION
 // ===================================
-// Progressive enhancement: swap the raster <img> for an inline SVG so each
-// of the 236 cross-stitches can be individually animated. The smoke crosses
-// rising from the chimney then loop forever. Falls back to a simple fade
-// if anything goes wrong.
+// The raster logo paints immediately; this lazily swaps it for the
+// pre-processed stitch SVG (images/hauslogo-anim.svg — wordmark crop,
+// stitch order, delays, and smoke offsets are all baked in at build
+// time) so CSS can run the stitch-in entrance and smoke loop. If the
+// fetch fails the raster logo simply stays put.
 
-async function animateLogo() {
+function swapInStitchLogo() {
     const img = document.getElementById('hausLogo');
-    if (!img) return;
-
-    const fallback = () => {
-        img.style.opacity = '0';
-        img.style.transform = 'translateY(-20px)';
-        setTimeout(() => {
-            img.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
-            img.style.opacity = '1';
-            img.style.transform = 'translateY(0)';
-        }, 200);
-    };
-
-    try {
-        const res = await fetch('images/HausOfToots.svg');
-        if (!res.ok) throw new Error('svg fetch failed');
-        const text = await res.text();
-        const doc = new DOMParser().parseFromString(text, 'image/svg+xml');
-        const svg = doc.querySelector('svg');
-        if (!svg) throw new Error('no svg root');
-
-        // Mirror the <img>'s positioning/class hooks so existing CSS keeps working.
-        svg.setAttribute('class', img.className);
-        svg.id = img.id;
-        svg.setAttribute('role', 'img');
-        svg.setAttribute('aria-label', img.alt || 'Haus of Toots');
-        svg.removeAttribute('width');
-        svg.removeAttribute('height');
-
-        img.replaceWith(svg);
-
-        let paths = Array.from(svg.querySelectorAll('path'));
-        if (!paths.length) return;
-
-        // The source SVG hardcodes fill via inline style on every path, which beats
-        // stylesheet rules. Strip it so .hero-logo's --logo-stitch-color can theme.
-        paths.forEach(p => p.style.removeProperty('fill'));
-
-        // The source SVG includes the "Haus of Toots" wordmark under the house.
-        // We only want the house. There's a clean ~7% vertical gap between the
-        // two — drop anything that lives below it, then recrop the viewBox.
-        const svgRect = svg.getBoundingClientRect();
-        const wordmarkCutoff = svgRect.top + svgRect.height * 0.74;
-        paths.forEach(p => {
-            const r = p.getBoundingClientRect();
-            if (r.top + r.height / 2 > wordmarkCutoff) p.remove();
-        });
-        paths = Array.from(svg.querySelectorAll('path'));
-        if (!paths.length) return;
-
-        // Recrop viewBox to the house's actual extent so it fills the container.
-        // svg.getBBox() would include a hidden placeholder <rect> from the source
-        // file, so union the path bboxes ourselves instead. Convert each path's
-        // client rect back into viewBox units.
-        const svgRect2 = svg.getBoundingClientRect();
-        const vb = svg.viewBox.baseVal;
-        const scale = vb.width / svgRect2.width;
-        let bx0 = Infinity, by0 = Infinity, bx1 = -Infinity, by1 = -Infinity;
-        paths.forEach(p => {
-            const r = p.getBoundingClientRect();
-            const x0 = (r.left - svgRect2.left) * scale + vb.x;
-            const y0 = (r.top - svgRect2.top) * scale + vb.y;
-            const x1 = x0 + r.width * scale;
-            const y1 = y0 + r.height * scale;
-            if (x0 < bx0) bx0 = x0;
-            if (y0 < by0) by0 = y0;
-            if (x1 > bx1) bx1 = x1;
-            if (y1 > by1) by1 = y1;
-        });
-        const pad = 4;
-        svg.setAttribute('viewBox', `${bx0 - pad} ${by0 - pad} ${bx1 - bx0 + pad * 2} ${by1 - by0 + pad * 2}`);
-
-        // getBoundingClientRect requires the SVG to be laid out — it's in the DOM now.
-        const rects = paths.map(p => p.getBoundingClientRect());
-        const ys = rects.map(r => r.top + r.height / 2);
-        const minY = Math.min(...ys);
-        const maxY = Math.max(...ys);
-        const range = maxY - minY || 1;
-
-        // Smoke = the 4 crosses rising from the chimney. Each cross is rendered
-        // as 2 overlapping path strokes, so the top 8 paths by Y are the smoke.
-        const SMOKE_PATH_COUNT = 8;
-        const sortedYs = [...ys].sort((a, b) => a - b);
-        const smokeCutoff = (sortedYs[SMOKE_PATH_COUNT - 1] + sortedYs[SMOKE_PATH_COUNT]) / 2;
-
-        // Stitch-in order: bottom → top, so the house builds from the ground up
-        // and the smoke is the last thing to appear before it starts drifting.
-        const indexed = paths.map((p, i) => ({ p, cy: ys[i] }));
-        indexed.sort((a, b) => b.cy - a.cy);
-
-        const totalStaggerMs = 1400;
-        indexed.forEach((entry, i) => {
-            const delay = (i / indexed.length) * totalStaggerMs;
-            entry.p.style.setProperty('--stitch-delay', `${delay}ms`);
-            entry.p.classList.add('logo-stitch');
-            if (entry.cy < smokeCutoff) {
-                entry.p.classList.add('logo-smoke');
-                // Stagger each smoke cross's drift loop so they don't pulse in sync.
-                entry.p.style.setProperty('--smoke-offset', `${Math.random() * 2.5}s`);
-            }
-        });
-    } catch (e) {
-        fallback();
-    }
+    if (!img || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    fetch('images/hauslogo-anim.svg?v=20260830', { priority: 'low' })
+        .then(res => {
+            if (!res.ok) throw new Error('svg fetch failed');
+            return res.text();
+        })
+        .then(text => {
+            const svg = new DOMParser().parseFromString(text, 'image/svg+xml').querySelector('svg');
+            if (!svg || !svg.querySelector('path')) return;
+            svg.setAttribute('class', img.className);
+            svg.id = img.id;
+            img.replaceWith(svg);
+        })
+        .catch(() => {});
 }
 
 // ===================================
@@ -119,58 +31,10 @@ async function animateLogo() {
 
 class ScrollStitchSidebar {
     constructor() {
-        this.stitchContainer = document.getElementById('stitchContainer');
+        this.stitchProgress = document.getElementById('stitchProgress');
         this.needle = document.getElementById('needle');
-        this.enabled = !!(this.stitchContainer && this.needle);
-        this.stitches = [];
-        this.stitchSize = 3.36; // Size of each stitch (42% of original 8)
-        // Authentic needlepoint spacing: stitches share holes
-        // The vertical spacing equals the stitch size so top-right of one = bottom-left of next
-        this.spacing = this.stitchSize * 2; // Vertical spacing between stitch centers
-        this.numStitches = Math.floor(1000 / this.spacing); // Calculate how many stitches fit
-        this.stitchSpeed = 0.8; // Speed multiplier - higher = stitches appear closer together as you scroll
-        
-        if (this.enabled) {
-            this.createStitches();
-        }
-        window.lastScrollY = 0;
-    }
-
-    createStitches() {
-        // Create all X stitch elements
-        for (let i = 0; i < this.numStitches; i++) {
-            const yPos = i * this.spacing;
-            const stitch = this.createXStitch(yPos, i);
-            this.stitches.push(stitch);
-            this.stitchContainer.appendChild(stitch.group);
-        }
-    }
-    
-    createXStitch(yPos, index) {
-        const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-        group.setAttribute('class', 'x-stitch');
-        group.setAttribute('data-index', index);
-        
-        // Single diagonal stroke: bottom-left to top-right (needlepoint style)
-        const line1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        line1.setAttribute('x1', 30 - this.stitchSize);
-        line1.setAttribute('y1', yPos + this.stitchSize);
-        line1.setAttribute('x2', 30 - this.stitchSize);
-        line1.setAttribute('y2', yPos + this.stitchSize);
-        line1.setAttribute('stroke', 'url(#threadGradient)');
-        line1.setAttribute('stroke-width', '3');
-        line1.setAttribute('stroke-linecap', 'round');
-        line1.style.filter = 'drop-shadow(0.5px 1px 1.5px rgba(0, 0, 0, 0.25)) drop-shadow(-0.5px 0px 0.5px rgba(255, 255, 255, 0.3))';
-        
-        group.appendChild(line1);
-        
-        return {
-            group: group,
-            line1: line1,
-            yPos: yPos,
-            progress: 0,
-            isAnimating: false
-        };
+        this.enabled = !!(this.stitchProgress && this.needle);
+        this.maxProgress = 0;
     }
     
     update(scrollPercent) {
@@ -178,74 +42,13 @@ class ScrollStitchSidebar {
             return;
         }
 
-        // Update needle position
-        const needleY = scrollPercent * 1000;
+        const boundedProgress = Math.min(Math.max(scrollPercent, 0), 1);
+        this.maxProgress = Math.max(this.maxProgress, boundedProgress);
+        this.stitchProgress.setAttribute('height', String(this.maxProgress * 1000));
+
+        const needleY = boundedProgress * 1000;
         this.needle.setAttribute('transform', `translate(30, ${needleY})`);
-        
-        // Show needle when scrolling
-        if (scrollPercent > 0) {
-            this.needle.style.opacity = '1';
-        } else {
-            this.needle.style.opacity = '0';
-        }
-        
-        // Add piercing animation
-        const scrollSpeed = Math.abs(window.lastScrollY - window.scrollY);
-        if (scrollSpeed > 5) {
-            this.needle.style.transform = 'scale(1.2)';
-            setTimeout(() => {
-                this.needle.style.transform = 'scale(1)';
-            }, 100);
-        }
-        
-        // Animate stitches based on scroll position
-        // Each stitch takes up equal portion of scroll, and must complete before next begins
-        // Apply speed multiplier to slow down the stitching
-        const totalScrollRange = scrollPercent * this.numStitches * this.stitchSpeed;
-        
-        this.stitches.forEach((stitch, index) => {
-            // Calculate which stitch should be active
-            const currentStitchIndex = Math.floor(totalScrollRange);
-            
-            if (index < currentStitchIndex) {
-                // Previous stitches should be fully complete and stay complete
-                stitch.progress = 1;
-                this.animateStitch(stitch);
-            } else if (index === currentStitchIndex) {
-                // This is the current stitch being animated
-                const stitchProgress = totalScrollRange - currentStitchIndex;
-                
-                // Only move forward, never backward (stitches don't un-stitch)
-                if (stitchProgress > stitch.progress) {
-                    // Smoothly interpolate to target progress with slower easing
-                    stitch.progress += (stitchProgress - stitch.progress) * 0.15;
-                }
-                
-                this.animateStitch(stitch);
-            } else {
-                // Future stitches - only reset if they haven't started yet
-                // Keep any progress they already have
-                if (stitch.progress === 0) {
-                    // Not started yet, keep at 0
-                } else {
-                    // Partially complete, keep the progress
-                    this.animateStitch(stitch);
-                }
-            }
-        });
-        
-        window.lastScrollY = window.scrollY;
-    }
-    
-    animateStitch(stitch) {
-        const progress = stitch.progress;
-        const size = this.stitchSize;
-        const centerX = 30;
-        const centerY = stitch.yPos;
-        
-        // Single diagonal stroke: bottom-left to top-right
-        stitch.line1.setAttribute('x2', centerX - size + (size * 2 * progress));
-        stitch.line1.setAttribute('y2', centerY + size - (size * 2 * progress));
+        this.needle.style.opacity = boundedProgress > 0 ? '1' : '0';
     }
 }
 
@@ -260,8 +63,6 @@ function updateScrollStitch() {
         scrollStitchSidebar.update(scrollPercent);
     }
 }
-
-window.lastScrollY = 0;
 
 // ===================================
 // CURSOR TRAIL STITCHING
@@ -563,45 +364,14 @@ function initSmoothScroll() {
 // INTERSECTION OBSERVER FOR ANIMATIONS
 // ===================================
 
-function initScrollAnimations() {
-    const shouldRevealImmediately = window.matchMedia('(max-width: 767px)').matches;
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -100px 0px'
-    };
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.animation = 'fadeInUp 0.6s ease-out forwards';
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-    
-    // Observe sections
-    document.querySelectorAll('section').forEach(section => {
-        const isCollectionHub = section.classList.contains('collection-hub-section');
-
-        if (shouldRevealImmediately && isCollectionHub) {
-            section.style.opacity = '1';
-            section.style.animation = 'none';
-            return;
-        }
-
-        section.style.opacity = '0';
-        observer.observe(section);
-    });
-}
-
 // ===================================
 // INITIALIZE EVERYTHING
 // ===================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Logo entrance animation
-    animateLogo();
-    
+    // Logo stitch entrance (index only — no-ops elsewhere)
+    swapInStitchLogo();
+
     // Scroll stitch sidebar
     scrollStitchSidebar = new ScrollStitchSidebar();
     
@@ -626,7 +396,9 @@ document.addEventListener('DOMContentLoaded', () => {
     updateScrollStitch();
     
     // Cursor trail
-    const cursorTrail = new CursorTrail();
+    if (window.matchMedia('(pointer: fine)').matches && !prefersReducedMotion.matches) {
+        new CursorTrail();
+    }
     
     // Email link stitching effect - apply to all links in about section
     const aboutLinks = document.querySelectorAll('.about-text a, .about-card a');
@@ -640,9 +412,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Smooth scrolling
     initSmoothScroll();
     
-    // Scroll animations
-    initScrollAnimations();
-
 });
 
 
@@ -752,5 +521,3 @@ if (navToggle && navLinksContainer) {
         }
     });
 }
-
-

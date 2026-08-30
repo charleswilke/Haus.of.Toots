@@ -20,12 +20,11 @@
     <link rel="canonical" href="https://hausoftoots.com/">
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link rel="preload" href="images/haus_of_toots_canvas_13ct_512px.webp" as="image">
-    <link rel="preload" href="images/HausOfToots.svg" as="fetch" crossorigin="anonymous">
+    <link rel="preload" href="images/flash-400.webp" imagesrcset="images/flash-400.webp 400w, images/flash-720.webp 720w" imagesizes="(max-width: 768px) calc(100vw - 32px), 360px" as="image" fetchpriority="high">
     <link rel="preconnect" href="https://haus-of-toots.myshopify.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Fraunces:opsz,wght@9..144,650;9..144,700&family=Winky+Sans:wght@300;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=20260825">
+    <link rel="preload" href="images/fonts/chewy-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="images/fonts/winky-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="styles.css?v=20260830c">
     <link rel="stylesheet" href="shop-styles.css?v=20260823c">
     <script type="application/ld+json">
     {
@@ -58,14 +57,14 @@
     <div id="shared-nav"></div>
     <div id="shared-stitch-sidebar"></div>
     <div id="shared-cursor-canvas"></div>
-    <script src="shared-components.js?v=20260825c" defer></script>
+    <script src="shared-components.js?v=20260830b" defer></script>
 
     <!-- Hero Section -->
     <section class="hero hero-shop">
         <div class="container">
             <div class="hero-layout">
                 <div class="hero-logo-side">
-                    <img src="images/hauslogo.webp" alt="Haus of Toots" class="hero-logo" id="hausLogo" width="328" height="437" fetchpriority="high">
+                    <img src="images/hauslogo-240.webp" srcset="images/hauslogo-240.webp 240w, images/hauslogo-480.webp 480w" sizes="(max-width: 767px) 176px, 328px" alt="Haus of Toots" class="hero-logo" id="hausLogo" width="328" height="437" fetchpriority="high" decoding="async">
                 </div>
                 <div class="hero-content-side">
                     <div class="stitched-border">
@@ -131,10 +130,11 @@
             </div>
             -->
 
+            <h2 class="visually-hidden">Shop by collection</h2>
             <div class="collection-card-grid collection-card-grid-three">
                 <a href="village" class="collection-card">
                     <div class="collection-card-image-wrap">
-                        <img src="images/village-expansion-400.webp" srcset="images/village-expansion-400.webp 400w, images/village-expansion-720.webp 720w, images/village-expansion-1040.webp 1040w" sizes="(max-width: 768px) 100vw, 360px" alt="Village Expansion Series card artwork: American Girl Place, JOANN, The Container Store, and Sephora needlepoint storefronts" class="collection-card-image" width="1200" height="881" loading="lazy">
+                        <img src="images/village-expansion-400.webp" srcset="images/village-expansion-400.webp 400w, images/village-expansion-720.webp 720w" sizes="(max-width: 768px) calc(100vw - 32px), 360px" alt="Village Expansion Series card artwork: American Girl Place, JOANN, The Container Store, and Sephora needlepoint storefronts" class="collection-card-image" width="1200" height="881" loading="eager" decoding="async">
                     </div>
                     <div class="collection-card-content">
                         <h3 class="collection-card-title">Village Expansion Series</h3>
@@ -145,7 +145,7 @@
 
                 <a href="flash" class="collection-card collection-card-mobile-first">
                     <div class="collection-card-image-wrap">
-                        <img src="images/flash.webp" alt="NDLPT Flash Sheet Collection card artwork" class="collection-card-image" width="1200" height="843" loading="lazy">
+                        <img src="images/flash-400.webp" srcset="images/flash-400.webp 400w, images/flash-720.webp 720w" sizes="(max-width: 768px) calc(100vw - 32px), 360px" alt="NDLPT Flash Sheet Collection card artwork" class="collection-card-image" width="1200" height="843" loading="eager" fetchpriority="high">
                     </div>
                     <div class="collection-card-content">
                         <h3 class="collection-card-title">NDLPT Flash Sheet Collection</h3>
@@ -156,7 +156,7 @@
 
                 <a href="accessories" class="collection-card">
                     <div class="collection-card-image-wrap">
-                        <img src="images/needleminders-400.webp" srcset="images/needleminders-400.webp 400w, images/needleminders-720.webp 720w, images/needleminders-1040.webp 1040w" sizes="(max-width: 768px) 100vw, 360px" alt="Flash Sheet Needle Minders on pink Haus of Toots backing cards" class="collection-card-image" width="1200" height="900" loading="lazy">
+                        <img src="images/needleminders-400.webp" srcset="images/needleminders-400.webp 400w, images/needleminders-720.webp 720w" sizes="(max-width: 768px) calc(100vw - 32px), 360px" alt="Flash Sheet Needle Minders on pink Haus of Toots backing cards" class="collection-card-image" width="1200" height="900" loading="eager" decoding="async">
                     </div>
                     <div class="collection-card-content">
                         <h3 class="collection-card-title">Accessories</h3>
@@ -192,6 +192,7 @@
     <!-- Browse Products -->
     <section class="home-browse-section">
         <div class="container">
+            <h2 class="visually-hidden">Browse all designs</h2>
             <!-- Compact so the loading state does not hold open a tall empty stretch of page. -->
             <div id="homeLoadingState" class="loading-state loading-state-inline">
                 <div class="loading-spinner"></div>
@@ -318,8 +319,8 @@
 
     <script src="shopify-config.js?v=20260703" defer></script>
     <script src="shopify.js?v=20260817" defer></script>
-    <script src="shop-app.js?v=20260823b" defer></script>
+    <script src="shop-app.js?v=20260830a" defer></script>
     <script src="index-app.js?v=20260819" defer></script>
-    <script src="script.js?v=20260823b" defer></script>
+    <script src="script.js?v=20260830c" defer></script>
 </body>
 </html>

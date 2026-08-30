@@ -10,7 +10,7 @@ const SharedComponents = {
     <nav class="top-nav">
         <div class="nav-container">
             <a href="index.html" class="nav-brand" aria-label="Haus of Toots home">
-                <img src="images/nav-wordmark.webp" alt="Haus of Toots" class="nav-brand-logo" width="520" height="247">
+                <img src="images/nav-wordmark-104.webp" srcset="images/nav-wordmark-104.webp 104w, images/nav-wordmark-208.webp 208w" sizes="104px" alt="Haus of Toots" class="nav-brand-logo" width="520" height="247" decoding="async">
             </a>
             <span class="nav-tagline">Cute, Weird &amp; Wildly Specific Needlepoint Canvases</span>
             <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
@@ -49,8 +49,14 @@ const SharedComponents = {
                     <stop offset="75%" style="stop-color:#E85563;stop-opacity:1" />
                     <stop offset="100%" style="stop-color:#D04552;stop-opacity:1" />
                 </linearGradient>
+                <pattern id="stitchPattern" width="60" height="6.72" patternUnits="userSpaceOnUse">
+                    <line x1="26.64" y1="6.72" x2="33.36" y2="0" stroke="url(#threadGradient)" stroke-width="3" stroke-linecap="round" />
+                </pattern>
+                <clipPath id="stitchClip">
+                    <rect id="stitchProgress" x="0" y="0" width="60" height="0" />
+                </clipPath>
             </defs>
-            <g id="stitchContainer"></g>
+            <rect class="stitch-thread" x="0" y="0" width="60" height="1000" fill="url(#stitchPattern)" clip-path="url(#stitchClip)" />
             <g id="needle" transform="translate(30, 0)">
                 <line x1="-8" y1="-15" x2="8" y2="-15" stroke="#FF6B7A" stroke-width="3" stroke-linecap="round"/>
                 <path d="M 0 -15 L 0 5" stroke="#C0C0C0" stroke-width="2"/>
