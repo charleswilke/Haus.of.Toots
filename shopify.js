@@ -65,6 +65,35 @@ class ShopifyClient {
     }
 
     /**
+     * Catalog reads go through a short-lived sessionStorage cache so
+     * navigating between pages doesn't refetch the same products every
+     * time. Only read-only queries use this — cart mutations and
+     * inventory checks always hit the network. The TTL keeps prices
+     * and availability from going stale mid-session.
+     */
+    async cachedFetch(query, variables = {}, ttlMs = 5 * 60 * 1000) {
+        let key = null;
+        try {
+            const s = query + JSON.stringify(variables);
+            let h = 5381;
+            for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) >>> 0;
+            key = `hot-catalog:${h.toString(36)}`;
+            const hit = JSON.parse(sessionStorage.getItem(key));
+            if (hit && Date.now() - hit.t < ttlMs) return hit.d;
+        } catch (e) {
+            // Private mode / disabled storage / corrupt entry — just use the network.
+        }
+
+        const data = await this.fetch(query, variables);
+        try {
+            if (key) sessionStorage.setItem(key, JSON.stringify({ t: Date.now(), d: data }));
+        } catch (e) {
+            // Storage full — serve uncached.
+        }
+        return data;
+    }
+
+    /**
      * Get all products from the store
      */
     async getProducts(first = 24) {
@@ -124,7 +153,7 @@ class ShopifyClient {
             }
         `;
 
-        const data = await this.fetch(query, { first });
+        const data = await this.cachedFetch(query, { first });
         return data.products.edges.map(edge => edge.node);
     }
 
@@ -188,7 +217,7 @@ class ShopifyClient {
             }
         `;
 
-        const data = await this.fetch(query, { first, after });
+        const data = await this.cachedFetch(query, { first, after });
         return {
             products: data.products.edges.map(edge => edge.node),
             pageInfo: data.products.pageInfo
@@ -231,7 +260,7 @@ class ShopifyClient {
             }
         `;
 
-        const data = await this.fetch(query, { first });
+        const data = await this.cachedFetch(query, { first });
         return data.collections.edges.map(edge => edge.node);
     }
 
@@ -297,7 +326,7 @@ class ShopifyClient {
             }
         `;
 
-        const data = await this.fetch(query, { handle, first });
+        const data = await this.cachedFetch(query, { handle, first });
         const collection = data.collection;
 
         if (!collection) {
@@ -374,7 +403,7 @@ class ShopifyClient {
             }
         `;
 
-        const data = await this.fetch(query, { handle });
+        const data = await this.cachedFetch(query, { handle });
         return data.product;
     }
 
@@ -441,7 +470,7 @@ class ShopifyClient {
             }
         `;
 
-        const data = await this.fetch(query, { id });
+        const data = await this.cachedFetch(query, { id });
         return data.product;
     }
 

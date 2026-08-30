@@ -294,10 +294,10 @@ class ShopApp {
         // compressed Shopify rendition for the active card layout.
         const fullImageUrl = image?.url || null;
         const imageParam = fullImageUrl?.includes('?') ? '&' : '?';
-        const thumbnailUrl = fullImageUrl ? `${fullImageUrl}${imageParam}width=480&quality=75` : null;
+        const thumbnailUrl = fullImageUrl ? `${fullImageUrl}${imageParam}width=480&quality=65` : null;
         const thumbnailSrcset = fullImageUrl
             ? [360, 480, 600]
-                .map(width => `${fullImageUrl}${imageParam}width=${width}&quality=75 ${width}w`)
+                .map(width => `${fullImageUrl}${imageParam}width=${width}&quality=65 ${width}w`)
                 .join(', ')
             : null;
         

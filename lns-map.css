@@ -14,7 +14,7 @@
     /* same paint texture + white veil as the about page's container */
     background:
         linear-gradient(rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.72)),
-        url('images/paint.webp') center / cover;
+        url('images/paint-800.webp') center / cover;
     border: 2px dashed var(--coral-light);
     border-radius: 16px;
     padding: var(--spacing-md) var(--spacing-md) var(--spacing-sm);

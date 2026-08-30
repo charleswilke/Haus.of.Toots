@@ -722,7 +722,7 @@ section {
     padding: var(--spacing-md) var(--spacing-lg);
     background:
         linear-gradient(rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.72)),
-        url('images/paint.webp') center / cover;
+        url('images/paint-800.webp') center / cover;
     /* Square on the two corners the stitch marks sit on - the marks want a
        right angle to cross - and rounded on the other two. Same asymmetry the
        Shopify theme's hero panel uses, and the same 32px, so the two stay in
@@ -905,7 +905,7 @@ svg.hero-logo .logo-smoke {
 .hero-content-side .stitched-border {
     background:
         linear-gradient(rgba(255, 255, 255, 0.58), rgba(255, 255, 255, 0.58)),
-        url('images/paint.webp') center / cover;
+        url('images/paint-800.webp') center / cover;
     transition: transform 0.32s var(--transition-smooth), box-shadow 0.32s var(--transition-smooth);
 }
 
