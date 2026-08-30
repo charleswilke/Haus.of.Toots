@@ -832,9 +832,13 @@ section {
 }
 
 /* Inline-SVG logo (lazily swapped in by swapInStitchLogo): the stitches
-   animate individually, so the raster's logoReveal must not rerun on it. */
+   animate individually, so the raster's logoReveal must not rerun on it.
+   overflow: visible — the viewBox is cropped to ~4 units of padding, but
+   smokeDrift translates up 6px and stitchPop overshoots to 1.35x, so
+   edge stitches must be allowed to render past the viewBox. */
 svg.hero-logo {
     animation: none;
+    overflow: visible;
 }
 
 /* Recolor every cross-stitch via the theme variable. */
