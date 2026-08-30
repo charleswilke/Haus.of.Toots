@@ -284,6 +284,16 @@ class CardGallery {
                     <img src="images/hauslogo.webp" alt="Haus of Toots" class="card-gallery-logo">
                     <h2 class="card-gallery-title">The Canvas Collection</h2>
                 </div>
+                <nav class="card-gallery-tabs" role="tablist" aria-label="Gallery categories">
+                    <button class="card-deck-tab active" data-category="all" role="tab" aria-selected="true">
+                        All <span class="tab-count">${this.cards.length}</span>
+                    </button>
+                    ${Object.entries(this.galleryData).map(([id, cat]) => `
+                        <button class="card-deck-tab" data-category="${id}" data-color="${cat.color}" role="tab" aria-selected="false">
+                            ${cat.name} <span class="tab-count">${cat.images.length}</span>
+                        </button>
+                    `).join('')}
+                </nav>
                 <button class="card-gallery-close" aria-label="Close gallery">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -291,18 +301,6 @@ class CardGallery {
                     </svg>
                 </button>
             </header>
-            
-            <!-- Category Tabs -->
-            <nav class="card-gallery-tabs" role="tablist" aria-label="Gallery categories">
-                <button class="card-deck-tab active" data-category="all" role="tab" aria-selected="true">
-                    All <span class="tab-count">${this.cards.length}</span>
-                </button>
-                ${Object.entries(this.galleryData).map(([id, cat]) => `
-                    <button class="card-deck-tab" data-category="${id}" data-color="${cat.color}" role="tab" aria-selected="false">
-                        ${cat.name} <span class="tab-count">${cat.images.length}</span>
-                    </button>
-                `).join('')}
-            </nav>
             
             <!-- Main Card Area -->
             <main class="card-gallery-main">
