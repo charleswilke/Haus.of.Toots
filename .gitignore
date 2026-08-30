@@ -35,3 +35,7 @@ tmp/
 
 .vercel
 .env*.local
+
+# Build output and dependencies
+node_modules/
+dist/
