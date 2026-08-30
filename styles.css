@@ -1647,9 +1647,37 @@ svg.hero-logo .logo-smoke {
 
 @media (max-width: 640px) {
     .footer-social {
-        flex-direction: column;
-        align-items: center;
+        flex-wrap: nowrap;
         gap: var(--spacing-xs);
+        /* .footer-content centers its children, so stretch to the full
+           container width instead of shrink-wrapping the row. */
+        width: 100%;
+    }
+
+    /* All three buttons on one row: equal widths, icon stacked over a
+       smaller label so "@haus.of.toots" still fits on narrow phones. */
+    .footer-shop-button,
+    .social-link {
+        flex: 1 1 0;
+        min-width: 0;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.4rem;
+        padding: 0.6rem 0.4rem;
+        font-size: clamp(0.7rem, 3.2vw, 0.85rem);
+        text-align: center;
+    }
+
+    .social-link span {
+        max-width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .social-link svg {
+        width: 20px;
+        height: 20px;
     }
 }
 
