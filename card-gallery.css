@@ -101,6 +101,32 @@
     }
 }
 
+/* Hamburger that reveals the category tabs on mobile; hidden on desktop
+   where the tabs sit inline in the header. */
+.card-gallery-menu-toggle {
+    display: none;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: rgba(255, 107, 122, 0.2);
+    border-radius: 50%;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    color: #FF8497;
+}
+
+.card-gallery-menu-toggle svg {
+    width: 20px;
+    height: 20px;
+}
+
+.card-gallery-header.tabs-open .card-gallery-menu-toggle {
+    background: #FF6B7A;
+    color: white;
+}
+
 .card-gallery-close {
     width: 48px;
     height: 48px;
@@ -1634,12 +1660,22 @@
         font-size: 1.25rem;
     }
     
-    /* Not enough width for one row on phones: brand and close stay on the
-       first line, tabs wrap onto their own line below. */
+    /* Not enough width for one row on phones: the tabs collapse behind
+       the hamburger and expand onto their own line below the brand. */
+    .card-gallery-menu-toggle {
+        display: flex;
+        margin-left: auto;
+    }
+
     .card-gallery-tabs {
+        display: none;
         order: 3;
         flex-basis: 100%;
         gap: 0.375rem;
+    }
+
+    .card-gallery-header.tabs-open .card-gallery-tabs {
+        display: flex;
     }
     
     .card-deck-tab {
@@ -1717,7 +1753,11 @@
     z-index: 1;
     opacity: 1;
     visibility: visible;
-    min-height: 100vh;
+    /* The page offsets content 60px for the fixed nav; subtract it so the
+       deck (including the thumbnail shelf at the bottom) fits the visible
+       viewport instead of hiding the shelf below the fold. */
+    min-height: calc(100vh - 60px);
+    min-height: calc(100dvh - 60px);
     overflow: visible;
     transition: none;
 }

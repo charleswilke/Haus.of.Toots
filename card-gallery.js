@@ -294,6 +294,13 @@ class CardGallery {
                         </button>
                     `).join('')}
                 </nav>
+                <button class="card-gallery-menu-toggle" aria-label="Show categories" aria-expanded="false">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <line x1="4" y1="7" x2="20" y2="7"></line>
+                        <line x1="4" y1="12" x2="20" y2="12"></line>
+                        <line x1="4" y1="17" x2="20" y2="17"></line>
+                    </svg>
+                </button>
                 <button class="card-gallery-close" aria-label="Close gallery">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -366,12 +373,24 @@ class CardGallery {
     attachOverlayListeners() {
         // Close button
         this.overlay.querySelector('.card-gallery-close').addEventListener('click', () => this.close());
-        
+
+        // Mobile: category tabs live behind a hamburger toggle
+        const header = this.overlay.querySelector('.card-gallery-header');
+        const menuToggle = this.overlay.querySelector('.card-gallery-menu-toggle');
+        menuToggle.addEventListener('click', () => {
+            const open = header.classList.toggle('tabs-open');
+            menuToggle.setAttribute('aria-expanded', String(open));
+        });
+
         // Category tabs
         this.overlay.querySelectorAll('.card-deck-tab').forEach(tab => {
             tab.addEventListener('click', () => {
                 const category = tab.dataset.category;
                 this.filterByCategory(category);
+
+                // Picking a category dismisses the mobile menu
+                header.classList.remove('tabs-open');
+                menuToggle.setAttribute('aria-expanded', 'false');
                 
                 // Update active state
                 this.overlay.querySelectorAll('.card-deck-tab').forEach(t => {
