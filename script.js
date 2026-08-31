@@ -10,7 +10,7 @@
 function swapInStitchLogo() {
     const img = document.getElementById('hausLogo');
     if (!img || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    fetch('images/hauslogo-anim.svg?v=20260830', { priority: 'low' })
+    fetch('images/hauslogo-anim.svg?v=20260830b', { priority: 'low' })
         .then(res => {
             if (!res.ok) throw new Error('svg fetch failed');
             return res.text();
