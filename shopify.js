@@ -109,8 +109,7 @@ class ShopifyClient {
                             id
                             handle
                             title
-                            description
-                            descriptionHtml
+                            vendor
                             productType
                             updatedAt
                             tags
@@ -128,6 +127,7 @@ class ShopifyClient {
                                     node {
                                         id
                                         title
+                                        sku
                                         availableForSale
                                         currentlyNotInStock
                                         priceV2 {
@@ -173,8 +173,7 @@ class ShopifyClient {
                             id
                             handle
                             title
-                            description
-                            descriptionHtml
+                            vendor
                             productType
                             updatedAt
                             tags
@@ -192,6 +191,7 @@ class ShopifyClient {
                                     node {
                                         id
                                         title
+                                        sku
                                         availableForSale
                                         currentlyNotInStock
                                         priceV2 {
@@ -281,10 +281,9 @@ class ShopifyClient {
                                 id
                                 handle
                                 title
-                                description
-                                descriptionHtml
+                                vendor
                                 productType
-                            updatedAt
+                                updatedAt
                                 tags
                                 images(first: 1) {
                                     edges {
@@ -300,6 +299,7 @@ class ShopifyClient {
                                         node {
                                             id
                                             title
+                                            sku
                                             availableForSale
                                             currentlyNotInStock
                                             priceV2 {

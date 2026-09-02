@@ -6,6 +6,9 @@
 import { build } from 'esbuild';
 import { copyFileSync, cpSync, mkdirSync, readdirSync, rmSync } from 'node:fs';
 
+// Finder drops .DS_Store files into image folders; keep them out of the deploy.
+const copyOpts = { recursive: true, filter: src => !src.endsWith('.DS_Store') };
+
 const dist = 'dist';
 const skipDirs = new Set(['dist', 'api', 'docs', '_archived', 'node_modules', 'images']);
 const skipFiles = new Set(['build.mjs', 'package.json', 'package-lock.json', 'vercel.json', 'HausOfToots.code-workspace']);
@@ -18,7 +21,7 @@ for (const entry of readdirSync('.', { withFileTypes: true })) {
     const name = entry.name;
     if (name.startsWith('.') || skipFiles.has(name) || name.endsWith('.md')) continue;
     if (entry.isDirectory()) {
-        if (!skipDirs.has(name)) cpSync(name, `${dist}/${name}`, { recursive: true });
+        if (!skipDirs.has(name)) cpSync(name, `${dist}/${name}`, copyOpts);
         continue;
     }
     if (name.endsWith('.js') || name.endsWith('.css')) {
@@ -27,7 +30,7 @@ for (const entry of readdirSync('.', { withFileTypes: true })) {
         copyFileSync(name, `${dist}/${name}`);
     }
 }
-cpSync('images', `${dist}/images`, { recursive: true });
+cpSync('images', `${dist}/images`, copyOpts);
 
 await build({
     entryPoints: minifyTargets,

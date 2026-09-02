@@ -60,8 +60,6 @@ class ShopApp {
             product.title,
             product.handle,
             product.productType,
-            product.description,
-            product.descriptionHtml,
             ...(product.tags || [])
         ].join(' '));
     }
@@ -1131,21 +1129,81 @@ class ShopApp {
         const modalBody = document.getElementById('productModalBody');
 
         clearTimeout(this.productModalCloseTimeout);
-        
-        // Show loading state
-        modalBody.innerHTML = '<div class="product-detail-loading">Loading product details...</div>';
+        this.activeModalProductId = productId;
+
+        // The grid already holds everything the modal needs except the
+        // description and any extra gallery images, so paint from that
+        // immediately and let the full fetch fill in the rest below.
+        const listed = this.findLoadedProduct(productId);
+        if (listed) {
+            this.renderProductModal(listed);
+        } else {
+            modalBody.innerHTML = '<div class="product-detail-loading">Loading product details...</div>';
+        }
         productModal.classList.add('open');
         document.body.style.overflow = 'hidden';
         this.scheduleProductModalScrollbarUpdate();
 
         try {
-            // Fetch full product details
             const product = await shopifyClient.getProductById(productId);
-            this.renderProductModal(product);
+            // The user may have closed this modal or opened another product
+            // while the fetch was in flight.
+            if (this.activeModalProductId !== productId || !productModal.classList.contains('open')) return;
+            if (listed) {
+                this.hydrateProductModal(listed, product);
+            } else {
+                this.renderProductModal(product);
+            }
         } catch (error) {
             console.error('Error loading product:', error);
-            modalBody.innerHTML = '<div class="product-detail-loading">Error loading product details. Please try again.</div>';
+            if (!listed) {
+                modalBody.innerHTML = '<div class="product-detail-loading">Error loading product details. Please try again.</div>';
+            }
         }
+    }
+
+    /**
+     * Find a product in whatever list this page has already loaded.
+     */
+    findLoadedProduct(productId) {
+        for (const pool of [this.products, this.allProducts, this.filteredProducts]) {
+            const hit = Array.isArray(pool) ? pool.find(p => p && p.id === productId) : null;
+            if (hit) return hit;
+        }
+        return null;
+    }
+
+    /**
+     * Fill in the parts of an already-rendered modal that the list data
+     * lacked: the description and the full image gallery. Merges the full
+     * product into the listed object so any later open is complete at once
+     * and closures holding the listed product see the new fields.
+     */
+    hydrateProductModal(listed, product) {
+        if (!product) return;
+        const modalBody = document.getElementById('productModalBody');
+        const content = modalBody.querySelector('.product-detail-content');
+
+        Object.assign(listed, product);
+        if (!content) return;
+
+        if (!content.querySelector('.product-detail-description')) {
+            const descriptionHTML = this.renderProductDescription(listed);
+            if (descriptionHTML) content.insertAdjacentHTML('beforeend', descriptionHTML);
+        }
+
+        const renderedImages = content.querySelectorAll('.product-detail-thumbnail').length
+            || (content.querySelector('#productMainImage') ? 1 : 0);
+        const fullImages = listed.images?.edges || [];
+        if (fullImages.length > renderedImages) {
+            const imagesEl = content.querySelector('.product-detail-images');
+            if (imagesEl) {
+                imagesEl.outerHTML = this.renderProductImages(listed);
+                this.attachProductImageListeners(listed);
+            }
+        }
+
+        this.scheduleProductModalScrollbarUpdate();
     }
 
     /**
@@ -1173,9 +1231,7 @@ class ShopApp {
      */
     renderProductModal(product) {
         const modalBody = document.getElementById('productModalBody');
-        const images = product.images?.edges || [];
         const variants = product.variants?.edges || [];
-        const mainImage = images[0]?.node;
         const availableVariants = variants.filter(v => v.node.availableForSale);
         const hasMultipleVariants = variants.length > 1;
         const selectedVariant = hasMultipleVariants ? null : (availableVariants[0]?.node || variants[0]?.node);
@@ -1206,49 +1262,8 @@ class ShopApp {
             </div>
         `;
 
-        // Collect all full-size image URLs for lightbox
-        const allImageUrls = images.map(imgEdge => imgEdge.node.url);
-        const allImageCaptions = images.map(imgEdge => imgEdge.node.altText || product.title);
-        
-        // Use the full image URL with a width param so the main image keeps its natural aspect ratio
-        // (transformedSrc returns a 400x400 cropped square — fine for thumbnails, wrong here).
-        const mainImageFullUrl = mainImage.url;
-        const mainImageSep = mainImageFullUrl.includes('?') ? '&' : '?';
-        const mainImageDisplayUrl = `${mainImageFullUrl}${mainImageSep}width=1200`;
-
-        const imagesHTML = images.length > 0 ? `
-            <div class="product-detail-images">
-                <img id="productMainImage" 
-                     src="${mainImageDisplayUrl}" 
-                     data-full-image="${mainImageFullUrl}"
-                     alt="${mainImage.altText || product.title}" 
-                     class="product-detail-main-image product-image-clickable">
-                ${images.length > 1 ? `
-                    <div class="product-detail-thumbnails">
-                        ${images.map((imgEdge, index) => {
-                            const thumbnailUrl = imgEdge.node.transformedSrc || imgEdge.node.url;
-                            const fullUrl = imgEdge.node.url;
-                            return `
-                            <img src="${thumbnailUrl}" 
-                                 data-full-image="${fullUrl}"
-                                 alt="${imgEdge.node.altText || product.title}" 
-                                 class="product-detail-thumbnail product-image-clickable ${index === 0 ? 'active' : ''}"
-                                 data-image-url="${imgEdge.node.url}"
-                                 data-image-alt="${imgEdge.node.altText || product.title}">
-                        `;
-                        }).join('')}
-                    </div>
-                ` : ''}
-            </div>
-        ` : `<div class="product-detail-images">
-            <div class="product-detail-main-image" style="background: var(--linen); display: flex; align-items: center; justify-content: center; color: var(--neutral-mid);">No image available</div>
-        </div>`;
-
-        const descriptionHTML = product.descriptionHtml 
-            ? `<div class="product-detail-description">${product.descriptionHtml}</div>`
-            : product.description 
-                ? `<div class="product-detail-description"><p>${this.escapeHtml(product.description)}</p></div>`
-                : '';
+        const imagesHTML = this.renderProductImages(product);
+        const descriptionHTML = this.renderProductDescription(product);
 
         modalBody.innerHTML = `
             <div class="product-detail-content">
@@ -1274,9 +1289,80 @@ class ShopApp {
     }
 
     /**
+     * Main image + thumbnail strip for the product modal.
+     */
+    renderProductImages(product) {
+        const images = product.images?.edges || [];
+        const mainImage = images[0]?.node;
+
+        if (images.length === 0 || !mainImage) {
+            return `<div class="product-detail-images">
+            <div class="product-detail-main-image" style="background: var(--linen); display: flex; align-items: center; justify-content: center; color: var(--neutral-mid);">No image available</div>
+        </div>`;
+        }
+
+        // Use the full image URL with a width param so the main image keeps its natural aspect ratio
+        // (transformedSrc returns a 400x400 cropped square — fine for thumbnails, wrong here).
+        const mainImageFullUrl = mainImage.url;
+        const mainImageSep = mainImageFullUrl.includes('?') ? '&' : '?';
+        const mainImageDisplayUrl = `${mainImageFullUrl}${mainImageSep}width=1200`;
+
+        return `
+            <div class="product-detail-images">
+                <img id="productMainImage" 
+                     src="${mainImageDisplayUrl}" 
+                     data-full-image="${mainImageFullUrl}"
+                     alt="${mainImage.altText || product.title}" 
+                     class="product-detail-main-image product-image-clickable">
+                ${images.length > 1 ? `
+                    <div class="product-detail-thumbnails">
+                        ${images.map((imgEdge, index) => {
+                            const thumbnailUrl = imgEdge.node.transformedSrc || imgEdge.node.url;
+                            const fullUrl = imgEdge.node.url;
+                            return `
+                            <img src="${thumbnailUrl}" 
+                                 data-full-image="${fullUrl}"
+                                 alt="${imgEdge.node.altText || product.title}" 
+                                 class="product-detail-thumbnail product-image-clickable ${index === 0 ? 'active' : ''}"
+                                 data-image-url="${imgEdge.node.url}"
+                                 data-image-alt="${imgEdge.node.altText || product.title}">
+                        `;
+                        }).join('')}
+                    </div>
+                ` : ''}
+            </div>
+        `;
+    }
+
+    /**
+     * Description block for the product modal ('' when the product has none
+     * or the list data hasn't been hydrated with it yet).
+     */
+    renderProductDescription(product) {
+        if (product.descriptionHtml) {
+            return `<div class="product-detail-description">${product.descriptionHtml}</div>`;
+        }
+        if (product.description) {
+            return `<div class="product-detail-description"><p>${this.escapeHtml(product.description)}</p></div>`;
+        }
+        return '';
+    }
+
+    /**
      * Attach event listeners to product modal
      */
     attachProductModalListeners(product, variants, selectedVariant) {
+        this.attachProductImageListeners(product);
+
+        this.attachProductVariantSelectionListeners(product, variants);
+
+        this.attachProductPurchaseActionListeners(product, selectedVariant);
+    }
+
+    /**
+     * Lightbox + thumbnail swapping for the modal's image block.
+     */
+    attachProductImageListeners(product) {
         // Collect all full-size image URLs for lightbox
         const images = product.images?.edges || [];
         const allImageUrls = images.map(imgEdge => imgEdge.node.url);
@@ -1314,10 +1400,6 @@ class ShopApp {
                 this.openLightbox(allImageUrls, index, allImageCaptions);
             });
         });
-
-        this.attachProductVariantSelectionListeners(product, variants);
-
-        this.attachProductPurchaseActionListeners(product, selectedVariant);
     }
 
     attachProductVariantSelectionListeners(product, variants) {
