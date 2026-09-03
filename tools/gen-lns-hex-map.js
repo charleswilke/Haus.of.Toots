@@ -92,7 +92,6 @@ const SHOPS = [
   { name: "Angel City Stitchery", url: "https://www.angelcitystitchery.com/", addr: "13347 Washington Blvd Ste B, Los Angeles, CA 90066", city: "Los Angeles", state: "CA", lat: 33.9926, lon: -118.4436 },
   { name: "Sunny Stitches", url: "http://www.sunnystitchesdenver.com/", addr: "1927 E Kentucky Ave, Denver, CO 80209", city: "Denver", state: "CO", lat: 39.692, lon: -104.973 },
   { name: "The Needle Works", url: "http://theneedleworks.com/", addr: "4401 Medical Pkwy, Austin, TX 78756", city: "Austin", state: "TX", lat: 30.3078, lon: -97.7387 },
-  { name: "Hibiscus Needlepoint", url: "https://hibiscusneedlepoint.com/", addr: "1206 W 38th St #1201, Austin, TX 78705", city: "Austin", state: "TX", lat: 30.304, lon: -97.74 },
   { name: "Mimi's Needlepoint", url: "https://mimisneedlepoint.com/", addr: "803 W Davis St Ste 103, Dallas, TX 75208", city: "Dallas", state: "TX", lat: 32.7473, lon: -96.828 },
   { name: "Barbara's Needlepoint", url: "http://www.barbarasneedlepoint.com/", addr: "1708 S Western Ave Unit 1, Sioux Falls, SD 57105", city: "Sioux Falls", state: "SD", lat: 43.525, lon: -96.744 },
   { name: "Village Needleworks", url: "http://www.villageneedleworks.com/", addr: "8721 Shamrock Rd, Omaha, NE 68114", city: "Omaha", state: "NE", lat: 41.256, lon: -96.05 },
@@ -102,7 +101,6 @@ const SHOPS = [
   { name: "The Nimble Needle", url: "https://www.atlantanimbleneedle.com/", addr: "206B Johnson Ferry Rd, Atlanta, GA 30328", city: "Atlanta", state: "GA", lat: 33.926, lon: -84.382 },
   { name: "Honeysuckle Needlepoint", url: null, addr: "102 Hill St, Bridgeport, WV 26330", city: "Bridgeport", state: "WV", lat: 39.2865, lon: -80.256 },
   { name: "Mrs. Meshugga Needlepoint Shop", url: "https://mrsmeshugga.com/", addr: "1875 Springfield Ave, Maplewood, NJ 07040", city: "Maplewood", state: "NJ", lat: 40.729, lon: -74.2735 },
-  { name: "Mopsey", url: "https://shopmopsey.com/", addr: "5 Alfred St Ste 104, Biddeford, ME 04005", city: "Biddeford", state: "ME", lat: 43.493, lon: -70.454 },
 ];
 
 // --- Projection: plate carrée scaled by cos(38.5°) on x ---
@@ -201,7 +199,6 @@ const LABELS = {
   "Atlanta":     { dx: 20,  dy: 8,   anchor: "start" },
   "Bridgeport":  { dx: 2,   dy: -20, anchor: "middle" },
   "Maplewood":   { dx: 20,  dy: -6,  anchor: "start" },
-  "Biddeford":   { dx: 18,  dy: -12, anchor: "start" },
 };
 
 // --- Emit SVG ---
