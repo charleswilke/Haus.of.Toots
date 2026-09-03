@@ -183,6 +183,8 @@ class ShopifyClient {
                                         url
                                         altText
                                         transformedSrc(maxWidth: 400, maxHeight: 400, crop: CENTER)
+                                        cardSrc: url(transform: {maxWidth: 1200, maxHeight: 1200})
+                                        fullSrc: url(transform: {maxWidth: 2000, maxHeight: 2000})
                                     }
                                 }
                             }

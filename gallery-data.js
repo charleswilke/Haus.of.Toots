@@ -32,7 +32,8 @@ const GALLERY_DATA = {
             { src: 'images/recent-canvases/1CustomCanvases/LOTR-Map-Inspired-Belt.webp', thumb: 'images/recent-canvases/1CustomCanvases/thumb-LOTR-Map-Inspired-Belt.webp', title: 'LOTR Map Inspired Belt', subtitle: '', date: '2026-02-05' },
             { src: 'images/recent-canvases/1CustomCanvases/RingBearerPillow2.webp', thumb: 'images/recent-canvases/1CustomCanvases/thumb-RingBearerPillow2.webp', title: 'Ring Bearer Pillow', subtitle: '', date: '2026-02-06' },
             { src: 'images/recent-canvases/1CustomCanvases/StPatricksBoysUniformOrnament.webp', thumb: 'images/recent-canvases/1CustomCanvases/thumb-StPatricksBoysUniformOrnament.webp', title: 'St. Patrick\'s Boys Uniform Ornament', subtitle: '', date: '2026-02-07' },
-            { src: 'images/recent-canvases/1CustomCanvases/StPatricksGirlsUniformOrnament.webp', thumb: 'images/recent-canvases/1CustomCanvases/thumb-StPatricksGirlsUniformOrnament.webp', title: 'St. Patrick\'s Girls Uniform Ornament', subtitle: '', date: '2026-02-07' }
+            { src: 'images/recent-canvases/1CustomCanvases/StPatricksGirlsUniformOrnament.webp', thumb: 'images/recent-canvases/1CustomCanvases/thumb-StPatricksGirlsUniformOrnament.webp', title: 'St. Patrick\'s Girls Uniform Ornament', subtitle: '', date: '2026-02-07' },
+            { src: 'images/recent-canvases/1CustomCanvases/TheColonyHotel.webp', thumb: 'images/recent-canvases/1CustomCanvases/thumb-TheColonyHotel.webp', title: 'The Colony Hotel', subtitle: '', date: '2026-09-02' }
         ]
     },
     'hot-originals': {

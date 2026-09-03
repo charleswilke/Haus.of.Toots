@@ -207,8 +207,12 @@ class CardGallery {
         return `${normalized.slice(0, maxLength - 1).trimEnd()}...`;
     }
 
+    isAccessoryProduct(product) {
+        return (product?.tags || []).some(tag => String(tag).trim().toLowerCase() === 'accessories');
+    }
+
     mapShopifyProductToCard(product) {
-        if (!product?.handle || !product?.title) {
+        if (!product?.handle || !product?.title || this.isAccessoryProduct(product)) {
             return null;
         }
 
@@ -217,8 +221,11 @@ class CardGallery {
             ? shopifyClient.getProductListingUrl(product.handle)
             : `https://${SHOPIFY_CONFIG.domain}/products/${encodeURIComponent(product.handle)}`;
 
+        // Card grid gets a 1200px render; the original upload is 3-5MB and ~5000px
+        const src = image?.cardSrc || image?.url || 'images/wordmarklogo.webp';
         return {
-            src: image?.url || 'images/wordmarklogo.webp',
+            src,
+            fullSrc: image?.fullSrc || src,
             thumb: image?.transformedSrc || image?.url || 'images/wordmarklogo.webp',
             title: product.title,
             subtitle: '',
@@ -946,7 +953,7 @@ class CardGallery {
             return;
         }
 
-        this.openFullview(cardData.src, cardData.title);
+        this.openFullview(cardData.fullSrc || cardData.src, cardData.title);
     }
     
     flipCard(card) {
