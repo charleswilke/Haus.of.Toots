@@ -26,7 +26,7 @@
     <link rel="preload" href="images/fonts/chewy-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="images/fonts/winky-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="styles.css?v=20260830d">
-    <link rel="stylesheet" href="shop-styles.css?v=20260830d">
+    <link rel="stylesheet" href="shop-styles.css?v=20260907e">
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -58,7 +58,21 @@
     <div id="shared-nav"></div>
     <div id="shared-stitch-sidebar"></div>
     <div id="shared-cursor-canvas"></div>
-    <script src="shared-components.js?v=20260830b" defer></script>
+    <script src="shared-components.js?v=20260907f" defer></script>
+
+    <!-- Shipping Notice (temporary: Jessie's NYC trip; self-hides after 9/15 via ShippingNotice in shared-components.js) -->
+    <section class="shipping-notice-section" id="shippingNotice">
+        <div class="container">
+            <div class="shipping-postcard" role="status">
+                <div class="shipping-postcard-inner">
+                    <p class="shipping-postcard-text">
+                        <span class="shipping-postcard-kicker" data-notice-kicker>Shipping Alert</span>
+                        <span class="shipping-postcard-body" data-notice-body>Orders placed after <strong>Thursday, Sept 10th</strong> will ship on <strong>Tuesday, Sept 15th</strong>.</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Hero Section -->
     <section class="hero hero-shop">

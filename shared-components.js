@@ -4,6 +4,98 @@
 // so it only needs to be maintained in one place.
 // ===================================
 
+// ===================================
+// SHIPPING NOTICE (temporary, self-expiring)
+// Jessie is out of town 9/11 - 9/14. Orders placed after Thu 9/10 ship
+// Tue 9/15. Phases: "before" (through the cutoff), "away" (cutoff to the
+// ship date), "done" (hidden). Delete this block and the homepage markup
+// once the trip is over, or leave it: it hides itself after the ship date.
+// ===================================
+
+const ShippingNotice = {
+    // Local time on the visitor's machine; a few hours of drift is fine.
+    cutoffEnd: new Date(2026, 8, 11, 0, 0, 0),   // first moment after Thu 9/10
+    shipDate: new Date(2026, 8, 15, 0, 0, 0),    // Tue 9/15
+
+    // ?notice=before|away previews a phase; ?notice=debug adds arrows to flip
+    // between them (homepage postcard only; the cart note follows the real date).
+    forced: (() => {
+        const v = new URLSearchParams(location.search).get('notice');
+        return v === 'before' || v === 'away' ? v : null;
+    })(),
+    debug: new URLSearchParams(location.search).get('notice') === 'debug',
+
+    phase(now = new Date()) {
+        if (this.forced) return this.forced;
+        if (now >= this.shipDate) return 'done';
+        if (now >= this.cutoffEnd) return 'away';
+        return 'before';
+    },
+
+    copy(phase) {
+        if (phase === 'away') {
+            return {
+                kicker: 'Shipping Alert',
+                body: 'Orders will ship <strong>Tuesday, Sept 15th</strong>.',
+                cart: 'Shipping alert: orders will ship Tuesday, Sept 15th.'
+            };
+        }
+        return {
+            kicker: 'Shipping Alert',
+            body: 'Orders placed after <strong>Thursday, Sept 10th</strong> will ship on <strong>Tuesday, Sept 15th</strong>.',
+            cart: 'Shipping alert: orders placed after Thursday, Sept 10th will ship on Tuesday, Sept 15th.'
+        };
+    },
+
+    cartNote() {
+        const phase = this.phase();
+        if (phase === 'done') return '';
+        return `
+                <p class="cart-shipping-note">
+                    <span class="cart-shipping-note-icon" aria-hidden="true">✈️</span>
+                    <span>${this.copy(phase).cart}</span>
+                </p>`;
+    },
+
+    // Homepage postcard: markup is static in index.html for the "before"
+    // phase; this swaps the copy or removes the section as the dates pass.
+    applyHomepage() {
+        const section = document.getElementById('shippingNotice');
+        if (!section) return;
+        const phase = this.phase();
+        if (phase === 'done' && !this.debug) {
+            section.remove();
+            return;
+        }
+        this.render(section, phase === 'done' ? 'before' : phase);
+        if (this.debug) this.addDebugArrows(section);
+    },
+
+    render(section, phase) {
+        const c = this.copy(phase);
+        const kicker = section.querySelector('[data-notice-kicker]');
+        const body = section.querySelector('[data-notice-body]');
+        if (kicker) kicker.textContent = c.kicker;
+        if (body) body.innerHTML = c.body;
+        section.dataset.phase = phase;
+    },
+
+    addDebugArrows(section) {
+        const card = section.querySelector('.shipping-postcard');
+        if (!card) return;
+        const flip = () => this.render(section, section.dataset.phase === 'away' ? 'before' : 'away');
+        [['prev', '\u25C0'], ['next', '\u25B6']].forEach(([side, glyph]) => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = `shipping-debug-arrow shipping-debug-arrow-${side}`;
+            btn.setAttribute('aria-label', 'Preview other banner version');
+            btn.textContent = glyph;
+            btn.addEventListener('click', flip);
+            card.appendChild(btn);
+        });
+    }
+};
+
 const SharedComponents = {
     nav() {
         return `
@@ -134,7 +226,7 @@ const SharedComponents = {
                 <div class="cart-total">
                     <span>Total:</span>
                     <span id="cartTotal" class="cart-total-amount">$0.00</span>
-                </div>
+                </div>${ShippingNotice.cartNote()}
                 <button id="clearCartBtn" class="clear-cart-btn">Clear Cart</button>
                 <a href="/" id="checkoutBtn" class="checkout-btn">
                     <span>Proceed to Checkout</span>
@@ -180,6 +272,7 @@ const SharedComponents = {
 
 // Auto-inject when the script runs (deferred: after parse, before DOMContentLoaded)
 SharedComponents.injectAll();
+ShippingNotice.applyHomepage();
 
 /**
  * Masonry layout helper.

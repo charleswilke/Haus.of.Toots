@@ -109,6 +109,161 @@
 }
 
 /* ===================================
+   SHIPPING NOTICE POSTCARD (temporary)
+   Airmail-striped card between the hero and the ticker. Remove along
+   with the ShippingNotice block in shared-components.js after the trip.
+   =================================== */
+
+/* Sits above the hero; the hero's own top padding supplies the gap below */
+.shipping-notice-section {
+    padding: 1.5rem 0 0;
+}
+
+@property --aura-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+}
+
+.shipping-postcard {
+    position: relative;
+    width: fit-content;
+    max-width: min(100%, 820px);
+    margin: 0 auto;
+    padding: 7px;
+    border-radius: 14px;
+    background: repeating-linear-gradient(
+        45deg,
+        var(--coral-primary) 0 14px,
+        var(--white) 14px 28px,
+        var(--plum-berry) 28px 42px,
+        var(--white) 42px 56px
+    );
+    box-shadow: 0 10px 24px rgba(74, 69, 66, 0.12);
+    transform: rotate(-0.6deg);
+}
+
+/* Faint aura that slowly sweeps around the postcard */
+.shipping-postcard::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    z-index: -1;
+    border-radius: 18px;
+    background: conic-gradient(
+        from var(--aura-angle),
+        rgba(255, 107, 122, 0.4),
+        rgba(203, 108, 230, 0.4),
+        rgba(255, 196, 107, 0.35),
+        rgba(255, 107, 122, 0.4)
+    );
+    filter: blur(14px);
+    animation: shipping-aura-spin 8s linear infinite;
+}
+
+@keyframes shipping-aura-spin {
+    to { --aura-angle: 360deg; }
+}
+
+.shipping-postcard-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.9rem 1.75rem;
+    border-radius: 8px;
+    background: var(--white);
+}
+
+.shipping-postcard-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    margin: 0;
+    color: var(--neutral-dark);
+    text-align: center;
+    line-height: 1.4;
+}
+
+.shipping-postcard-kicker {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    line-height: 1.1;
+    color: var(--coral-dark);
+}
+
+.shipping-postcard-body {
+    font-size: 1.05rem;
+}
+
+.shipping-postcard-body strong {
+    color: var(--coral-dark);
+    font-weight: 600;
+}
+
+@media (max-width: 600px) {
+    .shipping-postcard {
+        transform: none;
+    }
+
+    .shipping-postcard-inner {
+        padding: 0.85rem 1.1rem;
+    }
+
+    .shipping-postcard-kicker {
+        font-size: 1.3rem;
+    }
+
+    .shipping-postcard-body {
+        font-size: 0.95rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .shipping-postcard::before {
+        animation: none;
+    }
+}
+
+/* Debug arrows, only with ?notice=debug in the URL */
+.shipping-debug-arrow {
+    position: absolute;
+    top: 50%;
+    width: 2.2rem;
+    height: 2.2rem;
+    border: 2px solid var(--coral-primary);
+    border-radius: 50%;
+    background: var(--white);
+    color: var(--coral-dark);
+    font-size: 0.9rem;
+    line-height: 1;
+    cursor: pointer;
+    transform: translateY(-50%);
+    box-shadow: 0 4px 12px rgba(74, 69, 66, 0.15);
+}
+
+.shipping-debug-arrow-prev { left: -1.1rem; }
+.shipping-debug-arrow-next { right: -1.1rem; }
+
+/* Cart drawer one-liner (rendered by ShippingNotice.cartNote) */
+.cart-shipping-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin: calc(-1 * var(--spacing-sm)) 0 var(--spacing-sm);
+    padding: 0.6rem 0.8rem;
+    background: var(--linen);
+    border: 1.5px dashed rgba(232, 85, 99, 0.5);
+    border-radius: 10px;
+    font-size: 0.85rem;
+    line-height: 1.35;
+    color: var(--neutral-dark);
+}
+
+.cart-shipping-note-icon {
+    line-height: 1.35;
+}
+
+/* ===================================
    COLLECTION HUB + SERIES PAGES
    =================================== */
 
