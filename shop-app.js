@@ -135,7 +135,10 @@ class ShopApp {
             return;
         }
 
-        const fragment = document.createDocumentFragment();
+        // One wrapper around the paragraphs so the copy can flow as two
+        // columns on wider screens (see .series-description).
+        const wrapper = document.createElement('div');
+        wrapper.className = 'series-description';
 
         paragraphs.forEach(lines => {
             const paragraph = document.createElement('p');
@@ -148,10 +151,10 @@ class ShopApp {
                 paragraph.appendChild(document.createTextNode(line));
             });
 
-            fragment.appendChild(paragraph);
+            wrapper.appendChild(paragraph);
         });
 
-        existing.replaceWith(fragment);
+        existing.replaceWith(wrapper);
     }
 
     /**
@@ -259,24 +262,6 @@ class ShopApp {
         return title.includes('sticker') ||
                productType.includes('sticker') ||
                tags.some(tag => tag.includes('sticker'));
-    }
-
-    /**
-     * Extract mesh size from product title
-     */
-    extractMeshSize(title) {
-        if (!title) return null;
-        // Look for patterns like "13 Mesh", "18 Mesh", ": 13", ": 18", etc.
-        const meshMatch = title.match(/(\d+)\s*[Mm]esh/i);
-        if (meshMatch) {
-            return meshMatch[1];
-        }
-        // Also check for patterns like ": 13" or ": 18" at the end
-        const endMatch = title.match(/:\s*(\d+)(?:\s*[Mm]esh)?$/);
-        if (endMatch) {
-            return endMatch[1];
-        }
-        return null;
     }
 
     /**
@@ -401,6 +386,24 @@ class ShopApp {
         this.productModalScrollbar = customScrollbar;
         this.productModalScrollbarThumb = customThumb;
 
+        // Sticky add-to-cart pill, after the Shopify theme's: a sibling of
+        // the scrolling body so it stays put, shown once the buy buttons
+        // have scrolled up out of view. Built here rather than in each
+        // page's markup so every page with the modal gets it.
+        const stickyBar = document.createElement('div');
+        stickyBar.className = 'product-sticky-bar';
+        stickyBar.setAttribute('role', 'region');
+        stickyBar.setAttribute('aria-label', 'Quick add to cart');
+        modalBody.insertAdjacentElement('afterend', stickyBar);
+        this.productStickyBar = stickyBar;
+        this.productStickyBarObserver = new IntersectionObserver(entries => {
+            const entry = entries[0];
+            if (!entry) return;
+            const scrolledPast = !entry.isIntersecting
+                && entry.boundingClientRect.bottom < (entry.rootBounds?.top ?? 0);
+            stickyBar.classList.toggle('visible', scrolledPast && stickyBar.innerHTML !== '');
+        }, { root: modalBody, threshold: 0 });
+
         closeModalBtn.addEventListener('click', () => this.closeProductModal());
         overlay.addEventListener('click', () => this.closeProductModal());
 
@@ -469,10 +472,6 @@ class ShopApp {
         }
 
         this.productModalScrollbar.classList.remove('hidden');
-
-        const cap = this.productModalBody.querySelector('.product-detail-title-bar');
-        const capHeight = cap?.getBoundingClientRect().height || 0;
-        this.productModalScrollbar.style.top = capHeight > 0 ? `${capHeight + 12}px` : '';
 
         const trackHeight = this.productModalScrollbar.clientHeight;
         const thumbHeight = Math.max((clientHeight / scrollHeight) * trackHeight, 56);
@@ -1143,6 +1142,7 @@ class ShopApp {
         productModal.classList.add('open');
         document.body.style.overflow = 'hidden';
         this.scheduleProductModalScrollbarUpdate();
+        this.loadProductRecommendations(productId);
 
         try {
             const product = await shopifyClient.getProductById(productId);
@@ -1166,7 +1166,7 @@ class ShopApp {
      * Find a product in whatever list this page has already loaded.
      */
     findLoadedProduct(productId) {
-        for (const pool of [this.products, this.allProducts, this.filteredProducts]) {
+        for (const pool of [this.products, this.allProducts, this.filteredProducts, this.recommendedProducts]) {
             const hit = Array.isArray(pool) ? pool.find(p => p && p.id === productId) : null;
             if (hit) return hit;
         }
@@ -1189,11 +1189,11 @@ class ShopApp {
 
         if (!content.querySelector('.product-detail-description')) {
             const descriptionHTML = this.renderProductDescription(listed);
-            if (descriptionHTML) content.insertAdjacentHTML('beforeend', descriptionHTML);
+            const info = content.querySelector('.product-detail-info');
+            if (descriptionHTML && info) info.insertAdjacentHTML('beforeend', descriptionHTML);
         }
 
-        const renderedImages = content.querySelectorAll('.product-detail-thumbnail').length
-            || (content.querySelector('#productMainImage') ? 1 : 0);
+        const renderedImages = content.querySelectorAll('.product-detail-gallery-image').length;
         const fullImages = listed.images?.edges || [];
         if (fullImages.length > renderedImages) {
             const imagesEl = content.querySelector('.product-detail-images');
@@ -1216,6 +1216,7 @@ class ShopApp {
         productModal.classList.remove('open');
         document.body.style.overflow = '';
         this.scheduleProductModalScrollbarUpdate();
+        this.productStickyBar?.classList.remove('visible');
 
         // Let the close animation finish before clearing the content.
         clearTimeout(this.productModalCloseTimeout);
@@ -1227,109 +1228,216 @@ class ShopApp {
     }
 
     /**
-     * Render product in modal
+     * Render product in modal. The layout mirrors the Shopify product page:
+     * the gallery runs down the left as a single column of full-width
+     * images, and everything else sits in a stitched panel on the right,
+     * capped by the coral title bar - price, option pills, quantity and buy
+     * buttons, then the description inside the same panel.
      */
     renderProductModal(product) {
         const modalBody = document.getElementById('productModalBody');
         const variants = product.variants?.edges || [];
-        const availableVariants = variants.filter(v => v.node.availableForSale);
         const hasMultipleVariants = variants.length > 1;
-        const selectedVariant = hasMultipleVariants ? null : (availableVariants[0]?.node || variants[0]?.node);
-        const isHandPainted = this.isHandPainted(product);
-        
-        // Badge HTML for modal
-        const badgeHTML = isHandPainted 
-            ? `<span class="product-detail-badge product-detail-badge-hand-painted">Painted Canvas</span>`
-            : `<span class="product-detail-badge product-detail-badge-digital">Digital Pattern</span>`;
-
-        // Extract mesh size from title
-        const meshSize = !hasMultipleVariants ? this.extractMeshSize(product.title) : null;
-        const sizeHTML = meshSize 
-            ? `<div class="product-detail-size">
-                <span class="product-detail-type-label">Size:</span>
-                <span class="product-detail-size-value">${meshSize} Mesh</span>
-            </div>`
-            : '';
-
-        const purchaseActionsHTML = `
-            <div class="product-detail-actions">
-                <div id="productDetailPrice">
-                    ${this.renderProductPriceDisplay(product, selectedVariant, hasMultipleVariants)}
-                </div>
-                <div id="productPurchaseActions">
-                    ${this.renderProductPurchaseActions(product, selectedVariant, hasMultipleVariants)}
-                </div>
-            </div>
-        `;
+        const selectedVariant = this.getDefaultVariant(product);
 
         const imagesHTML = this.renderProductImages(product);
         const descriptionHTML = this.renderProductDescription(product);
 
         modalBody.innerHTML = `
             <div class="product-detail-content">
-                <div class="product-detail-title-bar">
-                    <h1 class="product-detail-title">${this.escapeHtml(product.title)}</h1>
-                    ${sizeHTML}
-                </div>
                 <div class="product-detail-main-layout">
-                    ${imagesHTML}
+                    <div class="product-detail-media">
+                        ${imagesHTML}
+                        <section id="productRecommendations" class="product-detail-recommendations" aria-label="You may also like">
+                            ${this.renderProductRecommendations(product.id)}
+                        </section>
+                    </div>
                     <div class="product-detail-info">
-                        ${purchaseActionsHTML}
+                        <div class="product-detail-title-bar">
+                            <h1 class="product-detail-title">${this.escapeHtml(product.title)}</h1>
+                        </div>
+                        <div class="product-detail-actions">
+                            <div id="productDetailPrice" class="product-detail-price-slot">
+                                ${this.renderProductPriceDisplay(product, selectedVariant)}
+                            </div>
+                            <hr class="product-detail-divider">
+                            <div id="productVariantPicker" class="product-detail-variant-slot">
+                                ${this.renderProductVariantPicker(product, variants, selectedVariant)}
+                            </div>
+                            <div id="productPurchaseActions" class="product-detail-purchase-slot">
+                                ${this.renderProductPurchaseActions(product, selectedVariant, hasMultipleVariants)}
+                            </div>
+                        </div>
+                        ${descriptionHTML}
                     </div>
                 </div>
-                ${descriptionHTML}
             </div>
         `;
 
         modalBody.scrollTop = 0;
         this.scheduleProductModalScrollbarUpdate();
 
-        // Add event listeners
         this.attachProductModalListeners(product, variants, selectedVariant);
+        this.attachProductRecommendationListeners();
+        this.updateStickyBar(product, selectedVariant);
     }
 
     /**
-     * Main image + thumbnail strip for the product modal.
+     * Fill the sticky pill for the current selection and start watching the
+     * buy buttons. Empty (and so never shown) when there is nothing to add:
+     * a sold-out variant, or a sticker sheet picked by quantity.
+     */
+    updateStickyBar(product, selectedVariant) {
+        const bar = this.productStickyBar;
+        if (!bar) return;
+
+        const canAdd = selectedVariant?.availableForSale && selectedVariant?.id
+            && !(this.isStickerProduct(product) && (product.variants?.edges?.length || 0) > 1);
+        const image = product.images?.edges?.[0]?.node;
+        const optionValue = selectedVariant?.selectedOptions?.[0]?.value;
+        const showOption = optionValue && !/^default title$/i.test(optionValue);
+        const label = this.isVariantPreorder(selectedVariant) ? 'Preorder' : 'Add to cart';
+
+        bar.innerHTML = canAdd ? `
+            <div class="product-sticky-bar-inner">
+                ${image ? `<img class="product-sticky-bar-image" src="${image.url}${image.url.includes('?') ? '&' : '?'}width=120" alt="">` : ''}
+                <div class="product-sticky-bar-info">
+                    <p class="product-sticky-bar-title">${this.escapeHtml(product.title)}</p>
+                    ${showOption ? `<p class="product-sticky-bar-variant">${this.escapeHtml(optionValue)}</p>` : ''}
+                </div>
+                <span class="product-sticky-bar-price">${this.formatVariantPrice(selectedVariant)}</span>
+                <button class="product-sticky-bar-button" type="button">
+                    <div class="add-to-cart-content">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                        <span class="add-to-cart-text">${label}</span>
+                    </div>
+                </button>
+            </div>
+        ` : '';
+        if (!canAdd) bar.classList.remove('visible');
+        this.productModal?.classList.toggle('has-sticky-bar', Boolean(canAdd));
+
+        // The pill's button drives the real one, so the quantity, the live
+        // stock check and the "Added!" feedback all stay in one place.
+        bar.querySelector('.product-sticky-bar-button')?.addEventListener('click', () => {
+            document.querySelector('.product-detail-add-to-cart')?.click();
+        });
+
+        const slot = document.getElementById('productPurchaseActions');
+        this.productStickyBarObserver?.disconnect();
+        if (slot && canAdd) this.productStickyBarObserver?.observe(slot);
+    }
+
+    /**
+     * "You may also like", from Shopify's related-products picks - the same
+     * four the storefront's product page shows. Fetched alongside the
+     * product; whichever of the two renders last still ends up with the
+     * row, because renderProductModal reads the cached picks and this
+     * paints into the section if it already exists.
+     */
+    async loadProductRecommendations(productId) {
+        if (this.modalRecommendations?.productId === productId) {
+            this.paintProductRecommendations(productId);
+            return;
+        }
+
+        try {
+            const products = await shopifyClient.getProductRecommendations(productId, 4);
+            if (this.activeModalProductId !== productId) return;
+            this.modalRecommendations = { productId, products };
+            this.recommendedProducts = products;
+            this.paintProductRecommendations(productId);
+        } catch (error) {
+            console.warn('Product recommendations unavailable:', error);
+        }
+    }
+
+    paintProductRecommendations(productId) {
+        const section = document.getElementById('productRecommendations');
+        if (!section) return;
+        section.innerHTML = this.renderProductRecommendations(productId);
+        this.attachProductRecommendationListeners();
+        this.scheduleProductModalScrollbarUpdate();
+    }
+
+    renderProductRecommendations(productId) {
+        const picks = this.modalRecommendations;
+        if (!picks || picks.productId !== productId || picks.products.length === 0) return '';
+
+        return `
+            <h2 class="product-detail-recommendations-title">You may also like</h2>
+            <div class="product-detail-recommendations-grid">
+                ${picks.products.map(product => this.createProductCard(product)).join('')}
+            </div>
+        `;
+    }
+
+    attachProductRecommendationListeners() {
+        document.querySelectorAll('#productRecommendations .product-card').forEach(card => {
+            card.addEventListener('click', () => {
+                this.openProductModal(card.getAttribute('data-product-id'));
+            });
+            card.addEventListener('keydown', (e) => {
+                if (e.key !== 'Enter' && e.key !== ' ') return;
+                e.preventDefault();
+                card.click();
+            });
+        });
+    }
+
+    /**
+     * The variant the modal opens on. Like the Shopify product page, the
+     * first purchasable option is preselected so the price and buy buttons
+     * are live straight away; a fully sold-out product still selects its
+     * first variant so the waitlist form has something to attach to.
+     * Multi-variant sticker sheets are the exception: they are picked by
+     * quantity per design, so nothing is selected up front.
+     */
+    getDefaultVariant(product) {
+        const variants = product?.variants?.edges?.map(edge => edge.node).filter(Boolean) || [];
+        if (variants.length > 1 && this.isStickerProduct(product)) return null;
+        return variants.find(variant => variant.availableForSale) || variants[0] || null;
+    }
+
+    /**
+     * Gallery for the product modal: every image at full width in a single
+     * column, as on the Shopify product page. Below the tablet breakpoint the
+     * same markup becomes a snap-scrolling strip with dots (see the 767px
+     * block in shop-styles.css and attachProductImageListeners).
      */
     renderProductImages(product) {
-        const images = product.images?.edges || [];
-        const mainImage = images[0]?.node;
+        const images = (product.images?.edges || []).map(edge => edge.node).filter(Boolean);
 
-        if (images.length === 0 || !mainImage) {
+        if (images.length === 0) {
             return `<div class="product-detail-images">
-            <div class="product-detail-main-image" style="background: var(--linen); display: flex; align-items: center; justify-content: center; color: var(--neutral-mid);">No image available</div>
+            <div class="product-detail-image-empty">No image available</div>
         </div>`;
         }
 
-        // Use the full image URL with a width param so the main image keeps its natural aspect ratio
-        // (transformedSrc returns a 400x400 cropped square — fine for thumbnails, wrong here).
-        const mainImageFullUrl = mainImage.url;
-        const mainImageSep = mainImageFullUrl.includes('?') ? '&' : '?';
-        const mainImageDisplayUrl = `${mainImageFullUrl}${mainImageSep}width=1200`;
+        const dotsHTML = images.length > 1 ? `
+                <div class="product-detail-gallery-dots">
+                    ${images.map((_, index) => `<button type="button" class="product-detail-gallery-dot${index === 0 ? ' active' : ''}" data-index="${index}" aria-label="Show image ${index + 1} of ${images.length}"></button>`).join('')}
+                </div>` : '';
 
         return `
             <div class="product-detail-images">
-                <img id="productMainImage" 
-                     src="${mainImageDisplayUrl}" 
-                     data-full-image="${mainImageFullUrl}"
-                     alt="${mainImage.altText || product.title}" 
-                     class="product-detail-main-image product-image-clickable">
-                ${images.length > 1 ? `
-                    <div class="product-detail-thumbnails">
-                        ${images.map((imgEdge, index) => {
-                            const thumbnailUrl = imgEdge.node.transformedSrc || imgEdge.node.url;
-                            const fullUrl = imgEdge.node.url;
-                            return `
-                            <img src="${thumbnailUrl}" 
-                                 data-full-image="${fullUrl}"
-                                 alt="${imgEdge.node.altText || product.title}" 
-                                 class="product-detail-thumbnail product-image-clickable ${index === 0 ? 'active' : ''}"
-                                 data-image-url="${imgEdge.node.url}"
-                                 data-image-alt="${imgEdge.node.altText || product.title}">
-                        `;
-                        }).join('')}
-                    </div>
-                ` : ''}
+                <div class="product-detail-gallery">
+                    ${images.map((image, index) => {
+                        // A width param keeps the natural aspect ratio; transformedSrc is a cropped square.
+                        const sep = image.url.includes('?') ? '&' : '?';
+                        return `
+                        <img src="${image.url}${sep}width=1200"
+                             data-full-image="${image.url}"
+                             data-index="${index}"
+                             alt="${this.escapeHtml(image.altText || product.title)}"
+                             loading="${index === 0 ? 'eager' : 'lazy'}"
+                             class="product-detail-gallery-image product-image-clickable">`;
+                    }).join('')}
+                </div>${dotsHTML}
             </div>
         `;
     }
@@ -1400,50 +1508,39 @@ class ShopApp {
     }
 
     /**
-     * Lightbox + thumbnail swapping for the modal's image block.
+     * Lightbox on every gallery image, plus the dots for the mobile strip.
      */
     attachProductImageListeners(product) {
-        // Collect all full-size image URLs for lightbox
-        const images = product.images?.edges || [];
-        const allImageUrls = images.map(imgEdge => imgEdge.node.url);
-        const allImageCaptions = images.map(imgEdge => imgEdge.node.altText || product.title);
+        const images = (product.images?.edges || []).map(edge => edge.node).filter(Boolean);
+        const allImageUrls = images.map(image => image.url);
+        const allImageCaptions = images.map(image => image.altText || product.title);
 
-        // Main image click - open lightbox
-        const mainImage = document.getElementById('productMainImage');
-        if (mainImage) {
-            mainImage.addEventListener('click', () => {
-                const currentIndex = 0; // Main image is always first
-                this.openLightbox(allImageUrls, currentIndex, allImageCaptions);
-            });
-        }
-
-        // Image thumbnail clicks - update main image and open lightbox
-        const thumbnails = document.querySelectorAll('.product-detail-thumbnail');
-        thumbnails.forEach((thumb, index) => {
-            thumb.addEventListener('click', (e) => {
-                // Update main image display
-                thumbnails.forEach(t => t.classList.remove('active'));
-                thumb.classList.add('active');
-                if (mainImage) {
-                    const fullUrl = thumb.getAttribute('data-full-image') || thumb.getAttribute('data-image-url');
-                    if (fullUrl) {
-                        const sep = fullUrl.includes('?') ? '&' : '?';
-                        mainImage.src = `${fullUrl}${sep}width=1200`;
-                        mainImage.setAttribute('data-full-image', fullUrl);
-                    } else {
-                        mainImage.src = thumb.src;
-                    }
-                    mainImage.alt = thumb.getAttribute('data-image-alt') || thumb.getAttribute('alt');
-                }
-                
-                // Open lightbox at clicked image
+        document.querySelectorAll('.product-detail-gallery-image').forEach(img => {
+            img.addEventListener('click', () => {
+                const index = parseInt(img.getAttribute('data-index'), 10) || 0;
                 this.openLightbox(allImageUrls, index, allImageCaptions);
+            });
+        });
+
+        const gallery = document.querySelector('.product-detail-gallery');
+        const dots = Array.from(document.querySelectorAll('.product-detail-gallery-dot'));
+        if (!gallery || dots.length < 2) return;
+
+        const setActiveDot = index => dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+        gallery.addEventListener('scroll', () => {
+            const slideWidth = gallery.clientWidth || 1;
+            setActiveDot(Math.round(gallery.scrollLeft / slideWidth));
+        }, { passive: true });
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                const index = parseInt(dot.getAttribute('data-index'), 10) || 0;
+                gallery.scrollTo({ left: index * gallery.clientWidth, behavior: 'smooth' });
             });
         });
     }
 
     attachProductVariantSelectionListeners(product, variants) {
-        const priceRows = document.querySelectorAll('.product-detail-price-row[data-variant-id]');
+        const variantPills = document.querySelectorAll('.product-detail-variant-pill[data-variant-id]');
 
         if (this.isStickerProduct(product) && variants.length > 1) {
             this.prefetchStickerInventory(product, variants);
@@ -1510,15 +1607,21 @@ class ShopApp {
             return;
         }
 
-        priceRows.forEach(row => {
-            row.addEventListener('click', () => {
-                const variantId = row.getAttribute('data-variant-id');
+        variantPills.forEach(pill => {
+            pill.addEventListener('click', () => {
+                if (pill.classList.contains('selected')) return;
+                const variantId = pill.getAttribute('data-variant-id');
                 const selectedVariant = variants.find(v => v.node.id === variantId)?.node;
                 const detailPrice = document.getElementById('productDetailPrice');
+                const variantPicker = document.getElementById('productVariantPicker');
                 const purchaseActions = document.getElementById('productPurchaseActions');
 
                 if (detailPrice) {
-                    detailPrice.innerHTML = this.renderProductPriceDisplay(product, selectedVariant, true);
+                    detailPrice.innerHTML = this.renderProductPriceDisplay(product, selectedVariant);
+                }
+
+                if (variantPicker) {
+                    variantPicker.innerHTML = this.renderProductVariantPicker(product, variants, selectedVariant);
                 }
 
                 if (purchaseActions) {
@@ -1527,6 +1630,7 @@ class ShopApp {
                 }
 
                 this.attachProductVariantSelectionListeners(product, variants);
+                this.updateStickyBar(product, selectedVariant);
                 this.scheduleProductModalScrollbarUpdate();
             });
         });
@@ -1748,52 +1852,65 @@ class ShopApp {
         });
     }
 
-    renderProductPriceDisplay(product, selectedVariant, hasMultipleVariants) {
-        if (!hasMultipleVariants) {
-            const fallbackPrice = selectedVariant
-                ? this.formatVariantPrice(selectedVariant)
-                : this.formatPriceRange(product);
-            if (!fallbackPrice) {
-                return '';
-            }
-
-            const isUnavailable = selectedVariant?.availableForSale === false;
-            return `
-                <div class="product-detail-price-group">
-                    <div class="product-detail-price ${isUnavailable ? 'product-detail-price-unavailable' : ''}">${fallbackPrice}</div>
-                    ${this.renderStockStatus(selectedVariant)}
-                </div>
-            `;
+    /**
+     * The headline price: the selected variant's, or the range when nothing
+     * is selected (multi-variant sticker sheets). As on the Shopify page it
+     * sits under the title and follows the option pills.
+     */
+    renderProductPriceDisplay(product, selectedVariant) {
+        const price = selectedVariant
+            ? this.formatVariantPrice(selectedVariant)
+            : this.formatPriceRange(product);
+        if (!price) {
+            return '';
         }
 
-        const variants = product?.variants?.edges?.map(edge => edge.node) || [];
-
-        if (this.isStickerProduct(product)) {
-            return this.renderStickerVariantList(product, variants);
-        }
-
+        const isUnavailable = selectedVariant?.availableForSale === false;
         return `
             <div class="product-detail-price-group">
-                <div class="product-detail-price-list">
-                    ${variants.map(variant => {
+                <div class="product-detail-price ${isUnavailable ? 'product-detail-price-unavailable' : ''}">${price}</div>
+                ${this.renderStockStatus(selectedVariant)}
+            </div>
+        `;
+    }
+
+    /**
+     * Option pills ("Mesh Size": 13 Mesh / 18 Mesh), after the Shopify
+     * theme's button-style variant picker. Sticker sheets keep their
+     * per-variant quantity list. Empty for single-variant products.
+     */
+    renderProductVariantPicker(product, variants, selectedVariant) {
+        const nodes = variants.map(edge => edge.node).filter(Boolean);
+        if (nodes.length < 2) {
+            return '';
+        }
+
+        if (this.isStickerProduct(product)) {
+            return this.renderStickerVariantList(product, nodes);
+        }
+
+        const optionName = nodes[0].selectedOptions?.[0]?.name || 'Option';
+        return `
+            <fieldset class="product-detail-variant-picker">
+                <legend class="product-detail-variant-label">${this.escapeHtml(optionName)}</legend>
+                <div class="product-detail-variant-options">
+                    ${nodes.map(variant => {
                         const optionValue = variant.selectedOptions?.[0]?.value || variant.title;
-                        const price = this.formatVariantPrice(variant);
-                        const rowClasses = [
-                            'product-detail-price-row',
-                            selectedVariant?.id === variant.id ? 'selected' : '',
+                        const isSelected = selectedVariant?.id === variant.id;
+                        const pillClasses = [
+                            'product-detail-variant-pill',
+                            isSelected ? 'selected' : '',
                             !variant.availableForSale ? 'unavailable' : ''
                         ].filter(Boolean).join(' ');
 
                         return `
-                            <button class="${rowClasses}" type="button" data-variant-id="${variant.id}">
-                                <span class="product-detail-price-option">${this.escapeHtml(optionValue)}</span>
-                                <span class="product-detail-price-value">${price}</span>
+                            <button class="${pillClasses}" type="button" data-variant-id="${variant.id}" aria-pressed="${isSelected ? 'true' : 'false'}">
+                                ${this.escapeHtml(optionValue)}
                             </button>
                         `;
                     }).join('')}
                 </div>
-                ${this.renderStockStatus(selectedVariant)}
-            </div>
+            </fieldset>
         `;
     }
 
@@ -1846,7 +1963,7 @@ class ShopApp {
 
         if (selectedVariant?.availableForSale && selectedVariant?.id) {
             const isPreorder = this.isVariantPreorder(selectedVariant);
-            const buttonLabel = isPreorder ? 'Preorder' : 'Add to Cart';
+            const buttonLabel = isPreorder ? 'Preorder' : 'Add to cart';
             const preorderNote = isPreorder ? `
                         <div class="product-detail-preorder-note">
                             <p>Additional inventory has been ordered and is expected to arrive in 1–2 months. Beyond that, preorders could take up to 4–6 months to arrive.</p>
@@ -1876,6 +1993,7 @@ class ShopApp {
                             </div>
                         </button>
                     </div>
+                    <button class="product-detail-buy-now" type="button" data-variant-id="${selectedVariant.id}">Buy it now</button>
                     <p class="product-detail-stock-note" aria-live="polite"></p>
 ${preorderNote}                </div>
                 ${isPreorder ? this.renderNotifyGroup(selectedVariant, { preorder: true }) : ''}
@@ -1987,6 +2105,11 @@ ${preorderNote}                </div>
             quantityValue.textContent = String(state.selectedQuantity);
         }
 
+        const buyNowBtn = document.querySelector('.product-detail-buy-now');
+        if (buyNowBtn) {
+            buyNowBtn.disabled = !state.canAdd;
+        }
+
         quantityButtons.forEach(button => {
             const action = button.getAttribute('data-action');
             if (action === 'increase') {
@@ -2087,7 +2210,7 @@ ${preorderNote}                </div>
                     `;
                     
                     setTimeout(() => {
-                        const defaultLabel = addToCartBtn.getAttribute('data-default-label') || 'Add to Cart';
+                        const defaultLabel = addToCartBtn.getAttribute('data-default-label') || 'Add to cart';
                         addToCartBtn.innerHTML = `
                             <div class="add-to-cart-content">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -2102,6 +2225,54 @@ ${preorderNote}                </div>
                     }, 1000);
                 }
             });
+        }
+
+        // Buy it now: straight to checkout with just this item, as on the
+        // Shopify page. The saved cart is left alone.
+        const buyNowBtn = document.querySelector('.product-detail-buy-now');
+        if (buyNowBtn && variantId) {
+            buyNowBtn.addEventListener('click', async () => {
+                const selectedQuantity = parseInt(quantityValue?.textContent || '1', 10) || 1;
+                const inventoryResult = await syncModalInventory({
+                    forceRefresh: true,
+                    requestedQuantity: selectedQuantity
+                });
+                if (!inventoryResult?.state?.canAdd) {
+                    return;
+                }
+
+                const defaultLabel = buyNowBtn.textContent;
+                buyNowBtn.disabled = true;
+                buyNowBtn.textContent = 'Heading to checkout\u2026';
+
+                try {
+                    const checkout = await shopifyClient.createCheckout([
+                        { variantId, quantity: inventoryResult.state.selectedQuantity }
+                    ]);
+                    window.location.href = checkout.webUrl;
+                } catch (error) {
+                    console.error('Buy now error:', error);
+                    alert('Sorry, there was an error starting checkout. Please try again.');
+                    buyNowBtn.disabled = false;
+                    buyNowBtn.textContent = defaultLabel;
+                }
+            });
+        }
+
+        // Keep the sticky pill's button in step with the real one ("Added!",
+        // sold-out disabling) without duplicating any of that logic.
+        if (addToCartBtn && this.productStickyBar) {
+            const mirror = () => {
+                const barBtn = this.productStickyBar.querySelector('.product-sticky-bar-button');
+                if (!barBtn) return;
+                const text = addToCartBtn.querySelector('.add-to-cart-text')?.textContent;
+                const barText = barBtn.querySelector('.add-to-cart-text');
+                if (barText && text) barText.textContent = text;
+                barBtn.disabled = addToCartBtn.disabled;
+            };
+            this.stickyBarMirror?.disconnect();
+            this.stickyBarMirror = new MutationObserver(mirror);
+            this.stickyBarMirror.observe(addToCartBtn, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['disabled'] });
         }
 
         const notifyForm = document.querySelector('.product-detail-notify-form');

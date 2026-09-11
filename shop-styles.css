@@ -980,6 +980,33 @@
 
 /* Shopify descriptions arrive as several paragraphs; space them without
    adding a trailing gap inside the stitched border. */
+/* The collection description flows as two columns once the stitched box
+   is wide enough for a comfortable measure in each - the copy is four
+   short paragraphs, which otherwise run as a wide, shallow block. Text is
+   allowed to run on across the gap: keeping paragraphs whole left one
+   column two paragraphs taller than the other. */
+.series-description {
+    width: 100%;
+}
+
+@media (min-width: 900px) {
+    .series-description {
+        columns: 2;
+        column-gap: clamp(2rem, 4vw, 3.5rem);
+    }
+
+    /* Justified, as print columns are: every line runs to the column edge.
+       Hyphenation keeps the word spacing even in a column this narrow;
+       without it the justifier has to stretch short lines into rivers. */
+    .series-description .hero-description {
+        text-align: justify;
+        text-align-last: left;
+        hyphens: auto;
+        -webkit-hyphens: auto;
+        text-wrap: pretty;
+    }
+}
+
 .series-copy .hero-description + .hero-description {
     margin-top: 0.7rem;
 }
@@ -1729,6 +1756,10 @@
 
 /* Product Detail Modal */
 .product-modal {
+    /* The Shopify theme's primary button colours (scheme-1), so the buy
+       buttons here match the storefront's. */
+    --peach-button: #FF9786;
+    --peach-button-hover: #FFAD9E;
     position: fixed;
     top: 0;
     left: 0;
@@ -1831,13 +1862,19 @@
 }
 
 .product-modal-body {
+    --modal-pad: clamp(1.25rem, 3vw, 2.5rem);
     flex: 1;
     overflow-y: auto;
-    padding: var(--spacing-lg);
-    background: var(--cream);
-    padding-right: calc(var(--spacing-lg) + 26px);
-    padding-top: calc(var(--spacing-lg) + 14px);
-    padding-bottom: calc(var(--spacing-lg) + 14px);
+    padding: var(--modal-pad);
+    /* The same canvas weave the page sits on, so the stitched panel reads
+       as it does on the Shopify product page rather than floating on flat
+       cream. */
+    background-color: var(--cream);
+    background-image: url('images/haus_of_toots_canvas_13ct_512px.webp');
+    background-repeat: repeat;
+    background-size: 512px 500px;
+    /* Room on the right for the custom scrollbar. */
+    padding-right: calc(var(--modal-pad) + 22px);
     scrollbar-width: none;
     -ms-overflow-style: none;
 }
@@ -1925,143 +1962,322 @@
 }
 
 .product-detail-content {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-lg);
     width: 100%;
 }
 
+/* Two columns, as on the Shopify product page: the gallery on the left
+   takes the larger share (544/400 there), the stitched details panel on
+   the right. */
 .product-detail-main-layout {
     display: grid;
-    grid-template-columns: 1.25fr 1fr;
-    gap: var(--spacing-lg);
+    grid-template-columns: minmax(0, 1.36fr) minmax(0, 1fr);
+    gap: clamp(1.25rem, 3vw, 3rem);
     align-items: start;
 }
 
-.product-detail-info {
+/* Media column: the gallery, then "You may also like" filling the space
+   under it while the details panel runs on beside them. */
+.product-detail-media {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-md);
-    min-height: 100%;
+    gap: clamp(2rem, 4vw, 3rem);
+    min-width: 0;
 }
 
+/* Gallery: every image full width in a single column, square-cornered on
+   the weave like the Shopify media grid (4px between images there). */
 .product-detail-images {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-sm);
+    min-width: 0;
 }
 
-.product-detail-main-image {
+.product-detail-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.product-detail-gallery-image {
+    display: block;
     width: 100%;
     height: auto;
-    border-radius: 12px;
-    background: var(--linen);
-    border: 2px solid var(--coral-light);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+    background: var(--cream);
+    cursor: zoom-in;
 }
 
-.product-detail-main-image:hover {
-    box-shadow: 0 6px 24px rgba(255, 107, 122, 0.2);
+/* No hover lift on these - they sit edge to edge and would overlap. */
+.product-detail-gallery .product-detail-gallery-image:hover {
+    transform: none;
 }
 
-.product-detail-thumbnails {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-    gap: var(--spacing-xs);
-}
-
-.product-detail-thumbnail {
-    width: 100%;
-    aspect-ratio: 1;
-    object-fit: cover;
-    border-radius: 8px;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: all 0.3s ease;
-    background: var(--linen);
-}
-
-.product-detail-thumbnail:hover {
-    border-color: var(--coral-primary);
-    transform: scale(1.05);
-}
-
-.product-detail-thumbnail.active {
-    border-color: var(--coral-primary);
-}
-
-.product-detail-info {
+.product-detail-image-empty {
     display: flex;
-    flex-direction: column;
-    gap: var(--spacing-sm);
-}
-
-/* Product Detail Modal Header */
-.product-detail-header {
-    margin-bottom: var(--spacing-sm);
-}
-
-.product-detail-title-bar {
-    display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    text-align: center;
-    gap: 0.4rem;
-    padding: 1.2rem 4rem 1.3rem;
-    background: var(--coral-primary);
-    color: var(--cream);
+    aspect-ratio: 4 / 3;
+    background: var(--linen);
+    color: var(--neutral-mid);
+}
+
+/* Dots only exist for the mobile strip; see the 767px block. */
+.product-detail-gallery-dots {
+    display: none;
+}
+
+/* The details panel, ported back from the Shopify theme's product page
+   (haus-of-toots-theme, snippets/hot-brand-styles.liquid, "Product page"):
+   the same stitched box the hero uses - paint wash under a white veil, 3px
+   dashed coral, rounded only at the top so the title bar caps it - with a
+   single cross-stitch mark at the bottom-right corner. Everything the
+   shopper needs sits inside it, description included. */
+.product-detail-info {
+    --details-pad: clamp(1.25rem, 2vw, 1.75rem);
+    /* Sticky rather than relative: it stays put while a long gallery
+       scrolls past, as on the Shopify page on desktop. Sticky is still a
+       positioned box, so the ::after mark hangs off it as usual. */
+    position: sticky;
+    top: var(--modal-pad);
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    min-width: 0;
+    padding: 0 var(--details-pad) var(--details-pad);
+    background:
+        linear-gradient(rgba(255, 255, 255, 0.58), rgba(255, 255, 255, 0.58)),
+        url('images/paint-800.webp') center / cover;
+    border: 3px dashed var(--coral-primary);
     border-radius: 18px 18px 0 0;
-    margin: calc(-1 * (var(--spacing-lg) + 14px)) calc(-1 * (var(--spacing-lg) + 26px)) 0 calc(-1 * var(--spacing-lg));
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Cross-stitch mark, bottom-right only. Two 3px bars - the panel's own
+   border width - so it reads as the dashed stroke carrying past the
+   corner. Offset -((13 - 3) / 2 + 3) = -8px lands the bars on the border;
+   see .stitched-border in styles.css for the derivation. */
+.product-detail-info::after {
+    content: '';
+    position: absolute;
+    right: -8px;
+    bottom: -8px;
+    width: 13px;
+    height: 13px;
+    background:
+        linear-gradient(var(--coral-primary), var(--coral-primary)) center / 100% 3px no-repeat,
+        linear-gradient(var(--coral-primary), var(--coral-primary)) center / 3px 100% no-repeat;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Title bar caps the panel: bleeds through the panel's inline padding to
+   meet the dashed edge, square along the bottom, top corners at the
+   panel's 18px less its 3px border. Coral is --coral-dark: cream on
+   --coral-primary is 2.59:1, on --coral-dark 3.35:1. */
+.product-detail-title-bar {
+    margin: 0 calc(-1 * var(--details-pad));
+    padding: 1.2rem clamp(1.25rem, 3vw, 2.5rem) 1.3rem;
+    background: var(--coral-dark);
+    color: var(--cream);
+    border-radius: 15px 15px 0 0;
     box-shadow: 0 4px 12px rgba(232, 85, 99, 0.18);
 }
 
 .product-detail-title {
     font-family: var(--font-display);
-    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    font-size: clamp(1.6rem, 2.4vw, 2rem);
     font-weight: 400;
     color: var(--cream);
     margin: 0;
     line-height: 1.2;
     letter-spacing: 0.02em;
+    text-wrap: pretty;
 }
 
-.product-detail-title-bar .product-detail-size {
+.product-detail-divider {
+    width: 100%;
+    height: 1px;
     margin: 0;
-    color: var(--cream);
+    border: 0;
+    background: var(--neutral-light);
 }
 
-.product-detail-type {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    margin-bottom: var(--spacing-xs);
+.product-detail-price-slot:empty,
+.product-detail-variant-slot:empty {
+    display: none;
 }
 
-.product-detail-size {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    margin-bottom: 0;
+/* "You may also like", after the Shopify product page's recommendations
+   section: a Chewy heading, then four of the site's own product cards
+   (the theme's cards were ported from these, so the two match). Sits
+   under the gallery in the media column, two across, so it fills the run
+   of empty weave the taller details panel would otherwise leave beside
+   it. Empty until the picks arrive; on a phone it drops below the panel. */
+.product-detail-recommendations:empty {
+    display: none;
 }
 
-.product-detail-type-label {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--neutral-mid);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+.product-detail-recommendations {
+    min-width: 0;
 }
 
-.product-detail-size-value {
-    font-size: 0.875rem;
-    font-weight: 600;
+.product-detail-recommendations-title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 400;
     color: var(--neutral-dark);
-    padding: 0.375rem 0.875rem;
+    margin: 0 0 1.25rem;
+    letter-spacing: 0.01em;
+}
+
+.product-detail-recommendations-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    align-items: start;
+}
+
+/* Sticky add-to-cart pill, after the Shopify theme's: a cream pill 600px
+   wide, floating 20px off the bottom of the modal once the buy buttons
+   have scrolled out of view - thumbnail, title with the chosen option,
+   price, and a peach button that drives the real one. Slides up from
+   below on show. Spans the modal on a phone. */
+.product-sticky-bar {
+    position: absolute;
+    left: 50%;
+    bottom: 20px;
+    width: min(600px, calc(100% - 2rem));
+    transform: translate(-50%, calc(100% + 24px));
+    opacity: 0;
+    z-index: 5;
+    pointer-events: none;
+    transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.product-sticky-bar.visible {
+    transform: translate(-50%, 0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Room under the content so the end of the scroll clears the pill. Only
+   while there is a pill to clear. */
+.product-modal.has-sticky-bar .product-modal-body {
+    padding-bottom: calc(var(--modal-pad) + 96px);
+}
+
+@media (max-width: 767px) {
+    .product-modal.has-sticky-bar .product-modal-body {
+        padding-bottom: calc(1rem + 84px);
+    }
+}
+
+.product-sticky-bar-inner {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.7rem;
+    background: var(--cream);
+    border-radius: 25px;
+    box-shadow: 0 4px 20px rgba(74, 69, 66, 0.15);
+}
+
+.product-sticky-bar-image {
+    flex: 0 0 auto;
+    width: 52px;
+    height: 52px;
+    object-fit: cover;
+    border-radius: 14px;
     background: var(--linen);
-    border-radius: 20px;
-    border: 1px dashed var(--coral-light);
+}
+
+.product-sticky-bar-info {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+.product-sticky-bar-title {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--neutral-dark);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+}
+
+.product-sticky-bar-variant {
+    margin: 2px 0 0;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: rgba(74, 69, 66, 0.7);
+}
+
+.product-sticky-bar-price {
+    flex: 0 0 auto;
+    font-weight: 700;
+    color: var(--coral-dark);
+    white-space: nowrap;
+}
+
+.product-sticky-bar-button {
+    flex: 0 0 auto;
+    min-height: 52px;
+    padding: 0.85rem 1.5rem;
+    border: 0;
+    border-radius: 14px;
+    background: var(--peach-button);
+    color: var(--neutral-dark);
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.3;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.product-sticky-bar-button:hover:not(:disabled) {
+    background: var(--peach-button-hover);
+}
+
+.product-sticky-bar-button:disabled {
+    background: var(--neutral-light);
+    color: var(--neutral-mid);
+    cursor: not-allowed;
+}
+
+.product-sticky-bar-button:focus-visible {
+    outline: 2px solid var(--coral-dark);
+    outline-offset: 2px;
+}
+
+@media (max-width: 767px) {
+    .product-sticky-bar {
+        bottom: 0.75rem;
+        width: calc(100% - 1.5rem);
+    }
+
+    .product-sticky-bar-inner {
+        gap: 0.6rem;
+        padding: 0.5rem;
+    }
+
+    .product-sticky-bar-title {
+        font-size: 0.9rem;
+        line-height: 1.35;
+    }
+
+    .product-sticky-bar-variant {
+        font-size: 0.85rem;
+        line-height: 1.35;
+    }
+
+    .product-sticky-bar-button {
+        padding-inline: 0.85rem;
+    }
+
+    .product-sticky-bar-button .add-to-cart-text {
+        display: none;
+    }
 }
 
 /* Product Detail Badge */
@@ -2122,9 +2338,9 @@
 }
 
 .product-detail-price {
-    font-size: 2.5rem;
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
     font-weight: 700;
-    color: var(--coral-primary);
+    color: var(--coral-dark);
     line-height: 1.1;
     margin: 0;
 }
@@ -2147,20 +2363,17 @@
     letter-spacing: 0.04em;
 }
 
+/* Plain on the panel, as on the Shopify page - no box of its own. */
 .product-detail-description {
     color: var(--neutral-dark);
-    line-height: 1.7;
+    line-height: 1.6;
     font-size: 1rem;
-    padding: var(--spacing-md);
-    background: var(--white);
-    border-radius: 12px;
-    border: 2px dashed var(--neutral-light);
     width: 100%;
     box-sizing: border-box;
 }
 
 .product-detail-description p {
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: 0.6rem;
 }
 
 .product-detail-description p:last-child {
@@ -2186,18 +2399,18 @@
 /* Target paragraphs that come after lists (which typically contain the main description) */
 .product-detail-description ul + p,
 .product-detail-description ol + p {
-    margin-top: var(--spacing-md);
+    margin-top: 1rem;
 }
 
 /* Target paragraphs with strong tags (section headings) that aren't the first child */
 .product-detail-description p:not(:first-child):has(strong) {
-    margin-top: var(--spacing-md);
+    margin-top: 1rem;
 }
 
 /* Target headings */
 .product-detail-description h2,
 .product-detail-description h3 {
-    margin-top: var(--spacing-md);
+    margin-top: 1rem;
 }
 
 .product-detail-description h2:first-child,
@@ -2248,139 +2461,156 @@
     letter-spacing: 0.02em;
 }
 
-.product-detail-variants {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-sm);
+/* Variant picker, after the Shopify theme's button-style picker: a plain
+   option label over equal-width pills, 52px tall with a 14px radius; the
+   selected one fills ink-dark with cream text. */
+.product-detail-variant-picker {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
 }
 
 .product-detail-variant-label {
-    font-weight: 600;
+    display: block;
+    padding: 0;
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+    font-weight: 300;
     color: var(--neutral-dark);
-    font-size: 0.95rem;
 }
 
 .product-detail-variant-options {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--spacing-xs);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.75rem;
 }
 
-.product-detail-variant-option {
-    padding: 0.625rem 1.25rem;
-    border: 2px dashed var(--neutral-light);
-    border-radius: 20px;
+.product-detail-variant-pill {
+    min-height: 52px;
+    padding: 0.5rem 0.8rem;
+    border: 1px solid var(--neutral-light);
+    border-radius: 14px;
     background: var(--white);
+    color: var(--neutral-dark);
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.3;
     cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 0.9rem;
-    font-weight: 500;
-    position: relative;
+    transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
 
-.product-detail-variant-option:hover {
-    border-color: var(--coral-primary);
-    border-style: solid;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(255, 107, 122, 0.2);
+.product-detail-variant-pill:hover {
+    border-color: var(--neutral-dark);
 }
 
-.product-detail-variant-option.selected {
-    border-color: var(--coral-primary);
-    border-style: solid;
-    background: linear-gradient(135deg, var(--coral-light) 0%, var(--white) 100%);
-    color: var(--coral-dark);
-    font-weight: 600;
-    box-shadow: 0 2px 8px rgba(255, 107, 122, 0.3);
+.product-detail-variant-pill:focus-visible {
+    outline: 2px solid var(--coral-dark);
+    outline-offset: 2px;
 }
 
-.product-detail-variant-option.unavailable {
-    opacity: 0.5;
-    cursor: not-allowed;
+.product-detail-variant-pill.selected {
+    background: var(--neutral-dark);
+    border-color: var(--neutral-dark);
+    color: var(--cream);
+    cursor: default;
+}
+
+.product-detail-variant-pill.unavailable:not(.selected) {
+    color: var(--neutral-mid);
     text-decoration: line-through;
 }
+
 
 .product-detail-actions {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-sm);
+    gap: 1.75rem;
     width: 100%;
+}
+
+/* Buy buttons, after the Shopify theme's primary button: flat peach, ink
+   text, 14px radius, 52px tall, a lighter peach on hover. No gradient,
+   no lift. */
+.product-detail-add-to-cart,
+.product-detail-buy-now,
+.product-detail-notify-btn {
+    background: var(--peach-button);
+    color: var(--neutral-dark);
+    border: 0;
+    border-radius: 14px;
+    min-height: 52px;
+    padding: 0.85rem 1.5rem;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.3;
+    cursor: pointer;
+    box-shadow: none;
+    transition: background 0.2s ease;
+}
+
+.product-detail-add-to-cart:hover:not(:disabled),
+.product-detail-buy-now:hover:not(:disabled),
+.product-detail-notify-btn:hover:not(:disabled) {
+    background: var(--peach-button-hover);
+}
+
+.product-detail-add-to-cart:focus-visible,
+.product-detail-buy-now:focus-visible,
+.product-detail-notify-btn:focus-visible {
+    outline: 2px solid var(--coral-dark);
+    outline-offset: 2px;
 }
 
 .product-detail-add-to-cart {
     flex: 1;
-    background: linear-gradient(135deg, var(--coral-primary) 0%, var(--coral-dark) 100%);
-    color: var(--white);
-    border: none;
-    padding: 1rem 2rem;
-    border-radius: 12px;
-    font-weight: 700;
-    font-size: 1rem;
-    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s var(--transition-smooth);
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 4px 16px rgba(255, 107, 122, 0.3);
+    min-width: 0;
 }
 
-.product-detail-select-prompt {
-    background: linear-gradient(135deg, rgba(255, 170, 181, 0.22) 0%, rgba(255, 248, 242, 0.94) 100%);
-    color: var(--coral-dark);
-    border: 2px dashed rgba(255, 170, 181, 0.85);
-    box-shadow: none;
+.product-detail-buy-now {
+    width: 100%;
+}
+
+.product-detail-add-to-cart:disabled,
+.product-detail-buy-now:disabled {
+    background: var(--neutral-light);
+    color: var(--neutral-mid);
+    cursor: not-allowed;
+}
+
+/* "Choose Stickers to Continue" - the disabled prompt keeps a dashed
+   outline so it reads as a placeholder rather than a dead button. */
+.product-detail-select-prompt,
+.product-detail-select-prompt:disabled {
+    background: rgba(255, 255, 255, 0.7);
+    color: var(--neutral-mid);
+    border: 1px dashed var(--neutral-mid);
 }
 
 .add-to-cart-content {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
+    gap: 0.6rem;
     width: 100%;
 }
 
 .add-to-cart-content svg {
     flex-shrink: 0;
+    width: 20px;
+    height: 20px;
 }
 
 .add-to-cart-text {
     text-align: center;
+    white-space: nowrap;
 }
 
-.product-detail-add-to-cart::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    transition: left 0.5s ease;
-}
-
-.product-detail-add-to-cart:hover::before {
-    left: 100%;
-}
-
-.product-detail-add-to-cart:hover {
-    background: linear-gradient(135deg, var(--coral-dark) 0%, var(--coral-primary) 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 24px rgba(255, 107, 122, 0.5);
-}
-
-.product-detail-add-to-cart:disabled {
-    background: var(--neutral-light);
-    color: var(--neutral-mid);
-    cursor: not-allowed;
-    transform: none;
-}
-
-.product-detail-add-to-cart svg {
-    width: 20px;
-    height: 20px;
-}
 
 .product-detail-purchase-row {
     display: flex;
@@ -2392,41 +2622,43 @@
 .product-detail-purchase-group {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.75rem;
     width: 100%;
 }
 
+/* Quantity stepper, after the Shopify theme's: a white 52px pill with a
+   hairline border and unstyled minus/plus at either end. */
 .product-detail-quantity-control {
     display: flex;
     align-items: center;
-    gap: 0.35rem;
-    background: rgba(255, 255, 255, 0.92);
-    border: 2px solid rgba(255, 170, 181, 0.72);
-    border-radius: 12px;
-    padding: 0.3rem;
-    box-shadow: 0 4px 14px rgba(255, 170, 181, 0.08);
+    flex: 0 0 auto;
+    min-height: 52px;
+    padding: 0 0.25rem;
+    background: var(--white);
+    border: 1px solid var(--neutral-light);
+    border-radius: 14px;
+    box-shadow: none;
 }
 
 .product-detail-quantity-btn {
     background: none;
     border: none;
-    color: var(--coral-primary);
-    width: 34px;
-    height: 34px;
+    color: var(--neutral-dark);
+    width: 40px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    border-radius: 8px;
+    border-radius: 10px;
     transition: background 0.2s ease, color 0.2s ease;
     font-size: 1.25rem;
-    font-weight: 700;
+    font-weight: 400;
     line-height: 1;
 }
 
-.product-detail-quantity-btn:hover {
+.product-detail-quantity-btn:hover:not(:disabled) {
     background: var(--linen);
-    color: var(--coral-dark);
 }
 
 .product-detail-quantity-btn:disabled {
@@ -2436,12 +2668,12 @@
 }
 
 .product-detail-quantity-value {
-    min-width: 2ch;
+    min-width: 2.25rem;
     text-align: center;
-    font-weight: 700;
+    font-weight: 400;
     color: var(--neutral-dark);
-    padding: 0 0.35rem;
 }
+
 
 .product-detail-stock-note {
     margin: 0;
@@ -2516,7 +2748,7 @@
 .product-detail-notify-group-preorder .product-detail-notify-btn {
     background: var(--white);
     color: var(--coral-dark);
-    border-color: rgba(232, 85, 99, 0.45);
+    border: 1px solid rgba(232, 85, 99, 0.45);
     box-shadow: none;
     font-size: 0.92rem;
     padding: 0.7rem 1.1rem;
@@ -2580,22 +2812,6 @@
 
 .product-detail-notify-btn {
     width: 100%;
-    border-radius: 12px;
-    font-weight: 700;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s var(--transition-smooth);
-    border: 2px solid var(--coral-primary);
-    background: linear-gradient(135deg, var(--coral-primary) 0%, var(--coral-dark) 100%);
-    color: var(--white);
-    padding: 0.9rem 1.25rem;
-    box-shadow: 0 4px 16px rgba(255, 107, 122, 0.22);
-}
-
-.product-detail-notify-btn:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(255, 107, 122, 0.3);
-    border-color: var(--coral-dark);
 }
 
 .product-detail-notify-btn:disabled {
@@ -2800,31 +3016,18 @@
 /* Responsive */
 @media (max-width: 968px) {
     .product-detail-main-layout {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-lg);
+        grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+        gap: 1.25rem;
     }
-    
-    .product-detail-thumbnails {
-        grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-    }
-    
+
     .product-detail-title {
-        font-size: 1.75rem;
+        font-size: 1.6rem;
     }
-    
-    .product-detail-type {
-        flex-wrap: wrap;
-    }
-    
-    .product-detail-price {
-        font-size: 2rem;
-    }
-    
+
     .product-modal-content {
         width: 98%;
         max-width: none;
     }
-
 }
 
 /* iPad Mini - side by side layout */
@@ -2910,48 +3113,100 @@
         padding: 0.4rem;
     }
 
-    .product-detail-content {
-        gap: 1rem;
-    }
-
+    /* Stacked, as the Shopify page is on a phone: the gallery becomes a
+       snap-scrolling strip with dots, and the stitched panel follows. */
     .product-detail-main-layout {
         display: flex;
         flex-direction: column;
         gap: 1rem;
     }
 
-    .product-detail-info {
+    .product-detail-media {
         display: contents;
     }
 
-    .product-detail-title-bar {
-        margin: -1rem -1rem 0;
-        padding: 0.9rem 3.5rem 1rem;
-        border-radius: 14px 14px 0 0;
+    .product-detail-images {
+        order: 0;
     }
 
-    .product-detail-images {
+    .product-detail-info {
+        order: 1;
+        position: relative;
+        top: auto;
+        gap: 1.25rem;
+    }
+
+    .product-detail-recommendations {
         order: 2;
-        gap: 0.75rem;
+        margin-top: 1rem;
+    }
+
+    .product-detail-gallery {
+        flex-direction: row;
+        gap: 0.5rem;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .product-detail-gallery::-webkit-scrollbar {
+        display: none;
+    }
+
+    .product-detail-gallery-image {
+        flex: 0 0 100%;
+        scroll-snap-align: center;
+        scroll-snap-stop: always;
+    }
+
+    .product-detail-gallery-dots {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        padding-top: 0.6rem;
+    }
+
+    .product-detail-gallery-dot {
+        width: 10px;
+        height: 10px;
+        padding: 0;
+        border: 0;
+        border-radius: 50%;
+        /* Ink at a quarter strength: --neutral-light vanished on the weave. */
+        background: rgba(74, 69, 66, 0.25);
+        cursor: pointer;
+        transition: background 0.2s ease;
+    }
+
+    .product-detail-gallery-dot.active {
+        background: var(--neutral-dark);
+    }
+
+    .product-detail-title-bar {
+        padding: 0.9rem 1.25rem 1rem;
     }
 
     .product-detail-actions {
-        order: 3;
-        gap: 0.875rem;
+        gap: 1.25rem;
     }
 
-    .product-detail-description {
-        padding: 1rem;
+    /* Keep "Add to cart" on one line beside the stepper at phone widths. */
+    .product-detail-add-to-cart {
+        padding-inline: 0.75rem;
+    }
+
+    .product-detail-quantity-btn {
+        width: 36px;
+    }
+
+    .product-detail-quantity-value {
+        min-width: 2rem;
     }
 
     .product-detail-description ul,
     .product-detail-description ol {
         padding-left: 1.1rem;
-    }
-
-    .product-detail-thumbnails {
-        grid-template-columns: repeat(auto-fit, minmax(68px, 1fr));
-        gap: 0.5rem;
     }
 
     .product-detail-price-list {
@@ -3167,16 +3422,6 @@
 }
 
 .product-image-clickable:hover {
-    transform: scale(1.02);
-}
-
-/* Make modal images clickable too */
-.product-detail-main-image {
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-.product-detail-main-image:hover {
     transform: scale(1.02);
 }
 

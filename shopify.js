@@ -158,6 +158,67 @@ class ShopifyClient {
     }
 
     /**
+     * Shopify's own "You may also like" picks for a product - the same
+     * related-products list the storefront's product page shows. Returns
+     * the grid's product shape so the cards render with createProductCard
+     * and open in the modal without a second fetch.
+     */
+    async getProductRecommendations(productId, first = 4) {
+        const query = `
+            query GetProductRecommendations($id: ID!) {
+                productRecommendations(productId: $id, intent: RELATED) {
+                    id
+                    handle
+                    title
+                    vendor
+                    productType
+                    updatedAt
+                    tags
+                    images(first: 1) {
+                        edges {
+                            node {
+                                url
+                                altText
+                                transformedSrc(maxWidth: 400, maxHeight: 400, crop: CENTER)
+                            }
+                        }
+                    }
+                    variants(first: 50) {
+                        edges {
+                            node {
+                                id
+                                title
+                                sku
+                                availableForSale
+                                currentlyNotInStock
+                                priceV2 {
+                                    amount
+                                    currencyCode
+                                }
+                                selectedOptions {
+                                    name
+                                    value
+                                }
+                            }
+                        }
+                    }
+                    priceRange {
+                        minVariantPrice {
+                            amount
+                            currencyCode
+                        }
+                    }
+                }
+            }
+        `;
+
+        const data = await this.cachedFetch(query, { id: productId });
+        return (data.productRecommendations || [])
+            .filter(product => product && product.id !== productId)
+            .slice(0, first);
+    }
+
+    /**
      * Get a single page of products from the store
      */
     async getProductsPage(first = 50, after = null) {
