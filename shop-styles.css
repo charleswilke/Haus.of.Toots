@@ -2205,6 +2205,49 @@
     margin-top: 0;
 }
 
+/* Links inside Shopify listing copy match the site's body-text link style
+   (see .about-text a in styles.css): coral thread shimmer, no underline. */
+.product-detail-description a {
+    position: relative;
+    display: inline;
+    color: var(--coral-primary);
+    font-weight: 600;
+    text-decoration: none;
+    padding: 0;
+    background: linear-gradient(
+        90deg,
+        var(--coral-light) 0%,
+        var(--coral-primary) 25%,
+        var(--coral-dark) 50%,
+        var(--coral-primary) 75%,
+        var(--coral-light) 100%
+    );
+    background-size: 200% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: threadShimmer 3s ease-in-out infinite;
+    transition: all 0.3s ease;
+}
+
+.product-detail-description a:hover {
+    animation: threadShimmer 1.5s ease-in-out infinite;
+}
+
+.product-detail-description a:focus-visible {
+    outline: 2px solid var(--coral-primary);
+    outline-offset: 4px;
+}
+
+/* Trademark marks (e.g. StitchPerfect™) sit as a small superscript
+   without pushing the line height around. */
+.product-detail-description sup {
+    font-size: 0.6em;
+    line-height: 0;
+    vertical-align: super;
+    letter-spacing: 0.02em;
+}
+
 .product-detail-variants {
     display: flex;
     flex-direction: column;

@@ -1335,12 +1335,52 @@ class ShopApp {
     }
 
     /**
+     * Render trademark marks as a small superscript. Shopify copy uses either
+     * the ™ character (which the site font draws at full cap height) or a
+     * literal "TM" glued to the word (e.g. "StitchPerfectTM"); both become
+     * <sup>TM</sup>. Only text nodes are touched, so hrefs and attributes are
+     * left alone, and the literal form requires a lowercase letter or digit
+     * before it so acronyms like "ATM" are skipped. Returns the markup
+     * unchanged if there is nothing to superscript.
+     */
+    superscriptTrademarks(descriptionHtml) {
+        const pattern = /\u2122|(?<=[a-z0-9])TM(?![A-Za-z0-9])/g;
+        if (!descriptionHtml || !new RegExp(pattern.source).test(descriptionHtml)) {
+            return descriptionHtml;
+        }
+
+        const parsed = new DOMParser().parseFromString(descriptionHtml, 'text/html');
+        const walker = parsed.createTreeWalker(parsed.body, NodeFilter.SHOW_TEXT);
+        const textNodes = [];
+        while (walker.nextNode()) textNodes.push(walker.currentNode);
+
+        textNodes.forEach(node => {
+            const text = node.nodeValue;
+            if (!new RegExp(pattern.source).test(text)) return;
+            const fragment = parsed.createDocumentFragment();
+            let last = 0;
+            for (const match of text.matchAll(pattern)) {
+                fragment.appendChild(parsed.createTextNode(text.slice(last, match.index)));
+                const sup = parsed.createElement('sup');
+                sup.textContent = 'TM';
+                fragment.appendChild(sup);
+                last = match.index + match[0].length;
+            }
+            fragment.appendChild(parsed.createTextNode(text.slice(last)));
+            node.replaceWith(fragment);
+        });
+
+        return parsed.body.innerHTML;
+    }
+
+    /**
      * Description block for the product modal ('' when the product has none
      * or the list data hasn't been hydrated with it yet).
      */
     renderProductDescription(product) {
         if (product.descriptionHtml) {
-            return `<div class="product-detail-description">${product.descriptionHtml}</div>`;
+            const html = this.superscriptTrademarks(product.descriptionHtml);
+            return `<div class="product-detail-description">${html}</div>`;
         }
         if (product.description) {
             return `<div class="product-detail-description"><p>${this.escapeHtml(product.description)}</p></div>`;
