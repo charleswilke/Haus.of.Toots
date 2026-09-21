@@ -20,13 +20,15 @@
     <link rel="canonical" href="https://hausoftoots.com/">
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link rel="preload" href="images/haus_of_toots_canvas_13ct_512px.webp" as="image">
-    <link rel="preload" href="images/flash-400.webp" imagesrcset="images/flash-400.webp 400w, images/flash-720.webp 720w" imagesizes="(max-width: 768px) calc(100vw - 32px), 360px" as="image" fetchpriority="high">
+    <link rel="preload" href="images/mainstage-collection.webp" as="image" fetchpriority="high">
     <link rel="preconnect" href="https://haus-of-toots.myshopify.com" crossorigin>
     <link rel="preconnect" href="https://cdn.shopify.com">
     <link rel="preload" href="images/fonts/chewy-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="images/fonts/winky-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="styles.css?v=20260830d">
+    <link rel="stylesheet" href="styles.css?v=20260918b">
     <link rel="stylesheet" href="shop-styles.css?v=20260910c">
+    <link rel="stylesheet" href="mainstage.css?v=20260920x">
+    <script src="mainstage.js?v=20260920w" defer></script>
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -58,7 +60,7 @@
     <div id="shared-nav"></div>
     <div id="shared-stitch-sidebar"></div>
     <div id="shared-cursor-canvas"></div>
-    <script src="shared-components.js?v=20260907f" defer></script>
+    <script src="shared-components.js?v=20260918b" defer></script>
 
     <!-- Shipping Notice (temporary: Jessie's NYC trip; self-hides after 9/15 via ShippingNotice in shared-components.js) -->
     <section class="shipping-notice-section" id="shippingNotice">
@@ -74,22 +76,154 @@
         </div>
     </section>
 
-    <!-- Hero Section -->
-    <section class="hero hero-shop">
+    <!-- Main Stage launch feature -->
+    <section class="mainstage-hero" aria-labelledby="mainstageTitle">
         <div class="container">
-            <div class="hero-layout">
-                <div class="hero-logo-side">
-                    <img src="images/hauslogo-240.webp" srcset="images/hauslogo-240.webp 240w, images/hauslogo-480.webp 480w" sizes="(max-width: 767px) 176px, 328px" alt="Haus of Toots" class="hero-logo" id="hausLogo" width="328" height="437" fetchpriority="high" decoding="async">
+            <div class="mainstage-feature">
+                <div class="mainstage-copy">
+                    <h1 id="mainstageTitle">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="400" height="234" viewBox="0 0 400 234" class="mainstage-wordmark" data-layout="stacked" role="img" aria-labelledby="mainstageWordmarkTitle" aria-describedby="mainstageWordmarkDescription">
+                          <title id="mainstageWordmarkTitle">Main Stage — The Collection</title>
+                          <desc id="mainstageWordmarkDescription">A glow rises through the pink depth of every letter together. Small ivory sparks twinkle in different places as the violet-to-berry gradient faces light up, then fade as the letters settle back to their resting color.</desc>
+                          <defs>
+                            <linearGradient id="mainstage-face-gradient" gradientUnits="userSpaceOnUse" x1="0%" y1="0%" x2="100%" y2="0%">
+                              <stop offset="0%" stop-color="#242457"/>
+                              <stop offset="55%" stop-color="#3e214d"/>
+                              <stop offset="100%" stop-color="#7b2c67"/>
+                            </linearGradient>
+                            <g id="mainstage-spark">
+                              <path d="M0 -10 2 -2 10 0 2 2 0 10 -2 2 -10 0 -2 -2Z"/>
+                              <circle cx="12" cy="-9" r="1.3" fill="#ffe091"/>
+                              <circle cx="-11" cy="8" r="1" fill="#ffe091"/>
+                            </g>
+                            <!-- Original letter outlines. No font dependency; counters use even-odd fill. -->
+                            <g id="mainstage-lettering" fill-rule="evenodd" transform="translate(40 12) skewX(-9)">
+                              <g transform="scale(1.17 .94)">
+                                <!-- MAIN -->
+                                <path d="M0 80V0H19L39 28 59 0H78V80H55V35L39 56 23 35V80Z"/>
+                                <path transform="translate(85)" d="M0 80 20 0H55L75 80H50L46 62H27L23 80ZM34 22 30 43H43L39 22Z"/>
+                                <path transform="translate(168)" d="M0 0H28V80H0Z"/>
+                                <path transform="translate(204)" d="M0 80V0H23L52 40V0H75V80H52L23 39V80Z"/>
+                              </g>
+                              <g class="mainstage-stage-letters" transform="translate(0 87) scale(.88 .94)">
+                                <!-- STAGE -->
+                                <path d="M65 0H14L0 14V40L12 51H42V60H0V80H52L67 65V42L54 29H25V20H65Z"/>
+                                <path transform="translate(74)" d="M0 0H70V22H47V80H23V22H0Z"/>
+                                <path transform="translate(151)" d="M0 80 20 0H55L75 80H50L46 62H27L23 80ZM34 22 30 43H43L39 22Z"/>
+                                <path transform="translate(233)" d="M74 0H15L0 15V65L15 80H74V35H37V53H51V59H25V21H74Z"/>
+                                <path transform="translate(314)" d="M0 0H65V21H25V29H58V49H25V59H65V80H0Z"/>
+                              </g>
+                            </g>
+                            <mask id="mainstage-face-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="740" height="234">
+                              <use href="#mainstage-lettering" fill="white"/>
+                            </mask>
+                          </defs>
+                          <!-- Each depth contains the entire wordmark, so MAIN and STAGE pulse together.
+                               The delay advances from the farthest layer (10px) to the nearest (2px). -->
+                          <g>
+                            <use class="depth-layer" href="#mainstage-lettering" transform="translate(10 10)" fill="#c82174" style="--layer-color: #c82174; --layer-delay: 0s"/>
+                            <use class="depth-layer" href="#mainstage-lettering" transform="translate(8 8)" fill="#d8257c" style="--layer-color: #d8257c; --layer-delay: .22s"/>
+                            <use class="depth-layer" href="#mainstage-lettering" transform="translate(6 6)" fill="#e52a83" style="--layer-color: #e52a83; --layer-delay: .44s"/>
+                            <use class="depth-layer" href="#mainstage-lettering" transform="translate(4 4)" fill="#ed388c" style="--layer-color: #ed388c; --layer-delay: .66s"/>
+                            <use class="depth-layer" href="#mainstage-lettering" transform="translate(2 2)" fill="#f34897" style="--layer-color: #f34897; --layer-delay: .88s"/>
+                          </g>
+                          <!-- One shared color surface across both words, clipped to all letter faces. -->
+                          <g class="letter-face" mask="url(#mainstage-face-mask)">
+                            <rect width="100%" height="100%" fill="url(#mainstage-face-gradient)"/>
+                          </g>
+                          <!-- Sparks share the face's 5.8s cycle and peak around its 40% highlight. -->
+                          <g aria-hidden="true" pointer-events="none">
+                            <g transform="translate(56 21)"><use class="title-spark" href="#mainstage-spark"/></g>
+                            <g transform="translate(324 69) scale(.8)"><use class="title-spark" href="#mainstage-spark" style="--spark-delay: .12s"/></g>
+                            <g transform="translate(64 146) scale(.75)"><use class="title-spark" href="#mainstage-spark" style="--spark-delay: .2s"/></g>
+                            <g transform="translate(228 107)"><use class="title-spark" href="#mainstage-spark" style="--spark-delay: .06s"/></g>
+                            <g transform="translate(306 164) scale(.8)"><use class="title-spark" href="#mainstage-spark" style="--spark-delay: .16s"/></g>
+                          </g>
+                          <!-- The collection label shares the title's purple gradient on a pink ribbon. -->
+                          <g aria-hidden="true">
+                            <path class="mainstage-underline" d="M13 194H352L347 226H8Z" fill="#ffb7d7"/>
+                            <text class="mainstage-collection-label" x="180" y="210" text-anchor="middle" dominant-baseline="central">THE COLLECTION</text>
+                          </g>
+                        </svg>
+                    </h1>
+                    <p class="mainstage-deck" data-mainstage-after-launch hidden>Big hair. Bold color. Taking up space.</p>
+                    <p class="mainstage-story">Twelve designs celebrating women and unapologetic femininity.</p>
                 </div>
-                <div class="hero-content-side">
-                    <div class="stitched-border">
-                        <div class="hero-content">
-                            <div class="hero-text-mobile hero-shop-intro">
-                                <p class="hero-kicker">Cute. Weird. Wildly specific.</p>
-                                <h1 class="hero-title hero-shop-title">Shop <span class="highlight">Haus of Toots</span> NDLPT designs</h1>
-                            </div>
+                <div class="mainstage-art">
+                    <figure class="mainstage-photo">
+                        <img src="images/mainstage-collection.webp" alt="Twelve Main Stage needlepoint canvases featuring bold, colorful women, arranged on a blush tray over teal satin." width="1000" height="800" fetchpriority="high" decoding="async">
+                    </figure>
+                </div>
+                <div class="mainstage-actions">
+                    <div class="mainstage-launch" data-mainstage-launch aria-live="polite">
+                        <div class="mainstage-launch-note" data-mainstage-callout>
+                            <p class="mainstage-launch-copy">
+                                <span class="mainstage-launch-kicker">Available on</span>
+                                <time class="mainstage-launch-date" datetime="2026-09-22T11:00:00-05:00">
+                                    <span class="mainstage-launch-month">
+                                        <span class="visually-hidden">September</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="465" height="84" viewBox="0 0 465 84" aria-hidden="true" focusable="false">
+                                            <defs>
+                                                <!-- The same quick pen scrawl as ND, with individual strokes and loose retracing. -->
+                                                <g id="mainstage-september-lettering" fill="none" stroke-width="9" stroke-linecap="square" stroke-linejoin="bevel">
+                                                    <path transform="translate(8)" d="M46 14C40 2 16 5 12 21C8 32 34 30 37 42C42 61 13 77 4 62L9 55"/>
+                                                    <path transform="translate(60)" d="M41 10 15 14 4 69 36 64M10 41 32 36"/>
+                                                    <path transform="translate(106)" d="M4 70 18 8M16 13C56-2 52 28 38 36L11 43"/>
+                                                    <path transform="translate(155)" d="M2 14 48 7M29 12 13 71"/>
+                                                    <path transform="translate(204)" d="M40 9 14 14 3 67 38 65M10 41 34 35"/>
+                                                    <path transform="translate(251)" d="M1 70 18 8 25 48 51 7 43 72"/>
+                                                    <path transform="translate(307)" d="M3 70 19 8M16 14C48-1 59 13 35 33L13 42M27 36C57 27 59 49 38 63L5 73"/>
+                                                    <path transform="translate(359)" d="M40 12 15 13 3 70 36 64M10 42 33 36"/>
+                                                    <path transform="translate(408)" d="M3 71 18 8M16 13C49 0 54 22 34 35L11 42M25 39 44 70"/>
+                                                    <path d="M19 75Q36 71 45 60M79 21 68 66M322 67Q341 63 349 53M438 47 456 74" stroke-width="2.8"/>
+                                                </g>
+                                            </defs>
+                                            <use href="#mainstage-september-lettering" transform="translate(3 4)" stroke="#f34897"/>
+                                            <use href="#mainstage-september-lettering" stroke="#fff1df"/>
+                                        </svg>
+                                    </span>
+                                    <strong class="mainstage-launch-day"><span class="visually-hidden">22</span>
+                                        <svg class="mainstage-launch-numerals" xmlns="http://www.w3.org/2000/svg" width="216" height="128" viewBox="0 0 216 128" aria-hidden="true" focusable="false">
+                                            <defs>
+                                                <!-- Sweeping marker strokes, with broken tips instead of squared-off corners. -->
+                                                <path id="mainstage-date-two" d="M4 30C12 7 37-3 62 1C85 4 97 21 87 41C79 58 54 68 34 84L80 74 85 77 78 82 83 83 74 99 0 107 3 94 0 95 8 80C28 62 57 46 64 33C69 23 62 18 53 20C42 21 33 29 29 38L21 39 23 34 17 39 8 39 10 34Z"/>
+                                                <g id="mainstage-date-numerals" transform="translate(19 7) skewX(-8)">
+                                                    <use href="#mainstage-date-two" transform="rotate(-4 44 52)"/>
+                                                    <use href="#mainstage-date-two" transform="translate(91 -1) rotate(3 44 52)"/>
+                                                </g>
+                                                <mask id="mainstage-date-wear" maskUnits="userSpaceOnUse" x="0" y="0" width="216" height="128">
+                                                    <rect width="216" height="128" fill="white"/>
+                                                    <path d="M24 101l39-7M116 91l23-6" fill="none" stroke="black" stroke-width="1.8" stroke-linecap="round"/>
+                                                </mask>
+                                            </defs>
+                                            <use href="#mainstage-date-numerals" transform="translate(5 6)" fill="#c82174"/>
+                                            <use href="#mainstage-date-numerals" transform="translate(2.5 3)" fill="#f34897"/>
+                                            <use href="#mainstage-date-numerals" fill="#fff1df" mask="url(#mainstage-date-wear)"/>
+                                        </svg>
+                                        <span class="mainstage-launch-ordinal"><span class="visually-hidden">nd</span><svg xmlns="http://www.w3.org/2000/svg" width="145" height="84" viewBox="0 0 145 84" aria-hidden="true" focusable="false">
+                                        <defs>
+                                            <!-- Fast pen scrawl with overshoots, a loose loop, and retraced strokes. -->
+                                            <g id="mainstage-ordinal-lettering" fill="none" stroke-linecap="square" stroke-linejoin="bevel">
+                                                <path d="M8 71 27 7 21 13 43 67 66 7" stroke-width="9"/>
+                                                <path d="M75 72 90 5M79 13C104-1 137 7 130 29C124 50 96 77 70 68L80 63" stroke-width="8.5"/>
+                                                <path d="M13 67 29 14M79 76Q110 70 124 54" stroke-width="3"/>
+                                            </g>
+                                        </defs>
+                                        <use href="#mainstage-ordinal-lettering" transform="translate(3 4)" stroke="#f34897"/>
+                                        <use href="#mainstage-ordinal-lettering" stroke="#fff1df"/>
+                                    </svg></span>
+                                        <svg class="mainstage-launch-flare" viewBox="0 0 64 44" aria-hidden="true" focusable="false">
+                                            <path d="m22 0 5 16 17 6-17 5-5 17-5-17L0 22l17-6Z"/>
+                                            <path d="m54 1 2.5 7.5L64 11l-7.5 2.5L54 21l-2.5-7.5L44 11l7.5-2.5Z"/>
+                                        </svg>
+                                    </strong>
+                                    <span class="mainstage-launch-time">at 11AM Central</span>
+                                </time>
+                            </p>
                         </div>
+                        <a class="mainstage-cta" data-mainstage-link hidden>Main Stage Collection <span aria-hidden="true">&rarr;</span></a>
                     </div>
+                    <p class="mainstage-giving" data-mainstage-after-launch hidden><span class="mainstage-giving-lead">Stitch loud. Do good.</span> $5 from every canvas<br> gives back.</p>
                 </div>
             </div>
         </div>
@@ -102,13 +236,13 @@
                 <div class="ticker">
                     <span class="ticker-item">SPEND $150, GET FREE SHIPPING</span>
                     <span class="ticker-sep">✦</span>
-                    <span class="ticker-item">NEW COLLECTION LAUNCHING IN SEPTEMBER!</span>
+                    <span class="ticker-item">MEET THE MAIN STAGE COLLECTION</span>
                     <span class="ticker-sep">✦</span>
                     <span class="ticker-item">@HAUS.OF.TOOTS ON TIKTOK &amp; INSTAGRAM</span>
                     <span class="ticker-sep">✦</span>
                     <span class="ticker-item">SPEND $150, GET FREE SHIPPING</span>
                     <span class="ticker-sep">✦</span>
-                    <span class="ticker-item">NEW COLLECTION LAUNCHING IN SEPTEMBER!</span>
+                    <span class="ticker-item">MEET THE MAIN STAGE COLLECTION</span>
                     <span class="ticker-sep">✦</span>
                     <span class="ticker-item">@HAUS.OF.TOOTS ON TIKTOK &amp; INSTAGRAM</span>
                     <span class="ticker-sep">✦</span>
