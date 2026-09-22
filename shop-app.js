@@ -113,29 +113,62 @@ class ShopApp {
     }
 
     /**
-     * Pull the paragraph text out of Shopify's description HTML.
-     * Returns an array of paragraphs, each split into its own lines.
+     * Rebuild Shopify paragraphs with text, line breaks, and safe links.
+     * Keep destination URLs without importing Shopify styles or event handlers.
      */
     parseCollectionDescription(descriptionHtml) {
-        if (!descriptionHtml) {
-            return [];
-        }
+        if (!descriptionHtml) return [];
 
         const parsed = new DOMParser().parseFromString(descriptionHtml, 'text/html');
-        parsed.body.querySelectorAll('br').forEach(br => br.replaceWith('\n'));
-
+        parsed.body.querySelectorAll('script, style, iframe, object').forEach(node => node.remove());
         const blocks = parsed.body.querySelectorAll('p, li');
         const sources = blocks.length ? Array.from(blocks) : [parsed.body];
 
-        return sources
-            .map(node => node.textContent.replace(/[^\S\n]+/g, ' ').trim())
-            .filter(Boolean)
-            .map(text => text.split('\n').map(line => line.trim()).filter(Boolean));
+        const copyContent = (source, target) => {
+            source.childNodes.forEach(node => {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    const lines = node.textContent.replace(/[^\S\n]+/g, ' ').split('\n');
+                    lines.forEach((line, index) => {
+                        if (index > 0) target.appendChild(document.createElement('br'));
+                        target.appendChild(document.createTextNode(line));
+                    });
+                } else if (node.nodeType === Node.ELEMENT_NODE) {
+                    if (node.tagName === 'BR') {
+                        target.appendChild(document.createElement('br'));
+                        return;
+                    }
+                    let destination = target;
+                    if (node.tagName === 'A') {
+                        try {
+                            const url = new URL(node.getAttribute('href'), `https://${SHOPIFY_CONFIG.domain}`);
+                            if (node.hasAttribute('href') && ['https:', 'http:', 'mailto:', 'tel:'].includes(url.protocol)) {
+                                destination = document.createElement('a');
+                                destination.href = url.href;
+                                if (node.getAttribute('target') === '_blank') {
+                                    destination.target = '_blank';
+                                    destination.rel = 'noopener noreferrer';
+                                }
+                                target.appendChild(destination);
+                            }
+                        } catch {
+                            // Keep the label as text when a destination is invalid.
+                        }
+                    }
+                    copyContent(node, destination);
+                }
+            });
+        };
+
+        return sources.filter(node => node.textContent.trim()).map(node => {
+            const content = document.createDocumentFragment();
+            copyContent(node, content);
+            return content;
+        });
     }
 
     /**
      * Swap the hardcoded hero copy for the collection description set in Shopify.
-     * The paragraphs are rebuilt from text nodes rather than injected as markup,
+     * The paragraphs are rebuilt from safe nodes rather than injected as markup,
      * and an empty description leaves the copy already in the page untouched.
      */
     applyCollectionDescription(descriptionHtml) {
@@ -154,16 +187,11 @@ class ShopApp {
         const wrapper = document.createElement('div');
         wrapper.className = 'series-description';
 
-        paragraphs.forEach(lines => {
+        paragraphs.forEach(content => {
             const paragraph = document.createElement('p');
             paragraph.className = existing.className;
 
-            lines.forEach((line, index) => {
-                if (index > 0) {
-                    paragraph.appendChild(document.createElement('br'));
-                }
-                paragraph.appendChild(document.createTextNode(line));
-            });
+            paragraph.appendChild(content);
 
             wrapper.appendChild(paragraph);
         });

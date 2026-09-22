@@ -989,6 +989,17 @@
     width: 100%;
 }
 
+.series-description a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+}
+
+.series-description a:hover,
+.series-description a:focus-visible {
+    color: var(--primary-pink, #d63384);
+}
+
 @media (min-width: 900px) {
     .series-description {
         columns: 2;
