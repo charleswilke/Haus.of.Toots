@@ -1,7 +1,7 @@
 /* Homepage launch feature. Keep these styles separate from the shared heroes. */
 .mainstage-hero {
     --mainstage-ink: #174f54;
-    --mainstage-accent: #4b9c82;
+    --mainstage-accent: #3e214d;
     --mainstage-stripe-width: 32px;
     padding: 1.5rem 0;
 }
@@ -324,17 +324,17 @@
     padding: 0.65rem 1.15rem;
     border: 1px solid var(--mainstage-accent);
     border-radius: 2px 12px 2px 12px;
-    background: var(--mainstage-accent);
+    background: linear-gradient(90deg, #242457, #3e214d 55%, #7b2c67);
     color: #f5efe4;
     font: 500 1rem var(--font-body);
     text-decoration: none;
     line-height: 1.35;
     cursor: pointer;
-    transition: background 160ms ease, transform 160ms ease;
+    transition: filter 160ms ease, transform 160ms ease;
 }
 
-.mainstage-cta:hover { background: #408c74; color: #f5efe4; transform: translateY(-2px); }
-.mainstage-cta:focus-visible { outline: 3px solid #885374; outline-offset: 4px; }
+.mainstage-cta:hover { filter: brightness(1.12); color: #f5efe4; transform: translateY(-2px); }
+.mainstage-cta:focus-visible { outline: 3px solid #242457; outline-offset: 4px; }
 .mainstage-cta span { font-size: 1.3rem; }
 .mainstage-giving { margin: 0; font-size: 0.8rem; line-height: 1.35; font-weight: 400; }
 
