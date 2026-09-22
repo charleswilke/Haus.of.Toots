@@ -221,7 +221,7 @@ class ShopifyClient {
     /**
      * Get a single page of products from the store
      */
-    async getProductsPage(first = 50, after = null) {
+    async getProductsPage(first = 50, after = null, { forceRefresh = false } = {}) {
         const query = `
             query GetProductsPage($first: Int!, $after: String) {
                 products(first: $first, after: $after) {
@@ -280,7 +280,9 @@ class ShopifyClient {
             }
         `;
 
-        const data = await this.cachedFetch(query, { first, after });
+        const data = forceRefresh
+            ? await this.fetch(query, { first, after })
+            : await this.cachedFetch(query, { first, after });
         return {
             products: data.products.edges.map(edge => edge.node),
             pageInfo: data.products.pageInfo
@@ -290,13 +292,13 @@ class ShopifyClient {
     /**
      * Get every product from the store via pagination
      */
-    async getAllProducts(pageSize = 50) {
+    async getAllProducts(pageSize = 50, options = {}) {
         const products = [];
         let hasNextPage = true;
         let after = null;
 
         while (hasNextPage) {
-            const page = await this.getProductsPage(pageSize, after);
+            const page = await this.getProductsPage(pageSize, after, options);
             products.push(...page.products);
             hasNextPage = Boolean(page.pageInfo?.hasNextPage);
             after = page.pageInfo?.endCursor || null;
@@ -330,7 +332,7 @@ class ShopifyClient {
     /**
      * Get products for a specific collection handle
      */
-    async getCollectionProducts(handle, first = 50) {
+    async getCollectionProducts(handle, first = 50, { forceRefresh = false } = {}) {
         const query = `
             query GetCollectionProducts($handle: String!, $first: Int!) {
                 collection(handle: $handle) {
@@ -389,7 +391,9 @@ class ShopifyClient {
             }
         `;
 
-        const data = await this.cachedFetch(query, { handle, first });
+        const data = forceRefresh
+            ? await this.fetch(query, { handle, first })
+            : await this.cachedFetch(query, { handle, first });
         const collection = data.collection;
 
         if (!collection) {
@@ -1051,4 +1055,3 @@ class InventoryManager {
 const shopifyClient = new ShopifyClient(SHOPIFY_CONFIG);
 const cartManager = new CartManager();
 const inventoryManager = new InventoryManager(shopifyClient);
-

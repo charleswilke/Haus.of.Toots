@@ -43,6 +43,16 @@ class ShopApp {
             tag,
             title: (dataset.shopCollectionTitle || '').trim() || collectionKey,
             aliases,
+            priorityKeywords: (dataset.shopPriorityKeywords || '')
+                .split(',')
+                .map(keyword => this.normalizeCollectionText(keyword))
+                .filter(Boolean),
+            secondaryTitleKeyword: this.normalizeCollectionText(dataset.shopSecondaryTitleKeyword),
+            fallbackTitlePrefixes: (dataset.shopFallbackTitlePrefixes || '')
+                .split(',')
+                .map(prefix => this.normalizeCollectionText(prefix))
+                .filter(Boolean),
+            freshCatalog: dataset.shopFreshCatalog === 'true',
             emptyMessage: (dataset.shopEmptyMessage || '').trim()
         };
     }
@@ -82,7 +92,11 @@ class ShopApp {
 
         return products.filter(product => {
             const searchableText = this.getCollectionSearchText(product);
-            return aliases.some(alias => searchableText.includes(alias));
+            const title = this.normalizeCollectionText(product.title);
+            return aliases.some(alias => searchableText.includes(alias)) ||
+                (this.collectionContext.fallbackTitlePrefixes || []).some(prefix =>
+                    title === prefix || title.startsWith(`${prefix} `)
+                );
         });
     }
 
@@ -167,12 +181,13 @@ class ShopApp {
 
         try {
             if (this.collectionContext?.handle) {
-                const collection = await shopifyClient.getCollectionProducts(this.collectionContext.handle, 50);
+                const options = { forceRefresh: this.collectionContext.freshCatalog };
+                const collection = await shopifyClient.getCollectionProducts(this.collectionContext.handle, 50, options);
                 if (collection) {
                     this.products = collection.products;
                     this.applyCollectionDescription(collection.descriptionHtml);
                 } else {
-                    const products = await shopifyClient.getProducts(24);
+                    const products = await shopifyClient.getAllProducts(50, options);
                     this.products = this.filterProductsForCollection(products);
                 }
             } else {
@@ -210,8 +225,30 @@ class ShopApp {
             return;
         }
 
-        // Sort products - hand painted canvases first
+        // Featured collection keywords take precedence, in the configured order.
+        // Stable sorting preserves Shopify's order within each group and for the rest.
+        const priorityKeywords = this.collectionContext?.priorityKeywords || [];
+        const secondaryTitleKeyword = this.collectionContext?.secondaryTitleKeyword || '';
+        const priorityRank = product => {
+            const words = this.normalizeCollectionText([
+                product.title, product.handle, ...(product.tags || [])
+            ].join(' '));
+            const rank = priorityKeywords.findIndex(keyword =>
+                ` ${words} `.includes(` ${keyword} `)
+            );
+            if (rank !== -1) return rank;
+
+            const title = this.normalizeCollectionText(product.title);
+            const isSecondary = secondaryTitleKeyword &&
+                ` ${title} `.includes(` ${secondaryTitleKeyword} `);
+            return priorityKeywords.length + (isSecondary ? 0 : 1);
+        };
         const sortedProducts = [...this.products].sort((a, b) => {
+            if (priorityKeywords.length || secondaryTitleKeyword) {
+                return priorityRank(a) - priorityRank(b);
+            }
+
+            // Other collection pages retain their hand-painted-first ordering.
             const aIsHandPainted = this.isHandPainted(a);
             const bIsHandPainted = this.isHandPainted(b);
             if (aIsHandPainted && !bIsHandPainted) return -1;
