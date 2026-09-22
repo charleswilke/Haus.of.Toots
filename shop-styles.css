@@ -980,11 +980,7 @@
 
 /* Shopify descriptions arrive as several paragraphs; space them without
    adding a trailing gap inside the stitched border. */
-/* The collection description flows as two columns once the stitched box
-   is wide enough for a comfortable measure in each - the copy is four
-   short paragraphs, which otherwise run as a wide, shallow block. Text is
-   allowed to run on across the gap: keeping paragraphs whole left one
-   column two paragraphs taller than the other. */
+/* Keep collection descriptions in one full-width column at every size. */
 .series-description {
     width: 100%;
 }
@@ -998,24 +994,6 @@
 .series-description a:hover,
 .series-description a:focus-visible {
     color: var(--primary-pink, #d63384);
-}
-
-@media (min-width: 900px) {
-    .series-description {
-        columns: 2;
-        column-gap: clamp(2rem, 4vw, 3.5rem);
-    }
-
-    /* Justified, as print columns are: every line runs to the column edge.
-       Hyphenation keeps the word spacing even in a column this narrow;
-       without it the justifier has to stretch short lines into rivers. */
-    .series-description .hero-description {
-        text-align: justify;
-        text-align-last: left;
-        hyphens: auto;
-        -webkit-hyphens: auto;
-        text-wrap: pretty;
-    }
 }
 
 .series-copy .hero-description + .hero-description {
