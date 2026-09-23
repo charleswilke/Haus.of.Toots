@@ -4,8 +4,8 @@
 
 class HomeApp extends ShopApp {
     // Products rendered per scroll batch. Divides evenly into the masonry's
-    // 1/2/3 column layouts so a batch never leaves a ragged part-row.
-    static BATCH_SIZE = 6;
+    // 1/2/3/4 column layouts so a batch never leaves a ragged part-row.
+    static BATCH_SIZE = 12;
 
     constructor() {
         super(); // calls ShopApp constructor → this.init() → HomeApp.init()

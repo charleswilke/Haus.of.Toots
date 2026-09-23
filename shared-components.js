@@ -302,7 +302,8 @@ window.applyMasonry = function applyMasonry(grid) {
     let cols;
     if (w < 600) cols = 1;
     else if (w < 900) cols = 2;
-    else cols = 3;
+    else if (w < 1100) cols = 3;
+    else cols = 4;
     cols = Math.min(cols, cards.length);
 
     grid.innerHTML = '';
