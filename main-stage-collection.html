@@ -22,7 +22,8 @@
     <link rel="preload" href="images/fonts/winky-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="styles.css?v=20260918b">
     <link rel="stylesheet" href="shop-styles.css?v=20260922e">
-    <link rel="stylesheet" href="mainstage.css?v=20260921a">
+    <link rel="stylesheet" href="mainstage.css?v=20260922f">
+    <script src="mainstage.js?v=20260922b" defer></script>
 </head>
 <body
     data-shop-collection="main-stage-collection"
@@ -40,15 +41,78 @@
     <div id="shared-cursor-canvas"></div>
     <script src="shared-components.js?v=20260918b" defer></script>
 
-    <header class="series-header">
+    <header class="series-header mainstage-collection-header">
         <div class="container">
-            <div class="series-header-layout">
-                <div class="series-copy">
-                    <div class="stitched-border">
-                        <div class="series-copy-inner">
-                            <h1 class="hero-title"><span class="highlight">Main Stage</span> Collection</h1>
-                            <p class="hero-description">Big hair. Bold color. Taking up space. Twelve designs celebrating women and unapologetic femininity.</p>
-                        </div>
+            <!-- Same striped show-poster frame and animated wordmark as the homepage feature. -->
+            <div class="mainstage-feature mainstage-collection-banner">
+                <div class="series-copy mainstage-collection-copy">
+                    <h1 class="mainstage-collection-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="400" height="234" viewBox="0 0 400 234" class="mainstage-wordmark" data-layout="stacked" data-wide-query="(min-width: 701px)" role="img" aria-labelledby="mainstageWordmarkTitle" aria-describedby="mainstageWordmarkDescription">
+                          <title id="mainstageWordmarkTitle">Main Stage — The Collection</title>
+                          <desc id="mainstageWordmarkDescription">A glow rises through the pink depth of every letter together. Small ivory sparks twinkle in different places as the violet-to-berry gradient faces light up, then fade as the letters settle back to their resting color.</desc>
+                          <defs>
+                            <linearGradient id="mainstage-face-gradient" gradientUnits="userSpaceOnUse" x1="0%" y1="0%" x2="100%" y2="0%">
+                              <stop offset="0%" stop-color="#242457"/>
+                              <stop offset="55%" stop-color="#3e214d"/>
+                              <stop offset="100%" stop-color="#7b2c67"/>
+                            </linearGradient>
+                            <g id="mainstage-spark">
+                              <path d="M0 -10 2 -2 10 0 2 2 0 10 -2 2 -10 0 -2 -2Z"/>
+                              <circle cx="12" cy="-9" r="1.3" fill="#ffe091"/>
+                              <circle cx="-11" cy="8" r="1" fill="#ffe091"/>
+                            </g>
+                            <!-- Original letter outlines. No font dependency; counters use even-odd fill. -->
+                            <g id="mainstage-lettering" fill-rule="evenodd" transform="translate(40 12) skewX(-9)">
+                              <g transform="scale(1.17 .94)">
+                                <!-- MAIN -->
+                                <path d="M0 80V0H19L39 28 59 0H78V80H55V35L39 56 23 35V80Z"/>
+                                <path transform="translate(85)" d="M0 80 20 0H55L75 80H50L46 62H27L23 80ZM34 22 30 43H43L39 22Z"/>
+                                <path transform="translate(168)" d="M0 0H28V80H0Z"/>
+                                <path transform="translate(204)" d="M0 80V0H23L52 40V0H75V80H52L23 39V80Z"/>
+                              </g>
+                              <g class="mainstage-stage-letters" transform="translate(0 87) scale(.88 .94)">
+                                <!-- STAGE -->
+                                <path d="M65 0H14L0 14V40L12 51H42V60H0V80H52L67 65V42L54 29H25V20H65Z"/>
+                                <path transform="translate(74)" d="M0 0H70V22H47V80H23V22H0Z"/>
+                                <path transform="translate(151)" d="M0 80 20 0H55L75 80H50L46 62H27L23 80ZM34 22 30 43H43L39 22Z"/>
+                                <path transform="translate(233)" d="M74 0H15L0 15V65L15 80H74V35H37V53H51V59H25V21H74Z"/>
+                                <path transform="translate(314)" d="M0 0H65V21H25V29H58V49H25V59H65V80H0Z"/>
+                              </g>
+                            </g>
+                            <mask id="mainstage-face-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="740" height="234">
+                              <use href="#mainstage-lettering" fill="white"/>
+                            </mask>
+                          </defs>
+                          <!-- Each depth contains the entire wordmark, so MAIN and STAGE pulse together.
+                               The delay advances from the farthest layer (10px) to the nearest (2px). -->
+                          <g>
+                            <use class="depth-layer" href="#mainstage-lettering" transform="translate(10 10)" fill="#c82174" style="--layer-color: #c82174; --layer-delay: 0s"/>
+                            <use class="depth-layer" href="#mainstage-lettering" transform="translate(8 8)" fill="#d8257c" style="--layer-color: #d8257c; --layer-delay: .22s"/>
+                            <use class="depth-layer" href="#mainstage-lettering" transform="translate(6 6)" fill="#e52a83" style="--layer-color: #e52a83; --layer-delay: .44s"/>
+                            <use class="depth-layer" href="#mainstage-lettering" transform="translate(4 4)" fill="#ed388c" style="--layer-color: #ed388c; --layer-delay: .66s"/>
+                            <use class="depth-layer" href="#mainstage-lettering" transform="translate(2 2)" fill="#f34897" style="--layer-color: #f34897; --layer-delay: .88s"/>
+                          </g>
+                          <!-- One shared color surface across both words, clipped to all letter faces. -->
+                          <g class="letter-face" mask="url(#mainstage-face-mask)">
+                            <rect width="100%" height="100%" fill="url(#mainstage-face-gradient)"/>
+                          </g>
+                          <!-- Sparks share the face's 5.8s cycle and peak around its 40% highlight. -->
+                          <g aria-hidden="true" pointer-events="none">
+                            <g transform="translate(56 21)"><use class="title-spark" href="#mainstage-spark"/></g>
+                            <g transform="translate(324 69) scale(.8)"><use class="title-spark" href="#mainstage-spark" style="--spark-delay: .12s"/></g>
+                            <g transform="translate(64 146) scale(.75)"><use class="title-spark" href="#mainstage-spark" style="--spark-delay: .2s"/></g>
+                            <g transform="translate(228 107)"><use class="title-spark" href="#mainstage-spark" style="--spark-delay: .06s"/></g>
+                            <g transform="translate(306 164) scale(.8)"><use class="title-spark" href="#mainstage-spark" style="--spark-delay: .16s"/></g>
+                          </g>
+                          <!-- The collection label shares the title's purple gradient on a pink ribbon. -->
+                          <g aria-hidden="true">
+                            <path class="mainstage-underline" d="M13 194H352L347 226H8Z" fill="#ffb7d7"/>
+                            <text class="mainstage-collection-label" x="180" y="210" text-anchor="middle" dominant-baseline="central">THE COLLECTION</text>
+                          </g>
+                        </svg>
+                    </h1>
+                    <div class="mainstage-collection-card">
+                        <p class="hero-description">Big hair. Bold color. Taking up space. Twelve designs celebrating women and unapologetic femininity.</p>
                     </div>
                 </div>
             </div>

@@ -7,7 +7,8 @@
     const letters = [...lettering.querySelectorAll('path')];
     const sparks = [...wordmark.querySelectorAll('.title-spark')];
     const face = wordmark.querySelector('.letter-face');
-    const wideLayout = matchMedia('(min-width: 1100px)');
+    // Pages can widen the wordmark sooner when it has the full container to itself.
+    const wideLayout = matchMedia(wordmark.dataset.wideQuery || '(min-width: 1100px)');
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
     function placeSparks() {
@@ -102,4 +103,51 @@
     window.addEventListener('pageshow', updateLaunch);
     window.addEventListener('focus', updateLaunch);
     updateLaunch();
+})();
+
+// Collection page: on phones, fold the Shopify description under its opening line.
+// The description arrives after the catalog loads, so wait for its wrapper.
+(() => {
+    const card = document.querySelector('.mainstage-collection-card');
+    if (!card) return;
+
+    function foldDescription(description) {
+        const [lead, ...rest] = description.querySelectorAll('.hero-description');
+        if (!lead || !rest.length) return;
+
+        const more = document.createElement('div');
+        more.className = 'mainstage-collection-more';
+        more.id = 'mainstageCollectionMore';
+        const inner = document.createElement('div');
+        inner.className = 'mainstage-collection-more-inner';
+        rest.forEach(paragraph => inner.appendChild(paragraph));
+        more.appendChild(inner);
+
+        const toggle = document.createElement('button');
+        toggle.type = 'button';
+        toggle.className = 'mainstage-collection-toggle';
+        toggle.setAttribute('aria-controls', more.id);
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.innerHTML = '<span>Read more</span><svg viewBox="0 0 12 8" aria-hidden="true" focusable="false"><path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        toggle.addEventListener('click', () => {
+            const expanded = toggle.getAttribute('aria-expanded') !== 'true';
+            toggle.setAttribute('aria-expanded', String(expanded));
+            toggle.querySelector('span').textContent = expanded ? 'Show less' : 'Read more';
+        });
+
+        lead.after(toggle, more);
+    }
+
+    const existing = card.querySelector('.series-description');
+    if (existing) {
+        foldDescription(existing);
+        return;
+    }
+    const observer = new MutationObserver(() => {
+        const description = card.querySelector('.series-description');
+        if (!description) return;
+        observer.disconnect();
+        foldDescription(description);
+    });
+    observer.observe(card, { childList: true });
 })();
