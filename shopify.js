@@ -236,6 +236,7 @@ class ShopifyClient {
                             title
                             vendor
                             productType
+                            createdAt
                             updatedAt
                             tags
                             images(first: 1) {

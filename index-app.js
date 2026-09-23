@@ -94,13 +94,10 @@ class HomeApp extends ShopApp {
     // ─── Rendering ────────────────────────────────────────────────────────────
 
     renderProducts() {
-        let products = [...this.allProducts];
-        products.sort((a, b) => {
-            const aIn = this.isProductInStock(a);
-            const bIn = this.isProductInStock(b);
-            if (aIn === bIn) return 0;
-            return aIn ? -1 : 1;
-        });
+        // Sort the full catalog before splitting it into scroll batches.
+        const products = [...this.allProducts].sort((a, b) =>
+            (Date.parse(b.createdAt) || 0) - (Date.parse(a.createdAt) || 0)
+        );
 
         this.filteredProducts = products;
         this.visibleCount = 0;
