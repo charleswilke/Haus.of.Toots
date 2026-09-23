@@ -386,10 +386,9 @@
     .mainstage-series { grid-template-columns: 1fr; }
 }
 
-/* Collection page header: the homepage feature's frame and stripes, with the
-   wordmark centered over a cream show card that holds the Shopify description. */
+/* Collection page header: the homepage feature's frame and stripes around
+   the animated wordmark, kept short so the canvases start high on the page. */
 .mainstage-collection-header {
-    --mainstage-ink: #174f54;
     --mainstage-stripe-width: 32px;
     /* Match the gap .shop-section leaves below the banner. The fixed nav is
        78px tall but body only offsets 70px, so add back the 8px it covers. */
@@ -409,11 +408,11 @@
 .mainstage-collection-copy {
     position: relative;
     z-index: 1;
-    padding: 2rem 2.5rem 2.5rem;
+    padding: 2rem 2.5rem;
 }
 
 .mainstage-collection-title {
-    margin: 0 0 1.5rem;
+    margin: 0;
     line-height: 1;
 }
 
@@ -422,119 +421,15 @@
     margin: 0 auto;
 }
 
-.mainstage-collection-card {
-    position: relative;
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 1.4rem 1.75rem;
-    border: 1px solid rgba(62, 33, 77, 0.28);
-    border-radius: 2px 18px 2px 18px;
-    background: rgba(255, 253, 247, 0.93);
-    box-shadow: 5px 6px 0 #f34897;
-}
-
-/* Same inset keyline as the launch flyer. */
-.mainstage-collection-card::before {
-    content: '';
-    position: absolute;
-    inset: 5px;
-    border: 1px solid rgba(243, 72, 151, 0.35);
-    border-radius: 1px 14px 1px 14px;
-    pointer-events: none;
-}
-
-.mainstage-collection-card .hero-description {
-    position: relative;
-    color: var(--mainstage-ink);
-    font-size: 1rem;
-    line-height: 1.6;
-    text-align: left;
-}
-
-/* The opening line reads as the deck, like "Stitch loud. Do good." */
-.mainstage-collection-card > .hero-description:first-child,
-.mainstage-collection-card .series-description > .hero-description:first-child {
-    color: #3e214d;
-    font-size: 1.2rem;
-    font-weight: 600;
-    line-height: 1.35;
-}
-
-.mainstage-collection-card .series-description a {
-    color: #7b2c67;
-    font-weight: 600;
-    text-decoration-color: #f34897;
-    text-decoration-thickness: 2px;
-}
-
-.mainstage-collection-card .series-description a:hover,
-.mainstage-collection-card .series-description a:focus-visible {
-    color: #c82174;
-}
-
-/* The fold only applies on phones; wider screens show every paragraph. */
-.mainstage-collection-toggle { display: none; }
-
-.mainstage-collection-more-inner > .hero-description:first-child {
-    margin-top: 0.7rem;
-}
-
 @media (max-width: 700px) {
     .mainstage-collection-header { --mainstage-stripe-width: 24px; }
     .mainstage-collection-header .container { padding: 0 16px; }
-    .mainstage-collection-copy { padding: 1.25rem 0.9rem 1.4rem; }
-    .mainstage-collection-title { margin-bottom: 1rem; }
+    .mainstage-collection-copy { padding: 2rem 0.9rem; }
     .mainstage-collection-title .mainstage-wordmark { width: min(100%, 260px); }
-    .mainstage-collection-card { padding: 1.1rem 1.1rem; box-shadow: 4px 5px 0 #f34897; }
-    .mainstage-collection-card .hero-description { font-size: 0.95rem; }
-    .mainstage-collection-card > .hero-description:first-child,
-    .mainstage-collection-card .series-description > .hero-description:first-child { font-size: 1.05rem; }
-
-    .mainstage-collection-toggle {
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.45rem;
-        margin-top: 0.75rem;
-        padding: 0.4rem 0.8rem;
-        border: 1px solid #3e214d;
-        border-radius: 2px 10px 2px 10px;
-        background: linear-gradient(90deg, #242457, #3e214d 55%, #7b2c67);
-        color: #fff1df;
-        font: 600 0.8rem var(--font-body);
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-        box-shadow: 2px 3px 0 #f34897;
-        cursor: pointer;
-    }
-    .mainstage-collection-toggle svg {
-        width: 0.7rem;
-        height: auto;
-        transition: transform 200ms ease;
-    }
-    .mainstage-collection-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
-    .mainstage-collection-toggle:focus-visible { outline: 3px solid #242457; outline-offset: 3px; }
-
-    /* Animate the height through a 0fr/1fr grid row. */
-    .mainstage-collection-more {
-        display: grid;
-        grid-template-rows: 0fr;
-        transition: grid-template-rows 280ms ease, visibility 0s linear 280ms;
-        visibility: hidden;
-    }
-    .mainstage-collection-toggle[aria-expanded="true"] + .mainstage-collection-more {
-        grid-template-rows: 1fr;
-        transition: grid-template-rows 280ms ease;
-        visibility: visible;
-    }
-    .mainstage-collection-more-inner { min-height: 0; overflow: hidden; }
-    .mainstage-collection-more-inner > .hero-description:first-child { margin-top: 0.9rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
     .mainstage-cta { transition: none; }
-    .mainstage-collection-more,
-    .mainstage-collection-toggle svg { transition: none !important; }
     .mainstage-wordmark .depth-layer { animation: none; filter: none; }
     .mainstage-wordmark .letter-face { animation: none; }
     .mainstage-wordmark .title-spark { display: none; animation: none; }
