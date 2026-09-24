@@ -673,7 +673,6 @@
     <use href="#lnsHex" x="763.2" y="337.0" class="hx hx1"/>
     <use href="#lnsHex" x="784.0" y="337.0" class="hx hx2"/>
     <use href="#lnsHex" x="804.8" y="337.0" class="hx hx1"/>
-    <use href="#lnsHex" x="825.6" y="337.0" class="hx hx1"/>
     <use href="#lnsHex" x="846.4" y="337.0" class="hx hx3"/>
     <use href="#lnsHex" x="867.2" y="337.0" class="hx hx1"/>
     <use href="#lnsHex" x="129.3" y="355.0" class="hx hx1"/>
@@ -927,7 +926,7 @@
       <use href="#lnsHeart" x="680.1" y="193.0" class="lns-marker-heart"/>
       <text x="682.1" y="177.0" text-anchor="middle" class="lns-marker-label">Barrington, IL</text>
     </a>
-    <a href="#stop-nashville" class="lns-marker" aria-label="Nashville, TN: Kick Ass Needlepoint">
+    <a href="#stop-nashville" class="lns-marker" aria-label="Nashville, TN: Kick Ass Needlepoint & The Stitching Belle">
       <use href="#lnsHexBig" x="690.5" y="319.0" class="hx-marker"/>
       <use href="#lnsHeart" x="690.5" y="319.0" class="lns-marker-heart"/>
       <text x="692.5" y="350.0" text-anchor="middle" class="lns-marker-label">Nashville, TN</text>
@@ -941,6 +940,11 @@
       <use href="#lnsHexBig" x="804.8" y="265.0" class="hx-marker"/>
       <use href="#lnsHeart" x="804.8" y="265.0" class="lns-marker-heart"/>
       <text x="806.8" y="249.0" text-anchor="middle" class="lns-marker-label">Bridgeport, WV</text>
+    </a>
+    <a href="#stop-chapel-hill" class="lns-marker" aria-label="Chapel Hill, NC: Elizabeth Brooke">
+      <use href="#lnsHexBig" x="825.6" y="337.0" class="hx-marker"/>
+      <use href="#lnsHeart" x="825.6" y="337.0" class="lns-marker-heart"/>
+      <text x="845.6" y="345.0" text-anchor="start" class="lns-marker-label">Chapel Hill, NC</text>
     </a>
     <a href="#stop-maplewood" class="lns-marker" aria-label="Maplewood, NJ: Mrs. Meshugga Needlepoint Shop">
       <use href="#lnsHexBig" x="908.7" y="229.0" class="hx-marker"/>
@@ -966,6 +970,13 @@
                     <h3 class="lns-card-name">Barbara's Needlepoint</h3>
                     <p class="lns-card-addr">1708 S Western Ave Unit 1<br>Sioux Falls, SD 57105</p>
                     <a href="http://www.barbarasneedlepoint.com/" target="_blank" rel="noopener noreferrer" class="lns-card-link">Visit Site</a>
+                </div>
+                <div class="lns-shop-card" data-city="chapel-hill" id="stop-chapel-hill">
+                    <img class="lns-card-logo" src="images/lns/elizabeth-brooke.webp" alt="" loading="lazy">
+                    <p class="lns-card-city">Chapel Hill, NC</p>
+                    <h3 class="lns-card-name">Elizabeth Brooke</h3>
+                    <p class="lns-card-addr">900 Willow Drive Suite 107<br>Chapel Hill, NC 27514</p>
+                    <a href="https://shopelizabethbrooke.com/" target="_blank" rel="noopener noreferrer" class="lns-card-link">Visit Site</a>
                 </div>
                 <div class="lns-shop-card" data-city="bridgeport" id="stop-bridgeport">
                     <img class="lns-card-logo" src="images/lns/honeysuckle.webp" alt="" loading="lazy">
@@ -1022,6 +1033,13 @@
                     <h3 class="lns-card-name">The Pepper Pot</h3>
                     <p class="lns-card-addr">Icehouse Mall, 200 Applebee St<br>Barrington, IL 60010</p>
                     <a href="https://thepepperpot.co/" target="_blank" rel="noopener noreferrer" class="lns-card-link">Visit Site</a>
+                </div>
+                <div class="lns-shop-card" data-city="nashville" id="shop-stitching-belle">
+                    <img class="lns-card-logo" src="images/lns/stitching-belle.webp" alt="" loading="lazy">
+                    <p class="lns-card-city">Nashville, TN</p>
+                    <h3 class="lns-card-name">The Stitching Belle</h3>
+                    <p class="lns-card-addr">3518 Nebraska Ave<br>Nashville, TN 37205</p>
+                    <a href="https://thestitchingbelle.com/" target="_blank" rel="noopener noreferrer" class="lns-card-link">Visit Site</a>
                 </div>
                 <div class="lns-shop-card" data-city="denver" id="stop-denver">
                     <img class="lns-card-logo" src="images/lns/sunny-stitches.webp" alt="" loading="lazy">
@@ -1103,8 +1121,12 @@
                 { name: 'The Pepper Pot', addr: 'Icehouse Mall, 200 Applebee St, Barrington, IL 60010', url: 'https://thepepperpot.co/', logo: 'images/lns/pepper-pot.webp' }
             ]},
             'nashville': { city: 'Nashville, TN', geo: { d: 'M6.6 9.7L8.2 8.0L7.1 6.1L9.0 6.1L8.0 5.3L9.2 4.3L8.9 2.6L26.0 2.6L25.9 0.0L28.3 0.6L43.9 0.4L76.4 1.4L100.0 0.9L98.9 3.9L99.3 4.8L97.0 5.4L95.6 7.8L94.4 8.1L93.5 7.4L91.9 8.0L89.5 10.3L88.6 8.7L86.4 10.8L85.4 10.7L84.5 12.9L82.6 13.0L78.8 15.8L74.2 16.5L72.6 18.1L72.6 19.6L69.5 20.7L69.1 24.1L0.0 24.0L2.8 21.9L1.7 19.7L2.7 18.4L1.5 18.5L1.6 17.9L2.6 17.1L2.9 18.2L3.2 16.0L4.5 16.6L4.2 15.3L5.3 14.8L4.0 13.6L7.0 12.0L6.2 11.6L6.5 11.0L7.5 11.3L6.6 9.7Z', w: 100, h: 24.1, x: 39.8, y: 7.8, coords: '36.13° N · 86.86° W' }, shops: [
-                { name: 'Kick Ass Needlepoint', addr: '850 Hillwood Blvd #6, Nashville, TN 37209', url: 'https://www.kickassneedlepoint.com/', logo: 'images/lns/kick-ass.webp' }
+                { name: 'Kick Ass Needlepoint', addr: '850 Hillwood Blvd #6, Nashville, TN 37209', url: 'https://www.kickassneedlepoint.com/', logo: 'images/lns/kick-ass.webp' },
+                { name: 'The Stitching Belle', addr: '3518 Nebraska Ave, Nashville, TN 37205', url: 'https://thestitchingbelle.com/', logo: 'images/lns/stitching-belle.webp' }
             ]},
+            'chapel-hill': { city: 'Chapel Hill, NC', geo: { d: 'M38.8 0.4L46.8 0.6L55.9 0.7L98.2 0.5L99.6 6.2L96.3 5.7L91.9 7.2L88.7 8.3L92.0 8.6L96.0 8.5L97.1 9.8L99.2 9.3L100.0 12.7L99.3 14.3L97.9 14.5L95.0 18.0L91.1 18.2L90.5 20.6L92.1 23.0L93.4 23.5L91.0 27.4L88.9 27.0L85.2 27.3L82.6 28.2L78.6 30.9L75.4 34.5L73.8 39.0L71.4 38.0L67.2 39.0L54.0 25.4L40.9 25.2L41.1 23.5L39.3 21.1L38.1 22.0L38.1 20.5L23.7 19.8L20.6 20.3L18.1 21.7L14.1 22.6L8.1 22.8L0.0 22.8L0.3 19.4L2.6 19.1L3.5 16.8L6.4 14.6L9.5 14.6L12.4 12.4L15.4 11.6L18.0 8.4L19.5 7.5L19.9 8.9L24.4 6.2L26.5 6.7L28.0 4.1L30.2 3.4L30.7 0.0L38.8 0.4Z', w: 100, h: 39, x: 61.5, y: 9.4, coords: '35.93° N · 79.03° W' }, shops: [
+                { name: 'Elizabeth Brooke', addr: '900 Willow Drive Suite 107, Chapel Hill, NC 27514', url: 'https://shopelizabethbrooke.com/', logo: 'images/lns/elizabeth-brooke.webp' }
+            ] },
             'atlanta': { city: 'Atlanta, GA', geo: { d: 'M45.3 0.0L41.4 4.6L41.1 6.8L47.1 11.4L49.0 11.1L51.8 15.8L52.4 18.3L55.3 22.8L59.5 25.5L61.8 29.5L66.7 33.1L66.5 35.6L69.7 39.6L74.5 42.9L75.7 46.5L75.9 51.1L78.4 52.6L81.3 58.4L81.4 62.0L85.6 63.9L81.1 71.2L80.3 75.0L78.4 78.3L78.2 81.7L76.2 83.3L75.4 92.5L70.5 91.6L66.3 89.9L64.6 91.5L65.3 95.5L64.5 99.9L62.3 100.0L61.4 95.4L38.2 93.7L13.4 92.3L10.9 86.1L8.9 80.2L10.2 74.5L8.4 68.0L10.0 64.4L9.9 61.7L13.0 59.0L10.9 57.7L11.7 55.5L9.7 52.1L7.6 46.1L3.2 18.9L0.0 0.4L23.3 0.2L36.0 0.4Z', w: 85.6, h: 100, x: 22.2, y: 23.1, coords: '33.93° N · 84.38° W' }, shops: [
                 { name: 'The Nimble Needle', addr: '206B Johnson Ferry Rd, Atlanta, GA 30328', url: 'https://www.atlantanimbleneedle.com/', logo: 'images/lns/nimble-needle.webp' }
             ]},
