@@ -213,6 +213,11 @@
     container-type: inline-size;
 }
 
+/* After launch only the CTA remains, so hug it and keep the giving note close. */
+@media (min-width: 701px) {
+    .mainstage-launch:has(> [data-mainstage-callout][hidden]) { width: auto; container-type: normal; }
+}
+
 .mainstage-feature [hidden] { display: none; }
 
 /* A hand-painted show flyer with one compact date lockup. */
