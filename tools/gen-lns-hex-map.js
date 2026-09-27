@@ -89,6 +89,7 @@ const OUTLINE = [
 
 // --- Shops ---
 const SHOPS = [
+  { name: "Cotswold Needlepoint", url: "https://cotswoldneedlepoint.com/", addr: "16930 W Catawba Ave Suite 103, Cornelius, NC 28031", city: "Cornelius", state: "NC", lat: 35.447294, lon: -80.892458 },
   { name: "Angel City Stitchery", url: "https://www.angelcitystitchery.com/", addr: "13347 Washington Blvd Ste B, Los Angeles, CA 90066", city: "Los Angeles", state: "CA", lat: 33.9926, lon: -118.4436 },
   { name: "Sunny Stitches", url: "http://www.sunnystitchesdenver.com/", addr: "1927 E Kentucky Ave, Denver, CO 80209", city: "Denver", state: "CO", lat: 39.692, lon: -104.973 },
   { name: "The Needle Works", url: "http://theneedleworks.com/", addr: "4401 Medical Pkwy, Austin, TX 78756", city: "Austin", state: "TX", lat: 30.3078, lon: -97.7387 },
@@ -198,6 +199,7 @@ const LABELS = {
   "Kansas City": { dx: 21,  dy: 12,  anchor: "start" },
   "Barrington":  { dx: 2,   dy: -20, anchor: "middle" },
   "Nashville":   { dx: 2,   dy: 27,  anchor: "middle" },
+  "Cornelius":   { dx: 0,   dy: -20, anchor: "middle" },
   "Chapel Hill": { dx: 20,  dy: 4,   anchor: "start" },
   "Atlanta":     { dx: 20,  dy: 8,   anchor: "start" },
   "Bridgeport":  { dx: 2,   dy: -20, anchor: "middle" },
