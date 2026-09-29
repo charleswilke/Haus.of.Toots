@@ -1,4 +1,68 @@
 /* Homepage launch feature. Keep these styles separate from the shared heroes. */
+.mobile-tagline {
+    display: none;
+}
+
+/* A little stitched label beneath the compact navigation. */
+@media (max-width: 808px) {
+    .mobile-tagline {
+        display: block;
+        height: 0;
+    }
+
+    .mobile-tagline.is-cart-empty {
+        height: var(--tagline-height, 42px);
+    }
+
+    .mobile-tagline-label {
+        position: fixed;
+        top: var(--tagline-nav-bottom, 60px);
+        left: 16px;
+        right: 16px;
+        z-index: 999;
+        margin: 0;
+        padding: 0.75rem 0.75rem;
+        border: 1px solid rgba(232, 85, 99, 0.3);
+        border-top: 0;
+        border-radius: 0 0 18px 18px;
+        background: var(--coral-primary);
+        color: #fff1df;
+        text-align: center;
+        font-family: var(--font-body);
+        font-weight: 500;
+        font-size: clamp(0.625rem, 3.4vw, 1rem);
+        letter-spacing: 0.035em;
+        line-height: 1.25;
+        white-space: nowrap;
+        box-shadow: 0 3px 0 rgba(255, 107, 122, 0.16);
+        transform: translateY(-105%);
+        opacity: 0;
+        visibility: hidden;
+        transition: transform 0.3s ease, opacity 0.2s ease, visibility 0.3s;
+    }
+
+    .mobile-tagline.is-visible .mobile-tagline-label {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .mobile-tagline-label::after {
+        content: '';
+        position: absolute;
+        inset: 4px;
+        border: 1px dashed rgba(255, 241, 223, 0.65);
+        border-top: 0;
+        border-radius: 0 0 14px 14px;
+        pointer-events: none;
+    }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mobile-tagline-label { transition: none; }
+}
+
 .mainstage-hero {
     --mainstage-ink: #174f54;
     --mainstage-accent: #3e214d;

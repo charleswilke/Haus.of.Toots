@@ -1,3 +1,35 @@
+// The homepage label peeks out only at the top, leaving the cart tab priority.
+document.addEventListener('DOMContentLoaded', () => {
+    const tagline = document.querySelector('.mobile-tagline');
+    const nav = document.querySelector('.top-nav');
+    if (!tagline || !nav || typeof cartManager === 'undefined') return;
+
+    const mobile = matchMedia('(max-width: 808px)');
+    const label = tagline.querySelector('.mobile-tagline-label');
+    function updateVisibility() {
+        const empty = cartManager.getTotalItems() === 0;
+        const visible = mobile.matches && empty && window.scrollY <= 4;
+        tagline.classList.toggle('is-cart-empty', empty);
+        tagline.classList.toggle('is-visible', visible);
+        tagline.setAttribute('aria-hidden', String(!visible));
+    }
+
+    function updateDimensions() {
+        tagline.style.setProperty('--tagline-nav-bottom', `${nav.getBoundingClientRect().bottom}px`);
+        tagline.style.setProperty('--tagline-height', `${label.getBoundingClientRect().height}px`);
+    }
+
+    const resizeObserver = new ResizeObserver(updateDimensions);
+    resizeObserver.observe(nav);
+    resizeObserver.observe(label);
+    window.addEventListener('scroll', updateVisibility, { passive: true });
+    window.addEventListener('pageshow', updateVisibility);
+    mobile.addEventListener('change', updateVisibility);
+    cartManager.subscribe(updateVisibility);
+    updateDimensions();
+    updateVisibility();
+});
+
 // Keep spark placement tied to the actual glow cycle, without a separate timer.
 (() => {
     const wordmark = document.querySelector('svg.mainstage-wordmark');
