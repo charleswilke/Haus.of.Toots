@@ -282,13 +282,19 @@ ShippingNotice.applyHomepage();
  */
 window.applyMasonry = function applyMasonry(grid) {
     if (!grid) return;
+    // Hold the grid's height while it is rebuilt; collapsing it for even one
+    // layout clamps the page's scroll position back toward the top.
+    grid.style.minHeight = `${grid.offsetHeight}px`;
     const cards = Array.from(grid.children).filter(c => !c.classList.contains('masonry-column'));
     // Flatten any prior column wrappers (preserve original order)
     grid.querySelectorAll(':scope > .masonry-column').forEach(col => {
         Array.from(col.children).forEach(child => cards.push(child));
         col.remove();
     });
-    if (cards.length === 0) return;
+    if (cards.length === 0) {
+        grid.style.minHeight = '';
+        return;
+    }
 
     // Tag with original order so re-runs (e.g. after images load) keep the sort.
     cards.forEach((card, i) => {
@@ -322,6 +328,7 @@ window.applyMasonry = function applyMasonry(grid) {
         }
         shortest.appendChild(card);
     });
+    grid.style.minHeight = '';
 
     // Re-balance once images settle, since card heights aren't final until then.
     const imgs = grid.querySelectorAll('img');
@@ -339,7 +346,12 @@ window.applyMasonry = function applyMasonry(grid) {
 };
 
 let __masonryResizeTimer;
+let __masonryWidth = window.innerWidth;
 window.addEventListener('resize', () => {
+    // Mobile browsers fire resize as the URL bar shows and hides while scrolling;
+    // only a width change can alter the column layout.
+    if (window.innerWidth === __masonryWidth) return;
+    __masonryWidth = window.innerWidth;
     clearTimeout(__masonryResizeTimer);
     __masonryResizeTimer = setTimeout(() => {
         document.querySelectorAll('.products-grid').forEach(g => window.applyMasonry(g));
