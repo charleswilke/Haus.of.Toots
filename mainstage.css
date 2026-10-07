@@ -73,6 +73,7 @@
 .mainstage-feature {
     position: relative;
     isolation: isolate;
+    text-decoration: none;
     display: grid;
     grid-template-columns: 52% 48%;
     grid-template-areas: "copy art" "actions art";
@@ -402,8 +403,8 @@
     transition: filter 160ms ease, transform 160ms ease;
 }
 
-.mainstage-cta:hover { filter: brightness(1.12); color: #f5efe4; transform: translateY(-2px); }
-.mainstage-cta:focus-visible { outline: 3px solid #242457; outline-offset: 4px; }
+.mainstage-feature[href]:hover .mainstage-cta { filter: brightness(1.12); color: #f5efe4; transform: translateY(-2px); }
+.mainstage-feature:focus-visible { outline: 3px solid #242457; outline-offset: 4px; }
 .mainstage-cta span { font-size: 1.3rem; }
 .mainstage-giving { margin: 0; font-size: 0.8rem; line-height: 1.35; font-weight: 400; }
 

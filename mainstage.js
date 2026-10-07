@@ -108,6 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const launchAt = Date.parse('2026-09-22T11:00:00-05:00');
     const callout = launch.querySelector('[data-mainstage-callout]');
     const link = launch.querySelector('[data-mainstage-link]');
+    const collectionLink = launch.closest('a.mainstage-feature') || link;
     const afterLaunch = document.querySelectorAll('[data-mainstage-after-launch]');
     let timer;
 
@@ -120,9 +121,9 @@ document.addEventListener('DOMContentLoaded', () => {
         afterLaunch.forEach(element => { element.hidden = !launched; });
 
         if (launched) {
-            link.href = 'main-stage-collection.html';
+            collectionLink.href = 'main-stage-collection.html';
         } else {
-            link.removeAttribute('href');
+            collectionLink.removeAttribute('href');
             // Recheck the clock each minute, with an exact timer at the cutoff.
             timer = setTimeout(updateLaunch, Math.min(remaining, 60_000));
         }

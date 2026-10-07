@@ -10,7 +10,7 @@ import { copyFileSync, cpSync, mkdirSync, readdirSync, rmSync } from 'node:fs';
 const copyOpts = { recursive: true, filter: src => !src.endsWith('.DS_Store') };
 
 const dist = 'dist';
-const skipDirs = new Set(['dist', 'api', 'docs', '_archived', 'node_modules', 'images']);
+const skipDirs = new Set(['dist', 'api', 'docs', '_archived', 'node_modules', 'images', 'tests']);
 const skipFiles = new Set(['build.mjs', 'package.json', 'package-lock.json', 'vercel.json', 'HausOfToots.code-workspace']);
 
 rmSync(dist, { recursive: true, force: true });

@@ -507,7 +507,8 @@ class ShopApp {
 
         // Close on Escape key
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && productModal.classList.contains('open')) {
+            if (e.key === 'Escape' && productModal.classList.contains('open') &&
+                !document.getElementById('imageLightbox').classList.contains('open')) {
                 this.closeProductModal();
             }
         });
@@ -661,7 +662,9 @@ class ShopApp {
     closeLightbox() {
         const lightbox = document.getElementById('imageLightbox');
         lightbox.classList.remove('open');
-        document.body.style.overflow = '';
+        if (!document.getElementById('productModal').classList.contains('open')) {
+            document.body.style.overflow = '';
+        }
     }
 
     /**
@@ -1194,6 +1197,7 @@ class ShopApp {
 
         clearTimeout(this.productModalCloseTimeout);
         this.activeModalProductId = productId;
+        const request = this.productModalRequest = Symbol();
 
         // The grid already holds everything the modal needs except the
         // description and any extra gallery images, so paint from that
@@ -1213,7 +1217,7 @@ class ShopApp {
             const product = await shopifyClient.getProductById(productId);
             // The user may have closed this modal or opened another product
             // while the fetch was in flight.
-            if (this.activeModalProductId !== productId || !productModal.classList.contains('open')) return;
+            if (this.productModalRequest !== request || !productModal.classList.contains('open')) return;
             if (listed) {
                 this.hydrateProductModal(listed, product);
             } else {
@@ -1221,6 +1225,7 @@ class ShopApp {
             }
         } catch (error) {
             console.error('Error loading product:', error);
+            if (this.productModalRequest !== request || !productModal.classList.contains('open')) return;
             if (!listed) {
                 modalBody.innerHTML = '<div class="product-detail-loading">Error loading product details. Please try again.</div>';
             }
@@ -1278,6 +1283,9 @@ class ShopApp {
         const productModal = document.getElementById('productModal');
         const modalBody = document.getElementById('productModalBody');
 
+        this.activeModalProductId = null;
+        this.productModalRequest = null;
+        this.closeLightbox();
         productModal.classList.remove('open');
         document.body.style.overflow = '';
         this.scheduleProductModalScrollbarUpdate();

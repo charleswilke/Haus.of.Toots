@@ -479,45 +479,41 @@ const navToggle = document.getElementById('navToggle');
 const navLinksContainer = document.getElementById('navLinks');
 
 if (navToggle && navLinksContainer) {
+    function closeNavMenu() {
+        if (!navLinksContainer.classList.contains('active')) return;
+        navToggle.setAttribute('aria-expanded', 'false');
+        navLinksContainer.classList.remove('active');
+        const overlayOpen = document.querySelector(
+            '#productModal.open, #imageLightbox.open, .card-gallery-overlay.active:not(.card-gallery-inline)'
+        );
+        if (!overlayOpen) document.body.style.overflow = '';
+    }
+
     navToggle.addEventListener('click', () => {
-        const isExpanded = navToggle.getAttribute('aria-expanded') === 'true';
-        navToggle.setAttribute('aria-expanded', !isExpanded);
-        navLinksContainer.classList.toggle('active');
-        
-        // Prevent body scroll when menu is open
-        if (!isExpanded) {
-            document.body.style.overflow = 'hidden';
+        if (navLinksContainer.classList.contains('active')) {
+            closeNavMenu();
         } else {
-            document.body.style.overflow = '';
+            navToggle.setAttribute('aria-expanded', 'true');
+            navLinksContainer.classList.add('active');
+            document.body.style.overflow = 'hidden';
         }
     });
-    
-    // Close menu when clicking on a link or cart button
+
     navLinksContainer.querySelectorAll('.nav-link').forEach(element => {
-        element.addEventListener('click', () => {
-            navToggle.setAttribute('aria-expanded', 'false');
-            navLinksContainer.classList.remove('active');
-            document.body.style.overflow = '';
-        });
+        element.addEventListener('click', closeNavMenu);
     });
-    
-    // Close menu when clicking outside
+
     document.addEventListener('click', (e) => {
         if (!navToggle.contains(e.target) && !navLinksContainer.contains(e.target)) {
-            if (navLinksContainer.classList.contains('active')) {
-                navToggle.setAttribute('aria-expanded', 'false');
-                navLinksContainer.classList.remove('active');
-                document.body.style.overflow = '';
-            }
+            closeNavMenu();
         }
     });
-    
-    // Close menu on window resize if it's larger than 768px
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeNavMenu();
+    });
+
     window.addEventListener('resize', () => {
-        if (window.innerWidth > 808) {
-            navToggle.setAttribute('aria-expanded', 'false');
-            navLinksContainer.classList.remove('active');
-            document.body.style.overflow = '';
-        }
+        if (window.innerWidth > 808) closeNavMenu();
     });
 }

@@ -543,6 +543,7 @@ class CardGallery {
         
         // Listen for resize to switch modes or recalculate widths
         this.resizeTimeout = null;
+        this.layoutWidth = window.innerWidth;
         this.resizeHandler = () => {
             clearTimeout(this.resizeTimeout);
             this.resizeTimeout = setTimeout(() => {
@@ -566,6 +567,9 @@ class CardGallery {
     }
     
     handleResize() {
+        // Browser chrome and the mobile keyboard can resize only the height.
+        if (!this.isOpen || this.layoutWidth === window.innerWidth) return;
+        this.layoutWidth = window.innerWidth;
         const modeChanged = this.checkMasonryMode();
         if (modeChanged) {
             this.render();
@@ -1089,14 +1093,24 @@ class CardGallery {
 
         // Once every front image has loaded (or failed), rebalance by real heights
         const imgs = this.cardStack.querySelectorAll('.card-front .card-image');
+        const renderedColumn = columns[0];
         let pending = imgs.length;
         const done = () => {
             pending--;
-            if (pending === 0) this.balanceMasonryColumns();
+            if (pending === 0 && this.cardStack.contains(renderedColumn)) this.balanceMasonryColumns();
         };
         imgs.forEach(img => {
-            img.addEventListener('load', done, { once: true });
-            img.addEventListener('error', done, { once: true });
+            if (img.complete) {
+                done();
+                return;
+            }
+            const settled = () => {
+                img.removeEventListener('load', settled);
+                img.removeEventListener('error', settled);
+                done();
+            };
+            img.addEventListener('load', settled, { once: true });
+            img.addEventListener('error', settled, { once: true });
         });
     }
 
