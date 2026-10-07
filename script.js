@@ -31,24 +31,116 @@ function swapInStitchLogo() {
 
 class ScrollStitchSidebar {
     constructor() {
-        this.stitchProgress = document.getElementById('stitchProgress');
-        this.needle = document.getElementById('needle');
-        this.enabled = !!(this.stitchProgress && this.needle);
+        this.svg = document.querySelector('.stitch-line');
+        this.group = this.svg?.querySelector('.sidebar-stitches');
+        this.enabled = !!this.group;
         this.maxProgress = 0;
+        this.lastProgress = 0;
+        this.stitchDuration = 480;
+        this.lastStart = -Infinity;
+        this.stitches = [];
+        this.active = new Set();
+        this.frame = null;
+        this.motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        if (!this.enabled) return;
+
+        this.resize();
+        window.addEventListener('resize', () => {
+            this.resize();
+            updateScrollStitch();
+        });
+        this.motion.addEventListener('change', () => {
+            if (this.motion.matches) this.finishActive();
+        });
     }
-    
-    update(scrollPercent) {
-        if (!this.enabled || !Number.isFinite(scrollPercent)) {
-            return;
+
+    resize() {
+        this.finishActive();
+        const completed = this.stitches.filter(stitch => stitch.started).length;
+        const { width, height } = this.svg.getBoundingClientRect();
+        const headerBottom = document.querySelector('.top-nav')?.getBoundingClientRect().bottom || 0;
+        const startY = Math.max(4, headerBottom + 12);
+        this.svg.setAttribute('viewBox', `0 0 ${width || 25} ${height || 1}`);
+        this.group.replaceChildren();
+        this.stitches = [];
+        // Give every stitch its own endpoints and room for the rounded caps.
+        // A repeated pattern clipped at the scroll edge cuts stitches in half.
+        const count = Math.max(0, Math.floor((height - startY - 8) / 8.4));
+        const ns = 'http://www.w3.org/2000/svg';
+        for (let i = 0; i < count; i++) {
+            const paths = ['sidebar-stitch', 'sidebar-stitch-highlight'].map(className => {
+                const path = document.createElementNS(ns, 'path');
+                path.setAttribute('class', className);
+                path.setAttribute('pathLength', '1');
+                path.setAttribute('stroke-dasharray', '1 1');
+                path.setAttribute('stroke-dashoffset', '1');
+                path.style.visibility = 'hidden';
+                this.group.appendChild(path);
+                return path;
+            });
+            const stitch = { paths, x: (width || 25) / 2, y: startY + i * 8.4, started: false };
+            this.stitches.push(stitch);
+            this.paint(stitch, 1);
         }
+        this.stitches.slice(0, completed).forEach(stitch => {
+            stitch.started = true;
+            this.paint(stitch, 1, true);
+        });
+    }
 
-        const boundedProgress = Math.min(Math.max(scrollPercent, 0), 1);
-        this.maxProgress = Math.max(this.maxProgress, boundedProgress);
-        this.stitchProgress.setAttribute('height', String(this.maxProgress * 1000));
+    paint(stitch, progress, visible = false) {
+        const { x, y } = stitch;
+        // Start at the lower left hole. The loose thread bows outward, then
+        // pulls straight between the holes after the tip reaches the upper right.
+        const draw = Math.min(progress / 0.6, 1);
+        const pull = Math.max(0, (progress - 0.6) / 0.4);
+        const slack = Math.pow(1 - pull, 3);
+        const d = `M ${x - 3.36} ${y + 6.72} Q ${x + slack * 4} ${y + 3.36 + slack * 3} ${x + 3.36} ${y}`;
+        stitch.paths.forEach(path => {
+            path.setAttribute('d', d);
+            path.setAttribute('stroke-dashoffset', String(1 - draw));
+            path.style.visibility = visible ? 'visible' : 'hidden';
+        });
+    }
 
-        const needleY = boundedProgress * 1000;
-        this.needle.setAttribute('transform', `translate(30, ${needleY})`);
-        this.needle.style.opacity = boundedProgress > 0 ? '1' : '0';
+    finishActive() {
+        if (this.frame !== null) cancelAnimationFrame(this.frame);
+        this.frame = null;
+        this.active.forEach(stitch => this.paint(stitch, 1, true));
+        this.active.clear();
+    }
+
+    update(scrollPercent) {
+        if (!this.enabled || !Number.isFinite(scrollPercent)) return;
+        const progress = Math.min(Math.max(scrollPercent, 0), 1);
+        const movingDown = progress > this.lastProgress;
+        this.lastProgress = progress;
+        this.maxProgress = Math.max(this.maxProgress, progress);
+        const now = performance.now();
+        // Scroll distance only sets the available canvas. Time spent scrolling
+        // earns stitches: no backlog and no automatic catch-up after stopping.
+        if (!movingDown || this.active.size || now - this.lastStart < this.stitchDuration) return;
+        const count = Math.floor(this.maxProgress * this.stitches.length);
+        const stitch = this.stitches.slice(0, count).find(stitch => !stitch.started);
+        if (!stitch) return;
+        stitch.started = true;
+        stitch.start = now;
+        this.lastStart = now;
+        if (this.motion.matches) {
+            this.paint(stitch, 1, true);
+        } else {
+            this.active.add(stitch);
+            this.frame = requestAnimationFrame(time => this.animate(time));
+        }
+    }
+
+    animate(time) {
+        this.active.forEach(stitch => {
+            const progress = Math.min(Math.max((time - stitch.start) / this.stitchDuration, 0), 1);
+            this.paint(stitch, progress, time >= stitch.start);
+            if (progress === 1) this.active.delete(stitch);
+        });
+        this.frame = this.active.size ? requestAnimationFrame(next => this.animate(next)) : null;
     }
 }
 

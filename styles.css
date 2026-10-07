@@ -181,13 +181,20 @@ section {
     height: 100%;
 }
 
-.stitch-thread {
-    filter: drop-shadow(0.5px 1px 1.5px rgba(0, 0, 0, 0.25)) drop-shadow(-0.5px 0 0.5px rgba(255, 255, 255, 0.3));
+.sidebar-stitch {
+    fill: none;
+    stroke: url(#threadGradient);
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    filter: drop-shadow(0.4px 0.7px 0.5px rgba(106, 48, 56, 0.22));
 }
 
-#needle {
-    opacity: 0;
-    transition: opacity 0.3s ease;
+.sidebar-stitch-highlight {
+    fill: none;
+    stroke: rgba(255, 235, 228, 0.55);
+    stroke-width: 0.65;
+    stroke-linecap: round;
+    transform: translate(-0.35px, -0.35px);
 }
 
 /* ===================================

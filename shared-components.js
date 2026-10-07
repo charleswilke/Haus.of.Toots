@@ -133,7 +133,7 @@ const SharedComponents = {
     stitchSidebar() {
         return `
     <div class="stitch-sidebar">
-        <svg class="stitch-line" viewBox="0 0 60 1000" preserveAspectRatio="xMidYMid slice">
+        <svg class="stitch-line" aria-hidden="true" focusable="false">
             <defs>
                 <linearGradient id="threadGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" style="stop-color:#FFAAB5;stop-opacity:1" />
@@ -142,19 +142,8 @@ const SharedComponents = {
                     <stop offset="75%" style="stop-color:#E85563;stop-opacity:1" />
                     <stop offset="100%" style="stop-color:#D04552;stop-opacity:1" />
                 </linearGradient>
-                <pattern id="stitchPattern" width="60" height="6.72" patternUnits="userSpaceOnUse">
-                    <line x1="26.64" y1="6.72" x2="33.36" y2="0" stroke="url(#threadGradient)" stroke-width="3" stroke-linecap="round" />
-                </pattern>
-                <clipPath id="stitchClip">
-                    <rect id="stitchProgress" x="0" y="0" width="60" height="0" />
-                </clipPath>
             </defs>
-            <rect class="stitch-thread" x="0" y="0" width="60" height="1000" fill="url(#stitchPattern)" clip-path="url(#stitchClip)" />
-            <g id="needle" transform="translate(30, 0)">
-                <line x1="-8" y1="-15" x2="8" y2="-15" stroke="#FF6B7A" stroke-width="3" stroke-linecap="round"/>
-                <path d="M 0 -15 L 0 5" stroke="#C0C0C0" stroke-width="2"/>
-                <circle cx="0" cy="-18" r="2" fill="#C0C0C0"/>
-            </g>
+            <g class="sidebar-stitches"></g>
         </svg>
     </div>`;
     },
