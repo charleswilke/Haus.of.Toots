@@ -264,20 +264,15 @@ const SharedComponents = {
 SharedComponents.injectAll();
 ShippingNotice.applyHomepage();
 
-// Carry the body canvas grid through the footer and put the thread endpoints
-// on neighboring holes. Re-align when products/images change the page height.
+// Carry the body canvas grid through the footer as page height changes.
+// The stitch row itself stays anchored to the footer edge in CSS.
 const stitchFooter = document.querySelector('.site-footer');
 if (stitchFooter) {
     const alignFooterStitches = () => {
         const tileHeight = 500;
-        const holeSpacing = tileHeight / 69;
-        const holePhase = 0.7154 * tileHeight / 509;
         const footerY = stitchFooter.getBoundingClientRect().top + window.scrollY;
         const tileY = ((footerY % tileHeight) + tileHeight) % tileHeight;
-        const upperHole = holePhase + Math.floor((tileY - holePhase) / holeSpacing) * holeSpacing;
         stitchFooter.style.setProperty('--footer-canvas-offset', `${-tileY}px`);
-        // At the slimmer 9px tile height, the upper endpoint sits 1.5px down.
-        stitchFooter.style.setProperty('--footer-stitch-top', `${upperHole - tileY - 1.5}px`);
     };
     alignFooterStitches();
     const footerCanvasObserver = new ResizeObserver(alignFooterStitches);

@@ -1492,7 +1492,8 @@ svg.hero-logo .logo-smoke {
 
 .footer-stitch-seam {
     position: absolute;
-    top: calc(var(--footer-stitch-top, -6px) - 2px);
+    /* Anchor the seam to the footer edge, independent of page-height changes. */
+    top: -4px;
     left: 0;
     width: 100%;
     height: 9px;
