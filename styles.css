@@ -1482,6 +1482,7 @@ svg.hero-logo .logo-smoke {
         linear-gradient(rgba(74, 69, 66, 0.88), rgba(74, 69, 66, 0.88)),
         url('images/haus_of_toots_canvas_13ct_512px.webp') repeat;
     background-size: auto, 512px 500px;
+    background-position: 0 0, 0 var(--footer-canvas-offset, 0px);
     color: var(--cream);
     padding: var(--spacing-lg) 0 var(--spacing-md);
     padding-top: calc(var(--spacing-lg) + 12px);
@@ -1491,14 +1492,18 @@ svg.hero-logo .logo-smoke {
 
 .footer-stitch-seam {
     position: absolute;
-    top: -4px;
+    top: calc(var(--footer-stitch-top, -6px) - 2px);
     left: 0;
     width: 100%;
-    height: 8px;
+    height: 9px;
     z-index: 1;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='8' viewBox='0 0 6 8'%3E%3Cline x1='0' y1='7' x2='6' y2='1' stroke='%23FF6B7A' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E");
+    pointer-events: none;
+    /* Match the canvas tile: 69 holes across 512px, anchored at the left. */
+    background-image: url('images/footer-stitches.svg?v=20261007b');
     background-repeat: repeat-x;
-    background-size: 6px 8px;
+    background-position: 5px 0;
+    background-size: 512px 9px;
+    filter: drop-shadow(0.4px 0.7px 0.5px rgba(106, 48, 56, 0.22));
 }
 
 .footer-content {
