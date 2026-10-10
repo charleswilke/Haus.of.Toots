@@ -104,6 +104,8 @@ const SHOPS = [
   { name: "The Nimble Needle", url: "https://www.atlantanimbleneedle.com/", addr: "206B Johnson Ferry Rd, Atlanta, GA 30328", city: "Atlanta", state: "GA", lat: 33.926, lon: -84.382 },
   { name: "Honeysuckle Needlepoint", url: null, addr: "102 Hill St, Bridgeport, WV 26330", city: "Bridgeport", state: "WV", lat: 39.2865, lon: -80.256 },
   { name: "Mrs. Meshugga Needlepoint Shop", url: "https://mrsmeshugga.com/", addr: "1875 Springfield Ave, Maplewood, NJ 07040", city: "Maplewood", state: "NJ", lat: 40.729, lon: -74.2735 },
+  { name: "What's the Point Needlepoint", url: "https://whatsthepoint.biz/", addr: "126 S. High St, Dublin, OH 43017", city: "Dublin", state: "OH", lat: 40.098, lon: -83.114 },
+  { name: "When Pigs Fly Needlepoint", url: "https://whenpigsflyndlpt.com/password", addr: "Cincinnati, OH", city: "Cincinnati", state: "OH", lat: 39.1031, lon: -84.512 },
 ];
 
 // --- Projection: plate carrée scaled by cos(38.5°) on x ---
@@ -189,21 +191,26 @@ for (const c of cities) {
 cities.sort((a, b) => a.lon - b.lon);
 
 // --- Label placement (dx, dy relative to marker, anchor) ---
+// Offsets place the city baseline directly; the state sits 12 units below.
+// Side labels center the two-line block beside the heart. Above/below
+// labels leave a small, consistent gap from the edge of the hex.
 const LABELS = {
-  "Los Angeles": { dx: 20,  dy: 4,   anchor: "start" },
-  "Denver":      { dx: 0,   dy: -20, anchor: "middle" },
-  "Austin":      { dx: 4,   dy: 26,  anchor: "middle" },
-  "Dallas":      { dx: 20,  dy: 4,   anchor: "start" },
-  "Sioux Falls": { dx: 2,   dy: -20, anchor: "middle" },
-  "Omaha":       { dx: 21,  dy: -8,  anchor: "start" },
-  "Kansas City": { dx: 21,  dy: 12,  anchor: "start" },
-  "Barrington":  { dx: 2,   dy: -20, anchor: "middle" },
-  "Nashville":   { dx: 2,   dy: 27,  anchor: "middle" },
-  "Cornelius":   { dx: 0,   dy: -20, anchor: "middle" },
-  "Chapel Hill": { dx: 20,  dy: 4,   anchor: "start" },
-  "Atlanta":     { dx: 20,  dy: 8,   anchor: "start" },
-  "Bridgeport":  { dx: 2,   dy: -20, anchor: "middle" },
-  "Maplewood":   { dx: 20,  dy: -6,  anchor: "start" },
+  "Dublin":      { dx: 0,   dy: -25, anchor: "middle" },
+  "Cincinnati":  { dx: -14, dy: -2,  anchor: "end" },
+  "Los Angeles": { dx: 14,  dy: -2,  anchor: "start" },
+  "Denver":      { dx: 0,   dy: -25, anchor: "middle" },
+  "Austin":      { dx: 0,   dy: 23,  anchor: "middle" },
+  "Dallas":      { dx: 14,  dy: -2,  anchor: "start" },
+  "Sioux Falls": { dx: 0,   dy: -25, anchor: "middle" },
+  "Omaha":       { dx: 14,  dy: -2,  anchor: "start" },
+  "Kansas City": { dx: 14,  dy: -2,  anchor: "start" },
+  "Barrington":  { dx: 0,   dy: -25, anchor: "middle" },
+  "Nashville":   { dx: 0,   dy: 23,  anchor: "middle" },
+  "Cornelius":   { dx: 0,   dy: -25, anchor: "middle" },
+  "Chapel Hill": { dx: 14,  dy: -2,  anchor: "start" },
+  "Atlanta":     { dx: 14,  dy: -2,  anchor: "start" },
+  "Bridgeport":  { dx: 14,  dy: -2,  anchor: "start" },
+  "Maplewood":   { dx: 14,  dy: -2,  anchor: "start" },
 };
 
 // --- Emit SVG ---
@@ -223,7 +230,7 @@ let svg = `<svg class="lns-map" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org
   <title id="lnsMapTitle">Hex-tile map of the lower 48 United States showing local needlepoint shops that carry Haus of Toots canvases</title>
   <defs>
     <polygon id="lnsHex" points="${hexPoints(R * 0.86)}"/>
-    <polygon id="lnsHexBig" points="${hexPoints(R * 1.2)}"/>
+    <polygon id="lnsHexBig" points="${hexPoints(R * 0.86)}"/>
     <path id="lnsHeart" d="M0,4.89 C-4.46,1.49 -5.95,-1.28 -4.25,-3.19 C-2.76,-4.76 -0.85,-4.17 0,-2.55 C0.85,-4.17 2.76,-4.76 4.25,-3.19 C5.95,-1.28 4.46,1.49 0,4.89 Z"/>
   </defs>
   <g class="lns-tiles">
@@ -239,10 +246,12 @@ for (const c of cities) {
   const lb = LABELS[c.city];
   const shopNames = c.shops.map(s => s.name).join(" & ");
   const slug = c.city.toLowerCase().replace(/\s+/g, "-");
+  const labelX = (c.hx + lb.dx).toFixed(1);
+  const labelY = (c.hy + lb.dy).toFixed(1);
   svg += `    <a href="#stop-${slug}" class="lns-marker" aria-label="${c.city}, ${c.state}: ${shopNames}">
       <use href="#lnsHexBig" x="${c.hx.toFixed(1)}" y="${c.hy.toFixed(1)}" class="hx-marker"/>
       <use href="#lnsHeart" x="${c.hx.toFixed(1)}" y="${c.hy.toFixed(1)}" class="lns-marker-heart"/>
-      <text x="${(c.hx + lb.dx).toFixed(1)}" y="${(c.hy + lb.dy + 4).toFixed(1)}" text-anchor="${lb.anchor}" class="lns-marker-label">${c.city}, ${c.state}</text>
+      <text x="${labelX}" y="${labelY}" text-anchor="${lb.anchor}" class="lns-marker-label"><tspan class="lns-marker-city">${c.city}</tspan><tspan x="${labelX}" dy="12" class="lns-marker-state">${c.state}</tspan></text>
     </a>\n`;
 }
 svg += `  </g>\n</svg>`;

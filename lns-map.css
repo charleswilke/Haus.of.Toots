@@ -82,8 +82,8 @@
 .hx-marker {
     fill: var(--coral-primary);
     stroke: var(--white);
-    stroke-width: 2;
-    filter: drop-shadow(0 3px 4px rgba(208, 69, 82, 0.35));
+    stroke-width: 1;
+    filter: drop-shadow(0 1px 2px rgba(208, 69, 82, 0.25));
     transition: fill 0.2s ease;
 }
 
@@ -100,13 +100,21 @@
 .lns-marker-label {
     font-family: var(--font-body);
     font-weight: 600;
-    font-size: 13.5px;
+    font-size: 12.5px;
     fill: var(--neutral-dark);
     stroke: var(--cream);
     stroke-width: 3px;
     paint-order: stroke;
     stroke-linejoin: round;
     transition: fill 0.2s ease;
+}
+
+/* A compact city/state lockup keeps nearby stops easy to scan. */
+.lns-marker-state {
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    fill: var(--teal-contrast);
 }
 
 .lns-marker:hover .lns-marker-label,
