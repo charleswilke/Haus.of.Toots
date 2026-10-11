@@ -17,7 +17,7 @@
         url('images/paint-800.webp') center / cover;
     border: 2px dashed var(--coral-light);
     border-radius: 16px;
-    padding: var(--spacing-md) var(--spacing-md) var(--spacing-sm);
+    padding: 0 var(--spacing-md) var(--spacing-sm);
     margin-bottom: var(--spacing-md);
     box-shadow: 0 8px 30px rgba(232, 85, 99, 0.08);
 }
@@ -45,7 +45,7 @@
     position: absolute;
     right: 1.25rem;
     bottom: 1rem;
-    width: min(105px, 16vw);
+    width: min(73.5px, 11.2vw);
     opacity: 0.26;
     mix-blend-mode: multiply;
     filter: hue-rotate(78deg) saturate(1.1);
@@ -53,12 +53,40 @@
     user-select: none;
 }
 
+/* A stitched tag hangs into the frame from its top seam. Keep it in
+   normal flow so wrapped text always leaves room for the map below. */
 .lns-map-hint {
+    position: relative;
+    width: fit-content;
+    max-width: calc(100% - 1rem);
+    margin: 0 auto -1rem;
+    padding: 0.5rem 1.25rem;
+    border: 1px solid rgba(31, 111, 120, 0.3);
+    border-top: 0;
+    border-radius: 0 0 18px 18px;
+    background: #D9ECE9;
+    color: var(--teal-contrast);
     text-align: center;
-    color: var(--neutral-mid);
-    font-size: 0.9rem;
-    margin-top: 0.25rem;
-    margin-bottom: 0;
+    font-family: var(--font-body);
+    font-size: clamp(0.8rem, 1.25vw, 1rem);
+    font-weight: 500;
+    letter-spacing: 0.035em;
+    line-height: 1.4;
+    box-shadow: 0 3px 0 rgba(31, 111, 120, 0.16);
+}
+
+.lns-map-hint-mobile {
+    display: none;
+}
+
+.lns-map-hint::after {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px dashed rgba(31, 111, 120, 0.7);
+    border-top: 0;
+    border-radius: 0 0 14px 14px;
+    pointer-events: none;
 }
 
 /* --- Hex tiles --- */
@@ -160,6 +188,13 @@
     max-width: 70%;
     margin: 0 auto var(--spacing-xs);
     object-fit: contain;
+}
+
+/* The transparent Sew Another Stitch asset has generous outer padding.
+   Scale its visible mark to fill the existing logo area. */
+.lns-card-logo[src*="sew-another-stitch-red"],
+.lns-modal-logo[src*="sew-another-stitch-red"] {
+    transform: translate(-3%, -3%) scale(1.45);
 }
 
 /* The round Kick Ass badge is tall and narrow, so the shared height
@@ -523,8 +558,36 @@
 /* --- Responsive --- */
 
 @media (max-width: 768px) {
+    .lns-page {
+        isolation: isolate;
+    }
+
     .lns-map-frame {
         padding: var(--spacing-sm);
+        margin-bottom: 3.5rem;
+    }
+
+    /* On mobile the tag hangs outside the bottom seam. Leave room
+       below the frame for the tag and a small gap before the shop cards. */
+    .lns-map-hint {
+        position: absolute;
+        top: calc(100% - 12px);
+        left: 50%;
+        z-index: -1;
+        transform: translateX(-50%);
+        width: calc(100% - 2rem);
+        max-width: none;
+        margin: 0;
+        padding: calc(0.45rem + 8px) 1rem 0.45rem;
+        font-size: 0.85rem;
+    }
+
+    .lns-map-hint-desktop {
+        display: none;
+    }
+
+    .lns-map-hint-mobile {
+        display: inline;
     }
 
     /* Labels get dense on small screens; markers + numbers still tell the story */

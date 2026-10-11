@@ -89,6 +89,7 @@ const OUTLINE = [
 
 // --- Shops ---
 const SHOPS = [
+  { name: "Sew Another Stitch", url: "https://sewanotherstitch.com/", addr: "433 St John St, Havre de Grace, MD 21078", city: "Havre de Grace", state: "MD", lat: 39.5493, lon: -76.0897 },
   { name: "Cotswold Needlepoint", url: "https://cotswoldneedlepoint.com/", addr: "16930 W Catawba Ave Suite 103, Cornelius, NC 28031", city: "Cornelius", state: "NC", lat: 35.447294, lon: -80.892458 },
   { name: "Angel City Stitchery", url: "https://www.angelcitystitchery.com/", addr: "13347 Washington Blvd Ste B, Los Angeles, CA 90066", city: "Los Angeles", state: "CA", lat: 33.9926, lon: -118.4436 },
   { name: "Sunny Stitches", url: "http://www.sunnystitchesdenver.com/", addr: "1927 E Kentucky Ave, Denver, CO 80209", city: "Denver", state: "CO", lat: 39.692, lon: -104.973 },
@@ -195,6 +196,7 @@ cities.sort((a, b) => a.lon - b.lon);
 // Side labels center the two-line block beside the heart. Above/below
 // labels leave a small, consistent gap from the edge of the hex.
 const LABELS = {
+  "Havre de Grace": { dx: 14, dy: 2, anchor: "start" },
   "Dublin":      { dx: 0,   dy: -25, anchor: "middle" },
   "Cincinnati":  { dx: -14, dy: -2,  anchor: "end" },
   "Los Angeles": { dx: 14,  dy: -2,  anchor: "start" },
@@ -210,7 +212,7 @@ const LABELS = {
   "Chapel Hill": { dx: 14,  dy: -2,  anchor: "start" },
   "Atlanta":     { dx: 14,  dy: -2,  anchor: "start" },
   "Bridgeport":  { dx: 14,  dy: -2,  anchor: "start" },
-  "Maplewood":   { dx: 14,  dy: -2,  anchor: "start" },
+  "Maplewood":   { dx: 0,   dy: -25, anchor: "middle" },
 };
 
 // --- Emit SVG ---

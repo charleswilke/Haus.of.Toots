@@ -24,7 +24,7 @@
     <link rel="preload" href="images/fonts/winky-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="styles.css?v=20261007h">
     <link rel="stylesheet" href="shop-styles.css?v=20260910c">
-    <link rel="stylesheet" href="lns-map.css?v=20261009b">
+    <link rel="stylesheet" href="lns-map.css?v=20261010i">
 </head>
 <body>
     <div id="shared-nav"></div>
@@ -37,6 +37,7 @@
 
             <div class="lns-map-frame">
 
+                <p class="lns-map-hint"><span class="lns-map-hint-desktop">Haus of Toots creations are now available at these local needlepoint shops!</span><span class="lns-map-hint-mobile">Find Haus of Toots at your LNS!</span></p>
                 <h1 class="lns-sr-title">HoT@LNS &mdash; Local Needlepoint Shops that carry Haus of Toots</h1>
                 <svg class="lns-map" viewBox="0 0 1090 581" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="lnsMapTitle">
   <title id="lnsMapTitle">Hex-tile map of the lower 48 United States showing local needlepoint shops that carry Haus of Toots canvases</title>
@@ -484,7 +485,6 @@
     <use href="#lnsHex" x="815.2" y="247.0" class="hx hx4"/>
     <use href="#lnsHex" x="836.0" y="247.0" class="hx hx1"/>
     <use href="#lnsHex" x="856.8" y="247.0" class="hx hx1"/>
-    <use href="#lnsHex" x="877.6" y="247.0" class="hx hx1"/>
     <use href="#lnsHex" x="898.3" y="247.0" class="hx hx1"/>
     <use href="#lnsHex" x="77.4" y="265.0" class="hx hx2"/>
     <use href="#lnsHex" x="98.1" y="265.0" class="hx hx4"/>
@@ -958,15 +958,19 @@
       <use href="#lnsHeart" x="825.6" y="337.0" class="lns-marker-heart"/>
       <text x="839.6" y="335.0" text-anchor="start" class="lns-marker-label"><tspan class="lns-marker-city">Chapel Hill</tspan><tspan x="839.6" dy="12" class="lns-marker-state">NC</tspan></text>
     </a>
+    <a href="#stop-havre-de-grace" class="lns-marker" aria-label="Havre de Grace, MD: Sew Another Stitch">
+      <use href="#lnsHexBig" x="877.6" y="247.0" class="hx-marker"/>
+      <use href="#lnsHeart" x="877.6" y="247.0" class="lns-marker-heart"/>
+      <text x="891.6" y="249.0" text-anchor="start" class="lns-marker-label"><tspan class="lns-marker-city">Havre de Grace</tspan><tspan x="891.6" dy="12" class="lns-marker-state">MD</tspan></text>
+    </a>
     <a href="#stop-maplewood" class="lns-marker" aria-label="Maplewood, NJ: Mrs. Meshugga Needlepoint Shop">
       <use href="#lnsHexBig" x="908.7" y="229.0" class="hx-marker"/>
       <use href="#lnsHeart" x="908.7" y="229.0" class="lns-marker-heart"/>
-      <text x="922.7" y="227.0" text-anchor="start" class="lns-marker-label"><tspan class="lns-marker-city">Maplewood</tspan><tspan x="922.7" dy="12" class="lns-marker-state">NJ</tspan></text>
+      <text x="908.7" y="204.0" text-anchor="middle" class="lns-marker-label"><tspan class="lns-marker-city">Maplewood</tspan><tspan x="908.7" dy="12" class="lns-marker-state">NJ</tspan></text>
     </a>
   </g>
 </svg>
                 <img class="lns-map-watermark" src="images/hauslogo.webp" alt="" aria-hidden="true" loading="lazy">
-                <p class="lns-map-hint">Haus of Toots creations are now available at these local needlepoint shops! Stop in and stitch local.</p>
             </div>
             <div class="lns-shop-grid">
                 <div class="lns-shop-card" data-city="los-angeles" id="stop-los-angeles">
@@ -1053,6 +1057,13 @@
                     <p class="lns-card-addr">Icehouse Mall, 200 Applebee St<br>Barrington, IL 60010</p>
                     <a href="https://thepepperpot.co/" target="_blank" rel="noopener noreferrer" class="lns-card-link">Visit Site</a>
                 </div>
+                <div class="lns-shop-card" data-city="havre-de-grace" id="stop-havre-de-grace">
+                    <img class="lns-card-logo" src="images/lns/sew-another-stitch-red.png" alt="" loading="lazy">
+                    <p class="lns-card-city">Havre de Grace, MD</p>
+                    <h3 class="lns-card-name">Sew Another Stitch</h3>
+                    <p class="lns-card-addr">433 St John St<br>Havre de Grace, MD 21078</p>
+                    <a href="https://sewanotherstitch.com/" target="_blank" rel="noopener noreferrer" class="lns-card-link">Visit Site</a>
+                </div>
                 <div class="lns-shop-card" data-city="nashville" id="shop-stitching-belle">
                     <img class="lns-card-logo" src="images/lns/stitching-belle.webp" alt="" loading="lazy">
                     <p class="lns-card-city">Nashville, TN</p>
@@ -1129,6 +1140,9 @@
         // To show a real logo, drop the file in images/lns/ and set `logo`
         // (placeholder hex initials render until then).
         const LNS_SHOPS = {
+            'havre-de-grace': { city: 'Havre de Grace, MD', geo: { d: 'M0.2 0.0L83.4 0.0L85.5 36.4L100.0 36.7L95.6 48.9L92.1 49.4L85.9 51.1L81.1 52.4L81.3 47.6L79.4 45.7L82.0 43.7L78.5 38.9L77.4 41.0L72.7 40.5L71.1 35.3L72.6 35.3L72.7 28.5L74.2 25.8L72.3 16.6L74.7 11.2L78.5 10.3L79.2 4.7L76.3 5.4L76.2 8.2L70.3 11.9L68.6 15.2L68.2 23.6L66.0 27.5L67.0 34.2L69.9 38.8L69.5 42.3L71.4 45.7L70.4 48.1L65.2 43.5L57.8 41.3L55.6 36.9L51.4 39.4L49.8 35.9L53.1 31.5L55.1 26.9L58.1 23.9L55.2 21.0L53.4 22.8L50.4 20.1L45.7 18.7L45.7 14.4L43.3 12.0L39.8 11.6L37.2 3.5L33.4 3.5L29.6 0.8L27.5 3.0L23.8 2.8L22.9 6.0L16.3 4.0L11.8 8.2L8.9 7.3L4.4 12.2L0.0 14.9L0.2 0.0Z', w: 100, h: 52.4, x: 76.5, y: 5, coords: '39.55° N · 76.09° W' }, shops: [
+                { name: 'Sew Another Stitch', addr: '433 St John St, Havre de Grace, MD 21078', url: 'https://sewanotherstitch.com/', logo: 'images/lns/sew-another-stitch-red.png' }
+            ]},
             'dublin': { city: 'Dublin, OH', geo: { d: 'M92.4 0.0L92.4 37.8L89.2 39.3L90.7 42.4L90.6 46.7L87.7 53.5L85.7 63.8L77.3 72.9L74.6 74.1L72.3 72.3L69.8 76.3L67.3 76.1L64.6 81.5L65.2 84.7L63.0 87.4L59.8 83.1L55.8 89.8L56.8 94.1L54.3 95.7L53.4 99.4L47.8 100.0L44.8 96.1L42.4 95.4L41.4 90.6L38.4 91.5L36.0 94.3L27.9 92.1L24.5 94.1L19.7 90.3L12.9 89.2L12.6 86.7L8.2 80.9L0.0 80.9L0.4 41.6L0.2 8.0L29.3 6.9L37.7 10.8L40.5 13.1L42.6 10.9L47.3 15.4L50.3 16.8L60.3 13.1L66.1 13.9L72.5 8.6L81.8 3.5L92.4 0.0Z', w: 92.4, h: 100, x: 36.6, y: 52.9, coords: '40.10° N · 83.11° W' }, shops: [
                 { name: "What's the Point Needlepoint", addr: '126 S. High St, Dublin, OH 43017', url: 'https://whatsthepoint.biz/', logo: 'images/lns/whats-the-point.png' }
             ]},
