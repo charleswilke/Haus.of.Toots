@@ -107,6 +107,7 @@ const SHOPS = [
   { name: "Mrs. Meshugga Needlepoint Shop", url: "https://mrsmeshugga.com/", addr: "1875 Springfield Ave, Maplewood, NJ 07040", city: "Maplewood", state: "NJ", lat: 40.729, lon: -74.2735 },
   { name: "What's the Point Needlepoint", url: "https://whatsthepoint.biz/", addr: "126 S. High St, Dublin, OH 43017", city: "Dublin", state: "OH", lat: 40.098, lon: -83.114 },
   { name: "When Pigs Fly Needlepoint", url: "https://whenpigsflyndlpt.com/password", addr: "Cincinnati, OH", city: "Cincinnati", state: "OH", lat: 39.1031, lon: -84.512 },
+  { name: "The Point of It All", url: "https://thepointofitallonline.com/", addr: "5115 MacArthur Blvd NW, Washington, DC 20016", city: "Washington", state: "DC", lat: 38.926, lon: -77.101 },
 ];
 
 // --- Projection: plate carrée scaled by cos(38.5°) on x ---
@@ -196,6 +197,7 @@ cities.sort((a, b) => a.lon - b.lon);
 // Side labels center the two-line block beside the heart. Above/below
 // labels leave a small, consistent gap from the edge of the hex.
 const LABELS = {
+  "Washington": { dx: 0, dy: 25, anchor: "middle" },
   "Havre de Grace": { dx: 14, dy: 2, anchor: "start" },
   "Dublin":      { dx: 0,   dy: -25, anchor: "middle" },
   "Cincinnati":  { dx: -14, dy: -2,  anchor: "end" },
@@ -211,7 +213,7 @@ const LABELS = {
   "Cornelius":   { dx: 0,   dy: -25, anchor: "middle" },
   "Chapel Hill": { dx: 14,  dy: -2,  anchor: "start" },
   "Atlanta":     { dx: 14,  dy: -2,  anchor: "start" },
-  "Bridgeport":  { dx: 14,  dy: -2,  anchor: "start" },
+  "Bridgeport":  { dx: 0,   dy: -25, anchor: "middle" },
   "Maplewood":   { dx: 0,   dy: -25, anchor: "middle" },
 };
 

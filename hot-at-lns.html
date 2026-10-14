@@ -521,7 +521,6 @@
     <use href="#lnsHex" x="784.0" y="265.0" class="hx hx3"/>
     <use href="#lnsHex" x="825.6" y="265.0" class="hx hx1"/>
     <use href="#lnsHex" x="846.4" y="265.0" class="hx hx4"/>
-    <use href="#lnsHex" x="867.2" y="265.0" class="hx hx2"/>
     <use href="#lnsHex" x="888.0" y="265.0" class="hx hx3"/>
     <use href="#lnsHex" x="87.7" y="283.0" class="hx hx3"/>
     <use href="#lnsHex" x="108.5" y="283.0" class="hx hx2"/>
@@ -951,12 +950,17 @@
     <a href="#stop-bridgeport" class="lns-marker" aria-label="Bridgeport, WV: Honeysuckle Needlepoint">
       <use href="#lnsHexBig" x="804.8" y="265.0" class="hx-marker"/>
       <use href="#lnsHeart" x="804.8" y="265.0" class="lns-marker-heart"/>
-      <text x="818.8" y="263.0" text-anchor="start" class="lns-marker-label"><tspan class="lns-marker-city">Bridgeport</tspan><tspan x="818.8" dy="12" class="lns-marker-state">WV</tspan></text>
+      <text x="804.8" y="240.0" text-anchor="middle" class="lns-marker-label"><tspan class="lns-marker-city">Bridgeport</tspan><tspan x="804.8" dy="12" class="lns-marker-state">WV</tspan></text>
     </a>
     <a href="#stop-chapel-hill" class="lns-marker" aria-label="Chapel Hill, NC: Elizabeth Brooke">
       <use href="#lnsHexBig" x="825.6" y="337.0" class="hx-marker"/>
       <use href="#lnsHeart" x="825.6" y="337.0" class="lns-marker-heart"/>
       <text x="839.6" y="335.0" text-anchor="start" class="lns-marker-label"><tspan class="lns-marker-city">Chapel Hill</tspan><tspan x="839.6" dy="12" class="lns-marker-state">NC</tspan></text>
+    </a>
+    <a href="#stop-washington" class="lns-marker" aria-label="Washington, DC: The Point of It All">
+      <use href="#lnsHexBig" x="867.2" y="265.0" class="hx-marker"/>
+      <use href="#lnsHeart" x="867.2" y="265.0" class="lns-marker-heart"/>
+      <text x="867.2" y="290.0" text-anchor="middle" class="lns-marker-label"><tspan class="lns-marker-city">Washington</tspan><tspan x="867.2" dy="12" class="lns-marker-state">DC</tspan></text>
     </a>
     <a href="#stop-havre-de-grace" class="lns-marker" aria-label="Havre de Grace, MD: Sew Another Stitch">
       <use href="#lnsHexBig" x="877.6" y="247.0" class="hx-marker"/>
@@ -1057,6 +1061,13 @@
                     <p class="lns-card-addr">Icehouse Mall, 200 Applebee St<br>Barrington, IL 60010</p>
                     <a href="https://thepepperpot.co/" target="_blank" rel="noopener noreferrer" class="lns-card-link">Visit Site</a>
                 </div>
+                <div class="lns-shop-card" data-city="washington" id="stop-washington">
+                    <img class="lns-card-logo" src="images/lns/point-of-it-all.avif" alt="" loading="lazy">
+                    <p class="lns-card-city">Washington, DC</p>
+                    <h3 class="lns-card-name">The Point of It All</h3>
+                    <p class="lns-card-addr">5115 MacArthur Blvd NW<br>Washington, DC 20016</p>
+                    <a href="https://thepointofitallonline.com/" target="_blank" rel="noopener noreferrer" class="lns-card-link">Visit Site</a>
+                </div>
                 <div class="lns-shop-card" data-city="havre-de-grace" id="stop-havre-de-grace">
                     <img class="lns-card-logo" src="images/lns/sew-another-stitch-red.png" alt="" loading="lazy">
                     <p class="lns-card-city">Havre de Grace, MD</p>
@@ -1140,6 +1151,9 @@
         // To show a real logo, drop the file in images/lns/ and set `logo`
         // (placeholder hex initials render until then).
         const LNS_SHOPS = {
+            'washington': { city: 'Washington, DC', geo: { d: 'M31.6 0.0L79.9 48.6L29.5 100.0L0.0 29.7L31.6 0.0Z', w: 79.9, h: 100, x: 6.3, y: 33.5, coords: '38.93° N · 77.10° W' }, shops: [
+                { name: 'The Point of It All', addr: '5115 MacArthur Blvd NW, Washington, DC 20016', url: 'https://thepointofitallonline.com/', logo: 'images/lns/point-of-it-all.avif' }
+            ]},
             'havre-de-grace': { city: 'Havre de Grace, MD', geo: { d: 'M0.2 0.0L83.4 0.0L85.5 36.4L100.0 36.7L95.6 48.9L92.1 49.4L85.9 51.1L81.1 52.4L81.3 47.6L79.4 45.7L82.0 43.7L78.5 38.9L77.4 41.0L72.7 40.5L71.1 35.3L72.6 35.3L72.7 28.5L74.2 25.8L72.3 16.6L74.7 11.2L78.5 10.3L79.2 4.7L76.3 5.4L76.2 8.2L70.3 11.9L68.6 15.2L68.2 23.6L66.0 27.5L67.0 34.2L69.9 38.8L69.5 42.3L71.4 45.7L70.4 48.1L65.2 43.5L57.8 41.3L55.6 36.9L51.4 39.4L49.8 35.9L53.1 31.5L55.1 26.9L58.1 23.9L55.2 21.0L53.4 22.8L50.4 20.1L45.7 18.7L45.7 14.4L43.3 12.0L39.8 11.6L37.2 3.5L33.4 3.5L29.6 0.8L27.5 3.0L23.8 2.8L22.9 6.0L16.3 4.0L11.8 8.2L8.9 7.3L4.4 12.2L0.0 14.9L0.2 0.0Z', w: 100, h: 52.4, x: 76.5, y: 5, coords: '39.55° N · 76.09° W' }, shops: [
                 { name: 'Sew Another Stitch', addr: '433 St John St, Havre de Grace, MD 21078', url: 'https://sewanotherstitch.com/', logo: 'images/lns/sew-another-stitch-red.png' }
             ]},
