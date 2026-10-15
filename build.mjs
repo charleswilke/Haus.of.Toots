@@ -12,6 +12,8 @@ const copyOpts = { recursive: true, filter: src => !src.endsWith('.DS_Store') };
 const dist = 'dist';
 const skipDirs = new Set(['dist', 'api', 'docs', '_archived', 'node_modules', 'images', 'tests']);
 const skipFiles = new Set(['build.mjs', 'package.json', 'package-lock.json', 'vercel.json', 'HausOfToots.code-workspace']);
+// Temporarily hidden pages: keep their source available for easy restoration.
+const hiddenPages = new Set(['just-landed.html']);
 
 rmSync(dist, { recursive: true, force: true });
 mkdirSync(dist);
@@ -19,7 +21,7 @@ mkdirSync(dist);
 const minifyTargets = [];
 for (const entry of readdirSync('.', { withFileTypes: true })) {
     const name = entry.name;
-    if (name.startsWith('.') || skipFiles.has(name) || name.endsWith('.md')) continue;
+    if (name.startsWith('.') || skipFiles.has(name) || hiddenPages.has(name) || name.endsWith('.md')) continue;
     if (entry.isDirectory()) {
         if (!skipDirs.has(name)) cpSync(name, `${dist}/${name}`, copyOpts);
         continue;
