@@ -1367,7 +1367,7 @@ class ShopApp {
         }
 
         const renderedImages = content.querySelectorAll('.product-detail-gallery-image').length;
-        const fullImages = listed.images?.edges || [];
+        const fullImages = this.getProductGalleryImages(listed);
         if (fullImages.length > renderedImages) {
             const imagesEl = content.querySelector('.product-detail-images');
             if (imagesEl) {
@@ -1388,6 +1388,10 @@ class ShopApp {
 
         this.activeModalProductId = null;
         this.productModalRequest = null;
+        if (this.stickerGalleryResizeHandler) {
+            window.removeEventListener('resize', this.stickerGalleryResizeHandler);
+            this.stickerGalleryResizeHandler = null;
+        }
         this.closeLightbox();
         productModal.classList.remove('open');
         this.deactivateDialog(productModal);
@@ -1415,18 +1419,23 @@ class ShopApp {
         const variants = product.variants?.edges || [];
         const hasMultipleVariants = variants.length > 1;
         const selectedVariant = this.getDefaultVariant(product);
+        const stickerGallery = this.hasStickerGallery(product);
+        this.stickerPreviewVariantId = stickerGallery ? variants[0]?.node.id : null;
+        this.stickerPreviewImageIndex = 0;
 
         const imagesHTML = this.renderProductImages(product);
         const descriptionHTML = this.renderProductDescription(product);
+        const recommendationsHTML = `
+            <section id="productRecommendations" class="product-detail-recommendations" aria-label="You may also like">
+                ${this.renderProductRecommendations(product.id)}
+            </section>`;
 
         modalBody.innerHTML = `
-            <div class="product-detail-content">
+            <div class="product-detail-content${stickerGallery ? ' product-detail-content-sticker-preview' : ''}">
                 <div class="product-detail-main-layout">
                     <div class="product-detail-media">
                         ${imagesHTML}
-                        <section id="productRecommendations" class="product-detail-recommendations" aria-label="You may also like">
-                            ${this.renderProductRecommendations(product.id)}
-                        </section>
+                        ${stickerGallery ? '' : recommendationsHTML}
                     </div>
                     <div class="product-detail-info">
                         <div class="product-detail-title-bar">
@@ -1447,6 +1456,7 @@ class ShopApp {
                         ${descriptionHTML}
                     </div>
                 </div>
+                ${stickerGallery ? recommendationsHTML : ''}
             </div>
         `;
 
@@ -1579,6 +1589,79 @@ class ShopApp {
         return variants.find(variant => variant.availableForSale) || variants[0] || null;
     }
 
+    hasStickerGallery(product) {
+        return this.isStickerProduct(product) && (product.variants?.edges?.length || 0) > 1;
+    }
+
+    getProductGalleryImages(product) {
+        const images = (product.images?.edges || []).map(edge => edge.node).filter(Boolean);
+        if (!this.hasStickerGallery(product)) return images;
+        // Variant photos can be outside the first page of product images.
+        for (const { node: variant } of product.variants.edges) {
+            if (variant.image?.url && !images.some(image => this.sameProductImage(image, variant.image))) {
+                images.push(variant.image);
+            }
+        }
+        return images;
+    }
+
+    sameProductImage(first, second) {
+        return Boolean(first?.url && second?.url &&
+            first.url.split('?')[0] === second.url.split('?')[0]);
+    }
+
+    getStickerVariantImageIndex(product, variant) {
+        const index = this.getProductGalleryImages(product)
+            .findIndex(image => this.sameProductImage(image, variant?.image));
+        return index < 0 ? 0 : index;
+    }
+
+    previewStickerVariant(product, variantId, options = {}) {
+        const variant = product.variants?.edges?.find(edge => edge.node.id === variantId)?.node;
+        if (!variant) return;
+        this.previewStickerImage(product, this.getStickerVariantImageIndex(product, variant), {
+            ...options, variantId, label: variant.selectedOptions?.[0]?.value || variant.title
+        });
+    }
+
+    previewStickerImage(product, index, { scroll = true, variantId, label } = {}) {
+        if (this.activeModalProductId !== product.id) return;
+        const images = this.getProductGalleryImages(product);
+        if (!images[index]) return;
+        const variant = product.variants?.edges?.find(edge =>
+            this.sameProductImage(edge.node.image, images[index]))?.node;
+        this.stickerPreviewVariantId = variantId || variant?.id || null;
+        this.stickerPreviewImageIndex = index;
+
+        document.querySelectorAll('.product-detail-price-row-sticker').forEach(row => {
+            const active = row.getAttribute('data-variant-id') === this.stickerPreviewVariantId;
+            row.classList.toggle('is-previewing', active);
+            row.querySelector('.sticker-preview-option')?.setAttribute('aria-pressed', String(active));
+        });
+        const slides = Array.from(document.querySelectorAll('.product-detail-gallery-image'));
+        slides.forEach((slide, i) => {
+            slide.classList.toggle('is-active', i === index);
+            if (i === index) slide.loading = 'eager';
+        });
+        document.querySelectorAll('.sticker-gallery-thumbnail').forEach((thumb, i) => {
+            thumb.setAttribute('aria-pressed', String(i === index));
+        });
+        document.querySelectorAll('.product-detail-gallery-dot').forEach((dot, i) => {
+            dot.classList.toggle('active', i === index);
+        });
+        const caption = document.querySelector('.sticker-gallery-caption');
+        if (caption) caption.textContent = label || variant?.selectedOptions?.[0]?.value ||
+            variant?.title || images[index].altText || `Photo ${index + 1}`;
+
+        const gallery = document.querySelector('.product-detail-gallery');
+        if (scroll && this.isMobileDevice() && gallery && slides[index]) {
+            gallery.scrollTo({
+                left: slides[index].offsetLeft - slides[0].offsetLeft,
+                behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+            });
+        }
+    }
+
     /**
      * Gallery for the product modal: every image at full width in a single
      * column, as on the Shopify product page. Below the tablet breakpoint the
@@ -1586,7 +1669,8 @@ class ShopApp {
      * block in shop-styles.css and attachProductImageListeners).
      */
     renderProductImages(product) {
-        const images = (product.images?.edges || []).map(edge => edge.node).filter(Boolean);
+        const images = this.getProductGalleryImages(product);
+        const stickerGallery = this.hasStickerGallery(product);
 
         if (images.length === 0) {
             return `<div class="product-detail-images">
@@ -1599,8 +1683,20 @@ class ShopApp {
                     ${images.map((_, index) => `<button type="button" class="product-detail-gallery-dot${index === 0 ? ' active' : ''}" data-index="${index}" aria-label="Show image ${index + 1} of ${images.length}"></button>`).join('')}
                 </div>` : '';
 
+        const thumbnailsHTML = stickerGallery ? `
+                <div class="sticker-gallery-thumbnails" role="group" aria-label="Product photos">
+                    ${images.map((image, index) => {
+                        const variant = product.variants.edges.find(edge => this.sameProductImage(edge.node.image, image))?.node;
+                        const label = variant?.selectedOptions?.[0]?.value || variant?.title || image.altText || `Photo ${index + 1}`;
+                        return `<button type="button" class="sticker-gallery-thumbnail" data-index="${index}" aria-label="View photo: ${this.escapeHtml(label)}" aria-pressed="${index === 0}">
+                            <img src="${image.url}${image.url.includes('?') ? '&' : '?'}width=120" alt="" width="56" height="56" loading="lazy">
+                        </button>`;
+                    }).join('')}
+                </div>
+                <p class="sticker-gallery-caption" aria-live="polite"></p>` : '';
+
         return `
-            <div class="product-detail-images">
+            <div class="product-detail-images${stickerGallery ? ' sticker-gallery' : ''}">
                 <div class="product-detail-gallery">
                     ${images.map((image, index) => {
                         // A width param keeps the natural aspect ratio; transformedSrc is a cropped square.
@@ -1609,12 +1705,13 @@ class ShopApp {
                         <img src="${image.url}${sep}width=1200"
                              data-full-image="${image.url}"
                              data-index="${index}"
+                             ${image.width && image.height ? `width="${image.width}" height="${image.height}"` : ''}
                              alt="${this.escapeHtml(image.altText || product.title)}"
                              ${this.isMobileDevice() ? '' : `role="button" tabindex="0" aria-label="Enlarge image ${index + 1}: ${this.escapeHtml(image.altText || product.title)}"`}
                              loading="${index === 0 ? 'eager' : 'lazy'}"
-                             class="product-detail-gallery-image product-image-clickable">`;
+                             class="product-detail-gallery-image product-image-clickable${index === 0 ? ' is-active' : ''}">`;
                     }).join('')}
-                </div>${dotsHTML}
+                </div>${dotsHTML}${thumbnailsHTML}
             </div>
         `;
     }
@@ -1688,7 +1785,12 @@ class ShopApp {
      * Lightbox on every gallery image, plus the dots for the mobile strip.
      */
     attachProductImageListeners(product) {
-        const images = (product.images?.edges || []).map(edge => edge.node).filter(Boolean);
+        if (this.stickerGalleryResizeHandler) {
+            window.removeEventListener('resize', this.stickerGalleryResizeHandler);
+            this.stickerGalleryResizeHandler = null;
+        }
+        const images = this.getProductGalleryImages(product);
+        const stickerGallery = this.hasStickerGallery(product);
         const allImageUrls = images.map(image => image.url);
         const allImageCaptions = images.map(image => image.altText || product.title);
 
@@ -1708,17 +1810,50 @@ class ShopApp {
 
         const gallery = document.querySelector('.product-detail-gallery');
         const dots = Array.from(document.querySelectorAll('.product-detail-gallery-dot'));
-        if (!gallery || dots.length < 2) return;
+        if (!gallery) return;
+
+        if (stickerGallery) {
+            document.querySelectorAll('.sticker-gallery-thumbnail').forEach(thumb => {
+                thumb.addEventListener('click', () => this.previewStickerImage(product, Number(thumb.dataset.index)));
+            });
+            this.previewStickerVariant(product, this.stickerPreviewVariantId, { scroll: false });
+            this.stickerGalleryResizeHandler = () => {
+                document.querySelectorAll('.product-detail-gallery-image').forEach((image, index) => {
+                    if (this.isMobileDevice()) {
+                        image.removeAttribute('role');
+                        image.removeAttribute('tabindex');
+                        image.removeAttribute('aria-label');
+                    } else {
+                        image.setAttribute('role', 'button');
+                        image.setAttribute('tabindex', '0');
+                        image.setAttribute('aria-label', `Enlarge image ${index + 1}: ${images[index].altText || product.title}`);
+                    }
+                });
+                if (this.stickerPreviewVariantId) this.previewStickerVariant(product, this.stickerPreviewVariantId);
+                else this.previewStickerImage(product, this.stickerPreviewImageIndex || 0);
+            };
+            window.addEventListener('resize', this.stickerGalleryResizeHandler);
+        }
+        if (dots.length < 2) return;
 
         const setActiveDot = index => dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
         gallery.addEventListener('scroll', () => {
-            const slideWidth = gallery.clientWidth || 1;
-            setActiveDot(Math.round(gallery.scrollLeft / slideWidth));
+            if (!this.isMobileDevice()) return;
+            const slides = Array.from(gallery.querySelectorAll('.product-detail-gallery-image'));
+            const offsets = slides.map(slide => slide.offsetLeft - slides[0].offsetLeft);
+            const index = offsets.reduce((nearest, offset, i) =>
+                Math.abs(offset - gallery.scrollLeft) < Math.abs(offsets[nearest] - gallery.scrollLeft) ? i : nearest, 0);
+            if (stickerGallery) this.previewStickerImage(product, index, { scroll: false });
+            else setActiveDot(index);
         }, { passive: true });
         dots.forEach(dot => {
             dot.addEventListener('click', () => {
                 const index = parseInt(dot.getAttribute('data-index'), 10) || 0;
-                gallery.scrollTo({ left: index * gallery.clientWidth, behavior: 'smooth' });
+                if (stickerGallery) this.previewStickerImage(product, index);
+                else {
+                    const slides = gallery.querySelectorAll('.product-detail-gallery-image');
+                    gallery.scrollTo({ left: slides[index].offsetLeft - slides[0].offsetLeft, behavior: 'smooth' });
+                }
             });
         });
     }
@@ -1743,10 +1878,13 @@ class ShopApp {
                     const action = btn.getAttribute('data-action');
                     const variantId = row.getAttribute('data-variant-id');
                     const variant = variants.find(v => v.node.id === variantId)?.node;
+                    this.previewStickerVariant(product, variantId);
                     let qty = parseInt(qtyEl.textContent, 10) || 0;
 
                     if (action === 'increase') {
                         const record = await inventoryManager.getVariantInventory(variantId, { forceRefresh: true });
+                        if (!row.isConnected || this.activeModalProductId !== product.id) return;
+                        qty = parseInt(qtyEl.textContent, 10) || 0;
                         const limit = getVariantInventoryLimit(record);
                         if (limit !== null) {
                             const existing = cartManager.getVariantQuantity(variantId);
@@ -1763,11 +1901,11 @@ class ShopApp {
                     }
 
                     qtyEl.textContent = String(qty);
-                    row.classList.toggle('selected', qty > 0);
                     if (decBtn) decBtn.disabled = qty <= 0;
 
                     if (variant) {
                         const cached = await inventoryManager.getVariantInventory(variantId);
+                        if (!row.isConnected || this.activeModalProductId !== product.id) return;
                         this.applyStickerRowInventory(row, variant, cached);
                     }
                     this.updateStickerPurchaseSummary(product, variants);
@@ -1777,15 +1915,7 @@ class ShopApp {
             document.querySelectorAll('.product-detail-price-row-sticker').forEach(row => {
                 row.addEventListener('click', (event) => {
                     if (event.target.closest('.sticker-qty-btn')) return;
-                    if (row.classList.contains('unavailable')) return;
-                    const qtyEl = row.querySelector('.sticker-qty-value');
-                    if (!qtyEl) return;
-                    const qty = parseInt(qtyEl.textContent, 10) || 0;
-                    if (qty > 0) return;
-                    const incBtn = row.querySelector('.sticker-qty-btn[data-action="increase"]');
-                    if (incBtn && !incBtn.disabled) {
-                        incBtn.click();
-                    }
+                    this.previewStickerVariant(product, row.getAttribute('data-variant-id'));
                 });
             });
             return;
@@ -1893,7 +2023,6 @@ class ShopApp {
 
         if (limit === 0 || inventoryRecord?.availableForSale === false) {
             row.classList.add('unavailable');
-            row.classList.remove('selected');
             if (qtyEl) qtyEl.textContent = '0';
             if (incBtn) incBtn.disabled = true;
             if (decBtn) decBtn.disabled = true;
@@ -1914,7 +2043,6 @@ class ShopApp {
         if (modalQty > maxAddable) {
             modalQty = maxAddable;
             if (qtyEl) qtyEl.textContent = String(modalQty);
-            row.classList.toggle('selected', modalQty > 0);
         }
         if (incBtn) incBtn.disabled = modalQty >= maxAddable;
         if (decBtn) decBtn.disabled = modalQty <= 0;
@@ -1994,7 +2122,6 @@ class ShopApp {
                 if (row) {
                     const qtyEl = row.querySelector('.sticker-qty-value');
                     if (qtyEl) qtyEl.textContent = String(finalQty);
-                    row.classList.toggle('selected', finalQty > 0);
                     this.applyStickerRowInventory(row, variant, record);
                 }
             });
@@ -2024,7 +2151,6 @@ class ShopApp {
 
             setTimeout(() => {
                 document.querySelectorAll('.product-detail-price-row-sticker').forEach(row => {
-                    row.classList.remove('selected');
                     const qtyEl = row.querySelector('.sticker-qty-value');
                     if (qtyEl) qtyEl.textContent = '0';
                     const decBtn = row.querySelector('.sticker-qty-btn[data-action="decrease"]');
@@ -2101,6 +2227,10 @@ class ShopApp {
     renderStickerVariantList(product, variants) {
         return `
             <div class="product-detail-price-group">
+                <div class="sticker-selection-intro">
+                    <h2>Choose your stickers</h2>
+                    <p>Click a design to preview it. Use + and − to choose quantities.</p>
+                </div>
                 <div class="product-detail-price-list">
                     ${variants.map(variant => {
                         const optionValue = variant.selectedOptions?.[0]?.value || variant.title;
@@ -2114,7 +2244,7 @@ class ShopApp {
 
                         return `
                             <div class="${rowClasses}" data-variant-id="${variant.id}">
-                                <span class="product-detail-price-option">${this.escapeHtml(optionValue)}</span>
+                                <button type="button" class="product-detail-price-option sticker-preview-option" aria-label="Preview ${this.escapeHtml(optionValue)}" aria-pressed="${variant.id === this.stickerPreviewVariantId}">${this.escapeHtml(optionValue)}</button>
                                 <span class="product-detail-price-value">${price}</span>
                                 <div class="sticker-qty-stepper" role="group" aria-label="Quantity for ${this.escapeHtml(optionValue)}">
                                     <button type="button" class="sticker-qty-btn" data-action="decrease" disabled aria-label="Decrease quantity">&minus;</button>

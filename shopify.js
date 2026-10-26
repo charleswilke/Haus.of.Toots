@@ -128,6 +128,12 @@ class ShopifyClient {
                                         id
                                         title
                                         sku
+                                        image {
+                                            url
+                                            altText
+                                            width
+                                            height
+                                        }
                                         availableForSale
                                         currentlyNotInStock
                                         priceV2 {
@@ -189,6 +195,12 @@ class ShopifyClient {
                                 id
                                 title
                                 sku
+                                image {
+                                    url
+                                    altText
+                                    width
+                                    height
+                                }
                                 availableForSale
                                 currentlyNotInStock
                                 priceV2 {
@@ -256,6 +268,12 @@ class ShopifyClient {
                                         id
                                         title
                                         sku
+                                        image {
+                                            url
+                                            altText
+                                            width
+                                            height
+                                        }
                                         availableForSale
                                         currentlyNotInStock
                                         priceV2 {
@@ -366,6 +384,12 @@ class ShopifyClient {
                                             id
                                             title
                                             sku
+                                            image {
+                                                url
+                                                altText
+                                                width
+                                                height
+                                            }
                                             availableForSale
                                             currentlyNotInStock
                                             priceV2 {
@@ -440,6 +464,12 @@ class ShopifyClient {
                                 id
                                 title
                                 sku
+                                image {
+                                    url
+                                    altText
+                                    width
+                                    height
+                                }
                                 availableForSale
                                 currentlyNotInStock
                                 priceV2 {
@@ -507,6 +537,12 @@ class ShopifyClient {
                                 id
                                 title
                                 sku
+                                image {
+                                    url
+                                    altText
+                                    width
+                                    height
+                                }
                                 availableForSale
                                 currentlyNotInStock
                                 priceV2 {
