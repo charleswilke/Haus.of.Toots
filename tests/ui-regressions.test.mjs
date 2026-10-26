@@ -8,6 +8,11 @@ function element() {
     const handlers = new Map();
     return {
         style: {}, dataset: {}, children: [], innerHTML: '',
+        inert: false, tabIndex: 0, isConnected: true,
+        focus() {},
+        closest() { return this.inert ? this : null; },
+        matches() { return Boolean(this.disabled); },
+        getClientRects() { return this.hidden ? [] : [{}]; },
         classList: {
             add: (...names) => names.forEach(name => classes.add(name)),
             remove: (...names) => names.forEach(name => classes.delete(name)),
@@ -21,7 +26,10 @@ function element() {
             handlers.get(name).add(handler);
         },
         removeEventListener(name, handler) { handlers.get(name)?.delete(handler); },
-        fire(name, event = {}) { [...(handlers.get(name) || [])].forEach(fn => fn(event)); },
+        fire(name, event = {}) {
+            event.preventDefault ||= () => {};
+            [...(handlers.get(name) || [])].forEach(fn => fn(event));
+        },
         setAttribute(name, value) { this[name] = String(value); },
         appendChild(child) { this.children.push(child); },
         contains(child) { return child === this || this.children.includes(child); },
@@ -35,15 +43,23 @@ function environment() {
     const document = Object.assign(element(), {
         body: element(), readyState: 'loading',
         getElementById(id) {
-            if (!elements.has(id)) elements.set(id, element());
+            if (!elements.has(id)) {
+                const node = Object.assign(element(), { id });
+                node.focus = () => { document.activeElement = node; };
+                elements.set(id, node);
+            }
             return elements.get(id);
         },
         createElement: element,
     });
+    document.activeElement = document.body;
+    document.body.style.overflow = '';
     const window = Object.assign(element(), { innerWidth: 1024 });
     const context = vm.createContext({
         document, window, console: { error() {}, warn() {} },
+        getComputedStyle: () => ({ visibility: 'visible' }),
         setTimeout: () => 1, clearTimeout() {},
+        requestAnimationFrame: callback => { callback(); return 1; },
         IntersectionObserver: class { observe() {} },
         MutationObserver: class { observe() {} },
     });
@@ -103,8 +119,9 @@ test('Escape closes the lightbox first, retaining the product modal and scroll l
     app.setupProductModalListeners();
     app.setupLightboxListeners();
     modal.classList.add('open');
+    app.activateDialog(modal, document.getElementById('closeProductModal'));
     lightbox.classList.add('open');
-    document.body.style.overflow = 'hidden';
+    app.activateDialog(lightbox, document.getElementById('closeLightbox'));
     document.fire('keydown', { key: 'Escape' });
     assert.equal(lightbox.classList.contains('open'), false);
     assert.equal(modal.classList.contains('open'), true);
@@ -112,6 +129,70 @@ test('Escape closes the lightbox first, retaining the product modal and scroll l
     document.fire('keydown', { key: 'Escape' });
     assert.equal(modal.classList.contains('open'), false);
     assert.equal(document.body.style.overflow, '');
+});
+
+test('dialog keyboard navigation wraps and skips disabled or hidden controls', () => {
+    const { app, document } = shop();
+    app.setupDialogAccessibility();
+    const modal = document.getElementById('productModal');
+    const first = document.getElementById('closeProductModal');
+    const disabled = Object.assign(element(), { disabled: true });
+    const hidden = Object.assign(element(), { hidden: true });
+    const last = document.getElementById('buyButton');
+    modal.children = [first, disabled, hidden, last];
+    modal.querySelectorAll = () => modal.children;
+    modal.classList.add('open');
+    app.activateDialog(modal, first);
+    document.fire('keydown', { key: 'Tab', shiftKey: true });
+    assert.equal(document.activeElement, last);
+    document.fire('keydown', { key: 'Tab' });
+    assert.equal(document.activeElement, first);
+    document.activeElement = document.body;
+    document.fire('focusin', { target: document.body });
+    assert.equal(document.activeElement, first);
+    modal.querySelectorAll = () => [];
+    document.fire('keydown', { key: 'Tab' });
+    assert.equal(document.activeElement, modal);
+});
+
+test('nested dialogs restore focus, background inert state, and the original scroll setting', () => {
+    const { app, document } = shop();
+    app.setupDialogAccessibility();
+    const modal = document.getElementById('productModal');
+    const lightbox = document.getElementById('imageLightbox');
+    const cart = document.getElementById('cartDrawer');
+    const background = element();
+    const alreadyInert = Object.assign(element(), { inert: true });
+    const card = document.getElementById('productCard');
+    const image = document.getElementById('galleryImage');
+    modal.children = [image];
+    background.children = [card];
+    document.body.children = [background, alreadyInert, modal, lightbox, cart];
+    document.body.style.overflow = 'clip';
+    card.focus();
+    modal.classList.add('open');
+    app.activateDialog(modal, document.getElementById('closeProductModal'));
+    assert.equal(background.inert, true);
+    assert.equal(modal.inert, false);
+    assert.equal(document.body.style.overflow, 'hidden');
+    image.focus();
+    lightbox.classList.add('open');
+    app.activateDialog(lightbox, document.getElementById('closeLightbox'));
+    assert.equal(modal.inert, true);
+    app.closeLightbox();
+    assert.equal(document.activeElement, image);
+    assert.equal(modal.inert, false);
+    assert.equal(lightbox.inert, true);
+    assert.equal(document.body.style.overflow, 'hidden');
+    // Switching to a recommendation must retain the original product card.
+    app.activateDialog(modal, document.getElementById('closeProductModal'));
+    app.closeProductModal();
+    assert.equal(document.activeElement, card);
+    assert.equal(background.inert, false);
+    assert.equal(alreadyInert.inert, true);
+    assert.equal(modal.inert, true);
+    assert.equal(lightbox.inert, true);
+    assert.equal(document.body.style.overflow, 'clip');
 });
 
 test('an earlier failed product request cannot overwrite the current product', async () => {

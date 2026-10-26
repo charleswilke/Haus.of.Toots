@@ -60,6 +60,9 @@
     --neutral-mid: #9B9690;
     --neutral-dark: #4A4542;
     --white: #FFFFFF;
+    /* Deep plum ink keeps labels readable on the existing peach/coral buttons. */
+    --button-ink: #2B1D23;
+    --coral-ink: #A32E43;
     
     /* Typography */
     --font-body: 'Winky Sans', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -1017,7 +1020,7 @@ svg.hero-logo .logo-smoke {
     font-family: var(--font-body);
     font-size: 1.125rem;
     font-weight: 600;
-    color: var(--white);
+    color: var(--button-ink);
     background: #FF836F;  /* Peachy orange */
     border: none;
     border-radius: var(--border-radius);
@@ -1047,13 +1050,13 @@ svg.hero-logo .logo-smoke {
 
 .cta-button-secondary {
     background: var(--white);
-    color: var(--coral-primary);
-    border: 2px solid var(--coral-primary);
+    color: var(--coral-ink);
+    border: 2px solid var(--coral-ink);
 }
 
 .cta-button-secondary:hover {
     background: var(--coral-primary);
-    color: var(--white);
+    color: var(--button-ink);
     border-color: var(--coral-primary);
 }
 

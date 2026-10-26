@@ -465,7 +465,7 @@
     font-family: var(--font-display);
     font-size: 1.05rem;
     letter-spacing: 0.04em;
-    color: var(--white);
+    color: var(--button-ink);
     background: linear-gradient(135deg, var(--coral-light) 0%, var(--coral-primary) 100%);
     border-radius: 999px;
     box-shadow: 0 6px 18px rgba(255, 132, 151, 0.38);
@@ -853,7 +853,7 @@
     font-family: var(--font-display);
     font-size: 1.05rem;
     letter-spacing: 0.04em;
-    color: var(--white);
+    color: var(--button-ink);
     background: linear-gradient(135deg, var(--coral-light) 0%, var(--coral-primary) 100%);
     box-shadow: 0 6px 18px rgba(255, 132, 151, 0.38);
     cursor: pointer;
@@ -1411,7 +1411,7 @@
     top: 2rem;
     right: 2rem;
     background: var(--coral-primary);
-    color: var(--white);
+    color: var(--button-ink);
     border: none;
     padding: 0.75rem 1.5rem;
     border-radius: 4px;
@@ -1463,6 +1463,7 @@
 .cart-drawer.open {
     visibility: visible;
     pointer-events: auto;
+    transition: none;
 }
 
 .cart-drawer-overlay {
@@ -1525,6 +1526,8 @@
     color: var(--neutral-mid);
     cursor: pointer;
     padding: 0.5rem;
+    min-width: 44px;
+    min-height: 44px;
     transition: color 0.3s ease;
 }
 
@@ -1535,7 +1538,7 @@
 .cart-body {
     flex: 1;
     overflow-y: auto;
-    padding: var(--spacing-md);
+    padding: var(--spacing-sm);
 }
 
 .cart-empty {
@@ -1557,8 +1560,8 @@
 
 .cart-item {
     display: flex;
-    gap: var(--spacing-md);
-    padding: var(--spacing-md);
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
     background: var(--linen);
     border-radius: 12px;
 }
@@ -1573,6 +1576,7 @@
 
 .cart-item-details {
     flex: 1;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -1600,6 +1604,7 @@
 
 .cart-item-controls {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: var(--spacing-sm);
     margin-top: auto;
@@ -1618,8 +1623,9 @@
     background: none;
     border: none;
     color: var(--coral-primary);
-    width: 28px;
-    height: 28px;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1668,6 +1674,8 @@
     color: var(--neutral-mid);
     cursor: pointer;
     padding: 0.25rem;
+    min-width: 44px;
+    min-height: 44px;
     transition: color 0.3s ease;
     margin-left: auto;
 }
@@ -1716,7 +1724,7 @@
 .checkout-btn {
     width: 100%;
     background: var(--coral-primary);
-    color: var(--white);
+    color: var(--button-ink);
     border: none;
     padding: 1rem;
     border-radius: 12px;
@@ -1833,12 +1841,12 @@
     cursor: pointer;
     padding: 0.5rem;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
+    transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
     z-index: 10;
     box-shadow: 0 2px 8px rgba(74, 69, 66, 0.18);
 }
@@ -1848,6 +1856,17 @@
     color: var(--coral-dark);
     transform: scale(1.1);
     box-shadow: 0 4px 12px rgba(74, 69, 66, 0.22);
+}
+
+.close-product-modal:focus-visible,
+.close-cart:focus-visible,
+.quantity-btn:focus-visible,
+.remove-item-btn:focus-visible,
+.product-detail-quantity-btn:focus-visible,
+.sticker-qty-btn:focus-visible,
+.product-detail-gallery-image:focus-visible {
+    outline: 3px solid var(--button-ink);
+    outline-offset: 3px;
 }
 
 .product-modal-body {
@@ -2135,12 +2154,14 @@
     width: min(600px, calc(100% - 2rem));
     transform: translate(-50%, calc(100% + 24px));
     opacity: 0;
+    visibility: hidden;
     z-index: 5;
     pointer-events: none;
     transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 .product-sticky-bar.visible {
+    visibility: visible;
     transform: translate(-50%, 0);
     opacity: 1;
     pointer-events: auto;
@@ -2633,8 +2654,9 @@
     background: none;
     border: none;
     color: var(--neutral-dark);
-    width: 40px;
+    width: 44px;
     height: 44px;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2950,8 +2972,9 @@
     background: none;
     border: none;
     color: var(--coral-primary);
-    width: 28px;
-    height: 28px;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -3097,8 +3120,8 @@
     .close-product-modal {
         top: 0.75rem;
         right: 0.75rem;
-        width: 36px;
-        height: 36px;
+        width: 44px;
+        height: 44px;
         padding: 0.4rem;
     }
 
@@ -3107,6 +3130,7 @@
     .product-detail-main-layout {
         display: flex;
         flex-direction: column;
+        align-items: stretch;
         gap: 1rem;
     }
 
@@ -3116,6 +3140,12 @@
 
     .product-detail-images {
         order: 0;
+        width: 100%;
+        padding: 0.65rem 0.65rem 0.1rem;
+        background: #f8e3e8;
+        border: 1px solid #e7b7c1;
+        border-radius: 14px;
+        box-shadow: 0 3px 12px rgba(90, 64, 54, 0.06);
     }
 
     .product-detail-info {
@@ -3132,6 +3162,8 @@
 
     .product-detail-gallery {
         flex-direction: row;
+        /* Center mixed photo ratios in the strip without stretching them. */
+        align-items: center;
         gap: 0.5rem;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
@@ -3152,24 +3184,47 @@
     .product-detail-gallery-dots {
         display: flex;
         justify-content: center;
-        gap: 0.5rem;
+        gap: 0;
+        overflow-x: auto;
         padding-top: 0.6rem;
     }
 
     .product-detail-gallery-dot {
-        width: 10px;
-        height: 10px;
+        display: grid;
+        place-items: center;
+        width: 0;
+        height: 44px;
+        flex: 1 1 0;
+        min-width: 24px;
+        max-width: 44px;
         padding: 0;
         border: 0;
         border-radius: 50%;
-        /* Ink at a quarter strength: --neutral-light vanished on the weave. */
-        background: rgba(74, 69, 66, 0.25);
+        background: transparent;
         cursor: pointer;
+    }
+
+    /* Keep the visible dots small inside comfortable, separate hit areas. */
+    .product-detail-gallery-dot::before {
+        content: '';
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: rgba(74, 69, 66, 0.25);
         transition: background 0.2s ease;
     }
 
-    .product-detail-gallery-dot.active {
+    .product-detail-gallery-dot.active::before {
         background: var(--neutral-dark);
+    }
+
+    .product-detail-gallery-dot:focus-visible {
+        outline: none;
+    }
+
+    .product-detail-gallery-dot:focus-visible::before {
+        outline: 2px solid var(--button-ink);
+        outline-offset: 4px;
     }
 
     .product-detail-title-bar {
@@ -3180,17 +3235,40 @@
         gap: 1.25rem;
     }
 
-    /* Keep "Add to cart" on one line beside the stepper at phone widths. */
+    /* Keep the controls together when they fit; stack on very narrow screens. */
+    .product-detail-purchase-row {
+        flex-wrap: wrap;
+    }
+
     .product-detail-add-to-cart {
+        flex: 1 1 130px;
         padding-inline: 0.75rem;
     }
 
     .product-detail-quantity-btn {
-        width: 36px;
+        width: 44px;
     }
 
     .product-detail-quantity-value {
         min-width: 2rem;
+    }
+
+    /* Larger steppers need their own row so long sticker names stay readable. */
+    .product-detail-price-row-sticker {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.5rem;
+    }
+
+    .product-detail-price-row-sticker .product-detail-price-option {
+        grid-column: 1 / -1;
+    }
+
+    .product-detail-price-row-sticker .sticker-qty-stepper {
+        margin-left: 0;
+    }
+
+    .product-detail-price-row-sticker .sticker-row-stock-note {
+        grid-column: 1 / -1;
     }
 
     .product-detail-description ul,
@@ -3355,7 +3433,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
+    transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
     z-index: 10;
     backdrop-filter: blur(10px);
 }
@@ -3381,7 +3459,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
+    transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
     z-index: 10;
     backdrop-filter: blur(10px);
 }

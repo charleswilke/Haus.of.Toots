@@ -450,6 +450,7 @@ class ShopApp {
         this.productModalBody = modalBody;
         this.productModalScrollbar = customScrollbar;
         this.productModalScrollbarThumb = customThumb;
+        this.setupDialogAccessibility();
 
         // Sticky add-to-cart pill, after the Shopify theme's: a sibling of
         // the scrolling body so it stays put, shown once the buy buttons
@@ -504,14 +505,116 @@ class ShopApp {
 
             window.addEventListener('resize', () => this.scheduleProductModalScrollbarUpdate());
         }
+    }
 
-        // Close on Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && productModal.classList.contains('open') &&
-                !document.getElementById('imageLightbox').classList.contains('open')) {
-                this.closeProductModal();
+    /** Keep focus and background interaction in the frontmost shop dialog. */
+    setupDialogAccessibility() {
+        this.dialogStack = [];
+        this.dialogBackground = new Map();
+        for (const [id, label] of [
+            ['productModal', 'Product details'],
+            ['imageLightbox', 'Product images'],
+            ['cartDrawer', 'Your cart']
+        ]) {
+            const dialog = document.getElementById(id);
+            dialog.setAttribute('role', 'dialog');
+            dialog.setAttribute('aria-modal', 'true');
+            dialog.setAttribute('aria-label', label);
+            dialog.tabIndex = -1;
+            dialog.inert = true;
+        }
+
+        document.addEventListener('keydown', event => {
+            const dialog = this.dialogStack.at(-1)?.dialog;
+            if (!dialog) return;
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                if (dialog.id === 'imageLightbox') this.closeLightbox();
+                else if (dialog.id === 'cartDrawer') this.closeCart();
+                else this.closeProductModal();
+            } else if (event.key === 'Tab') {
+                const controls = this.getDialogControls(dialog);
+                const first = controls[0] || dialog;
+                const last = controls.at(-1) || dialog;
+                const focused = document.activeElement;
+                if (!controls.includes(focused) || (event.shiftKey ? focused === first : focused === last)) {
+                    event.preventDefault();
+                    (event.shiftKey ? last : first).focus();
+                }
             }
         });
+        document.addEventListener('focusin', event => {
+            const dialog = this.dialogStack.at(-1)?.dialog;
+            if (dialog && !dialog.contains(event.target)) {
+                (this.getDialogControls(dialog)[0] || dialog).focus();
+            }
+        });
+    }
+
+    getDialogControls(dialog) {
+        return Array.from(dialog.querySelectorAll(
+            'a[href], button, input, select, textarea, [tabindex]'
+        )).filter(control => control.tabIndex >= 0 && !control.matches(':disabled') &&
+            !control.closest('[inert]') && control.getClientRects().length > 0 &&
+            getComputedStyle(control).visibility !== 'hidden');
+    }
+
+    activateDialog(dialog, initialFocus) {
+        this.dialogStack ||= [];
+        // Recommendations can replace the current product without opening a
+        // second dialog. Preserve the original card as the return destination.
+        if (!this.dialogStack.some(entry => entry.dialog === dialog)) {
+            if (!this.dialogStack.length) this.dialogScrollOverflow = document.body.style.overflow;
+            this.dialogStack.push({ dialog, trigger: document.activeElement });
+        }
+        this.syncDialogBackground();
+        (initialFocus || dialog).focus({ preventScroll: true });
+        // Some browsers finish removing focus from an inert background at
+        // the end of the frame. Reassert initial focus after that adjustment.
+        requestAnimationFrame(() => {
+            if (this.dialogStack.at(-1)?.dialog === dialog && !dialog.contains(document.activeElement)) {
+                (initialFocus || dialog).focus({ preventScroll: true });
+            }
+        });
+    }
+
+    deactivateDialog(dialog) {
+        const index = this.dialogStack?.findIndex(entry => entry.dialog === dialog) ?? -1;
+        if (index < 0) return;
+        const wasFrontmost = index === this.dialogStack.length - 1;
+        const [{ trigger }] = this.dialogStack.splice(index, 1);
+        this.syncDialogBackground();
+        dialog.inert = true;
+        if (!wasFrontmost) return;
+        const active = this.dialogStack.at(-1)?.dialog;
+        if (trigger?.isConnected && !trigger.closest('[inert]') &&
+            trigger.getClientRects().length && (!active || active.contains(trigger))) {
+            trigger.focus({ preventScroll: true });
+        } else if (active) {
+            (this.getDialogControls(active)[0] || active).focus({ preventScroll: true });
+        }
+    }
+
+    syncDialogBackground() {
+        this.dialogBackground ||= new Map();
+        for (const [element, inert] of this.dialogBackground) element.inert = inert;
+        this.dialogBackground.clear();
+        for (const id of ['productModal', 'imageLightbox', 'cartDrawer']) {
+            const dialog = document.getElementById(id);
+            if (!dialog.classList.contains('open')) dialog.inert = true;
+        }
+        const active = this.dialogStack.at(-1)?.dialog;
+        if (active) {
+            for (const element of document.body.children) {
+                if (element === active || element.contains(active)) continue;
+                this.dialogBackground.set(element, element.inert);
+                element.inert = true;
+            }
+            active.inert = false;
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = this.dialogScrollOverflow ?? '';
+        }
     }
 
     scheduleProductModalScrollbarUpdate() {
@@ -606,9 +709,7 @@ class ShopApp {
         document.addEventListener('keydown', (e) => {
             if (!lightbox.classList.contains('open')) return;
             
-            if (e.key === 'Escape') {
-                this.closeLightbox();
-            } else if (e.key === 'ArrowLeft') {
+            if (e.key === 'ArrowLeft') {
                 this.navigateLightbox(-1);
             } else if (e.key === 'ArrowRight') {
                 this.navigateLightbox(1);
@@ -653,7 +754,7 @@ class ShopApp {
 
         this.updateLightboxImage();
         lightbox.classList.add('open');
-        document.body.style.overflow = 'hidden';
+        this.activateDialog(lightbox, document.getElementById('closeLightbox'));
     }
 
     /**
@@ -662,9 +763,7 @@ class ShopApp {
     closeLightbox() {
         const lightbox = document.getElementById('imageLightbox');
         lightbox.classList.remove('open');
-        if (!document.getElementById('productModal').classList.contains('open')) {
-            document.body.style.overflow = '';
-        }
+        this.deactivateDialog(lightbox);
     }
 
     /**
@@ -710,6 +809,7 @@ class ShopApp {
     openCart() {
         const cartDrawer = document.getElementById('cartDrawer');
         cartDrawer.classList.add('open');
+        this.activateDialog(cartDrawer, document.getElementById('closeCart'));
     }
 
     /**
@@ -718,6 +818,7 @@ class ShopApp {
     closeCart() {
         const cartDrawer = document.getElementById('cartDrawer');
         cartDrawer.classList.remove('open');
+        this.deactivateDialog(cartDrawer);
     }
 
     /**
@@ -1209,7 +1310,8 @@ class ShopApp {
             modalBody.innerHTML = '<div class="product-detail-loading">Loading product details...</div>';
         }
         productModal.classList.add('open');
-        document.body.style.overflow = 'hidden';
+        productModal.setAttribute('aria-label', listed?.title || 'Product details');
+        this.activateDialog(productModal, document.getElementById('closeProductModal'));
         this.scheduleProductModalScrollbarUpdate();
         this.loadProductRecommendations(productId);
 
@@ -1223,6 +1325,7 @@ class ShopApp {
             } else {
                 this.renderProductModal(product);
             }
+            productModal.setAttribute('aria-label', product.title || 'Product details');
         } catch (error) {
             console.error('Error loading product:', error);
             if (this.productModalRequest !== request || !productModal.classList.contains('open')) return;
@@ -1287,7 +1390,7 @@ class ShopApp {
         this.productModalRequest = null;
         this.closeLightbox();
         productModal.classList.remove('open');
-        document.body.style.overflow = '';
+        this.deactivateDialog(productModal);
         this.scheduleProductModalScrollbarUpdate();
         this.productStickyBar?.classList.remove('visible');
 
@@ -1507,6 +1610,7 @@ class ShopApp {
                              data-full-image="${image.url}"
                              data-index="${index}"
                              alt="${this.escapeHtml(image.altText || product.title)}"
+                             ${this.isMobileDevice() ? '' : `role="button" tabindex="0" aria-label="Enlarge image ${index + 1}: ${this.escapeHtml(image.altText || product.title)}"`}
                              loading="${index === 0 ? 'eager' : 'lazy'}"
                              class="product-detail-gallery-image product-image-clickable">`;
                     }).join('')}
@@ -1589,9 +1693,16 @@ class ShopApp {
         const allImageCaptions = images.map(image => image.altText || product.title);
 
         document.querySelectorAll('.product-detail-gallery-image').forEach(img => {
-            img.addEventListener('click', () => {
+            const enlarge = () => {
                 const index = parseInt(img.getAttribute('data-index'), 10) || 0;
                 this.openLightbox(allImageUrls, index, allImageCaptions);
+            };
+            img.addEventListener('click', enlarge);
+            img.addEventListener('keydown', event => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    enlarge();
+                }
             });
         });
 
