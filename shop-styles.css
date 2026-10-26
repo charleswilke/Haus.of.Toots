@@ -2031,27 +2031,27 @@
     display: none;
 }
 
-.sticker-gallery-thumbnails,
-.sticker-gallery-caption {
+.variant-gallery-thumbnails,
+.variant-gallery-caption {
     display: none;
 }
 
-.product-detail-content-sticker-preview > .product-detail-recommendations {
+.product-detail-content-variant-preview > .product-detail-recommendations {
     margin-top: 2rem;
 }
 
 @media (min-width: 768px) {
-    .product-detail-content-sticker-preview .product-detail-media {
+    .product-detail-content-variant-preview .product-detail-media {
         position: sticky;
         top: var(--modal-pad);
     }
 
-    .product-detail-content-sticker-preview .product-detail-info {
+    .product-detail-content-variant-preview .product-detail-info {
         position: relative;
         top: auto;
     }
 
-    .sticker-gallery {
+    .variant-gallery {
         padding: 0.75rem;
         background: #f8e3e8;
         border: 1px solid #e7b7c1;
@@ -2059,7 +2059,7 @@
         box-shadow: 0 3px 12px rgba(90, 64, 54, 0.06);
     }
 
-    .sticker-gallery .product-detail-gallery {
+    .variant-gallery .product-detail-gallery {
         display: grid;
         grid-template: minmax(0, 1fr) / minmax(0, 1fr);
         place-items: center;
@@ -2067,7 +2067,7 @@
         min-height: 120px;
     }
 
-    .sticker-gallery .product-detail-gallery-image {
+    .variant-gallery .product-detail-gallery-image {
         display: none;
         grid-area: 1 / 1;
         width: 100%;
@@ -2077,11 +2077,11 @@
         background: transparent;
     }
 
-    .sticker-gallery .product-detail-gallery-image.is-active {
+    .variant-gallery .product-detail-gallery-image.is-active {
         display: block;
     }
 
-    .sticker-gallery-thumbnails {
+    .variant-gallery-thumbnails {
         display: flex;
         gap: 0.4rem;
         margin-top: 0.75rem;
@@ -2089,7 +2089,7 @@
         overflow-x: auto;
     }
 
-    .sticker-gallery-thumbnail {
+    .variant-gallery-thumbnail {
         flex: 0 0 56px;
         width: 56px;
         height: 56px;
@@ -2100,7 +2100,7 @@
         cursor: pointer;
     }
 
-    .sticker-gallery-thumbnail img {
+    .variant-gallery-thumbnail img {
         display: block;
         width: 100%;
         height: 100%;
@@ -2108,16 +2108,16 @@
         border-radius: 3px;
     }
 
-    .sticker-gallery-thumbnail[aria-pressed="true"] {
+    .variant-gallery-thumbnail[aria-pressed="true"] {
         border-color: var(--coral-ink);
     }
 
-    .sticker-gallery-thumbnail:focus-visible {
+    .variant-gallery-thumbnail:focus-visible {
         outline: 2px solid var(--button-ink);
         outline-offset: 2px;
     }
 
-    .sticker-gallery-caption {
+    .variant-gallery-caption {
         display: block;
         margin: 0.35rem 0 0;
         color: var(--neutral-dark);
@@ -2126,8 +2126,18 @@
         line-height: 1.4;
     }
 
-    .product-detail-content-sticker-preview > .product-detail-recommendations .product-detail-recommendations-grid {
+    .product-detail-content-variant-preview > .product-detail-recommendations .product-detail-recommendations-grid {
         grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    /* Keep the minder frame aligned with the tile's top at its own height. */
+    .product-detail-content-needle-minder .product-detail-media {
+        position: static;
+        top: auto;
+    }
+
+    .product-detail-content-needle-minder .variant-gallery .product-detail-gallery {
+        height: calc(90vh - var(--modal-pad) - var(--modal-pad) - 9rem);
     }
 }
 
@@ -3367,7 +3377,7 @@
 
     .product-detail-gallery-dots {
         display: flex;
-        justify-content: center;
+        justify-content: safe center;
         gap: 0;
         overflow-x: auto;
         padding-top: 0.6rem;

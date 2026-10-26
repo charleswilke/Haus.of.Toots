@@ -447,7 +447,7 @@ class ShopifyClient {
                     productType
                     tags
                     vendor
-                    images(first: 10) {
+                    images(first: 20) {
                         edges {
                             node {
                                 url
@@ -520,7 +520,7 @@ class ShopifyClient {
                     productType
                     tags
                     vendor
-                    images(first: 10) {
+                    images(first: 20) {
                         edges {
                             node {
                                 url

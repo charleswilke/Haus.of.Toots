@@ -329,6 +329,11 @@ class ShopApp {
                tags.some(tag => tag.includes('sticker'));
     }
 
+    isNeedleMinderProduct(product) {
+        const text = [product?.title, product?.productType, ...(product?.tags || [])].join(' ').toLowerCase();
+        return /needle\s*minder/.test(text);
+    }
+
     /**
      * Create HTML for a product card
      */
@@ -1388,9 +1393,9 @@ class ShopApp {
 
         this.activeModalProductId = null;
         this.productModalRequest = null;
-        if (this.stickerGalleryResizeHandler) {
-            window.removeEventListener('resize', this.stickerGalleryResizeHandler);
-            this.stickerGalleryResizeHandler = null;
+        if (this.variantGalleryResizeHandler) {
+            window.removeEventListener('resize', this.variantGalleryResizeHandler);
+            this.variantGalleryResizeHandler = null;
         }
         this.closeLightbox();
         productModal.classList.remove('open');
@@ -1419,9 +1424,10 @@ class ShopApp {
         const variants = product.variants?.edges || [];
         const hasMultipleVariants = variants.length > 1;
         const selectedVariant = this.getDefaultVariant(product);
-        const stickerGallery = this.hasStickerGallery(product);
-        this.stickerPreviewVariantId = stickerGallery ? variants[0]?.node.id : null;
-        this.stickerPreviewImageIndex = 0;
+        this.selectedProductVariantId = selectedVariant?.id || null;
+        const variantGallery = this.hasVariantGallery(product);
+        this.galleryPreviewVariantId = variantGallery ? selectedVariant?.id || variants[0]?.node.id : null;
+        this.galleryPreviewImageIndex = 0;
 
         const imagesHTML = this.renderProductImages(product);
         const descriptionHTML = this.renderProductDescription(product);
@@ -1431,11 +1437,11 @@ class ShopApp {
             </section>`;
 
         modalBody.innerHTML = `
-            <div class="product-detail-content${stickerGallery ? ' product-detail-content-sticker-preview' : ''}">
+            <div class="product-detail-content${variantGallery ? ' product-detail-content-variant-preview' : ''}${variantGallery && this.isNeedleMinderProduct(product) ? ' product-detail-content-needle-minder' : ''}">
                 <div class="product-detail-main-layout">
                     <div class="product-detail-media">
                         ${imagesHTML}
-                        ${stickerGallery ? '' : recommendationsHTML}
+                        ${variantGallery ? '' : recommendationsHTML}
                     </div>
                     <div class="product-detail-info">
                         <div class="product-detail-title-bar">
@@ -1456,7 +1462,7 @@ class ShopApp {
                         ${descriptionHTML}
                     </div>
                 </div>
-                ${stickerGallery ? recommendationsHTML : ''}
+                ${variantGallery ? recommendationsHTML : ''}
             </div>
         `;
 
@@ -1589,13 +1595,14 @@ class ShopApp {
         return variants.find(variant => variant.availableForSale) || variants[0] || null;
     }
 
-    hasStickerGallery(product) {
-        return this.isStickerProduct(product) && (product.variants?.edges?.length || 0) > 1;
+    hasVariantGallery(product) {
+        return (this.isStickerProduct(product) || this.isNeedleMinderProduct(product)) &&
+            (product.variants?.edges?.length || 0) > 1;
     }
 
     getProductGalleryImages(product) {
         const images = (product.images?.edges || []).map(edge => edge.node).filter(Boolean);
-        if (!this.hasStickerGallery(product)) return images;
+        if (!this.hasVariantGallery(product)) return images;
         // Variant photos can be outside the first page of product images.
         for (const { node: variant } of product.variants.edges) {
             if (variant.image?.url && !images.some(image => this.sameProductImage(image, variant.image))) {
@@ -1610,31 +1617,34 @@ class ShopApp {
             first.url.split('?')[0] === second.url.split('?')[0]);
     }
 
-    getStickerVariantImageIndex(product, variant) {
+    getVariantGalleryImageIndex(product, variant) {
         const index = this.getProductGalleryImages(product)
             .findIndex(image => this.sameProductImage(image, variant?.image));
         return index < 0 ? 0 : index;
     }
 
-    previewStickerVariant(product, variantId, options = {}) {
+    previewProductVariantImage(product, variantId, options = {}) {
         const variant = product.variants?.edges?.find(edge => edge.node.id === variantId)?.node;
         if (!variant) return;
-        this.previewStickerImage(product, this.getStickerVariantImageIndex(product, variant), {
+        this.previewProductGalleryImage(product, this.getVariantGalleryImageIndex(product, variant), {
             ...options, variantId, label: variant.selectedOptions?.[0]?.value || variant.title
         });
     }
 
-    previewStickerImage(product, index, { scroll = true, variantId, label } = {}) {
+    previewProductGalleryImage(product, index, { scroll = true, variantId, label } = {}) {
         if (this.activeModalProductId !== product.id) return;
         const images = this.getProductGalleryImages(product);
         if (!images[index]) return;
-        const variant = product.variants?.edges?.find(edge =>
-            this.sameProductImage(edge.node.image, images[index]))?.node;
-        this.stickerPreviewVariantId = variantId || variant?.id || null;
-        this.stickerPreviewImageIndex = index;
+        const variant = product.variants?.edges?.find(edge => variantId
+            ? edge.node.id === variantId : this.sameProductImage(edge.node.image, images[index]))?.node;
+        if (!this.isStickerProduct(product) && variant && variant.id !== this.selectedProductVariantId) {
+            this.selectProductVariant(product, variant.id, { syncGallery: false });
+        }
+        this.galleryPreviewVariantId = variantId || variant?.id || null;
+        this.galleryPreviewImageIndex = index;
 
         document.querySelectorAll('.product-detail-price-row-sticker').forEach(row => {
-            const active = row.getAttribute('data-variant-id') === this.stickerPreviewVariantId;
+            const active = row.getAttribute('data-variant-id') === this.galleryPreviewVariantId;
             row.classList.toggle('is-previewing', active);
             row.querySelector('.sticker-preview-option')?.setAttribute('aria-pressed', String(active));
         });
@@ -1643,34 +1653,46 @@ class ShopApp {
             slide.classList.toggle('is-active', i === index);
             if (i === index) slide.loading = 'eager';
         });
-        document.querySelectorAll('.sticker-gallery-thumbnail').forEach((thumb, i) => {
+        const thumbnails = document.querySelectorAll('.variant-gallery-thumbnail');
+        thumbnails.forEach((thumb, i) => {
             thumb.setAttribute('aria-pressed', String(i === index));
         });
-        document.querySelectorAll('.product-detail-gallery-dot').forEach((dot, i) => {
+        if (!this.isMobileDevice()) this.revealGalleryControl(thumbnails[index]);
+        const dots = document.querySelectorAll('.product-detail-gallery-dot');
+        dots.forEach((dot, i) => {
             dot.classList.toggle('active', i === index);
         });
-        const caption = document.querySelector('.sticker-gallery-caption');
+        if (this.isMobileDevice()) this.revealGalleryControl(dots[index]);
+        const caption = document.querySelector('.variant-gallery-caption');
         if (caption) caption.textContent = label || variant?.selectedOptions?.[0]?.value ||
             variant?.title || images[index].altText || `Photo ${index + 1}`;
-
         const gallery = document.querySelector('.product-detail-gallery');
         if (scroll && this.isMobileDevice() && gallery && slides[index]) {
             gallery.scrollTo({
                 left: slides[index].offsetLeft - slides[0].offsetLeft,
-                behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+                behavior: !this.isStickerProduct(product) || window.matchMedia('(prefers-reduced-motion: reduce)').matches
+                    ? 'auto' : 'smooth'
             });
         }
     }
 
+    revealGalleryControl(control) {
+        const strip = control?.parentElement;
+        if (!strip || strip.scrollWidth <= strip.clientWidth) return;
+        const item = control.getBoundingClientRect();
+        const bounds = strip.getBoundingClientRect();
+        if (item.left < bounds.left + 4) strip.scrollLeft -= bounds.left + 4 - item.left;
+        else if (item.right > bounds.right - 4) strip.scrollLeft += item.right - bounds.right + 4;
+    }
+
     /**
-     * Gallery for the product modal: every image at full width in a single
-     * column, as on the Shopify product page. Below the tablet breakpoint the
-     * same markup becomes a snap-scrolling strip with dots (see the 767px
-     * block in shop-styles.css and attachProductImageListeners).
+     * Stickers and needle minders share a desktop photo viewer with thumbnails.
+     * Other products keep the full-width image column. On mobile, both layouts
+     * become a snap-scrolling strip with dots.
      */
     renderProductImages(product) {
         const images = this.getProductGalleryImages(product);
-        const stickerGallery = this.hasStickerGallery(product);
+        const variantGallery = this.hasVariantGallery(product);
 
         if (images.length === 0) {
             return `<div class="product-detail-images">
@@ -1683,20 +1705,20 @@ class ShopApp {
                     ${images.map((_, index) => `<button type="button" class="product-detail-gallery-dot${index === 0 ? ' active' : ''}" data-index="${index}" aria-label="Show image ${index + 1} of ${images.length}"></button>`).join('')}
                 </div>` : '';
 
-        const thumbnailsHTML = stickerGallery ? `
-                <div class="sticker-gallery-thumbnails" role="group" aria-label="Product photos">
+        const thumbnailsHTML = variantGallery ? `
+                <div class="variant-gallery-thumbnails" role="group" aria-label="Product photos">
                     ${images.map((image, index) => {
                         const variant = product.variants.edges.find(edge => this.sameProductImage(edge.node.image, image))?.node;
                         const label = variant?.selectedOptions?.[0]?.value || variant?.title || image.altText || `Photo ${index + 1}`;
-                        return `<button type="button" class="sticker-gallery-thumbnail" data-index="${index}" aria-label="View photo: ${this.escapeHtml(label)}" aria-pressed="${index === 0}">
+                        return `<button type="button" class="variant-gallery-thumbnail" data-index="${index}" aria-label="View photo: ${this.escapeHtml(label)}" aria-pressed="${index === 0}">
                             <img src="${image.url}${image.url.includes('?') ? '&' : '?'}width=120" alt="" width="56" height="56" loading="lazy">
                         </button>`;
                     }).join('')}
                 </div>
-                <p class="sticker-gallery-caption" aria-live="polite"></p>` : '';
+                <p class="variant-gallery-caption" aria-live="polite"></p>` : '';
 
         return `
-            <div class="product-detail-images${stickerGallery ? ' sticker-gallery' : ''}">
+            <div class="product-detail-images${variantGallery ? ' variant-gallery' : ''}">
                 <div class="product-detail-gallery">
                     ${images.map((image, index) => {
                         // A width param keeps the natural aspect ratio; transformedSrc is a cropped square.
@@ -1785,12 +1807,12 @@ class ShopApp {
      * Lightbox on every gallery image, plus the dots for the mobile strip.
      */
     attachProductImageListeners(product) {
-        if (this.stickerGalleryResizeHandler) {
-            window.removeEventListener('resize', this.stickerGalleryResizeHandler);
-            this.stickerGalleryResizeHandler = null;
+        if (this.variantGalleryResizeHandler) {
+            window.removeEventListener('resize', this.variantGalleryResizeHandler);
+            this.variantGalleryResizeHandler = null;
         }
         const images = this.getProductGalleryImages(product);
-        const stickerGallery = this.hasStickerGallery(product);
+        const variantGallery = this.hasVariantGallery(product);
         const allImageUrls = images.map(image => image.url);
         const allImageCaptions = images.map(image => image.altText || product.title);
 
@@ -1812,12 +1834,12 @@ class ShopApp {
         const dots = Array.from(document.querySelectorAll('.product-detail-gallery-dot'));
         if (!gallery) return;
 
-        if (stickerGallery) {
-            document.querySelectorAll('.sticker-gallery-thumbnail').forEach(thumb => {
-                thumb.addEventListener('click', () => this.previewStickerImage(product, Number(thumb.dataset.index)));
+        if (variantGallery) {
+            document.querySelectorAll('.variant-gallery-thumbnail').forEach(thumb => {
+                thumb.addEventListener('click', () => this.previewProductGalleryImage(product, Number(thumb.dataset.index)));
             });
-            this.previewStickerVariant(product, this.stickerPreviewVariantId, { scroll: false });
-            this.stickerGalleryResizeHandler = () => {
+            this.previewProductVariantImage(product, this.galleryPreviewVariantId, { scroll: this.isMobileDevice() });
+            this.variantGalleryResizeHandler = () => {
                 document.querySelectorAll('.product-detail-gallery-image').forEach((image, index) => {
                     if (this.isMobileDevice()) {
                         image.removeAttribute('role');
@@ -1829,10 +1851,10 @@ class ShopApp {
                         image.setAttribute('aria-label', `Enlarge image ${index + 1}: ${images[index].altText || product.title}`);
                     }
                 });
-                if (this.stickerPreviewVariantId) this.previewStickerVariant(product, this.stickerPreviewVariantId);
-                else this.previewStickerImage(product, this.stickerPreviewImageIndex || 0);
+                if (this.galleryPreviewVariantId) this.previewProductVariantImage(product, this.galleryPreviewVariantId);
+                else this.previewProductGalleryImage(product, this.galleryPreviewImageIndex || 0);
             };
-            window.addEventListener('resize', this.stickerGalleryResizeHandler);
+            window.addEventListener('resize', this.variantGalleryResizeHandler);
         }
         if (dots.length < 2) return;
 
@@ -1843,13 +1865,13 @@ class ShopApp {
             const offsets = slides.map(slide => slide.offsetLeft - slides[0].offsetLeft);
             const index = offsets.reduce((nearest, offset, i) =>
                 Math.abs(offset - gallery.scrollLeft) < Math.abs(offsets[nearest] - gallery.scrollLeft) ? i : nearest, 0);
-            if (stickerGallery) this.previewStickerImage(product, index, { scroll: false });
+            if (variantGallery) this.previewProductGalleryImage(product, index, { scroll: false });
             else setActiveDot(index);
         }, { passive: true });
         dots.forEach(dot => {
             dot.addEventListener('click', () => {
                 const index = parseInt(dot.getAttribute('data-index'), 10) || 0;
-                if (stickerGallery) this.previewStickerImage(product, index);
+                if (variantGallery) this.previewProductGalleryImage(product, index);
                 else {
                     const slides = gallery.querySelectorAll('.product-detail-gallery-image');
                     gallery.scrollTo({ left: slides[index].offsetLeft - slides[0].offsetLeft, behavior: 'smooth' });
@@ -1878,7 +1900,7 @@ class ShopApp {
                     const action = btn.getAttribute('data-action');
                     const variantId = row.getAttribute('data-variant-id');
                     const variant = variants.find(v => v.node.id === variantId)?.node;
-                    this.previewStickerVariant(product, variantId);
+                    this.previewProductVariantImage(product, variantId);
                     let qty = parseInt(qtyEl.textContent, 10) || 0;
 
                     if (action === 'increase') {
@@ -1915,7 +1937,7 @@ class ShopApp {
             document.querySelectorAll('.product-detail-price-row-sticker').forEach(row => {
                 row.addEventListener('click', (event) => {
                     if (event.target.closest('.sticker-qty-btn')) return;
-                    this.previewStickerVariant(product, row.getAttribute('data-variant-id'));
+                    this.previewProductVariantImage(product, row.getAttribute('data-variant-id'));
                 });
             });
             return;
@@ -1925,29 +1947,33 @@ class ShopApp {
             pill.addEventListener('click', () => {
                 if (pill.classList.contains('selected')) return;
                 const variantId = pill.getAttribute('data-variant-id');
-                const selectedVariant = variants.find(v => v.node.id === variantId)?.node;
-                const detailPrice = document.getElementById('productDetailPrice');
-                const variantPicker = document.getElementById('productVariantPicker');
-                const purchaseActions = document.getElementById('productPurchaseActions');
-
-                if (detailPrice) {
-                    detailPrice.innerHTML = this.renderProductPriceDisplay(product, selectedVariant);
-                }
-
-                if (variantPicker) {
-                    variantPicker.innerHTML = this.renderProductVariantPicker(product, variants, selectedVariant);
-                }
-
-                if (purchaseActions) {
-                    purchaseActions.innerHTML = this.renderProductPurchaseActions(product, selectedVariant, true);
-                    this.attachProductPurchaseActionListeners(product, selectedVariant);
-                }
-
-                this.attachProductVariantSelectionListeners(product, variants);
-                this.updateStickyBar(product, selectedVariant);
-                this.scheduleProductModalScrollbarUpdate();
+                this.selectProductVariant(product, variantId);
             });
         });
+    }
+
+    selectProductVariant(product, variantId, { syncGallery = true } = {}) {
+        if (this.activeModalProductId !== product.id) return;
+        const variants = product.variants?.edges || [];
+        const selectedVariant = variants.find(edge => edge.node.id === variantId)?.node;
+        if (!selectedVariant) return;
+        const detailPrice = document.getElementById('productDetailPrice');
+        const variantPicker = document.getElementById('productVariantPicker');
+        const purchaseActions = document.getElementById('productPurchaseActions');
+        const restoreOptionFocus = variantPicker?.contains(document.activeElement);
+        this.selectedProductVariantId = variantId;
+
+        if (detailPrice) detailPrice.innerHTML = this.renderProductPriceDisplay(product, selectedVariant);
+        if (variantPicker) variantPicker.innerHTML = this.renderProductVariantPicker(product, variants, selectedVariant);
+        if (purchaseActions) {
+            purchaseActions.innerHTML = this.renderProductPurchaseActions(product, selectedVariant, true);
+            this.attachProductPurchaseActionListeners(product, selectedVariant);
+        }
+        this.attachProductVariantSelectionListeners(product, variants);
+        this.updateStickyBar(product, selectedVariant);
+        if (syncGallery && this.hasVariantGallery(product)) this.previewProductVariantImage(product, variantId);
+        if (restoreOptionFocus) variantPicker.querySelector('.product-detail-variant-pill.selected')?.focus({ preventScroll: true });
+        this.scheduleProductModalScrollbarUpdate();
     }
 
     renderStickerPurchaseActions(product, selections) {
@@ -2244,7 +2270,7 @@ class ShopApp {
 
                         return `
                             <div class="${rowClasses}" data-variant-id="${variant.id}">
-                                <button type="button" class="product-detail-price-option sticker-preview-option" aria-label="Preview ${this.escapeHtml(optionValue)}" aria-pressed="${variant.id === this.stickerPreviewVariantId}">${this.escapeHtml(optionValue)}</button>
+                                <button type="button" class="product-detail-price-option sticker-preview-option" aria-label="Preview ${this.escapeHtml(optionValue)}" aria-pressed="${variant.id === this.galleryPreviewVariantId}">${this.escapeHtml(optionValue)}</button>
                                 <span class="product-detail-price-value">${price}</span>
                                 <div class="sticker-qty-stepper" role="group" aria-label="Quantity for ${this.escapeHtml(optionValue)}">
                                     <button type="button" class="sticker-qty-btn" data-action="decrease" disabled aria-label="Decrease quantity">&minus;</button>

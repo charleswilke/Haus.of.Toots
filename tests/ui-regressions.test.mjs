@@ -123,9 +123,9 @@ function stickerShop() {
     document.querySelectorAll = selector => selector.includes('sticker-qty-btn') ? rows.flatMap(r => [r.increase, r.decrease]) :
         selector.includes('product-detail-price-row-sticker') ? rows :
         selector === '.product-detail-gallery-image' ? slides :
-        selector === '.sticker-gallery-thumbnail' ? thumbs :
+        selector === '.variant-gallery-thumbnail' ? thumbs :
         selector === '.product-detail-gallery-dot' ? dots : [];
-    document.querySelector = selector => selector === '.sticker-gallery-caption' ? caption : gallery;
+    document.querySelector = selector => selector === '.variant-gallery-caption' ? caption : gallery;
     context.getVariantInventoryLimit = () => 10;
     context.cartManager = { getVariantQuantity: () => 0 };
     context.inventoryManager = { getVariantInventory: async () => ({}) };
@@ -135,25 +135,112 @@ function stickerShop() {
     return { ...env, product, variants, rows, slides, thumbs, dots, caption };
 }
 
+function minderShop() {
+    const env = shop();
+    const { app, document } = env;
+    const variants = ['Red heart', 'Pink heart', 'Frog It'].map((title, index) => ({ node: {
+        id: `minder-${index}`, title, availableForSale: true,
+        image: { url: `https://example.com/minder-${index}.jpg` }
+    } }));
+    const product = { id: 'minders', title: 'Flash Sheet Needle Minders',
+        variants: { edges: variants }, images: { edges: variants.map(({ node }) => ({ node: node.image })) } };
+    const slides = variants.map(() => element());
+    const thumbs = variants.map(() => element());
+    const pills = variants.map(({ node }) => {
+        const pill = element();
+        pill.setAttribute('data-variant-id', node.id);
+        return pill;
+    });
+    const caption = element();
+    document.querySelector = selector => selector === '.variant-gallery-caption' ? caption : element();
+    document.querySelectorAll = selector => selector === '.product-detail-gallery-image' ? slides :
+        selector === '.variant-gallery-thumbnail' ? thumbs :
+        selector.includes('.product-detail-variant-pill') ? pills : [];
+    app.activeModalProductId = product.id;
+    app.selectedProductVariantId = variants[0].node.id;
+    app.renderProductPriceDisplay = (_product, variant) => variant.id;
+    app.renderProductVariantPicker = (_product, _variants, variant) => variant.id;
+    app.renderProductPurchaseActions = (_product, variant) => variant.id;
+    app.attachProductPurchaseActionListeners = (_product, variant) => { app.purchaseVariantId = variant.id; };
+    app.updateStickyBar = (_product, variant) => { app.stickyVariantId = variant.id; };
+    return { ...env, product, variants, slides, thumbs, pills, caption };
+}
+
+test('needle minder option selection updates its photo, price, and purchase variant together', async () => {
+    const { app, document, product, variants, pills, slides, caption } = minderShop();
+    assert.equal(app.hasVariantGallery(product), true);
+    app.attachProductVariantSelectionListeners(product, variants);
+    await pills[1].fire('click');
+    assert.equal(app.selectedProductVariantId, 'minder-1');
+    assert.equal(app.purchaseVariantId, 'minder-1');
+    assert.equal(app.stickyVariantId, 'minder-1');
+    assert.equal(document.getElementById('productDetailPrice').innerHTML, 'minder-1');
+    assert.equal(document.getElementById('productVariantPicker').innerHTML, 'minder-1');
+    assert.equal(document.getElementById('productPurchaseActions').innerHTML, 'minder-1');
+    assert.equal(slides[1].classList.contains('is-active'), true);
+    assert.equal(caption.textContent, 'Pink heart');
+});
+
+test('needle minder thumbnails select the matching purchasable option without recursion', () => {
+    const { app, product, slides, caption } = minderShop();
+    let updates = 0;
+    const update = app.updateStickyBar;
+    app.updateStickyBar = (...args) => { updates++; update(...args); };
+    app.previewProductGalleryImage(product, 2);
+    assert.equal(app.selectedProductVariantId, 'minder-2');
+    assert.equal(app.purchaseVariantId, 'minder-2');
+    assert.equal(slides[2].classList.contains('is-active'), true);
+    assert.equal(caption.textContent, 'Frog It');
+    assert.equal(updates, 1);
+    // A general overview photo has no associated option and keeps the choice.
+    product.images.edges.unshift({ node: { url: 'https://example.com/all-minders.jpg' } });
+    app.previewProductGalleryImage(product, 0);
+    assert.equal(app.selectedProductVariantId, 'minder-2');
+    assert.equal(app.purchaseVariantId, 'minder-2');
+});
+
+test('ordinary canvas options retain their existing gallery and purchase behavior', () => {
+    const { app, product } = minderShop();
+    product.title = 'Needlepoint Canvas';
+    assert.equal(app.hasVariantGallery(product), false);
+    let previews = 0;
+    app.previewProductVariantImage = () => { previews++; };
+    app.selectProductVariant(product, 'minder-1');
+    assert.equal(app.purchaseVariantId, 'minder-1');
+    assert.equal(previews, 0);
+});
+
+test('the active gallery control is revealed within its own horizontal strip', () => {
+    const { app } = shop();
+    const strip = { scrollLeft: 0, scrollWidth: 300, clientWidth: 100,
+        getBoundingClientRect: () => ({ left: 10, right: 110 }) };
+    const control = { parentElement: strip, getBoundingClientRect: () => ({ left: 160, right: 190 }) };
+    app.revealGalleryControl(control);
+    assert.equal(strip.scrollLeft, 84);
+    control.getBoundingClientRect = () => ({ left: 5, right: 35 });
+    app.revealGalleryControl(control);
+    assert.equal(strip.scrollLeft, 75);
+});
+
 test('sticker photos use assigned images rather than variant order, including unlisted photos', () => {
     const { app, product, variants } = stickerShop();
-    assert.equal(app.getStickerVariantImageIndex(product, variants[1].node), 2);
-    assert.equal(app.getStickerVariantImageIndex(product, variants[2].node), 1);
+    assert.equal(app.getVariantGalleryImageIndex(product, variants[1].node), 2);
+    assert.equal(app.getVariantGalleryImageIndex(product, variants[2].node), 1);
     variants[2].node.image = { url: 'https://example.com/new-pink.jpg' };
-    assert.equal(app.getStickerVariantImageIndex(product, variants[2].node), 3);
+    assert.equal(app.getVariantGalleryImageIndex(product, variants[2].node), 3);
     assert.equal(app.getProductGalleryImages(product).length, 4);
     assert.equal(product.images.edges.length, 3);
-    assert.equal(app.getStickerVariantImageIndex(product, { id: 'no-photo' }), 0);
+    assert.equal(app.getVariantGalleryImageIndex(product, { id: 'no-photo' }), 0);
 });
 
 test('only the previewed sticker is highlighted while chosen quantities remain independent', () => {
     const { app, product, rows, slides, thumbs, caption } = stickerShop();
     rows[1].qty.textContent = '2';
     rows[2].qty.textContent = '1';
-    app.previewStickerVariant(product, 'red');
+    app.previewProductVariantImage(product, 'red');
     assert.equal(slides[2].classList.contains('is-active'), true);
     assert.equal(rows[1].classList.contains('is-previewing'), true);
-    app.previewStickerVariant(product, 'pink');
+    app.previewProductVariantImage(product, 'pink');
     assert.equal(rows.filter(row => row.classList.contains('is-previewing')).length, 1);
     assert.equal(rows[1].classList.contains('is-previewing'), false);
     assert.equal(rows[2].button.getAttribute('aria-pressed'), 'true');
@@ -163,7 +250,7 @@ test('only the previewed sticker is highlighted while chosen quantities remain i
     assert.equal(caption.textContent, 'Pink heart');
     assert.deepEqual(rows.map(row => row.qty.textContent), ['0', '2', '1']);
     // Thumbnail browsing uses the same state as option selection.
-    app.previewStickerImage(product, 0);
+    app.previewProductGalleryImage(product, 0);
     assert.equal(rows[0].classList.contains('is-previewing'), true);
     assert.equal(rows[2].classList.contains('is-previewing'), false);
     assert.deepEqual(rows.map(row => row.qty.textContent), ['0', '2', '1']);
@@ -202,9 +289,9 @@ test('rapid sticker increments preserve every click while inventory requests are
 
 test('events from an old sticker gallery cannot alter a different product modal', () => {
     const { app, product, rows, caption } = stickerShop();
-    app.previewStickerVariant(product, 'red');
+    app.previewProductVariantImage(product, 'red');
     app.activeModalProductId = 'another-product';
-    app.previewStickerVariant(product, 'pink');
+    app.previewProductVariantImage(product, 'pink');
     assert.equal(caption.textContent, 'Red heart');
     assert.equal(rows[1].classList.contains('is-previewing'), true);
     assert.equal(rows[2].classList.contains('is-previewing'), false);
