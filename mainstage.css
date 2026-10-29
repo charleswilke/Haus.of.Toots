@@ -202,7 +202,7 @@
     font-size: 18px;
     font-weight: 600;
     letter-spacing: 10px;
-    fill: url(#mainstage-face-gradient);
+    fill: var(--purple-text);
 }
 
 .mainstage-deck {

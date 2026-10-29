@@ -26,9 +26,9 @@
     <link rel="preload" href="images/fonts/chewy-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="images/fonts/winky-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="styles.css?v=20261029a">
-    <link rel="stylesheet" href="shop-styles.css?v=20261025j">
-    <link rel="stylesheet" href="mainstage.css?v=20261006b">
-    <link rel="stylesheet" href="toys-r-us.css?v=20261029a">
+    <link rel="stylesheet" href="shop-styles.css?v=20261029b">
+    <link rel="stylesheet" href="mainstage.css?v=20261029b">
+    <link rel="stylesheet" href="toys-r-us.css?v=20261029b">
     <script src="mainstage.js?v=20261006b" defer></script>
     <script src="toys-r-us.js?v=20261028a" defer></script>
     <script type="application/ld+json">
@@ -189,13 +189,8 @@
                         <img class="mainstage-card-photo" src="images/mainstage-collection.webp" alt="All twelve Main Stage needlepoint canvases arranged on a pink tray over teal satin" width="1000" height="800" loading="lazy" decoding="async">
                         <svg xmlns="http://www.w3.org/2000/svg" width="400" height="234" viewBox="0 0 400 234" class="mainstage-wordmark" data-layout="stacked" data-wide-query="not all" role="img" aria-labelledby="mainstageWordmarkTitle" aria-describedby="mainstageWordmarkDescription">
                           <title id="mainstageWordmarkTitle">Main Stage — The Collection</title>
-                          <desc id="mainstageWordmarkDescription">A glow rises through the pink depth of every letter together. Small ivory sparks twinkle in different places as the violet-to-berry gradient faces light up, then fade as the letters settle back to their resting color.</desc>
+                          <desc id="mainstageWordmarkDescription">A glow rises through the pink depth of every letter together. Small ivory sparks twinkle in different places as the light purple faces light up, then fade as the letters settle back to their resting color.</desc>
                           <defs>
-                            <linearGradient id="mainstage-face-gradient" gradientUnits="userSpaceOnUse" x1="0%" y1="0%" x2="100%" y2="0%">
-                              <stop offset="0%" stop-color="#242457"/>
-                              <stop offset="55%" stop-color="#3e214d"/>
-                              <stop offset="100%" stop-color="#7b2c67"/>
-                            </linearGradient>
                             <g id="mainstage-spark">
                               <path d="M0 -10 2 -2 10 0 2 2 0 10 -2 2 -10 0 -2 -2Z"/>
                               <circle cx="12" cy="-9" r="1.3" fill="#ffe091"/>
@@ -272,7 +267,7 @@
                           </g>
                           <!-- One shared color surface across both words, clipped to all letter faces. -->
                           <g class="letter-face" mask="url(#mainstage-face-mask)">
-                            <rect width="100%" height="100%" fill="url(#mainstage-face-gradient)"/>
+                            <rect width="100%" height="100%" fill="var(--purple-text)"/>
                           </g>
                           <!-- Sparks share the face's 5.8s cycle and peak around its 40% highlight. -->
                           <g aria-hidden="true" pointer-events="none">
@@ -282,7 +277,7 @@
                             <g transform="translate(228 107)"><use class="title-spark" href="#mainstage-spark" style="--spark-delay: .06s"/></g>
                             <g transform="translate(306 164) scale(.8)"><use class="title-spark" href="#mainstage-spark" style="--spark-delay: .16s"/></g>
                           </g>
-                          <!-- The collection label shares the title's purple gradient on a pink ribbon. -->
+                          <!-- The collection label shares the title's light purple on a pink ribbon. -->
                           <g aria-hidden="true">
                             <path class="mainstage-underline" d="M13 194H352L347 226H8Z" fill="#ffb7d7"/>
                             <text class="mainstage-collection-label" x="180" y="210" text-anchor="middle" dominant-baseline="central">THE COLLECTION</text>

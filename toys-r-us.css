@@ -236,7 +236,6 @@
     overflow: visible;
 }
 .collection-card-mainstage .collection-card-title { color: var(--purple-text); }
-.collection-card-mainstage .collection-card-description { color: var(--purple-text); }
 .collection-card-mainstage .collection-card-description strong { display: block; margin-top: .4rem; font-weight: 500; }
 .collection-card-grid-four { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.25rem; align-items: stretch; }
 .collection-card-grid-four .collection-card-title { font-size: clamp(1.4rem, 2.1vw, 1.9rem); }
