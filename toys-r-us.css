@@ -202,7 +202,7 @@
 
 .toys-photo img { display: block; width: 100%; height: auto; aspect-ratio: 1.385; object-fit: cover; }
 .toys-photo-classic { left: -2%; top: 0; z-index: 1; transform: rotate(-4deg); }
-.toys-photo-holiday { right: -1%; top: 22%; z-index: 2; transform: rotate(4deg); background: #f6d1dc; }
+.toys-photo-holiday { right: -1%; top: 22%; z-index: 2; transform: rotate(4deg); background: #d9def3; }
 .toys-photo[aria-pressed="true"] { z-index: 3; box-shadow: 0 7px 18px #44305c38; }
 .toys-photo:hover { box-shadow: 0 8px 22px #44305c40; }
 .toys-photo:focus-visible { outline: 3px solid var(--toys-plum); outline-offset: 4px; }
