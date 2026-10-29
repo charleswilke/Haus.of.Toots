@@ -17,7 +17,7 @@
 /* A well-loved toy catalog, framed in the shop's familiar canvas stitching. */
 .toys-hero {
     --toys-pink: #d95980;
-    --toys-plum: #44305c;
+    --toys-plum: var(--purple-text);
     --toys-cream: #fffaf0;
     padding: 1.5rem 0;
 }
@@ -117,7 +117,7 @@
 .toys-title-us { color: var(--toys-pink); }
 .toys-backward-r, .toys-r-quote, .toys-eyebrow-purple {
     display: inline-block;
-    background: linear-gradient(120deg, #8b60ae, #69468c);
+    background: linear-gradient(120deg, var(--purple-text), #69468c);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -150,7 +150,7 @@
     padding: 12px 18px;
     border: 1px solid #765198;
     border-radius: 3px 14px 3px 14px;
-    background: linear-gradient(120deg, #8b60ae, #69468c);
+    background: linear-gradient(120deg, var(--purple-text), #69468c);
     color: var(--toys-cream);
     font: 700 1.1rem / 1.1 'Barlow Condensed', var(--font-body);
     text-decoration: none;
@@ -170,7 +170,7 @@
 }
 .toys-cta[href]:hover { background: linear-gradient(120deg, #8055a3, #614084); color: var(--toys-cream); }
 .toys-cta:focus-visible { outline: 3px solid var(--toys-pink); outline-offset: 4px; }
-.toys-mesh-note { margin: 9px 0 0; color: #6b536f; font-size: .8rem; line-height: 1.4; }
+.toys-mesh-note { margin: 9px 0 0; color: var(--purple-text); font-size: .8rem; line-height: 1.4; }
 
 .toys-photos {
     position: relative;
@@ -235,8 +235,8 @@
     height: auto;
     overflow: visible;
 }
-.collection-card-mainstage .collection-card-title { color: #3e214d; }
-.collection-card-mainstage .collection-card-description { color: #5b3b59; }
+.collection-card-mainstage .collection-card-title { color: var(--purple-text); }
+.collection-card-mainstage .collection-card-description { color: var(--purple-text); }
 .collection-card-mainstage .collection-card-description strong { display: block; margin-top: .4rem; font-weight: 500; }
 .collection-card-grid-four { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.25rem; align-items: stretch; }
 .collection-card-grid-four .collection-card-title { font-size: clamp(1.4rem, 2.1vw, 1.9rem); }
