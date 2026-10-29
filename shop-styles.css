@@ -653,12 +653,12 @@
     align-self: flex-start;
     margin-top: auto;
     padding: 0.52rem 0.72rem 0.58rem;
-    background: rgba(255, 107, 122, 0.1);
-    border: 1px solid rgba(232, 85, 99, 0.28);
+    background: color-mix(in srgb, var(--collection-title-color) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--collection-title-color) 28%, transparent);
     border-radius: 2px 10px 2px 10px;
     font-size: 0.82rem;
     font-weight: 600;
-    color: var(--coral-dark);
+    color: var(--collection-title-color);
     line-height: 1;
     transition: color 0.22s ease, background 0.22s ease, border-color 0.22s ease;
 }
@@ -669,8 +669,8 @@
 }
 
 .collection-card:hover .collection-card-link {
-    background: var(--coral-primary);
-    border-color: var(--coral-primary);
+    background: var(--collection-title-color);
+    border-color: var(--collection-title-color);
     color: var(--white);
 }
 
