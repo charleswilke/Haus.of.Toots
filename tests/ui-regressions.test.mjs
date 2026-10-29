@@ -3,6 +3,27 @@ import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 import test from 'node:test';
 
+test('product title colors follow collection membership across mixed grids and recommendations', () => {
+    const { app } = shop();
+    app.collectionContext = { key: 'flash', handle: 'ndlpt-flash-sheet-collection' };
+    for (const [handle, expected] of [
+        ['main-stage-collection', 'main-stage'],
+        ['village-expansion-series', 'village'],
+        ['ndlpt-flash-sheet-collection', 'flash'],
+        ['accessories', 'accessories']
+    ]) {
+        assert.equal(app.getProductTitleCollection({ collections: { edges: [{ node: { handle } }] } }), expected);
+    }
+    assert.equal(app.getProductTitleCollection({ title: 'Cached canvas' }), 'flash');
+    assert.equal(app.getProductTitleCollection({ collections: { edges: [
+        { node: { handle: 'ndlpt-flash-sheet-collection' } },
+        { node: { handle: 'accessories' } }
+    ] } }), 'accessories');
+    app.collectionContext = null;
+    assert.equal(app.getProductTitleCollection({ title: 'She Is Powerful' }), 'main-stage');
+    assert.equal(app.getProductTitleCollection({ title: 'Unknown canvas' }), 'default');
+});
+
 function element() {
     const classes = new Set();
     const handlers = new Map();

@@ -111,6 +111,7 @@ class ShopifyClient {
                             title
                             vendor
                             productType
+                            collections(first: 10) { edges { node { handle } } }
                             updatedAt
                             tags
                             images(first: 1) {
@@ -178,6 +179,7 @@ class ShopifyClient {
                     title
                     vendor
                     productType
+                    collections(first: 10) { edges { node { handle } } }
                     updatedAt
                     tags
                     images(first: 1) {
@@ -248,6 +250,7 @@ class ShopifyClient {
                             title
                             vendor
                             productType
+                            collections(first: 10) { edges { node { handle } } }
                             createdAt
                             updatedAt
                             tags
@@ -367,6 +370,7 @@ class ShopifyClient {
                                 title
                                 vendor
                                 productType
+                                collections(first: 10) { edges { node { handle } } }
                                 updatedAt
                                 tags
                                 images(first: 1) {
@@ -445,6 +449,7 @@ class ShopifyClient {
                     description
                     descriptionHtml
                     productType
+                    collections(first: 10) { edges { node { handle } } }
                     tags
                     vendor
                     images(first: 20) {
@@ -518,6 +523,7 @@ class ShopifyClient {
                     description
                     descriptionHtml
                     productType
+                    collections(first: 10) { edges { node { handle } } }
                     tags
                     vendor
                     images(first: 20) {

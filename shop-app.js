@@ -334,6 +334,30 @@ class ShopApp {
         return /needle\s*minder/.test(text);
     }
 
+    getProductTitleCollection(product) {
+        const handles = (product.collections?.edges || []).map(({ node }) => node.handle);
+        const collections = [
+            ['accessories', ['accessories']],
+            ['main-stage', ['main-stage-collection']],
+            ['village', ['village-expansion-series', 'village']],
+            ['flash', ['ndlpt-flash-sheet-collection', 'flash']]
+        ];
+        const membership = collections.find(([, aliases]) => aliases.some(handle => handles.includes(handle)));
+        if (membership) return membership[0];
+
+        // Collection pages also work with older cached product responses.
+        const context = this.collectionContext;
+        const pageCollection = collections.find(([, aliases]) => aliases.includes(context?.handle) || aliases.includes(context?.key?.toLowerCase()));
+        if (pageCollection) return pageCollection[0];
+
+        const text = this.getCollectionSearchText(product);
+        if (/main stage|mainstage/.test(text) || /^(serving|she is)\b/.test(this.normalizeCollectionText(product.title))) return 'main-stage';
+        if (/village/.test(text)) return 'village';
+        if (/flash/.test(text)) return 'flash';
+        if (/accessor|needle minder|sticker/.test(text)) return 'accessories';
+        return 'default';
+    }
+
     /**
      * Create HTML for a product card
      */
@@ -374,7 +398,7 @@ class ShopApp {
         const cardClasses = 'product-card';
 
         return `
-            <div class="${cardClasses}" data-product-id="${product.id}" role="button" tabindex="0" aria-label="View ${this.escapeHtml(product.title)}">
+            <div class="${cardClasses}" data-title-collection="${this.getProductTitleCollection(product)}" data-product-id="${product.id}" role="button" tabindex="0" aria-label="View ${this.escapeHtml(product.title)}">
                 <div class="product-image-container">
                     ${imageHTML}
                 </div>

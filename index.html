@@ -26,9 +26,9 @@
     <link rel="preload" href="images/fonts/chewy-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="images/fonts/winky-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="styles.css?v=20261029a">
-    <link rel="stylesheet" href="shop-styles.css?v=20261029b">
+    <link rel="stylesheet" href="shop-styles.css?v=20261029e">
     <link rel="stylesheet" href="mainstage.css?v=20261029b">
-    <link rel="stylesheet" href="toys-r-us.css?v=20261029b">
+    <link rel="stylesheet" href="toys-r-us.css?v=20261029d">
     <script src="mainstage.js?v=20261006b" defer></script>
     <script src="toys-r-us.js?v=20261028a" defer></script>
     <script type="application/ld+json">
@@ -184,7 +184,7 @@
 
             <h2 class="visually-hidden">Shop by collection</h2>
             <div class="collection-card-grid collection-card-grid-four">
-                <a href="main-stage-collection.html" class="collection-card collection-card-mainstage">
+                <a href="main-stage-collection.html" data-title-collection="main-stage" class="collection-card collection-card-mainstage">
                     <div class="collection-card-image-wrap">
                         <img class="mainstage-card-photo" src="images/mainstage-collection.webp" alt="All twelve Main Stage needlepoint canvases arranged on a pink tray over teal satin" width="1000" height="800" loading="lazy" decoding="async">
                         <svg xmlns="http://www.w3.org/2000/svg" width="400" height="234" viewBox="0 0 400 234" class="mainstage-wordmark" data-layout="stacked" data-wide-query="not all" role="img" aria-labelledby="mainstageWordmarkTitle" aria-describedby="mainstageWordmarkDescription">
@@ -291,7 +291,7 @@
                     </div>
                 </a>
 
-                <a href="village" class="collection-card">
+                <a href="village" data-title-collection="village" class="collection-card">
                     <div class="collection-card-image-wrap">
                         <img src="images/village-expansion-400.webp" srcset="images/village-expansion-400.webp 400w, images/village-expansion-720.webp 720w" sizes="(max-width: 620px) calc(100vw - 80px), (max-width: 1000px) 45vw, 260px" alt="Village Expansion Series card artwork: American Girl Place, JOANN, The Container Store, and Sephora needlepoint storefronts" class="collection-card-image" width="1200" height="881" loading="lazy" decoding="async">
                     </div>
@@ -302,7 +302,7 @@
                     </div>
                 </a>
 
-                <a href="flash" class="collection-card collection-card-mobile-first">
+                <a href="flash" data-title-collection="flash" class="collection-card collection-card-mobile-first">
                     <div class="collection-card-image-wrap">
                         <img src="images/flash-400.webp" srcset="images/flash-400.webp 400w, images/flash-720.webp 720w" sizes="(max-width: 620px) calc(100vw - 80px), (max-width: 1000px) 45vw, 260px" alt="NDLPT Flash Sheet Collection card artwork" class="collection-card-image" width="1200" height="843" loading="lazy">
                     </div>
@@ -313,7 +313,7 @@
                     </div>
                 </a>
 
-                <a href="accessories" class="collection-card">
+                <a href="accessories" data-title-collection="accessories" class="collection-card">
                     <div class="collection-card-image-wrap">
                         <img src="images/needleminders-400.webp" srcset="images/needleminders-400.webp 400w, images/needleminders-720.webp 720w" sizes="(max-width: 620px) calc(100vw - 80px), (max-width: 1000px) 45vw, 260px" alt="Flash Sheet Needle Minders on pink Haus of Toots backing cards" class="collection-card-image" width="1200" height="900" loading="lazy" decoding="async">
                     </div>
@@ -477,8 +477,8 @@
     <div id="shared-cart-drawer"></div>
 
     <script src="shopify-config.js?v=20260703" defer></script>
-    <script src="shopify.js?v=20261025b" defer></script>
-    <script src="shop-app.js?v=20261025f" defer></script>
+    <script src="shopify.js?v=20261029c" defer></script>
+    <script src="shop-app.js?v=20261029c" defer></script>
     <script src="index-app.js?v=20260923a" defer></script>
     <script src="script.js?v=20261007c" defer></script>
 </body>
