@@ -23,6 +23,7 @@
 }
 
 .toys-feature {
+    --toys-copy-edge: 34px;
     position: relative;
     isolation: isolate;
     display: grid;
@@ -86,6 +87,10 @@
 .toys-copy {
     position: relative;
     z-index: 2;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     padding: 4px 0;
     container-type: inline-size;
 }
@@ -155,7 +160,15 @@
 .toys-cta [hidden] { display: none; }
 .toys-cta time { font-size: clamp(13px, 5.5cqi, 16px); line-height: 1.3; letter-spacing: .4px; text-transform: uppercase; white-space: nowrap; }
 .toys-cta[aria-disabled="true"] { padding-inline: 16px; cursor: default; }
-.toys-cta[href]:hover { filter: brightness(.97); color: var(--toys-cream); transform: translateY(-2px); }
+/* Extend the real shopping link across the copy column only after launch.
+   Keep hover effects free of transforms/filters so this stays sized to the column. */
+.toys-cta[href]::after {
+    content: '';
+    position: absolute;
+    inset: -12px 0 -16px calc(-1 * var(--toys-copy-edge));
+    cursor: pointer;
+}
+.toys-cta[href]:hover { background: linear-gradient(120deg, #8055a3, #614084); color: var(--toys-cream); }
 .toys-cta:focus-visible { outline: 3px solid var(--toys-pink); outline-offset: 4px; }
 .toys-mesh-note { margin: 9px 0 0; color: #6b536f; font-size: .8rem; line-height: 1.4; }
 
@@ -236,7 +249,7 @@
 }
 
 @media (max-width: 800px) {
-    .toys-feature { padding: 0 26px 16px; gap: 12px 16px; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); }
+    .toys-feature { --toys-copy-edge: 26px; padding: 0 26px 16px; gap: 12px 16px; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); }
     .toys-ribbon { margin-inline: -26px; }
     .toys-photos { aspect-ratio: 1.4; }
     .toys-photo { width: 62%; }
@@ -245,9 +258,10 @@
 @media (max-width: 620px) {
     .toys-hero { padding: 1rem 0; }
     .toys-hero .container { padding-inline: 16px; }
-    .toys-feature { grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 0 23px 16px; }
+    .toys-feature { --toys-copy-edge: 23px; grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 0 23px 16px; }
     .toys-ribbon { grid-row: 1; height: 60px; margin-inline: -23px; background-size: 85px 100%; }
     .toys-copy { grid-row: 3; padding: 0; }
+    .toys-cta[href]::after { inset: 0 calc(-1 * var(--toys-copy-edge)) -16px; }
     .toys-title { margin-bottom: 12px; }
     .toys-deck { max-width: none; font-size: .9rem; }
     .toys-photos { grid-row: 2; aspect-ratio: 1.2; }
@@ -261,7 +275,7 @@
 }
 
 @media (max-width: 390px) {
-    .toys-feature { padding-inline: 20px; }
+    .toys-feature { --toys-copy-edge: 20px; padding-inline: 20px; }
     .toys-ribbon { margin-inline: -20px; }
 }
 
