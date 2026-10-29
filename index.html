@@ -102,25 +102,30 @@
                     </svg>
                 </div>
                 <div class="toys-copy">
+                    <p class="toys-eyebrow"><span class="toys-eyebrow-purple">A</span> <span class="toys-eyebrow-accent">new</span> <span class="toys-eyebrow-purple">storefront enters the</span> <span class="toys-eyebrow-accent">village</span>!</p>
                     <h1 class="toys-title" id="toysTitle" aria-label="Toys R Us">
                         <span class="toys-title-top" aria-hidden="true">Toys</span>
-                        <span class="toys-title-bottom" aria-hidden="true">“<span class="toys-backward-r">R</span>” Us</span>
+                        <span class="toys-title-bottom" aria-hidden="true"><span class="toys-r-quote">“</span><span class="toys-backward-r">R</span><span class="toys-r-quote">”</span> <span class="toys-title-us">Us</span></span>
                     </h1>
                     <p class="toys-deck">A little toy-store nostalgia,<br>ready for your needlepoint wish list.</p>
-                    <p class="toys-availability"><time datetime="2026-10-30T11:00:00-05:00" data-toys-launch aria-live="polite">Arriving October 30 · 11 a.m. Central</time></p>
-                    <a class="toys-cta" href="village">Meet your newest neighbor <span aria-hidden="true">→</span></a>
+                    <div class="toys-launch-row">
+                        <a class="toys-cta" data-toys-cta role="link" aria-disabled="true" aria-live="polite">
+                            <time datetime="2026-10-30T11:00:00-05:00" data-toys-launch>Arriving 10/30<span data-toys-time-note> · 11 a.m. Central</span></time>
+                            <span data-toys-shop hidden>Meet your newest neighbor</span>
+                            <span data-toys-arrow aria-hidden="true" hidden>→</span>
+                        </a>
+                    </div>
                     <p class="toys-mesh-note">Classic &amp; holiday versions · 13 &amp; 18 mesh</p>
                 </div>
-                <div class="toys-photos" aria-label="Classic and holiday canvas photographs">
-                    <img class="toys-price-tag" src="images/toys-r-us-village-tag.webp" alt="New to the Village!" width="600" height="351" decoding="async">
-                    <figure class="toys-photo toys-photo-classic">
+                <div class="toys-photos" data-toys-stack role="group" aria-label="Canvas editions — select a photo to bring it to the front">
+                    <button class="toys-photo toys-photo-classic" type="button" data-toys-edition="classic" aria-pressed="false" aria-label="Bring the classic canvas to the front">
                         <img src="images/toys-r-us-classic-720.webp" srcset="images/toys-r-us-classic-400.webp 400w, images/toys-r-us-classic-720.webp 720w, images/toys-r-us-classic-1100.webp 1100w" sizes="(max-width: 620px) 66vw, (max-width: 1200px) 35vw, 390px" alt="Classic Toys R Us needlepoint canvas with Geoffrey the giraffe and the rainbow storefront" width="1100" height="794" fetchpriority="high" decoding="async">
-                        <figcaption><span>The classic</span><span class="toys-photo-number" aria-hidden="true">01</span></figcaption>
-                    </figure>
-                    <figure class="toys-photo toys-photo-holiday">
+                        <span class="toys-photo-caption"><span>The classic</span><span class="toys-photo-number" aria-hidden="true">01</span></span>
+                    </button>
+                    <button class="toys-photo toys-photo-holiday" type="button" data-toys-edition="holiday" aria-pressed="true" aria-label="Bring the holiday canvas to the front">
                         <img src="images/toys-r-us-holiday-720.webp" srcset="images/toys-r-us-holiday-400.webp 400w, images/toys-r-us-holiday-720.webp 720w, images/toys-r-us-holiday-1100.webp 1100w" sizes="(max-width: 620px) 66vw, (max-width: 1200px) 35vw, 390px" alt="Holiday Toys R Us needlepoint canvas with snow, Christmas lights, and Geoffrey in a Santa hat" width="1100" height="797" decoding="async">
-                        <figcaption><span>The holiday edition</span><span class="toys-photo-number" aria-hidden="true">02</span></figcaption>
-                    </figure>
+                        <span class="toys-photo-caption"><span>The holiday edition</span><span class="toys-photo-number" aria-hidden="true">02</span></span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -181,6 +186,7 @@
             <div class="collection-card-grid collection-card-grid-four">
                 <a href="main-stage-collection.html" class="collection-card collection-card-mainstage">
                     <div class="collection-card-image-wrap">
+                        <img class="mainstage-card-photo" src="images/mainstage-collection.webp" alt="All twelve Main Stage needlepoint canvases arranged on a pink tray over teal satin" width="1000" height="800" loading="lazy" decoding="async">
                         <svg xmlns="http://www.w3.org/2000/svg" width="400" height="234" viewBox="0 0 400 234" class="mainstage-wordmark" data-layout="stacked" data-wide-query="not all" role="img" aria-labelledby="mainstageWordmarkTitle" aria-describedby="mainstageWordmarkDescription">
                           <title id="mainstageWordmarkTitle">Main Stage — The Collection</title>
                           <desc id="mainstageWordmarkDescription">A glow rises through the pink depth of every letter together. Small ivory sparks twinkle in different places as the violet-to-berry gradient faces light up, then fade as the letters settle back to their resting color.</desc>
@@ -216,7 +222,45 @@
                             <mask id="mainstage-face-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="740" height="234">
                               <use href="#mainstage-lettering" fill="white"/>
                             </mask>
+
+                            <!-- Non-scaling 24px strokes add 12px around the full logo silhouette. -->
+                            <g id="mainstage-card-contour-letters" fill-rule="evenodd" transform="translate(40 12) skewX(-9)">
+                              <g transform="scale(1.17 .94)">
+
+                                <path fill="white" stroke="white" stroke-width="24" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M0 80V0H19L39 28 59 0H78V80H55V35L39 56 23 35V80Z"/>
+                                <path fill="white" stroke="white" stroke-width="24" stroke-linejoin="round" vector-effect="non-scaling-stroke" transform="translate(85)" d="M0 80 20 0H55L75 80H50L46 62H27L23 80ZM34 22 30 43H43L39 22Z"/>
+                                <path fill="white" stroke="white" stroke-width="24" stroke-linejoin="round" vector-effect="non-scaling-stroke" transform="translate(168)" d="M0 0H28V80H0Z"/>
+                                <path fill="white" stroke="white" stroke-width="24" stroke-linejoin="round" vector-effect="non-scaling-stroke" transform="translate(204)" d="M0 80V0H23L52 40V0H75V80H52L23 39V80Z"/>
+                              </g>
+                              <g transform="translate(0 87) scale(.88 .94)">
+
+                                <path fill="white" stroke="white" stroke-width="24" stroke-linejoin="round" vector-effect="non-scaling-stroke" d="M65 0H14L0 14V40L12 51H42V60H0V80H52L67 65V42L54 29H25V20H65Z"/>
+                                <path fill="white" stroke="white" stroke-width="24" stroke-linejoin="round" vector-effect="non-scaling-stroke" transform="translate(74)" d="M0 0H70V22H47V80H23V22H0Z"/>
+                                <path fill="white" stroke="white" stroke-width="24" stroke-linejoin="round" vector-effect="non-scaling-stroke" transform="translate(151)" d="M0 80 20 0H55L75 80H50L46 62H27L23 80ZM34 22 30 43H43L39 22Z"/>
+                                <path fill="white" stroke="white" stroke-width="24" stroke-linejoin="round" vector-effect="non-scaling-stroke" transform="translate(233)" d="M74 0H15L0 15V65L15 80H74V35H37V53H51V59H25V21H74Z"/>
+                                <path fill="white" stroke="white" stroke-width="24" stroke-linejoin="round" vector-effect="non-scaling-stroke" transform="translate(314)" d="M0 0H65V21H25V29H58V49H25V59H65V80H0Z"/>
+                              </g>
+                            </g>
+                            <linearGradient id="mainstage-card-paper" x1="0" y1="0" x2="1" y2="1">
+                              <stop offset="0" stop-color="#ffdea8"/>
+                              <stop offset=".37" stop-color="#f7bfb0"/>
+                              <stop offset=".7" stop-color="#f69cc0"/>
+                              <stop offset="1" stop-color="#d4b6e4"/>
+                            </linearGradient>
+                            <pattern id="mainstage-card-stripes" patternUnits="userSpaceOnUse" width="60" height="60" patternTransform="rotate(45)">
+                              <rect width="30" height="60" fill="#91a8d4" fill-opacity=".82"/>
+                            </pattern>
+                            <mask id="mainstage-card-contour-mask" maskUnits="userSpaceOnUse" x="-80" y="-80" width="560" height="400">
+                              <use href="#mainstage-card-contour-letters"/>
+                              <use href="#mainstage-card-contour-letters" transform="translate(10 10)"/>
+                              <path d="M13 194H352L347 226H8Z" fill="white" stroke="white" stroke-width="24" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+                            </mask>
                           </defs>
+                          <g class="mainstage-card-backdrop" mask="url(#mainstage-card-contour-mask)" aria-hidden="true" pointer-events="none">
+                            <rect x="-80" y="-80" width="560" height="400" fill="url(#mainstage-card-paper)"/>
+                            <rect x="-80" y="-80" width="560" height="400" fill="url(#mainstage-card-stripes)"/>
+                            <rect x="-80" y="-80" width="560" height="400" fill="#fffdf2" opacity=".16"/>
+                          </g>
                           <!-- Each depth contains the entire wordmark, so MAIN and STAGE pulse together.
                                The delay advances from the farthest layer (10px) to the nearest (2px). -->
                           <g>
