@@ -4,6 +4,16 @@
   "cleanUrls": true,
   "redirects": [
     {
+      "source": "/gallery",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/gallery.html",
+      "destination": "/",
+      "permanent": false
+    },
+    {
       "source": "/just-landed",
       "destination": "/",
       "permanent": false

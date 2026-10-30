@@ -116,7 +116,6 @@ const SharedComponents = {
                 <a href="hot-at-lns.html" class="nav-link">@ Your LNS</a>
                 <a href="https://haus-of-toots.myshopify.com/pages/ws-account-create" class="nav-link" target="_blank" rel="noopener noreferrer">Wholesale</a>
                 <a href="about.html" class="nav-link">About</a>
-                <a href="gallery.html" class="nav-link">Gallery</a>
             </div>
         </div>
     </nav>
@@ -284,7 +283,7 @@ if (stitchFooter) {
 /**
  * Masonry layout helper.
  * Distributes children of `grid` into N flex columns using a shortest-column-first
- * algorithm so cards stack at their natural heights with no empty columns.
+ * algorithm, with an incomplete final row filling from left to right.
  */
 window.applyMasonry = function applyMasonry(grid) {
     if (!grid) return;
@@ -329,7 +328,14 @@ window.applyMasonry = function applyMasonry(grid) {
         colDivs.push(c);
     }
 
-    cards.forEach(card => {
+    const finalRowStart = cards.length - (cards.length % cols);
+    cards.forEach((card, index) => {
+        // Keep the trailing cards together on the left while retaining each
+        // column's natural heights and the same gap between stacked cards.
+        if (index >= finalRowStart) {
+            colDivs[index - finalRowStart].appendChild(card);
+            return;
+        }
         let shortest = colDivs[0];
         for (const c of colDivs) {
             if (c.offsetHeight < shortest.offsetHeight) shortest = c;

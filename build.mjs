@@ -13,7 +13,7 @@ const dist = 'dist';
 const skipDirs = new Set(['dist', 'api', 'docs', '_archived', 'node_modules', 'images', 'tests']);
 const skipFiles = new Set(['build.mjs', 'package.json', 'package-lock.json', 'vercel.json', 'HausOfToots.code-workspace']);
 // Temporarily hidden pages: keep their source available for easy restoration.
-const hiddenPages = new Set(['just-landed.html']);
+const hiddenPages = new Set(['just-landed.html', 'gallery.html']);
 
 rmSync(dist, { recursive: true, force: true });
 mkdirSync(dist);
