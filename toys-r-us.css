@@ -123,6 +123,7 @@
     color: transparent;
 }
 .toys-backward-r { transform: scaleX(-1) rotate(-5deg); }
+.toys-r-quote-left { transform: scaleX(-1); }
 .toys-eyebrow-purple { display: inline; }
 
 .toys-deck {
