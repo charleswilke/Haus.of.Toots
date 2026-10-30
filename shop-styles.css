@@ -1146,6 +1146,33 @@ body[data-title-collection] .series-copy .hero-title .highlight {
     gap: var(--spacing-md);
 }
 
+/* Keep each storefront's editions together, even beside an unpaired product. */
+.products-grid[data-product-layout="pairs"] {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+}
+
+.storefront-group {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--spacing-sm);
+    min-width: 0;
+}
+
+@media (min-width: 768px) {
+    .storefront-group {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--spacing-md);
+    }
+}
+
+@media (min-width: 1200px) {
+    .products-grid[data-product-layout="pairs"] {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
 /* Product Card */
 .product-card {
     position: relative;

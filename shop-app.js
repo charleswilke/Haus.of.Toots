@@ -53,6 +53,7 @@ class ShopApp {
                 .map(prefix => this.normalizeCollectionText(prefix))
                 .filter(Boolean),
             freshCatalog: dataset.shopFreshCatalog === 'true',
+            groupStorefronts: dataset.shopGroupStorefronts === 'true',
             emptyMessage: (dataset.shopEmptyMessage || '').trim()
         };
     }
@@ -284,7 +285,11 @@ class ShopApp {
             return 0;
         });
 
-        productsGrid.innerHTML = sortedProducts.map(product => this.createProductCard(product)).join('');
+        productsGrid.innerHTML = this.collectionContext?.groupStorefronts
+            ? this.getStorefrontGroups(sortedProducts).map(group =>
+                `<div class="storefront-group">${group.map(product => this.createProductCard(product)).join('')}</div>`
+            ).join('')
+            : sortedProducts.map(product => this.createProductCard(product)).join('');
         
         // Add click listeners to product cards so any non-control click opens the detail view
         const productCards = productsGrid.querySelectorAll('.product-card');
@@ -301,6 +306,24 @@ class ShopApp {
         });
 
         if (window.applyMasonry) window.applyMasonry(productsGrid);
+    }
+
+    getStorefrontGroups(products) {
+        const groups = new Map();
+        for (const product of products) {
+            // Editions share the storefront name before the product description.
+            // Use titles rather than handles, which can retain old names or "copy".
+            const storefront = this.normalizeCollectionText(product.title)
+                .replace(/\b(?:storefront|needlepoint|canvas)\b.*$/, '')
+                .trim()
+                .replace(/\b(?:non holiday|holiday|classic|everyday)(?: version)?$/, '')
+                .trim();
+            const key = storefront || product.id || product.handle;
+            if (!groups.has(key)) groups.set(key, []);
+            groups.get(key).push(product);
+        }
+        // First appearance keeps the collection's priority and Shopify group order.
+        return Array.from(groups.values());
     }
 
     /**

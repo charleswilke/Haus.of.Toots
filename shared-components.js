@@ -288,6 +288,8 @@ if (stitchFooter) {
  */
 window.applyMasonry = function applyMasonry(grid) {
     if (!grid) return;
+    // Paired collections use CSS rows so matching editions stay side by side.
+    if (grid.dataset.productLayout === 'pairs') return;
     // Hold the grid's height while it is rebuilt; collapsing it for even one
     // layout clamps the page's scroll position back toward the top.
     grid.style.minHeight = `${grid.offsetHeight}px`;

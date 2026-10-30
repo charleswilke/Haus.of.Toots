@@ -3,6 +3,47 @@ import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 import test from 'node:test';
 
+test('Village editions stay in storefront groups with Toys R Us first', () => {
+    const { app, document } = shop();
+    const html = readFileSync(new URL('../village-expansion-series.html', import.meta.url), 'utf8');
+    document.body.dataset = Object.fromEntries(
+        [...html.matchAll(/data-([a-z-]+)="([^"]*)"/g)].map(([, name, value]) =>
+            [name.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase()), value]
+        )
+    );
+    app.collectionContext = app.getCollectionContext();
+    const product = (id, title) => ({ id, title, productType: 'Hand Painted Needlepoint Canvas' });
+    app.products = [
+        product('joann', 'Joann Storefront Needlepoint Canvas (non-holiday version)'),
+        product('sephora-holiday', 'Sephora Holiday Storefront Needlepoint Canvas'),
+        product('toys-holiday', 'Toys “R” Us Holiday Storefront Needlepoint Canvas'),
+        product('joann-holiday', 'Joann Holiday Storefront Needlepoint Canvas'),
+        product('single', 'New Neighbor Storefront Needlepoint Canvas'),
+        product('toys', 'Toys R Us Storefront Needlepoint Canvas (non-holiday version)'),
+        product('sephora', 'Sephora Storefront Needlepoint Canvas (non-holiday version)'),
+        product('american-girl', 'American Girl Place Storefront Needlepoint Canvas'),
+        product('container-holiday', 'Container Store Holiday Storefront Needlepoint Canvas'),
+        product('american-girl-holiday', 'American Girl Place Holiday Storefront Needlepoint Canvas'),
+        product('container', 'Container Store Storefront Needlepoint Canvas (non-holiday version)')
+    ];
+    app.createProductCard = product => `[${product.id}]`;
+    app.renderProducts();
+    const grid = document.getElementById('productsGrid');
+    assert.equal(grid.innerHTML,
+        '<div class="storefront-group">[toys-holiday][toys]</div>' +
+        '<div class="storefront-group">[joann][joann-holiday]</div>' +
+        '<div class="storefront-group">[sephora-holiday][sephora]</div>' +
+        '<div class="storefront-group">[single]</div>' +
+        '<div class="storefront-group">[american-girl][american-girl-holiday]</div>' +
+        '<div class="storefront-group">[container-holiday][container]</div>');
+    assert.match(html, /data-product-layout="pairs"/);
+
+    // Other collection pages keep their original ordering and card structure.
+    app.collectionContext = { key: 'flash' };
+    app.renderProducts();
+    assert.equal(grid.innerHTML, app.products.map(app.createProductCard).join(''));
+});
+
 test('product title colors follow collection membership across mixed grids and recommendations', () => {
     const { app } = shop();
     app.collectionContext = { key: 'flash', handle: 'ndlpt-flash-sheet-collection' };
