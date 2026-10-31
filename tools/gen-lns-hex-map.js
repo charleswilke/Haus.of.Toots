@@ -89,6 +89,8 @@ const OUTLINE = [
 
 // --- Shops ---
 const SHOPS = [
+  // City-center coordinates until the shop announces its street address.
+  { name: "Rose Garden Stitch Co.", url: "https://www.rosegardenstitch.co/password", addr: null, city: "Portland", state: "OR", lat: 45.5152, lon: -122.6784 },
   { name: "Sew Another Stitch", url: "https://sewanotherstitch.com/", addr: "433 St John St, Havre de Grace, MD 21078", city: "Havre de Grace", state: "MD", lat: 39.5493, lon: -76.0897 },
   { name: "Cotswold Needlepoint", url: "https://cotswoldneedlepoint.com/", addr: "16930 W Catawba Ave Suite 103, Cornelius, NC 28031", city: "Cornelius", state: "NC", lat: 35.447294, lon: -80.892458 },
   { name: "Angel City Stitchery", url: "https://www.angelcitystitchery.com/", addr: "13347 Washington Blvd Ste B, Los Angeles, CA 90066", city: "Los Angeles", state: "CA", lat: 33.9926, lon: -118.4436 },
@@ -197,6 +199,7 @@ cities.sort((a, b) => a.lon - b.lon);
 // Side labels center the two-line block beside the heart. Above/below
 // labels leave a small, consistent gap from the edge of the hex.
 const LABELS = {
+  "Portland":    { dx: 14,  dy: -2,  anchor: "start" },
   "Washington": { dx: 0, dy: 25, anchor: "middle" },
   "Havre de Grace": { dx: 14, dy: 2, anchor: "start" },
   "Dublin":      { dx: 0,   dy: -25, anchor: "middle" },
