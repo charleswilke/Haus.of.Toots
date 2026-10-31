@@ -234,6 +234,26 @@
     margin-bottom: var(--spacing-sm);
 }
 
+/* Keep the shop's descriptive link above the stretched Visit Site link. */
+.lns-shop-name-link {
+    position: relative;
+    z-index: 1;
+    color: inherit;
+    text-decoration: none;
+}
+
+.lns-shop-name-link:hover,
+.lns-shop-name-link:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.lns-shop-name-link:focus-visible {
+    outline: 2px solid var(--coral-primary);
+    outline-offset: 3px;
+    border-radius: 2px;
+}
+
 .lns-card-link {
     display: inline-block;
     font-family: var(--font-body);
