@@ -234,12 +234,21 @@
     margin-bottom: var(--spacing-sm);
 }
 
-/* Keep the shop's descriptive link above the stretched Visit Site link. */
 .lns-shop-name-link {
-    position: relative;
-    z-index: 1;
     color: inherit;
     text-decoration: none;
+}
+
+.lns-name-tail {
+    white-space: nowrap;
+}
+
+.lns-external-arrow {
+    display: inline-block;
+    width: 0.65em;
+    height: 0.65em;
+    margin-left: 0.3em;
+    vertical-align: 0.05em;
 }
 
 .lns-shop-name-link:hover,
@@ -254,34 +263,9 @@
     border-radius: 2px;
 }
 
-.lns-card-link {
-    display: inline-block;
-    font-family: var(--font-body);
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: var(--white);
-    background: var(--coral-primary);
-    padding: 0.5rem 1.25rem;
-    border-radius: 999px;
-    text-decoration: none;
-    transition: background 0.2s ease, transform 0.2s ease;
-}
-
-/* No transform here: a transform would make the link the containing
-   block for its stretched ::after, collapsing the card overlay on
-   hover and flickering the cursor */
-.lns-card-link:hover {
-    background: var(--coral-dark);
-}
-
-/* The modal button has no stretched overlay, so it keeps its pop */
-.lns-modal-shop .lns-card-link:hover {
-    transform: scale(1.05);
-}
-
-/* Stretch the Visit Site link over the whole card, so clicking anywhere
-   on a card opens the shop's site (cards without a link stay inert) */
-.lns-shop-card .lns-card-link::after {
+/* The card contains the stretched link; keep the name unpositioned so
+   its click area covers the card, with address controls layered above. */
+.lns-shop-card .lns-shop-name-link::after {
     content: "";
     position: absolute;
     inset: 0;
@@ -473,7 +457,7 @@
     color: var(--coral-primary);
 }
 
-/* Each shop is a row: logo | name + address | Visit Site button.
+/* Each shop is a row: logo | linked name + address.
    The narrow-screen media query below stacks it back up. */
 .lns-modal-shop {
     display: flex;
@@ -524,10 +508,7 @@
     font-size: 1.3rem;
 }
 
-/* Button rides right beside the text block instead of pinning to the
-   modal edge, so the gap stays snug however short the address is —
-   and the info block doesn't stretch, letting the whole logo/text/
-   button cluster center under the city title */
+/* Keep the logo and shop details centered under the city title. */
 .lns-modal-shop-info {
     display: flex;
     align-items: center;
@@ -555,18 +536,10 @@
     line-height: 1.45;
 }
 
-/* Always break street / "City, ST ZIP": keeps the text block at its real
-   width so the Visit Site button sits close beside it */
+/* Keep the city, state and ZIP together below the street. */
 .lns-addr-locality {
     display: block;
     white-space: nowrap;
-}
-
-.lns-modal-shop .lns-card-link {
-    flex: none;
-    white-space: nowrap;
-    font-size: 0.8rem;
-    padding: 0.35rem 1rem;
 }
 
 .lns-modal-shop .lns-card-nolink {
