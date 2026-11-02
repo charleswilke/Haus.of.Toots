@@ -110,6 +110,8 @@ const SHOPS = [
   { name: "What's the Point Needlepoint", url: "https://whatsthepoint.biz/", addr: "126 S. High St, Dublin, OH 43017", city: "Dublin", state: "OH", lat: 40.098, lon: -83.114 },
   { name: "When Pigs Fly Needlepoint", url: "https://whenpigsflyndlpt.com/", addr: "Cincinnati, OH", city: "Cincinnati", state: "OH", lat: 39.1031, lon: -84.512 },
   { name: "The Point of It All", url: "https://thepointofitallonline.com/", addr: "5115 MacArthur Blvd NW, Washington, DC 20016", city: "Washington", state: "DC", lat: 38.926, lon: -77.101 },
+  // City-center coordinates for the stylized map; directions use the street address.
+  { name: "The Secret Stitchery", url: "https://shopthesecretstitchery.com/", addr: "155 W Broad St, Hopewell, NJ 08525", city: "Hopewell", state: "NJ", lat: 40.3893, lon: -74.7638 },
 ];
 
 // --- Projection: plate carrée scaled by cos(38.5°) on x ---
@@ -200,8 +202,6 @@ cities.sort((a, b) => a.lon - b.lon);
 // labels leave a small, consistent gap from the edge of the hex.
 const LABELS = {
   "Portland":    { dx: 14,  dy: -2,  anchor: "start" },
-  "Washington": { dx: 0, dy: 25, anchor: "middle" },
-  "Havre de Grace": { dx: 14, dy: 2, anchor: "start" },
   "Dublin":      { dx: 0,   dy: -25, anchor: "middle" },
   "Cincinnati":  { dx: -14, dy: -2,  anchor: "end" },
   "Los Angeles": { dx: 14,  dy: -2,  anchor: "start" },
@@ -217,7 +217,16 @@ const LABELS = {
   "Chapel Hill": { dx: 14,  dy: -2,  anchor: "start" },
   "Atlanta":     { dx: 14,  dy: -2,  anchor: "start" },
   "Bridgeport":  { dx: 0,   dy: -25, anchor: "middle" },
-  "Maplewood":   { dx: 0,   dy: -25, anchor: "middle" },
+};
+
+// Northeast stops share a label column in the open right margin. Route
+// each line out of its own hex, then toward the label in north/south order
+// so the lines stay separate and clear of the neighboring hearts.
+const CALLOUTS = {
+  "Maplewood":      { x: 954, y: 223, exitDx: 9, exitDy: -4, bendX: 934 },
+  "Hopewell":       { x: 954, y: 245, exitDx: 9, exitDy: -3, bendX: 934 },
+  "Havre de Grace": { x: 954, y: 267, exitDx: 7, exitDy: 7, bendX: 915 },
+  "Washington":     { x: 954, y: 289, exitDx: 7, exitDy: 7, bendX: 915 },
 };
 
 // --- Emit SVG ---
@@ -251,14 +260,23 @@ svg += `  </g>\n  <g class="lns-markers">\n`;
 
 for (const c of cities) {
   const lb = LABELS[c.city];
+  const callout = CALLOUTS[c.city];
   const shopNames = c.shops.map(s => s.name).join(" & ");
   const slug = c.city.toLowerCase().replace(/\s+/g, "-");
-  const labelX = (c.hx + lb.dx).toFixed(1);
-  const labelY = (c.hy + lb.dy).toFixed(1);
+  const labelX = (callout ? callout.x : c.hx + lb.dx).toFixed(1);
+  const labelY = (callout ? callout.y : c.hy + lb.dy).toFixed(1);
+  const anchor = callout ? "start" : lb.anchor;
+  const labelClass = callout ? "lns-marker-label lns-marker-label-inline" : "lns-marker-label";
+  const labelText = callout
+    ? `<tspan class="lns-marker-city">${c.city},</tspan><tspan dx="4" class="lns-marker-state">${c.state}</tspan>`
+    : `<tspan class="lns-marker-city">${c.city}</tspan><tspan x="${labelX}" dy="12" class="lns-marker-state">${c.state}</tspan>`;
+  const leader = callout
+    ? `      <path class="lns-marker-leader" d="M${(c.hx + callout.exitDx).toFixed(1)},${(c.hy + callout.exitDy).toFixed(1)} L${callout.bendX},${callout.y - 4} H${callout.x - 10}" aria-hidden="true"/>\n`
+    : "";
   svg += `    <a href="#stop-${slug}" class="lns-marker" aria-label="${c.city}, ${c.state}: ${shopNames}">
-      <use href="#lnsHexBig" x="${c.hx.toFixed(1)}" y="${c.hy.toFixed(1)}" class="hx-marker"/>
+${leader}      <use href="#lnsHexBig" x="${c.hx.toFixed(1)}" y="${c.hy.toFixed(1)}" class="hx-marker"/>
       <use href="#lnsHeart" x="${c.hx.toFixed(1)}" y="${c.hy.toFixed(1)}" class="lns-marker-heart"/>
-      <text x="${labelX}" y="${labelY}" text-anchor="${lb.anchor}" class="lns-marker-label"><tspan class="lns-marker-city">${c.city}</tspan><tspan x="${labelX}" dy="12" class="lns-marker-state">${c.state}</tspan></text>
+      <text x="${labelX}" y="${labelY}" text-anchor="${anchor}" class="${labelClass}">${labelText}</text>
     </a>\n`;
 }
 svg += `  </g>\n</svg>`;

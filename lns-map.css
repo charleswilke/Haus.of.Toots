@@ -125,6 +125,24 @@
     pointer-events: none;
 }
 
+.lns-marker-leader {
+    fill: none;
+    stroke: var(--teal-contrast);
+    stroke-width: 1;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.5;
+    vector-effect: non-scaling-stroke;
+    pointer-events: none;
+    transition: stroke 0.2s ease, opacity 0.2s ease;
+}
+
+.lns-marker:hover .lns-marker-leader,
+.lns-marker:focus .lns-marker-leader {
+    stroke: var(--coral-dark);
+    opacity: 1;
+}
+
 .lns-marker-label {
     font-family: var(--font-body);
     font-weight: 600;
@@ -143,6 +161,11 @@
     font-weight: 700;
     letter-spacing: 1.5px;
     fill: var(--teal-contrast);
+}
+
+.lns-marker-label-inline .lns-marker-state {
+    font-size: 10px;
+    letter-spacing: 0.6px;
 }
 
 .lns-marker:hover .lns-marker-label,
@@ -584,7 +607,8 @@
     }
 
     /* Labels get dense on small screens; markers + numbers still tell the story */
-    .lns-marker-label {
+    .lns-marker-label,
+    .lns-marker-leader {
         display: none;
     }
 

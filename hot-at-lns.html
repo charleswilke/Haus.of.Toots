@@ -24,7 +24,7 @@
     <link rel="preload" href="images/fonts/winky-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="styles.css?v=20261029a">
     <link rel="stylesheet" href="shop-styles.css?v=20261029h">
-    <link rel="stylesheet" href="lns-map.css?v=20261030b">
+    <link rel="stylesheet" href="lns-map.css?v=20261101b">
 </head>
 <body>
     <div id="shared-nav"></div>
@@ -484,7 +484,6 @@
     <use href="#lnsHex" x="815.2" y="247.0" class="hx hx4"/>
     <use href="#lnsHex" x="836.0" y="247.0" class="hx hx1"/>
     <use href="#lnsHex" x="856.8" y="247.0" class="hx hx1"/>
-    <use href="#lnsHex" x="898.3" y="247.0" class="hx hx1"/>
     <use href="#lnsHex" x="77.4" y="265.0" class="hx hx2"/>
     <use href="#lnsHex" x="98.1" y="265.0" class="hx hx4"/>
     <use href="#lnsHex" x="118.9" y="265.0" class="hx hx1"/>
@@ -962,19 +961,28 @@
       <text x="839.6" y="335.0" text-anchor="start" class="lns-marker-label"><tspan class="lns-marker-city">Chapel Hill</tspan><tspan x="839.6" dy="12" class="lns-marker-state">NC</tspan></text>
     </a>
     <a href="#stop-washington" class="lns-marker" aria-label="Washington, DC: The Point of It All">
+      <path class="lns-marker-leader" d="M874.2,272.0 L915,285 H944" aria-hidden="true"/>
       <use href="#lnsHexBig" x="867.2" y="265.0" class="hx-marker"/>
       <use href="#lnsHeart" x="867.2" y="265.0" class="lns-marker-heart"/>
-      <text x="867.2" y="290.0" text-anchor="middle" class="lns-marker-label"><tspan class="lns-marker-city">Washington</tspan><tspan x="867.2" dy="12" class="lns-marker-state">DC</tspan></text>
+      <text x="954.0" y="289.0" text-anchor="start" class="lns-marker-label lns-marker-label-inline"><tspan class="lns-marker-city">Washington,</tspan><tspan dx="4" class="lns-marker-state">DC</tspan></text>
     </a>
     <a href="#stop-havre-de-grace" class="lns-marker" aria-label="Havre de Grace, MD: Sew Another Stitch">
+      <path class="lns-marker-leader" d="M884.6,254.0 L915,263 H944" aria-hidden="true"/>
       <use href="#lnsHexBig" x="877.6" y="247.0" class="hx-marker"/>
       <use href="#lnsHeart" x="877.6" y="247.0" class="lns-marker-heart"/>
-      <text x="891.6" y="249.0" text-anchor="start" class="lns-marker-label"><tspan class="lns-marker-city">Havre de Grace</tspan><tspan x="891.6" dy="12" class="lns-marker-state">MD</tspan></text>
+      <text x="954.0" y="267.0" text-anchor="start" class="lns-marker-label lns-marker-label-inline"><tspan class="lns-marker-city">Havre de Grace,</tspan><tspan dx="4" class="lns-marker-state">MD</tspan></text>
+    </a>
+    <a href="#stop-hopewell" class="lns-marker" aria-label="Hopewell, NJ: The Secret Stitchery">
+      <path class="lns-marker-leader" d="M907.3,244.0 L934,241 H944" aria-hidden="true"/>
+      <use href="#lnsHexBig" x="898.3" y="247.0" class="hx-marker"/>
+      <use href="#lnsHeart" x="898.3" y="247.0" class="lns-marker-heart"/>
+      <text x="954.0" y="245.0" text-anchor="start" class="lns-marker-label lns-marker-label-inline"><tspan class="lns-marker-city">Hopewell,</tspan><tspan dx="4" class="lns-marker-state">NJ</tspan></text>
     </a>
     <a href="#stop-maplewood" class="lns-marker" aria-label="Maplewood, NJ: Mrs. Meshugga Needlepoint Shop">
+      <path class="lns-marker-leader" d="M917.7,225.0 L934,219 H944" aria-hidden="true"/>
       <use href="#lnsHexBig" x="908.7" y="229.0" class="hx-marker"/>
       <use href="#lnsHeart" x="908.7" y="229.0" class="lns-marker-heart"/>
-      <text x="908.7" y="204.0" text-anchor="middle" class="lns-marker-label"><tspan class="lns-marker-city">Maplewood</tspan><tspan x="908.7" dy="12" class="lns-marker-state">NJ</tspan></text>
+      <text x="954.0" y="223.0" text-anchor="start" class="lns-marker-label lns-marker-label-inline"><tspan class="lns-marker-city">Maplewood,</tspan><tspan dx="4" class="lns-marker-state">NJ</tspan></text>
     </a>
   </g>
 </svg>
@@ -1010,7 +1018,6 @@
                     <p class="lns-card-city">Bridgeport, WV</p>
                     <h3 class="lns-card-name">Honeysuckle Needlepoint</h3>
                     <p class="lns-card-addr">102 Hill St<br>Bridgeport, WV 26330</p>
-                    <span class="lns-card-nolink">Stop by in person!</span>
                 </div>
                 <div class="lns-shop-card" data-city="kansas-city" id="stop-kansas-city">
                     <img class="lns-card-logo" src="images/lns/kc-needlepoint.webp" alt="" loading="lazy">
@@ -1065,6 +1072,12 @@
                     <p class="lns-card-city">Portland, OR</p>
                     <h3 class="lns-card-name"><a href="https://www.rosegardenstitch.co/" target="_blank" rel="noopener" class="lns-shop-name-link">Rose Garden Stitch <span class="lns-name-tail">Co.<svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span><span class="visually-hidden"> (opens in a new tab)</span></a></h3>
                     <p class="lns-card-addr" data-address-pending>Opening soon &middot; Address to be announced</p>
+                </div>
+                <div class="lns-shop-card" data-city="hopewell" id="stop-hopewell">
+                    <img class="lns-card-logo" src="images/lns/secret-stitchery.webp" alt="" loading="lazy">
+                    <p class="lns-card-city">Hopewell, NJ</p>
+                    <h3 class="lns-card-name"><a href="https://shopthesecretstitchery.com/" target="_blank" rel="noopener" class="lns-shop-name-link">The Secret <span class="lns-name-tail">Stitchery<svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span><span class="visually-hidden"> (opens in a new tab)</span></a></h3>
+                    <p class="lns-card-addr">155 W Broad St<br>Hopewell, NJ 08525</p>
                 </div>
                 <div class="lns-shop-card" data-city="havre-de-grace" id="stop-havre-de-grace">
                     <img class="lns-card-logo" src="images/lns/sew-another-stitch-red.png" alt="" loading="lazy">
@@ -1198,6 +1211,9 @@
             ]},
             'bridgeport': { city: 'Bridgeport, WV', geo: { d: 'M0.9 58.1L6.4 57.4L7.0 54.1L9.5 52.9L8.6 48.3L12.4 42.2L15.3 46.3L17.5 44.9L16.8 40.8L18.2 40.4L19.5 35.8L21.8 35.9L23.9 32.4L25.5 34.0L29.1 32.7L35.9 26.7L41.6 8.3L40.8 0.6L43.2 0.0L43.2 24.1L64.5 24.1L64.3 37.6L72.3 30.6L75.1 31.4L78.7 26.6L81.3 28.9L85.1 29.4L86.5 27.5L85.7 26.8L88.8 26.7L90.8 24.7L94.4 27.2L98.0 27.2L96.9 28.3L100.0 32.8L98.1 39.5L87.6 30.7L86.4 38.6L76.9 49.2L74.3 46.9L67.9 58.4L61.0 53.7L58.1 62.2L48.5 75.6L47.8 77.2L49.3 78.9L47.1 80.6L47.7 82.1L44.1 84.3L42.5 83.0L38.1 85.6L36.3 84.2L35.1 87.4L28.8 89.2L26.1 86.5L22.1 89.9L19.6 90.1L16.0 87.9L13.3 83.5L14.5 82.0L7.0 77.8L2.8 70.9L3.6 69.7L0.0 65.5L1.3 62.2L0.9 58.1Z', w: 100, h: 90.1, x: 48.6, y: 35.4, coords: '39.29° N · 80.26° W' }, shops: [
                 { name: 'Honeysuckle Needlepoint', addr: '102 Hill St, Bridgeport, WV 26330', url: null, logo: 'images/lns/honeysuckle.webp', bg: '#FBF8F2' }
+            ]},
+            'hopewell': { city: 'Hopewell, NJ', geo: { d: 'M0.0 71.5L4.5 64.4L13.6 60.3L13.6 57.9L26.6 49.8L18.7 39.6L15.9 38.9L15.7 34.0L11.6 32.3L11.4 29.4L12.3 24.0L16.1 20.1L13.4 15.9L18.7 11.2L23.0 2.9L27.4 0.0L52.3 14.9L48.6 26.8L42.9 30.1L41.1 35.4L43.2 37.9L49.4 39.2L49.8 37.6L46.3 66.0L38.7 79.7L29.2 88.4L22.0 100.0L18.6 100.0L21.3 91.0L12.4 89.2L0.8 78.5L0.0 71.5Z', w: 52.3, h: 100, x: 25.3, y: 40, coords: '40.39° N · 74.76° W' }, shops: [
+                { name: 'The Secret Stitchery', addr: '155 W Broad St, Hopewell, NJ 08525', url: 'https://shopthesecretstitchery.com/', logo: 'images/lns/secret-stitchery.webp', bg: '#292F4D' }
             ]},
             'maplewood': { city: 'Maplewood, NJ', geo: { d: 'M0.0 71.5L4.5 64.4L13.6 60.3L13.6 57.9L26.6 49.8L18.7 39.6L15.9 38.9L15.7 34.0L11.6 32.3L11.4 29.4L12.3 24.0L16.1 20.1L13.4 15.9L18.7 11.2L23.0 2.9L27.4 0.0L52.3 14.9L48.6 26.8L42.9 30.1L41.1 35.4L43.2 37.9L49.4 39.2L49.8 37.6L46.3 66.0L38.7 79.7L29.2 88.4L22.0 100.0L18.6 100.0L21.3 91.0L12.4 89.2L0.8 78.5L0.0 71.5Z', w: 52.3, h: 100, x: 40.7, y: 26, coords: '40.73° N · 74.27° W' }, shops: [
                 { name: 'Mrs. Meshugga Needlepoint Shop', addr: '1875 Springfield Ave, Maplewood, NJ 07040', url: 'https://www.mrsmeshugga.com/', logo: 'images/lns/mrs-meshugga.webp' }
@@ -1399,13 +1415,6 @@
                 text.appendChild(addr);
 
                 info.appendChild(text);
-
-                if (!shop.url) {
-                    const note = document.createElement('span');
-                    note.className = 'lns-card-nolink';
-                    note.textContent = 'Stop by in person!';
-                    info.appendChild(note);
-                }
 
                 entry.appendChild(info);
                 return entry;
