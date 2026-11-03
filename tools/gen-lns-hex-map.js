@@ -104,6 +104,7 @@ const SHOPS = [
   { name: "Kick Ass Needlepoint", url: "https://kickassneedlepoint.com/", addr: "850 Hillwood Blvd #6, Nashville, TN 37209", city: "Nashville", state: "TN", lat: 36.131, lon: -86.858 },
   { name: "The Stitching Belle", url: "https://thestitchingbelle.com/", addr: "3518 Nebraska Ave, Nashville, TN 37205", city: "Nashville", state: "TN", lat: 36.142850, lon: -86.826146 },
   { name: "Elizabeth Brooke", url: "https://shopelizabethbrooke.com/", addr: "900 Willow Drive Suite 107, Chapel Hill, NC 27514", city: "Chapel Hill", state: "NC", lat: 35.928249, lon: -79.029824 },
+  { name: "North Myrtle Beach Needlepoint", url: "https://www.northmyrtlebeachneedlepoint.com/", addr: "211 Hwy 17 N Ste 105, North Myrtle Beach, SC 29582", city: "North Myrtle Beach", state: "SC", lat: 33.830308, lon: -78.677638 },
   { name: "The Nimble Needle", url: "https://www.atlantanimbleneedle.com/", addr: "206B Johnson Ferry Rd, Atlanta, GA 30328", city: "Atlanta", state: "GA", lat: 33.926, lon: -84.382 },
   { name: "Honeysuckle Needlepoint", url: null, addr: "102 Hill St, Bridgeport, WV 26330", city: "Bridgeport", state: "WV", lat: 39.2865, lon: -80.256 },
   { name: "Mrs. Meshugga Needlepoint Shop", url: "https://www.mrsmeshugga.com/", addr: "1875 Springfield Ave, Maplewood, NJ 07040", city: "Maplewood", state: "NJ", lat: 40.729, lon: -74.2735 },
@@ -215,6 +216,7 @@ const LABELS = {
   "Nashville":   { dx: 0,   dy: 23,  anchor: "middle" },
   "Cornelius":   { dx: 0,   dy: -25, anchor: "middle" },
   "Chapel Hill": { dx: 14,  dy: -2,  anchor: "start" },
+  "North Myrtle Beach": { dx: 14, dy: -2, anchor: "start" },
   "Atlanta":     { dx: 14,  dy: -2,  anchor: "start" },
   "Bridgeport":  { dx: 0,   dy: -25, anchor: "middle" },
 };
