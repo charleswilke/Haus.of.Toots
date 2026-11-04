@@ -113,6 +113,7 @@ const SHOPS = [
   { name: "The Point of It All", url: "https://thepointofitallonline.com/", addr: "5115 MacArthur Blvd NW, Washington, DC 20016", city: "Washington", state: "DC", lat: 38.926, lon: -77.101 },
   // City-center coordinates for the stylized map; directions use the street address.
   { name: "The Secret Stitchery", url: "https://shopthesecretstitchery.com/", addr: "155 W Broad St, Hopewell, NJ 08525", city: "Hopewell", state: "NJ", lat: 40.3893, lon: -74.7638 },
+  { name: "Stitch by Stitch", url: "https://stitchbystitchneedlepoint.com/", addr: "1953 Palmer Ave, Larchmont, NY 10538", city: "Larchmont", state: "NY", lat: 40.9279, lon: -73.7518 },
 ];
 
 // --- Projection: plate carrée scaled by cos(38.5°) on x ---
@@ -225,6 +226,7 @@ const LABELS = {
 // each line out of its own hex, then toward the label in north/south order
 // so the lines stay separate and clear of the neighboring hearts.
 const CALLOUTS = {
+  "Larchmont":      { x: 954, y: 201, exitDx: 9, exitDy: -4, bendX: 934 },
   "Maplewood":      { x: 954, y: 223, exitDx: 9, exitDy: -4, bendX: 934 },
   "Hopewell":       { x: 954, y: 245, exitDx: 9, exitDy: -3, bendX: 934 },
   "Havre de Grace": { x: 954, y: 267, exitDx: 7, exitDy: 7, bendX: 915 },
