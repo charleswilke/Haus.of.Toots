@@ -51,8 +51,8 @@
     <path stroke="url(#village-blue-sweep)" stroke-width="90" d="M80 206C330 263 367 77 665 112S1110 181 1510 38"/>
     <path stroke="url(#village-peach-sweep)" stroke-width="45" opacity=".5" d="M-100 191C170 104 315 228 553 182S837 48 1058 100"/>
   </g>
-  <circle cx="1250" cy="122" r="115" fill="url(#village-sun-halo)"/>
-  <circle cx="1250" cy="122" r="51" fill="#ffe9b7"/>
+  <circle cx="1250" cy="135" r="115" fill="url(#village-sun-halo)"/>
+  <circle cx="1250" cy="135" r="51" fill="#ffe9b7"/>
   <path fill="#bdc6d3" d="M0 169Q180 128 340 164T700 153T1060 160T1440 137v163H0z"/>
   <g fill="#fff0d8" opacity=".85">
     <path class="village-cloud" d="M94 35c0-9 14-12 19-5 5-17 31-14 32 2 15-5 22 5 20 10H94z"/>
