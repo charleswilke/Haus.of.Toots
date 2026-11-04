@@ -37,8 +37,7 @@ class ShopApp {
             .map(alias => this.normalizeCollectionText(alias))
             .filter(Boolean);
 
-        // Only known storefronts may influence Village ordering. Other collections
-        // and unknown values retain their configured defaults.
+        // Only known storefront links may override newest-first ordering.
         const featured = collectionKey === 'village'
             ? new URLSearchParams(window.location?.search || '').get('featured')
             : null;
@@ -50,11 +49,10 @@ class ShopApp {
             tag,
             title: (dataset.shopCollectionTitle || '').trim() || collectionKey,
             aliases,
-            priorityKeywords: (featuredKeyword || dataset.shopPriorityKeywords || '')
+            priorityKeywords: (featuredKeyword || '')
                 .split(',')
                 .map(keyword => this.normalizeCollectionText(keyword))
                 .filter(Boolean),
-            secondaryTitleKeyword: this.normalizeCollectionText(dataset.shopSecondaryTitleKeyword),
             fallbackTitlePrefixes: (dataset.shopFallbackTitlePrefixes || '')
                 .split(',')
                 .map(prefix => this.normalizeCollectionText(prefix))
@@ -261,10 +259,9 @@ class ShopApp {
             return;
         }
 
-        // Featured collection keywords take precedence, in the configured order.
-        // Stable sorting preserves Shopify's order within each group and for the rest.
+        // A storefront chosen by the incoming link comes first; all other
+        // ordering follows creation date, newest first (including each edition).
         const priorityKeywords = this.collectionContext?.priorityKeywords || [];
-        const secondaryTitleKeyword = this.collectionContext?.secondaryTitleKeyword || '';
         const priorityRank = product => {
             const words = this.normalizeCollectionText([
                 product.title, product.handle, ...(product.tags || [])
@@ -272,25 +269,12 @@ class ShopApp {
             const rank = priorityKeywords.findIndex(keyword =>
                 ` ${words} `.includes(` ${keyword} `)
             );
-            if (rank !== -1) return rank;
-
-            const title = this.normalizeCollectionText(product.title);
-            const isSecondary = secondaryTitleKeyword &&
-                ` ${title} `.includes(` ${secondaryTitleKeyword} `);
-            return priorityKeywords.length + (isSecondary ? 0 : 1);
+            return rank === -1 ? priorityKeywords.length : rank;
         };
-        const sortedProducts = [...this.products].sort((a, b) => {
-            if (priorityKeywords.length || secondaryTitleKeyword) {
-                return priorityRank(a) - priorityRank(b);
-            }
-
-            // Other collection pages retain their hand-painted-first ordering.
-            const aIsHandPainted = this.isHandPainted(a);
-            const bIsHandPainted = this.isHandPainted(b);
-            if (aIsHandPainted && !bIsHandPainted) return -1;
-            if (!aIsHandPainted && bIsHandPainted) return 1;
-            return 0;
-        });
+        const sortedProducts = [...this.products].sort((a, b) =>
+            priorityRank(a) - priorityRank(b) ||
+            (Date.parse(b.createdAt) || 0) - (Date.parse(a.createdAt) || 0)
+        );
 
         productsGrid.innerHTML = this.collectionContext?.groupStorefronts
             ? this.getStorefrontGroups(sortedProducts).map(group =>
@@ -329,7 +313,8 @@ class ShopApp {
             if (!groups.has(key)) groups.set(key, []);
             groups.get(key).push(product);
         }
-        // First appearance keeps the collection's priority and Shopify group order.
+        // First appearance orders storefront groups by their newest edition,
+        // with the incoming link's featured storefront taking precedence.
         return Array.from(groups.values());
     }
 

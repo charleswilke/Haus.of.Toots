@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 import test from 'node:test';
 
-test('Village editions stay in storefront groups with Toys R Us first', () => {
+test('Village storefront groups follow their newest edition', () => {
     const { app, document } = shop();
     const html = readFileSync(new URL('../village-expansion-series.html', import.meta.url), 'utf8');
     document.body.dataset = Object.fromEntries(
@@ -12,7 +12,10 @@ test('Village editions stay in storefront groups with Toys R Us first', () => {
         )
     );
     app.collectionContext = app.getCollectionContext();
-    const product = (id, title) => ({ id, title, productType: 'Hand Painted Needlepoint Canvas' });
+    const product = (id, title) => ({
+        id, title, productType: 'Hand Painted Needlepoint Canvas',
+        createdAt: id === 'single' ? '2026-11-04' : id.startsWith('toys') ? '2026-11-03' : '2026-10-01'
+    });
     app.products = [
         product('joann', 'Joann Storefront Needlepoint Canvas (non-holiday version)'),
         product('sephora-holiday', 'Sephora Holiday Storefront Needlepoint Canvas'),
@@ -30,18 +33,18 @@ test('Village editions stay in storefront groups with Toys R Us first', () => {
     app.renderProducts();
     const grid = document.getElementById('productsGrid');
     assert.equal(grid.innerHTML,
+        '<div class="storefront-group">[single]</div>' +
         '<div class="storefront-group">[toys-holiday][toys]</div>' +
         '<div class="storefront-group">[joann][joann-holiday]</div>' +
         '<div class="storefront-group">[sephora-holiday][sephora]</div>' +
-        '<div class="storefront-group">[single]</div>' +
         '<div class="storefront-group">[american-girl][american-girl-holiday]</div>' +
         '<div class="storefront-group">[container-holiday][container]</div>');
     assert.match(html, /data-product-layout="pairs"/);
 
-    // Other collection pages keep their original ordering and card structure.
+    // Other collection pages also use recency, without storefront wrappers.
     app.collectionContext = { key: 'flash' };
     app.renderProducts();
-    assert.equal(grid.innerHTML, app.products.map(app.createProductCard).join(''));
+    assert.equal(grid.innerHTML, '[single][toys-holiday][toys][joann][sephora-holiday][joann-holiday][sephora][american-girl][container-holiday][american-girl-holiday][container]');
 });
 
 test('product title colors follow collection membership across mixed grids and recommendations', () => {
@@ -545,28 +548,67 @@ test('gallery balances cached and newly settled images once and ignores obsolete
 });
 
 
-test('featured links prioritize the chosen Village storefront and preserve other product order', () => {
+test('featured links prioritize the chosen Village storefront, then recency', () => {
     for (const [featured, expected] of [
-        ['costco', '[costco][costco-holiday][joann][toys]'],
-        ['toys-r-us', '[toys][joann][costco][costco-holiday]'],
-        ['unknown', '[toys][joann][costco][costco-holiday]'],
-        ['toString', '[toys][joann][costco][costco-holiday]']
+        ['costco', '[costco-holiday][costco][toys][joann]'],
+        ['toys-r-us', '[toys][joann][costco-holiday][costco]'],
+        ['unknown', '[toys][joann][costco-holiday][costco]'],
+        ['toString', '[toys][joann][costco-holiday][costco]'],
+        ['', '[toys][joann][costco-holiday][costco]']
     ]) {
         const { app, document, window } = shop();
         window.location = { search: '?featured=' + featured };
-        document.body.dataset = { shopCollection: 'village', shopPriorityKeywords: 'toys r us' };
+        document.body.dataset = { shopCollection: 'village' };
         app.collectionContext = app.getCollectionContext();
         app.products = [
-            { id: 'joann', title: 'Joann Storefront' },
-            { id: 'costco', title: 'Costco Storefront' },
-            { id: 'toys', title: 'Toys “R” Us Storefront' },
-            { id: 'costco-holiday', title: 'Costco Holiday Storefront' }
+            { id: 'joann', title: 'Joann Storefront', createdAt: '2026-11-03' },
+            { id: 'costco', title: 'Costco Storefront', createdAt: '2026-11-01' },
+            { id: 'toys', title: 'Toys “R” Us Storefront', createdAt: '2026-11-04' },
+            { id: 'costco-holiday', title: 'Costco Holiday Storefront', createdAt: '2026-11-02' }
         ];
         app.createProductCard = product => `[${product.id}]`;
         app.renderProducts();
         assert.equal(document.getElementById('productsGrid').innerHTML, expected);
         document.body.dataset.shopCollection = 'flash';
-        document.body.dataset.shopPriorityKeywords = '';
         assert.equal(app.getCollectionContext().priorityKeywords.length, 0);
+    }
+});
+
+test('all listing pages use creation date ahead of product type or former keyword priorities', () => {
+    for (const key of [null, 'flash', 'main-stage-collection', 'accessories', 'village']) {
+        const { app, document } = shop();
+        document.body.dataset = key ? { shopCollection: key, shopPriorityKeywords: 'charisma' } : {};
+        app.collectionContext = app.getCollectionContext();
+        app.products = [
+            { id: 'unknown', title: 'Unknown date' },
+            { id: 'old', title: 'Charisma', productType: 'Hand Painted', createdAt: '2026-01-01', updatedAt: '2026-11-04' },
+            { id: 'new', title: 'New canvas', createdAt: '2026-11-03' },
+            { id: 'tie', title: 'Same date', createdAt: '2026-11-03' },
+            { id: 'invalid', title: 'Invalid date', createdAt: 'invalid' }
+        ];
+        app.createProductCard = product => `[${product.id}]`;
+        app.renderProducts();
+        assert.equal(document.getElementById('productsGrid').innerHTML, '[new][tie][old][unknown][invalid]');
+    }
+});
+
+test('Shopify listing queries request newest products and include creation dates', async () => {
+    const env = environment();
+    env.context.SHOPIFY_CONFIG = {};
+    const client = loadClass(env, 'shopify.js', 'ShopifyClient');
+    const queries = [];
+    client.cachedFetch = async query => {
+        queries.push(query);
+        return {
+            products: { edges: [], pageInfo: { hasNextPage: false } },
+            collection: { products: { edges: [] } }
+        };
+    };
+    await client.getProducts();
+    await client.getProductsPage();
+    await client.getCollectionProducts('village-expansion-series');
+    for (const [index, query] of queries.entries()) {
+        assert.match(query, index === 2 ? /sortKey: CREATED, reverse: true/ : /sortKey: CREATED_AT, reverse: true/);
+        assert.match(query, /createdAt/);
     }
 });

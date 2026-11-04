@@ -99,7 +99,7 @@ class ShopifyClient {
     async getProducts(first = 24) {
         const query = `
             query GetProducts($first: Int!) {
-                products(first: $first) {
+                products(first: $first, sortKey: CREATED_AT, reverse: true) {
                     pageInfo {
                         hasNextPage
                         endCursor
@@ -112,6 +112,7 @@ class ShopifyClient {
                             vendor
                             productType
                             collections(first: 10) { edges { node { handle } } }
+                            createdAt
                             updatedAt
                             tags
                             images(first: 1) {
@@ -238,7 +239,7 @@ class ShopifyClient {
     async getProductsPage(first = 50, after = null, { forceRefresh = false } = {}) {
         const query = `
             query GetProductsPage($first: Int!, $after: String) {
-                products(first: $first, after: $after) {
+                products(first: $first, after: $after, sortKey: CREATED_AT, reverse: true) {
                     pageInfo {
                         hasNextPage
                         endCursor
@@ -362,7 +363,7 @@ class ShopifyClient {
                     title
                     handle
                     descriptionHtml
-                    products(first: $first) {
+                    products(first: $first, sortKey: CREATED, reverse: true) {
                         edges {
                             node {
                                 id
@@ -371,6 +372,7 @@ class ShopifyClient {
                                 vendor
                                 productType
                                 collections(first: 10) { edges { node { handle } } }
+                                createdAt
                                 updatedAt
                                 tags
                                 images(first: 1) {
