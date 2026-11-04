@@ -5,10 +5,17 @@
     height: 250px;
     overflow: hidden;
     isolation: isolate;
-    background: #faf1e9;
+    background: var(--cream);
     border: 6px solid var(--cream);
     border-radius: 28px 4px 28px 4px;
     box-shadow: 0 0 0 1px rgb(139 96 174 / 20%), 0 12px 28px rgb(90 64 54 / 9%);
+}
+/* Keep the full-size composition and crop it at the stitched outline. */
+.village-banner-art {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    clip-path: inset(4px round 18px 2px 18px 2px);
 }
 .village-banner::after {
     content: '';
