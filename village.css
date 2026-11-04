@@ -93,7 +93,7 @@
     .village-banner { height: 250px; --village-small-sign-width: clamp(170px, 54vw, 210px); }
     .village-streetscape { width: min(150%, 560px); max-width: none; left: -4%; }
     .village-header-sign { right: 10px; }
-    .village-responsive-sun { width: 46px; height: 46px; right: calc(var(--village-small-sign-width) / 2 - 13px); bottom: calc(var(--village-small-sign-width) * .54375 - 50px); }
+    .village-responsive-sun { display: none; }
     .village-responsive-cloud { left: 10%; top: 33px; width: 40px; }
     .village-responsive-cloud-far { left: 48%; top: 28px; width: 30px; }
 }
