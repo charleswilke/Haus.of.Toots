@@ -84,3 +84,31 @@ test('desktop always restores Gold Star and resizing back keeps the chosen style
         assert.equal(page.randomCalls, 1);
     }
 });
+
+
+test('each Costco panel entry advances once, holds on exit, and stops at the zoom cap', () => {
+    const handlers = {};
+    const scales = [];
+    const media = { matches: true };
+    const feature = {
+        style: { setProperty: (name, value) => scales.push([name, value]) },
+        addEventListener: (name, fn) => { handlers[name] = fn; },
+    };
+    vm.runInNewContext(source, {
+        document: { querySelector: selector => selector === '.costco-feature' ? feature : null },
+        window: { matchMedia: () => media },
+    });
+    handlers.pointerenter();
+    assert.deepEqual(scales, [['--costco-aisle-scale', '1.03']]);
+    // No exit/child-hover listener resets the crop or advances it again.
+    assert.deepEqual(Object.keys(handlers), ['pointerenter']);
+    media.matches = false;
+    handlers.pointerenter();
+    assert.equal(scales.length, 1);
+    media.matches = true;
+    handlers.pointerenter();
+    handlers.pointerenter();
+    handlers.pointerenter();
+    handlers.pointerenter();
+    assert.deepEqual(scales.map(([, value]) => value), ['1.03', '1.06', '1.09', '1.12']);
+});

@@ -37,13 +37,20 @@ class ShopApp {
             .map(alias => this.normalizeCollectionText(alias))
             .filter(Boolean);
 
+        // Only known storefronts may influence Village ordering. Other collections
+        // and unknown values retain their configured defaults.
+        const featured = collectionKey === 'village'
+            ? new URLSearchParams(window.location?.search || '').get('featured')
+            : null;
+        const featuredKeyword = new Map([['toys-r-us', 'toys r us'], ['costco', 'costco']]).get(featured);
+
         return {
             key: collectionKey,
             handle: collectionHandle,
             tag,
             title: (dataset.shopCollectionTitle || '').trim() || collectionKey,
             aliases,
-            priorityKeywords: (dataset.shopPriorityKeywords || '')
+            priorityKeywords: (featuredKeyword || dataset.shopPriorityKeywords || '')
                 .split(',')
                 .map(keyword => this.normalizeCollectionText(keyword))
                 .filter(Boolean),
