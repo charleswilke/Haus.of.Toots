@@ -373,7 +373,10 @@
                             </g>
                             <path d="M12 47h38C66 22 108 10 160 10s94 12 110 37h38v91H12Z" fill="var(--cream)" stroke="var(--coral-primary)" stroke-width="4" stroke-linejoin="round"/>
                             <path d="M21 56h34C72 31 111 19 160 19s88 12 105 37h34v73H21Z" fill="none" stroke="var(--purple-text)" stroke-width="1.5"/>
-                            <text class="village-sign-welcome" x="160" y="54" text-anchor="middle">WELCOME TO</text>
+                            <defs>
+                                <path id="village-sign-welcome-arch" d="M78 65Q160 25 242 65"/>
+                            </defs>
+                            <text class="village-sign-welcome" text-anchor="middle"><textPath href="#village-sign-welcome-arch" startOffset="50%">WELCOME TO</textPath></text>
                             <text class="village-sign-name" x="160" y="99" text-anchor="middle">the Village</text>
                             <!-- Sweeping brush flourishes sit below the lettering, framing the seedling. -->
                             <g fill="var(--coral-primary)" fill-opacity=".8">
