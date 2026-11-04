@@ -38,6 +38,51 @@
     updateLaunch();
 })();
 
+// Pick the smaller-screen card style once per page load, independently of the
+// canvas edition. Restore the Gold Star card when both desktop cards are shown.
+(() => {
+    const card = document.querySelector('[data-costco-responsive-card]');
+    if (!card) return;
+    const label = card.querySelector('[data-costco-member-type]');
+    const smallerScreen = window.matchMedia('(max-width: 1099px)');
+    const useExecutive = Math.random() < .5;
+
+    function updateStyle() {
+        const executive = smallerScreen.matches && useExecutive;
+        card.classList.toggle('costco-membership-mobile-executive', executive);
+        if (label) label.textContent = executive ? 'Executive Stitcher' : 'Gold Star Stitcher';
+    }
+
+    smallerScreen.addEventListener('change', updateStyle);
+    updateStyle();
+})();
+
+// Keep one close-up visible so choosing an edition never changes the card size.
+(() => {
+    const gallery = document.querySelector('[data-costco-gallery]');
+    if (!gallery) return;
+    const swap = gallery.querySelector('[data-costco-swap]');
+    const photos = [...gallery.querySelectorAll('[data-costco-photo]')];
+    const choices = [...gallery.querySelectorAll('[data-costco-edition]')];
+    if (!swap || photos.length !== 2) return;
+    let active = 'classic';
+
+    function select(edition) {
+        active = edition;
+        photos.forEach(photo => { photo.hidden = photo.dataset.costcoPhoto !== edition; });
+        choices.forEach(choice => {
+            choice.setAttribute('aria-pressed', String(choice.dataset.costcoEdition === edition));
+        });
+        const next = edition === 'classic' ? 'holiday' : 'classic';
+        swap.setAttribute('aria-label', `Show ${next} Costco canvas`);
+    }
+
+    swap.addEventListener('click', () => select(active === 'classic' ? 'holiday' : 'classic'));
+    choices.forEach(choice => {
+        choice.addEventListener('click', () => select(choice.dataset.costcoEdition));
+    });
+})();
+
 // Native buttons support tapping, clicking, and Enter/Space without changing
 // the stack's layout or the edition's image, caption, and label pairing.
 (() => {
