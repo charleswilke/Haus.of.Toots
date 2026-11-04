@@ -1,0 +1,210 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 300" preserveAspectRatio="xMidYMax meet" fill="none">
+  <!-- A wordless, color-block neighborhood based on the six storefront canvases. -->
+  <defs>
+    <linearGradient id="village-sky" x1="0" y1="0" x2=".7" y2="1">
+      <stop offset="0" stop-color="#b3cddd"/>
+      <stop offset=".55" stop-color="#ccdae5"/>
+      <stop offset="1" stop-color="#dce5e6"/>
+    </linearGradient>
+    <radialGradient id="village-corner-warmth" gradientUnits="userSpaceOnUse" cx="-30" cy="-20" r="1160" gradientTransform="scale(1 .48)">
+      <stop offset="0" stop-color="#eac0a7"/>
+      <stop offset=".32" stop-color="#edc9b4" stop-opacity=".95"/>
+      <stop offset=".65" stop-color="#e8c4c8" stop-opacity=".7"/>
+      <stop offset="1" stop-color="#dfcbdc" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="village-peach-sweep" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#edc4aa" stop-opacity=".85"/>
+      <stop offset=".55" stop-color="#efc0be" stop-opacity=".65"/>
+      <stop offset="1" stop-color="#e8cbdc" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="village-blue-sweep" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#c6bfdb" stop-opacity="0"/>
+      <stop offset=".45" stop-color="#c3c5e1" stop-opacity=".65"/>
+      <stop offset="1" stop-color="#9fc4dc" stop-opacity=".7"/>
+    </linearGradient>
+    <filter id="village-sky-soften" x="-15%" y="-100%" width="130%" height="300%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="20"/>
+    </filter>
+    <radialGradient id="village-sun-halo">
+      <stop offset="0" stop-color="#fff0cc" stop-opacity=".35"/>
+      <stop offset="1" stop-color="#fff0cc" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="toy-stripes" width="18" height="110" patternUnits="userSpaceOnUse"><path fill="#cf7e88" d="M0 0h3v110H0z"/><path fill="#6ea6a0" d="M3 0h3v110H3z"/><path fill="#e3c777" d="M6 0h3v110H6z"/><path fill="#8cb4b4" d="M9 0h3v110H9z"/><path fill="#d8a3b4" d="M12 0h3v110h-3z"/><path fill="#849db9" d="M15 0h3v110h-3z"/></pattern>
+    <pattern id="toy-roof" width="12" height="7" patternUnits="userSpaceOnUse"><path fill="#b58e77" d="M0 0h12v7H0z"/><path fill="#96765f" d="M0 5h12v2H0z"/></pattern>
+    <pattern id="awning-stripes" width="26" height="35" patternUnits="userSpaceOnUse" patternTransform="skewX(-12)"><path fill="#faf8f5" d="M0 0h13v35H0z"/><path fill="#83a7a0" d="M13 0h13v35H13z"/></pattern>
+    <g id="window"><path fill="#faf8f5" d="M0 0h26v32H0z"/><path fill="#9cb7b4" d="M3 3h20v26H3z"/><path stroke="#faf8f5" stroke-width="2" d="M13 3v26M3 15h20"/></g>
+    <g id="tree"><path stroke="#88749c" stroke-width="4" d="M0 0v52"/><ellipse cy="-8" rx="18" ry="29" fill="#8baaa2"/><ellipse cx="-6" cy="-11" rx="9" ry="20" fill="#a6bdb0"/></g>
+  </defs>
+  <style>
+    .village-cloud { transform-box: fill-box; transform-origin: center; }
+    @keyframes cloud-drift { from { transform: translateX(-26px); } to { transform: translateX(44px); } }
+    @media (prefers-reduced-motion: no-preference) {
+      .village-cloud { animation: cloud-drift 48s ease-in-out -18s infinite alternate; }
+      .village-cloud-far { animation-duration: 67s; animation-delay: -40s; }
+    }
+  </style>
+  <path fill="url(#village-sky)" d="M0 0h1440v300H0z"/>
+  <path fill="url(#village-corner-warmth)" d="M0 0h1440v300H0Z"/>
+  <!-- Broad, feathered curves mingle the sky colors rather than forming straight bands. -->
+  <g fill="none" stroke-linecap="round" filter="url(#village-sky-soften)">
+    <path stroke="url(#village-peach-sweep)" stroke-width="92" d="M-140 38C130-60 280 157 535 95S850-7 1100 62"/>
+    <path stroke="url(#village-blue-sweep)" stroke-width="90" d="M80 206C330 263 367 77 665 112S1110 181 1510 38"/>
+    <path stroke="url(#village-peach-sweep)" stroke-width="45" opacity=".5" d="M-100 191C170 104 315 228 553 182S837 48 1058 100"/>
+  </g>
+  <circle cx="1250" cy="122" r="115" fill="url(#village-sun-halo)"/>
+  <circle cx="1250" cy="122" r="51" fill="#ffe9b7"/>
+  <path fill="#bdc6d3" d="M0 169Q180 128 340 164T700 153T1060 160T1440 137v163H0z"/>
+  <g fill="#fff0d8" opacity=".85">
+    <path class="village-cloud" d="M94 35c0-9 14-12 19-5 5-17 31-14 32 2 15-5 22 5 20 10H94z"/>
+    <path class="village-cloud village-cloud-far" d="M1045 34c0-8 13-11 18-4 5-15 29-13 31 2 13-4 20 5 18 10h-67z"/>
+  </g>
+  <!-- One vanishing point on the right organizes the street, curb and storefront row. -->
+  <path fill="#c2cbb5" d="M0 198q390-14 780-4t660-8v114H0Z"/>
+  <path fill="#e8d9d5" d="M0 298 1224 181h44L270 300H0Z"/>
+  <path fill="#f6e9df" d="m1224 185 28 1L332 300H148Z"/>
+  <path fill="#a89bab" d="m1252 186 18-1 170 115H332Z"/>
+  <path fill="#b7aabb" d="m1261 186 9-1 170 115H827Z"/>
+  <path fill="#f6e9df" d="m1270 185 9-1 161 90v26Z"/>
+  <path stroke="#e4d4d0" stroke-width="1.5" d="m1232 189-969 111m1047-88-28 27m-187 21-102 40"/>
+  <g fill="#f6e9df">
+    <path d="m1237 193 3 .5-8 5-4-.7Z"/>
+    <path d="m1205 205 5 1-17 10-7-1.5Z"/>
+    <path d="m1145 228 9 2-32 20-14-3Z"/>
+    <path d="m1035 270 19 4-44 26h-28Z"/>
+  </g>
+  <!-- American Girl: tall, symmetrical facade, projecting cornice, red lintels. -->
+  <g transform="matrix(1.28 -.24 0 1.12 120 78)">
+    <!-- The shaded return wall and roof cap give the tall facade real depth. -->
+    <path fill="#c5a2a9" d="M0 12-27-3v178l27 15Z"/>
+    <path fill="#e3c7be" d="M-27-3h166l27 15H0Z"/>
+    <path fill="#9a8da3" d="m-29-8 27 15v10l-27-15Z"/>
+    <g fill="#8e9fa4"><path d="m-21 34 13 7v25l-13-7Z"/><path d="m-21 80 13 7v25l-13-7Z"/><path d="m-21 131 13 7v25l-13-7Z"/></g>
+    <path stroke="#ead4ca" stroke-width="2" d="m-15 37 0 26m0 20v25m0 26v25"/>
+
+    <path fill="#d6a7ad" d="M0 12h166v178H0z"/><path fill="#eac9bd" d="M10 22h146v168H10z"/>
+    <!-- One shallow stone cornice with a softly beveled face. -->
+    <path fill="#c7b9b4" d="M-4 3h174l-5 10H1Z"/>
+    <path fill="#ddd0c4" d="M-4 3h174l-1 2H-3Z"/>
+    <path fill="#b8a9a9" d="M1 12h164v2H1Z"/>
+    <path fill="#f8eee1" d="M12 34h13v156H12zM141 34h13v156h-13zM67 34h9v108h-9zM92 34h9v108h-9z"/>
+    <g><use href="#window" x="31" y="42"/><use href="#window" x="109" y="42"/><use href="#window" x="31" y="91"/><use href="#window" x="109" y="91"/></g>
+    <!-- A continuous molding above the blank name band, as on the canvas. -->
+    <path fill="#b69e83" d="M25 77h116v5H25z"/>
+    <path fill="#f8eee1" d="M24 76h118v2H24zM24 82h118v2H24z"/>
+    <!-- Plain red fabric awnings with straight valances, as in the building reference. -->
+    <path fill="#c9767d" d="m29 36-2 8h34l-2-8Zm78 0-2 8h34l-2-8ZM29 85l-2 8h34l-2-8Zm78 0-2 8h34l-2-8ZM27 136l-3 9h118l-3-9Z"/>
+    <path fill="#ad626f" d="M27 44h34v3H27ZM105 44h34v3h-34ZM27 93h34v3H27ZM105 93h34v3h-34ZM24 145h118v3H24Z"/>
+    <path fill="#b37991" d="M61 151h43v39H61z"/><path fill="#f9eee0" d="M68 157h29v33H68z"/><path fill="#90aaa8" d="M71 160h23v30H71z"/>
+    <use href="#window" x="27" y="153"/><use href="#window" x="112" y="153"/>
+    <path fill="#b9a4b4" d="M-5 190h176v7H-5z"/>
+  </g>
+  <!-- JOANN: curved parapet, upstairs windows, scalloped striped awning. -->
+  <g transform="matrix(.98 -.15 0 .85 590 108)">
+    <path fill="#829e96" d="M0 26-23 11v139l23 15Z"/>
+    <path fill="#c4d0b9" d="M-23 11Q57-34 137 11l23 15Q80-19 0 26Z"/>
+    <path fill="#647f7c" d="m-17 63 11 7v24l-11-7Zm0 62 11 7v24l-11-7Z"/>
+    <path fill="#628e83" d="m-6 122-23-15 6-26 30 13Z"/>
+
+    <path fill="#a9bab1" d="M0 28h10Q17 7 80 1q63 6 70 27h10v137H0Z"/><path fill="#dce0c8" d="M9 34h8Q24 15 80 9q56 6 63 25h8v131H9Z"/>
+    <path stroke="#829c96" stroke-width="6" d="M-3 28h13Q17 7 80 1q63 6 70 27h13"/>
+    <path fill="#8da879" d="M24 29Q80 3 136 29v20H24Z"/>
+    <use href="#window" x="22" y="57"/><use href="#window" x="67" y="57"/><use href="#window" x="112" y="57"/>
+    <!-- The generator projects this canopy outward in depth from the wall. -->
+    <g id="joann-projecting-awning">
+    <path fill="url(#awning-stripes)" d="M7 94h146l13 28H-6Z"/>
+    <path fill="#6f8d66" d="M-6 121h172v3H-6Z"/>
+    <path fill="url(#awning-stripes)" d="M-6 122h172v5q-6.615 7-13.23 0q-6.615 7-13.23 0q-6.615 7-13.23 0q-6.615 7-13.23 0q-6.615 7-13.23 0q-6.615 7-13.23 0q-6.615 7-13.23 0q-6.615 7-13.23 0q-6.615 7-13.23 0q-6.615 7-13.23 0q-6.615 7-13.23 0q-6.615 7-13.23 0q-6.615 7-13.23 0Z"/>
+    <path stroke="#f7efdf" stroke-width="1.5" d="M7 94h146"/>
+    </g>
+    <path fill="#f8eee1" d="M15 129h130v36H15z"/><path fill="#8baaaa" d="M20 133h38v32H20zM66 133h28v32H66zM102 133h38v32h-38z"/>
+    <path fill="#c58097" d="M63 129h4v36h-4zM94 129h4v36h-4z"/>
+    <path fill="#829c96" d="M-5 165h170v7H-5z"/>
+  </g>
+  <!-- Container Store: shallow pediment and long, gridded display windows. -->
+  <g transform="matrix(.79 -.13 0 .70 778 140)">
+    <path fill="#bdc5c6" d="M0 18-22 4v114l22 14Z"/>
+    <path fill="#a8bdce" d="m-27 3 89-17 88 17 22 14-88-17-89 17Z"/>
+    <path fill="#839eaf" d="m-16 56 10 6v47l-10-6Z"/>
+    <path stroke="#e2c8b7" stroke-width="2" d="m-17 80 12 7"/>
+
+    <path fill="#e6d4c4" d="M0 18h167v114H0z"/><path fill="#7e9bb8" d="m-5 17 89-17 88 17v8H-5z"/>
+    <path fill="#8daac4" d="M10 31h147v22H10z"/><path fill="#f7efdf" d="M7 61h153v63H7z"/>
+    <g fill="#9bb7c6"><path d="M14 67h52v50H14zM101 67h52v50h-52zM73 67h21v57H73z"/></g>
+    <path stroke="#eee1cc" stroke-width="4" d="M31 67v50M49 67v50M119 67v50M136 67v50M14 88h52M101 88h52"/>
+    <path fill="#889daf" d="M-4 132h175v7H-4z"/>
+  </g>
+  <!-- Sephora: deep rectangular surround, pale bands, arched central door. -->
+  <g transform="matrix(.65 -.11 0 .61 930 135)">
+    <path fill="#68646b" d="M0 5-22-10v138l22 15Z"/>
+    <path fill="#89818b" d="M-26-15h161l22 15H-4Z"/>
+    <path fill="#f4ebdf" d="m-22 14 22 15v8l-22-15Zm0 29 22 15v8l-22-15Z"/>
+    <path fill="#a8a19b" d="m-16 83 10 7v36l-10-7Z"/>
+
+    <path fill="#77717a" d="M0 5h153v138H0z"/><path fill="#f4ebdf" d="M8 14h137v129H8z"/>
+    <path fill="#77717a" d="M-4 0h161v11H-4zM8 24h137v22H8zM8 53h137v8H8zM8 76h137v8H8z"/>
+    <path fill="#f4ebdf" d="M15 91h37v44H15zM101 91h37v44h-37z"/><path fill="#b0aaa6" d="M20 97h27v32H20zM106 97h27v32h-27z"/>
+    <path fill="#77717a" d="M59 143V90a18 18 0 0 1 36 0v53z"/><path fill="#f4ebdf" d="M65 143V91a12 12 0 0 1 24 0v52z"/><path fill="#b0aaa6" d="M69 143V92a8 8 0 0 1 16 0v51z"/>
+    <path fill="#77717a" d="M-4 143h161v7H-4z"/>
+  </g>
+  <!-- Costco: stepped warehouse facade and projecting center entrance. -->
+  <g transform="matrix(.55 -.08 0 .51 1046 142)">
+    <path fill="#b2948f" d="M0 38-23 22v101l23 16Z"/>
+    <path fill="#e1c0b3" d="M-23 22h14V5h33v-21h81l23 16H47v21H14v17H0Z"/>
+    <path fill="#809ba2" d="m-17 79 11 7v39l-11-7Z"/>
+    <path fill="#9b7181" d="m-23 54 23 16v9l-23-16Z"/>
+
+    <path fill="#c6b2aa" d="M0 38h174v101H0z"/><path fill="#e8cabc" d="M14 21h146v118H14z"/><path fill="#d6b2a5" d="M47 0h81v139H47z"/>
+    <path fill="#b4778a" d="M-3 34h180v7H-3zM10 17h154v8H10zM42-4h91v9H42z"/>
+    <path fill="#d6b2a5" d="M57 13h61v42H57z"/><path fill="#b29ab7" d="M60 63h55v8H60z"/>
+    <path fill="#faf1e9" d="M7 82h31v49H7zM138 82h29v49h-29zM55 88h65v51H55z"/>
+    <path fill="#90abae" d="M60 94h23v45H60zM90 94h23v45H90zM10 87h24v37H10zM142 87h21v37h-21z"/>
+    <path fill="#bc8594" d="M4 72h37v10H4zM135 72h35v10h-35z"/><path fill="#a28a9c" d="M-4 139h182v7H-4z"/>
+  </g>
+  <!-- Toys R Us: broad tiered mansard roof, rainbow cladding and a striped entry canopy.
+       The canvas supplies the architecture; the roof stays completely unlettered. -->
+  <g transform="matrix(1.05 -.16 0 1 355 153)">
+    <!-- The mansard wraps around the side instead of ending at a flat cutout. -->
+    <path fill="#97745f" d="M0 36-24 23v82l24 13Z"/>
+    <path fill="#c19e83" d="m-8 35-24-13 6-14h28Z"/>
+    <path fill="#806653" d="m-9 38-24-13v6l24 13Z"/>
+    <path fill="#7897a5" d="m-18 75 12 7v23l-12-7Z"/>
+    <path stroke="#bd9580" stroke-width="2" d="m-18 52 12 7m-12 4 12 7m-6 9v23"/>
+
+    <path fill="#a37e6a" d="M0 36h196v82H0z"/>
+    <path fill="url(#toy-stripes)" d="M4 42h188v67H4z"/>
+    <g id="toys-sloped-roof">
+    <path fill="url(#toy-roof)" stroke="#96765f" stroke-width="1.5" stroke-linejoin="round" d="M-8 35-2 21h28l5-13h28l5 13h8l5-13h48l5 13h8l5-13h26l5 13h13l8 14v6H-8Z"/>
+    <!-- Shaded shoulders and thin lit edges articulate the three raised tiers. -->
+    <path fill="#8c6c58" d="m26 21 5-13h4l-5 13Zm46 0 5-13h4l-5 13Zm66 0 5-13h4l-5 13ZM-8 35l6-14h4l-6 14Z"/>
+    <path fill="#c9a58b" d="m56 8 5 13h3L59 8Zm66 0 5 13h3l-5-13Zm44 0 5 13h3l-5-13Z"/>
+    <path stroke="#d0ad90" stroke-width="1.3" d="M32 9h26M78 9h46M144 9h24M-2 22h27M64 22h7M130 22h7M175 22h12"/>
+    <path fill="#8c6f5e" d="M-9 38h214v6H-9z"/>
+    <path fill="#755d50" d="M-9 42h214v2H-9z"/>
+    <path stroke="#c9a58b" stroke-width="1.2" d="M-9 38h214"/>
+    </g>
+    <!-- The center canopy turns the same rainbow stripes horizontally. -->
+    <path fill="#6ea6a0" stroke="#96765f" stroke-width="2" d="M77 45h43v34H77z"/>
+    <path stroke="#e3c777" stroke-width="3" d="M79 49h39M79 64h39"/>
+    <path stroke="#cf7e88" stroke-width="3" d="M79 53h39M79 68h39"/>
+    <path stroke="#849db9" stroke-width="3" d="M79 57h39M79 72h39"/>
+    <!-- Low, wide display windows flank blue double doors. -->
+    <path fill="#96765f" d="M9 78h61v30H9zM128 78h61v30h-61zM77 78h43v33H77z"/>
+    <path fill="#a3b9c6" d="M12 81h55v24H12zM131 81h55v24h-55z"/>
+    <path fill="#d7c3d6" d="M13 82h15v22H13zM132 82h15v22h-15z"/>
+    <path fill="#a7c3ae" d="M51 82h15v22H51zM170 82h15v22h-15z"/>
+    <path stroke="#96765f" stroke-width="2" d="M30 81v24M49 81v24M149 81v24M168 81v24"/>
+    <path fill="#729fb8" d="M81 81h13v29H81zM101 81h14v29h-14z"/>
+    <path stroke="#b8d3d5" stroke-width="1.5" d="M82 97h11M102 97h12"/>
+    <path fill="#b79a7c" d="M0 111h196v7H0z"/>
+    <path fill="#f6e9df" d="M73 118h52l7 7H66z"/>
+  </g>
+  <!-- Trees and clipped grass beds follow the same receding curb. -->
+  <g transform="translate(331 234)"><use href="#tree" transform="scale(1.05)"/></g>
+  <g transform="translate(567 220)"><use href="#tree" transform="scale(.8)"/></g>
+  <g transform="translate(759 207)"><use href="#tree" transform="scale(.61)"/></g>
+  <g transform="translate(1029 190)"><use href="#tree" transform="scale(.38)"/></g>
+  <g transform="translate(1167 187)"><use href="#tree" transform="scale(.25)"/></g>
+  <path fill="#aec0a5" d="M0 280q22-26 44-4 21-35 49-8 26-21 51 0 25-26 49-1l56 13L148 300H0Z"/>
+  <path fill="#aec0a5" d="m1340 220q18-21 34-2 20-19 38 1 14-14 28-5v59Z"/>
+  <g fill="#f7eade"><circle cx="37" cy="282" r="3"/><circle cx="104" cy="284" r="3"/><circle cx="1391" cy="238" r="2"/></g>
+</svg>
