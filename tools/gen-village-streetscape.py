@@ -145,7 +145,7 @@ for name, first_fill, baseline, start, span, side, width in reversed(models):
             for child in el: emit(child,attrs,dx,dy)
             roof_mode = False
             return
-        if tag=='g' and el.get('id') == 'joann-projecting-awning':
+        if tag=='g' and el.get('id') in ['joann-projecting-awning', 'container-projecting-awnings']:
             return  # Draw the projecting canopy in front of the doors below.
         if tag=='g':
             for child in el: emit(child,attrs,dx,dy)
@@ -203,6 +203,20 @@ for name, first_fill, baseline, start, span, side, width in reversed(models):
                 a=' '.join(f'{k}="{v}"' for k,v in attrs.items())
                 out.append(f'  <path {a} d="{d}"/>')
     for child in children: emit(child)
+    if name == 'Container Store':
+        # A shallow canopy projects only a few pixels beyond the front wall.
+        def blue_canopy(x, t):
+            u=start+x*span/width
+            return point(complex(x,58+8*t))+complex(12,1.5)*(600/(u+600))*t
+        for a,b in [(12,68),(73,94),(99,155)]:
+            back_l,back_r=blue_canopy(a,0),blue_canopy(b,0)
+            front_l,front_r=blue_canopy(a,1),blue_canopy(b,1)
+            shadow=[point(complex(a,66)),point(complex(b,66)),front_r+complex(0,3),front_l+complex(0,3)]
+            out.append(f'  <path fill="#557894" fill-opacity=".18" d="{polygon(shadow)}"/>')
+            out.append(f'  <path fill="#557894" d="{polygon([back_l,front_l,front_l+complex(0,2),point(complex(a,68))])}"/>')
+            out.append(f'  <path fill="#6e90ae" d="{polygon([back_l,back_r,front_r,front_l])}"/>')
+            out.append(f'  <path fill="#557894" d="{polygon([front_l,front_r,front_r+complex(0,2),front_l+complex(0,2)])}"/>')
+            out.append(f'  <path stroke="#a2b9cc" stroke-width=".6" d="M{back_l.real:.2f},{back_l.imag:.2f} L{back_r.real:.2f},{back_r.imag:.2f}"/>')
     if name == 'JOANN':
         # Fabric depth is a separate direction from the facade's horizontal axis.
         # Each stripe follows an outward ray, not a skew painted on the front wall.

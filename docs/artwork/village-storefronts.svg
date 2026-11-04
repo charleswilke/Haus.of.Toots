@@ -86,14 +86,18 @@
     <path fill="#c7b9b4" d="M-4 3h174l-5 10H1Z"/>
     <path fill="#ddd0c4" d="M-4 3h174l-1 2H-3Z"/>
     <path fill="#b8a9a9" d="M1 12h164v2H1Z"/>
-    <path fill="#f8eee1" d="M12 34h13v156H12zM141 34h13v156h-13zM67 34h9v108h-9zM92 34h9v108h-9z"/>
-    <g><use href="#window" x="31" y="42"/><use href="#window" x="109" y="42"/><use href="#window" x="31" y="91"/><use href="#window" x="109" y="91"/></g>
+    <path fill="#f8eee1" d="M12 34h13v156H12zM141 34h13v156h-13zM62 34h5v42h-5zM101 34h5v42h-5zM78 84h10v58H78Z"/>
+    <g><use href="#window" x="31" y="42"/><use href="#window" x="70" y="42"/><use href="#window" x="109" y="42"/></g>
+    <!-- Two wider display windows on the second floor. -->
+    <path fill="#faf8f5" d="M31 91h41v32H31ZM95 91h41v32H95Z"/>
+    <path fill="#9cb7b4" d="M34 94h35v26H34ZM98 94h35v26H98Z"/>
+    <path stroke="#faf8f5" stroke-width="2" d="M51.5 94v26M34 106h35M115.5 94v26M98 106h35"/>
     <!-- A continuous molding above the blank name band, as on the canvas. -->
     <path fill="#b69e83" d="M25 77h116v5H25z"/>
     <path fill="#f8eee1" d="M24 76h118v2H24zM24 82h118v2H24z"/>
     <!-- Plain red fabric awnings with straight valances, as in the building reference. -->
-    <path fill="#c9767d" d="m29 36-2 8h34l-2-8Zm78 0-2 8h34l-2-8ZM29 85l-2 8h34l-2-8Zm78 0-2 8h34l-2-8ZM27 136l-3 9h118l-3-9Z"/>
-    <path fill="#ad626f" d="M27 44h34v3H27ZM105 44h34v3h-34ZM27 93h34v3H27ZM105 93h34v3h-34ZM24 145h118v3H24Z"/>
+    <path fill="#c9767d" d="m29 36-2 8h34l-2-8Zm39 0-2 8h34l-2-8Zm39 0-2 8h34l-2-8ZM29 85l-2 8h49l-2-8Zm64 0-2 8h49l-2-8ZM27 136l-3 9h118l-3-9Z"/>
+    <path fill="#ad626f" d="M27 44h34v3H27ZM66 44h34v3H66ZM105 44h34v3h-34ZM27 93h49v3H27ZM91 93h49v3H91ZM24 145h118v3H24Z"/>
     <path fill="#b37991" d="M61 151h43v39H61z"/><path fill="#f9eee0" d="M68 157h29v33H68z"/><path fill="#90aaa8" d="M71 160h23v30H71z"/>
     <use href="#window" x="27" y="153"/><use href="#window" x="112" y="153"/>
     <path fill="#b9a4b4" d="M-5 190h176v7H-5z"/>
@@ -108,7 +112,10 @@
     <path fill="#a9bab1" d="M0 28h10Q17 7 80 1q63 6 70 27h10v137H0Z"/><path fill="#dce0c8" d="M9 34h8Q24 15 80 9q56 6 63 25h8v131H9Z"/>
     <path stroke="#829c96" stroke-width="6" d="M-3 28h13Q17 7 80 1q63 6 70 27h13"/>
     <path fill="#8da879" d="M24 29Q80 3 136 29v20H24Z"/>
-    <use href="#window" x="22" y="57"/><use href="#window" x="67" y="57"/><use href="#window" x="112" y="57"/>
+    <!-- Two broad second-floor display windows, as on the canvas. -->
+    <path fill="#faf8f5" d="M20 57h53v32H20ZM87 57h53v32H87Z"/>
+    <path fill="#9cb7b4" d="M23 60h47v26H23ZM90 60h47v26H90Z"/>
+    <path stroke="#faf8f5" stroke-width="2" d="M46.5 60v26M23 72h47M113.5 60v26M90 72h47"/>
     <!-- The generator projects this canopy outward in depth from the wall. -->
     <g id="joann-projecting-awning">
     <path fill="url(#awning-stripes)" d="M7 94h146l13 28H-6Z"/>
@@ -131,6 +138,12 @@
     <path fill="#8daac4" d="M10 31h147v22H10z"/><path fill="#f7efdf" d="M7 61h153v63H7z"/>
     <g fill="#9bb7c6"><path d="M14 67h52v50H14zM101 67h52v50h-52zM73 67h21v57H73z"/></g>
     <path stroke="#eee1cc" stroke-width="4" d="M31 67v50M49 67v50M119 67v50M136 67v50M14 88h52M101 88h52"/>
+    <g id="container-projecting-awnings">
+    <!-- Three blue awnings shelter the two displays and central entrance. -->
+    <path fill="#6e90ae" d="M12 58h56l3 8H9ZM73 58h21l3 8H70ZM99 58h56l3 8H96Z"/>
+    <path fill="#557894" d="M9 66h62v4H9ZM70 66h27v4H70ZM96 66h62v4H96Z"/>
+    <path stroke="#a2b9cc" stroke-width="1.3" d="M12 58h56M73 58h21M99 58h56"/>
+    </g>
     <path fill="#889daf" d="M-4 132h175v7H-4z"/>
   </g>
   <!-- Sephora: deep rectangular surround, pale bands, arched central door. -->
