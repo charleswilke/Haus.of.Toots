@@ -155,7 +155,7 @@ for name, first_fill, baseline, start, span, side, width in reversed(models):
             for child in el: emit(child,attrs,dx,dy)
             roof_mode = False
             return
-        if tag=='g' and el.get('id') in ['joann-projecting-awning', 'container-projecting-awnings']:
+        if tag=='g' and el.get('id') in ['joann-projecting-awning', 'container-projecting-awnings', 'american-girl-projecting-awnings']:
             return  # Draw the projecting canopy in front of the doors below.
         if tag=='g':
             for child in el: emit(child,attrs,dx,dy)
@@ -213,6 +213,22 @@ for name, first_fill, baseline, start, span, side, width in reversed(models):
                 a=' '.join(f'{k}="{v}"' for k,v in attrs.items())
                 out.append(f'  <path {a} d="{d}"/>')
     for child in children: emit(child)
+    if name == 'American Girl':
+        # Simple fabric wedges: the projection has its own depth direction,
+        # independent of the facade, with a side panel and hanging front hem.
+        for a,b,y in [(29,59,36),(68,98,36),(107,137,36),(29,74,85),(93,138,85),(27,139,136)]:
+            def red_canopy(x,t):
+                u=start+x*span/width
+                return point(complex(x,y+7*t))+complex(11,1.5)*(600/(u+600))*t
+            bl,br=red_canopy(a,0),red_canopy(b,0)
+            fl,fr=red_canopy(a,1),red_canopy(b,1)
+            hem=complex(0,3*600/(start+600))
+            shadow=[point(complex(a,y+7)),point(complex(b,y+7)),fr+hem*2,fl+hem*2]
+            out.append(f'  <path fill="#855a65" fill-opacity=".16" d="{polygon(shadow)}"/>')
+            out.append(f'  <path fill="#a55f6b" d="{polygon([bl,fl,fl+hem,point(complex(a,y+10))])}"/>')
+            out.append(f'  <path fill="#c9767d" d="{polygon([bl,br,fr,fl])}"/>')
+            out.append(f'  <path fill="#ad626f" d="{polygon([fl,fr,fr+hem,fl+hem])}"/>')
+            out.append(f'  <path fill="none" stroke="#df9b9b" stroke-width=".65" d="M{bl.real:.2f},{bl.imag:.2f} L{br.real:.2f},{br.imag:.2f}"/>')
     if name == 'Container Store':
         # A shallow canopy projects only a few pixels beyond the front wall.
         def blue_canopy(x, t):

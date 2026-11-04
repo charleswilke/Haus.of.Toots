@@ -96,8 +96,10 @@
     <path fill="#b69e83" d="M25 77h116v5H25z"/>
     <path fill="#f8eee1" d="M24 76h118v2H24zM24 82h118v2H24z"/>
     <!-- Plain red fabric awnings with straight valances, as in the building reference. -->
+    <g id="american-girl-projecting-awnings">
     <path fill="#c9767d" d="m29 36-2 8h34l-2-8Zm39 0-2 8h34l-2-8Zm39 0-2 8h34l-2-8ZM29 85l-2 8h49l-2-8Zm64 0-2 8h49l-2-8ZM27 136l-3 9h118l-3-9Z"/>
     <path fill="#ad626f" d="M27 44h34v3H27ZM66 44h34v3H66ZM105 44h34v3h-34ZM27 93h49v3H27ZM91 93h49v3H91ZM24 145h118v3H24Z"/>
+    </g>
     <path fill="#b37991" d="M61 151h43v39H61z"/><path fill="#f9eee0" d="M68 157h29v33H68z"/><path fill="#90aaa8" d="M71 160h23v30H71z"/>
     <use href="#window" x="27" y="153"/><use href="#window" x="112" y="153"/>
     <path fill="#b9a4b4" d="M-5 190h176v7H-5z"/>
