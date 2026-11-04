@@ -46,11 +46,64 @@
     clip-path: inset(50%);
     white-space: nowrap;
 }
+/* Separate sky and scenery at smaller widths: all shops retain their proportions,
+   with a foreground sign positioned clear of the distant storefronts. */
+.village-responsive-sky { display: none; }
+@media (max-width: 1100px) {
+    .village-banner { height: 190px; --village-small-sign-width: clamp(180px, 26vw, 230px); }
+    .village-responsive-sky {
+        display: block;
+        position: absolute;
+        inset: 0;
+        background: #cbd9e3 url('images/village-sky.svg?v=20261104a') center / 100% 100% no-repeat;
+    }
+    .village-streetscape {
+        inset: auto auto 0 0;
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+    }
+    .village-header-sign { width: var(--village-small-sign-width); bottom: -4px; right: 14px; z-index: 2; }
+    .village-responsive-sun {
+        position: absolute;
+        z-index: 1;
+        width: 60px;
+        height: 60px;
+        bottom: calc(var(--village-small-sign-width) * .54375 - 56px);
+        right: calc(var(--village-small-sign-width) / 2 - 16px);
+        border-radius: 50%;
+        background: #ffe9b7;
+        box-shadow: 0 0 28px 9px rgb(255 240 204 / 15%);
+    }
+    .village-responsive-cloud {
+        position: absolute;
+        width: 48px;
+        height: auto;
+        left: 12%;
+        top: 28px;
+        fill: #fff0d8;
+        opacity: .85;
+    }
+    .village-responsive-cloud-far { left: 49%; top: 48px; width: 36px; }
+}
 @media (max-width: 700px) {
     .village-collection-header .container { padding-inline: 16px; }
-    .village-banner { height: 220px; }
-    .village-streetscape { object-fit: cover; object-position: right bottom; }
-    .village-header-sign { width: min(240px, 74%); right: 8px; }
+}
+@media (max-width: 600px) {
+    .village-banner { height: 250px; --village-small-sign-width: clamp(170px, 54vw, 210px); }
+    .village-streetscape { width: min(150%, 560px); max-width: none; left: -4%; }
+    .village-header-sign { right: 10px; }
+    .village-responsive-sun { width: 46px; height: 46px; right: calc(var(--village-small-sign-width) / 2 - 13px); bottom: calc(var(--village-small-sign-width) * .54375 - 50px); }
+    .village-responsive-cloud { left: 10%; top: 33px; width: 40px; }
+    .village-responsive-cloud-far { left: 48%; top: 28px; width: 30px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+    .village-responsive-cloud { animation: village-cloud-drift 48s ease-in-out -18s infinite alternate; }
+    .village-responsive-cloud-far { animation-duration: 67s; animation-delay: -40s; }
+}
+@keyframes village-cloud-drift {
+    from { transform: translateX(-12px); }
+    to { transform: translateX(20px); }
 }
 @media (max-width: 640px) {
     .village-collection-header { padding-top: calc(var(--spacing-md) - 2px); }

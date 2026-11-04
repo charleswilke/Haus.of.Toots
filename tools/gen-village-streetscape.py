@@ -250,3 +250,35 @@ out.append('''  <path fill="#aec0a5" d="M0 283q19-23 39-3 19-32 45-9 23-22 46 0 
   <path fill="#aec0a5" d="m1340 244q18-21 34-2 20-19 38 1 14-14 28-5v46Z"/>
 </svg>''')
 (ROOT/'images/village-streetscape.svg').write_text('\n'.join(out)+'\n')
+
+# Separate abstract sky and proportion-preserving scenery for narrow layouts.
+# This lets the header fill vertically without stretching the shop architecture.
+ET.register_namespace('', 'http://www.w3.org/2000/svg')
+finished = '\n'.join(out)+'\n'
+for filename, sky_only in [('village-sky.svg', True), ('village-neighborhood.svg', False)]:
+    layer = ET.fromstring(finished)
+    reached_hills = False
+    for child in list(layer):
+        tag = child.tag.removeprefix(ns)
+        if tag in ['defs', 'style']:
+            continue
+        if tag == 'path' and child.get('fill') == '#bdc6d3':
+            reached_hills = True
+        is_cloud = any('village-cloud' in el.get('class','') for el in child.iter())
+        is_sun = tag == 'circle'
+        if (sky_only and (reached_hills or is_sun or is_cloud)) or (not sky_only and (not reached_hills or is_cloud)):
+            layer.remove(child)
+    if sky_only:
+        layer.set('preserveAspectRatio', 'none')
+    (ROOT / 'images' / filename).write_text(ET.tostring(layer, encoding='unicode')+'\n')
+    if not sky_only:
+        # Extra foreground on phones places the sign on grass below the shops,
+        # instead of shrinking the buildings or floating the sign in the sky.
+        layer.set('viewBox', '0 0 1440 570')
+        for fill, d in [
+            ('#c2cbb5','M0 300h1440v270H0Z'),
+            ('#a89bab','M340 300h610L-86 570H-2755Z'),
+            ('#f6e9df','M950 300h18L-68 570h-18Z'),
+        ]:
+            ET.SubElement(layer, ns+'path', {'fill':fill,'d':d})
+        (ROOT/'images/village-neighborhood-mobile.svg').write_text(ET.tostring(layer, encoding='unicode')+'\n')
