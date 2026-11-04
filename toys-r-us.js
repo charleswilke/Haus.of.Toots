@@ -1,3 +1,13 @@
+// Replay a short greeting only after a deliberate smaller-screen selection.
+function replaySmallScreenGreeting(element) {
+    if (!element || !window.matchMedia('(max-width: 1099px)').matches ||
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    element.classList.remove('is-celebrating');
+    // Restart the CSS animation even when selections happen back to back.
+    void element.offsetWidth;
+    element.classList.add('is-celebrating');
+}
+
 // October 30 at 11 AM in Chicago is CDT (UTC-05:00). Use one absolute instant
 // so the announcement changes together for shoppers in every time zone.
 (() => {
@@ -21,7 +31,7 @@
         arrow.hidden = !launched;
         if (timeNote) timeNote.hidden = launched;
         if (launched) {
-            cta.setAttribute('href', 'village');
+            cta.setAttribute('href', 'village?featured=toys-r-us');
             cta.removeAttribute('aria-disabled');
         } else {
             cta.removeAttribute('href');
@@ -38,17 +48,63 @@
     updateLaunch();
 })();
 
-// Native buttons support tapping, clicking, and Enter/Space without changing
-// the stack's layout or the edition's image, caption, and label pairing.
+// Pick the smaller-screen card style once per page load, independently of the
+// canvas edition. Restore the Gold Star card when both desktop cards are shown.
 (() => {
-    const stack = document.querySelector('[data-toys-stack]');
-    if (!stack) return;
-    const photos = [...stack.querySelectorAll('[data-toys-edition]')];
-    photos.forEach(photo => {
-        photo.addEventListener('click', () => {
-            photos.forEach(item => {
-                item.setAttribute('aria-pressed', String(item === photo));
-            });
+    const card = document.querySelector('[data-costco-responsive-card]');
+    if (!card) return;
+    const label = card.querySelector('[data-costco-member-type]');
+    const smallerScreen = window.matchMedia('(max-width: 1099px)');
+    const useExecutive = Math.random() < .5;
+
+    function updateStyle() {
+        const executive = smallerScreen.matches && useExecutive;
+        card.classList.toggle('costco-membership-mobile-executive', executive);
+        if (label) label.textContent = executive ? 'Executive Stitcher' : 'Gold Star Stitcher';
+    }
+
+    smallerScreen.addEventListener('change', updateStyle);
+    updateStyle();
+})();
+
+// Keep one close-up visible so choosing an edition never changes the card size.
+(() => {
+    const gallery = document.querySelector('[data-costco-gallery]');
+    if (!gallery) return;
+    const swap = gallery.querySelector('[data-costco-swap]');
+    const photos = [...gallery.querySelectorAll('[data-costco-photo]')];
+    const choices = [...gallery.querySelectorAll('[data-costco-edition]')];
+    if (!swap || photos.length !== 2) return;
+    let active = 'classic';
+
+    function select(edition) {
+        if (edition === active) return;
+        active = edition;
+        photos.forEach(photo => { photo.hidden = photo.dataset.costcoPhoto !== edition; });
+        choices.forEach(choice => {
+            choice.setAttribute('aria-pressed', String(choice.dataset.costcoEdition === edition));
         });
+        const next = edition === 'classic' ? 'holiday' : 'classic';
+        swap.setAttribute('aria-label', `Show ${next} Costco canvas`);
+        replaySmallScreenGreeting(gallery.closest?.('[data-costco-responsive-card]'));
+    }
+
+    swap.addEventListener('click', () => select(active === 'classic' ? 'holiday' : 'classic'));
+    choices.forEach(choice => {
+        choice.addEventListener('click', () => select(choice.dataset.costcoEdition));
+    });
+})();
+
+// Each entry takes one smooth step down the aisle. Leaving holds the current
+// crop; moving between the two membership cards does not count as another step.
+(() => {
+    const feature = document.querySelector('.costco-feature');
+    if (!feature) return;
+    const enabled = window.matchMedia('(min-width: 1100px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
+    let steps = 0;
+    feature.addEventListener('pointerenter', () => {
+        if (!enabled.matches || steps >= 4) return;
+        steps += 1;
+        feature.style.setProperty('--costco-aisle-scale', (1 + steps * .03).toFixed(2));
     });
 })();

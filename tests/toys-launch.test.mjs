@@ -64,7 +64,7 @@ test('the arrival button becomes a shopping link at exactly 11 AM Central in eve
     assert.equal(page.shopCopy.hidden, false);
     assert.equal(page.arrow.hidden, false);
     assert.equal(page.timeNote.hidden, true);
-    assert.equal(page.cta.getAttribute('href'), 'village');
+    assert.equal(page.cta.getAttribute('href'), 'village?featured=toys-r-us');
     assert.equal(page.cta.getAttribute('aria-disabled'), null);
     assert.equal(page.nextDelay, undefined);
 });
@@ -75,7 +75,7 @@ test('a page opened after release immediately has an active shopping link and ar
     assert.equal(page.shopCopy.hidden, false);
     assert.equal(page.arrow.hidden, false);
     assert.equal(page.timeNote.hidden, true);
-    assert.equal(page.cta.getAttribute('href'), 'village');
+    assert.equal(page.cta.getAttribute('href'), 'village?featured=toys-r-us');
     assert.equal(page.cta.getAttribute('aria-disabled'), null);
     assert.equal(page.nextDelay, undefined);
 });
@@ -90,7 +90,7 @@ test('a backgrounded or restored page catches up after release', () => {
         assert.equal(page.shopCopy.hidden, false);
         assert.equal(page.arrow.hidden, false);
         assert.equal(page.timeNote.hidden, true);
-        assert.equal(page.cta.getAttribute('href'), 'village');
+        assert.equal(page.cta.getAttribute('href'), 'village?featured=toys-r-us');
         assert.equal(page.nextDelay, undefined);
     }
 });

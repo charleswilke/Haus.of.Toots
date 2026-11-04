@@ -119,7 +119,7 @@ function environment() {
     document.body.style.overflow = '';
     const window = Object.assign(element(), { innerWidth: 1024 });
     const context = vm.createContext({
-        document, window, console: { error() {}, warn() {} },
+        document, window, URLSearchParams, console: { error() {}, warn() {} },
         getComputedStyle: () => ({ visibility: 'visible' }),
         setTimeout: () => 1, clearTimeout() {},
         requestAnimationFrame: callback => { callback(); return 1; },
@@ -542,4 +542,31 @@ test('gallery balances cached and newly settled images once and ignores obsolete
     stack.innerHTML = '';
     images[1].fire('load');
     assert.equal(balances, 2);
+});
+
+
+test('featured links prioritize the chosen Village storefront and preserve other product order', () => {
+    for (const [featured, expected] of [
+        ['costco', '[costco][costco-holiday][joann][toys]'],
+        ['toys-r-us', '[toys][joann][costco][costco-holiday]'],
+        ['unknown', '[toys][joann][costco][costco-holiday]'],
+        ['toString', '[toys][joann][costco][costco-holiday]']
+    ]) {
+        const { app, document, window } = shop();
+        window.location = { search: '?featured=' + featured };
+        document.body.dataset = { shopCollection: 'village', shopPriorityKeywords: 'toys r us' };
+        app.collectionContext = app.getCollectionContext();
+        app.products = [
+            { id: 'joann', title: 'Joann Storefront' },
+            { id: 'costco', title: 'Costco Storefront' },
+            { id: 'toys', title: 'Toys “R” Us Storefront' },
+            { id: 'costco-holiday', title: 'Costco Holiday Storefront' }
+        ];
+        app.createProductCard = product => `[${product.id}]`;
+        app.renderProducts();
+        assert.equal(document.getElementById('productsGrid').innerHTML, expected);
+        document.body.dataset.shopCollection = 'flash';
+        document.body.dataset.shopPriorityKeywords = '';
+        assert.equal(app.getCollectionContext().priorityKeywords.length, 0);
+    }
 });

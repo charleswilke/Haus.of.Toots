@@ -20,7 +20,7 @@
     <link rel="canonical" href="https://hausoftoots.com/">
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link rel="preload" href="images/haus_of_toots_canvas_13ct_512px.webp" as="image">
-    <link rel="preload" as="image" href="images/toys-r-us-classic-720.webp" imagesrcset="images/toys-r-us-classic-400.webp 400w, images/toys-r-us-classic-720.webp 720w, images/toys-r-us-classic-1100.webp 1100w" imagesizes="(max-width: 620px) 66vw, (max-width: 1200px) 35vw, 390px" fetchpriority="high">
+    <link rel="preload" as="image" href="images/toys-r-us-classic-720.webp" imagesrcset="images/toys-r-us-classic-400.webp 400w, images/toys-r-us-classic-720.webp 720w, images/toys-r-us-classic-1100.webp 1100w" imagesizes="(max-width: 700px) 70vw, (max-width: 1099px) 31vw, 260px" fetchpriority="high">
     <link rel="preconnect" href="https://haus-of-toots.myshopify.com" crossorigin>
     <link rel="preconnect" href="https://cdn.shopify.com">
     <link rel="preload" href="images/fonts/chewy-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -28,9 +28,9 @@
     <link rel="stylesheet" href="styles.css?v=20261029a">
     <link rel="stylesheet" href="shop-styles.css?v=20261029h">
     <link rel="stylesheet" href="mainstage.css?v=20261029b">
-    <link rel="stylesheet" href="toys-r-us.css?v=20261029j">
+    <link rel="stylesheet" href="toys-r-us.css?v=20261104u">
     <script src="mainstage.js?v=20261006b" defer></script>
-    <script src="toys-r-us.js?v=20261028a" defer></script>
+    <script src="toys-r-us.js?v=20261104u" defer></script>
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -85,47 +85,119 @@
         </p>
     </div>
 
-    <!-- Toys R Us: a little toy-catalog nostalgia -->
-    <section class="toys-hero" aria-labelledby="toysTitle">
+    <!-- Two village neighbors share one feature, each with its own visual world. -->
+    <section class="village-feature-section" aria-label="Featured Village Expansion canvases">
         <div class="container">
-            <div class="toys-feature">
-                <div class="toys-ribbon" aria-hidden="true">
-                    <svg class="toys-ribbon-wear" viewBox="0 0 1000 100" preserveAspectRatio="none" focusable="false">
-                        <defs>
-                            <filter id="toys-ink-wear" x="0" y="0" width="100%" height="100%">
-                                <feTurbulence type="fractalNoise" baseFrequency=".72" numOctaves="3" stitchTiles="stitch" seed="13"/>
-                                <feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 .98  0 0 0 0 .92  7 0 0 0 -3.8"/>
-                            </filter>
-                        </defs>
-                        <rect width="1000" height="100" filter="url(#toys-ink-wear)"/>
-                        <path d="M22 11L81 10M239 88L302 87M730 16L803 15M917 82L967 81" stroke="#fff4da" stroke-width="1.1" fill="none" opacity=".7"/>
-                    </svg>
-                </div>
-                <div class="toys-copy">
-                    <p class="toys-eyebrow"><span class="toys-eyebrow-purple">A new</span> <span class="toys-eyebrow-accent">storefront</span> <span class="toys-eyebrow-purple">enters the</span> <span class="toys-eyebrow-accent">village</span>!</p>
-                    <h1 class="toys-title" id="toysTitle" aria-label="Toys R Us">
-                        <span class="toys-title-top" aria-hidden="true">Toys</span>
-                        <span class="toys-title-bottom" aria-hidden="true"><span class="toys-r-quote toys-r-quote-left">”</span><span class="toys-backward-r">R</span><span class="toys-r-quote">”</span> <span class="toys-title-us">Us</span></span>
-                    </h1>
-                    <p class="toys-deck">A little toy-store nostalgia,<br>ready for your needlepoint wish list.</p>
-                    <div class="toys-launch-row">
-                        <a class="toys-cta" data-toys-cta role="link" aria-disabled="true" aria-live="polite">
-                            <time datetime="2026-10-30T11:00:00-05:00" data-toys-launch>Arriving 10/30<span data-toys-time-note> · 11 a.m. Central</span></time>
-                            <span data-toys-shop hidden>Meet your newest neighbor</span>
-                            <span data-toys-arrow aria-hidden="true" hidden>→</span>
-                        </a>
-                    </div>
-                    <p class="toys-mesh-note">Classic &amp; holiday versions · 13 &amp; 18 mesh</p>
-                </div>
-                <div class="toys-photos" data-toys-stack role="group" aria-label="Canvas editions — select a photo to bring it to the front">
-                    <button class="toys-photo toys-photo-classic" type="button" data-toys-edition="classic" aria-pressed="false" aria-label="Bring the classic canvas to the front">
-                        <img src="images/toys-r-us-classic-720.webp" srcset="images/toys-r-us-classic-400.webp 400w, images/toys-r-us-classic-720.webp 720w, images/toys-r-us-classic-1100.webp 1100w" sizes="(max-width: 620px) 66vw, (max-width: 1200px) 35vw, 390px" alt="Classic Toys R Us needlepoint canvas with Geoffrey the giraffe and the rainbow storefront" width="1100" height="794" fetchpriority="high" decoding="async">
-                        <span class="toys-photo-caption"><span>The classic</span><span class="toys-photo-number" aria-hidden="true">01</span></span>
-                    </button>
-                    <button class="toys-photo toys-photo-holiday" type="button" data-toys-edition="holiday" aria-pressed="true" aria-label="Bring the holiday canvas to the front">
-                        <img src="images/toys-r-us-holiday-720.webp" srcset="images/toys-r-us-holiday-400.webp 400w, images/toys-r-us-holiday-720.webp 720w, images/toys-r-us-holiday-1100.webp 1100w" sizes="(max-width: 620px) 66vw, (max-width: 1200px) 35vw, 390px" alt="Holiday Toys R Us needlepoint canvas with snow, Christmas lights, and Geoffrey in a Santa hat" width="1100" height="797" decoding="async">
-                        <span class="toys-photo-caption"><span>The holiday edition</span><span class="toys-photo-number" aria-hidden="true">02</span></span>
-                    </button>
+            <div class="village-feature">
+                <div class="village-feature-grid">
+                    <article class="toys-feature" aria-labelledby="toysTitle">
+                        <div class="toys-ribbon" aria-hidden="true">
+                            <svg class="toys-ribbon-wear" viewBox="0 0 1000 100" preserveAspectRatio="none" focusable="false">
+                                <defs>
+                                    <filter id="toys-ink-wear" x="0" y="0" width="100%" height="100%">
+                                        <feTurbulence type="fractalNoise" baseFrequency=".72" numOctaves="3" stitchTiles="stitch" seed="13"/>
+                                        <feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 .98  0 0 0 0 .92  7 0 0 0 -3.8"/>
+                                    </filter>
+                                </defs>
+                                <rect width="1000" height="100" filter="url(#toys-ink-wear)"/>
+                                <path d="M22 11L81 10M239 88L302 87M730 16L803 15M917 82L967 81" stroke="#fff4da" stroke-width="1.1" fill="none" opacity=".7"/>
+                            </svg>
+                        </div>
+                        <div class="toys-copy">
+                            <h2 class="toys-title" id="toysTitle" aria-label="Toys R Us">
+                                <span class="toys-title-top" aria-hidden="true">Toys</span>
+                                <span class="toys-title-bottom" aria-hidden="true"><span class="toys-r-quote toys-r-quote-left">”</span><span class="toys-backward-r"><span class="toys-r-spacer">R</span><span class="toys-r-solid"><span class="toys-r-depth" style="--r-depth: -0.25px">R</span><span class="toys-r-depth" style="--r-depth: -0.5px">R</span><span class="toys-r-depth" style="--r-depth: -0.75px">R</span><span class="toys-r-depth" style="--r-depth: -1px">R</span><span class="toys-r-depth" style="--r-depth: -1.25px">R</span><span class="toys-r-depth" style="--r-depth: -1.5px">R</span><span class="toys-r-depth" style="--r-depth: -1.75px">R</span><span class="toys-r-depth" style="--r-depth: -2px">R</span><span class="toys-r-depth" style="--r-depth: -2.25px">R</span><span class="toys-r-depth" style="--r-depth: -2.5px">R</span><span class="toys-r-depth" style="--r-depth: -2.75px">R</span><span class="toys-r-depth" style="--r-depth: -3px">R</span><span class="toys-r-depth" style="--r-depth: -3.25px">R</span><span class="toys-r-depth" style="--r-depth: -3.5px">R</span><span class="toys-r-depth" style="--r-depth: -3.75px">R</span><span class="toys-r-depth" style="--r-depth: -4px">R</span><span class="toys-r-depth" style="--r-depth: -4.25px">R</span><span class="toys-r-depth" style="--r-depth: -4.5px">R</span><span class="toys-r-depth" style="--r-depth: -4.75px">R</span><span class="toys-r-depth" style="--r-depth: -5px">R</span><span class="toys-r-depth" style="--r-depth: -5.25px">R</span><span class="toys-r-depth" style="--r-depth: -5.5px">R</span><span class="toys-r-depth" style="--r-depth: -5.75px">R</span><span class="toys-r-depth" style="--r-depth: -6px">R</span><span class="toys-r-depth" style="--r-depth: -6.25px">R</span><span class="toys-r-depth" style="--r-depth: -6.5px">R</span><span class="toys-r-depth" style="--r-depth: -6.75px">R</span><span class="toys-r-depth" style="--r-depth: -7px">R</span><span class="toys-r-depth" style="--r-depth: -7.25px">R</span><span class="toys-r-depth" style="--r-depth: -7.5px">R</span><span class="toys-r-depth" style="--r-depth: -7.75px">R</span><span class="toys-r-depth" style="--r-depth: -8px">R</span><span class="toys-r-depth" style="--r-depth: -8.25px">R</span><span class="toys-r-depth" style="--r-depth: -8.5px">R</span><span class="toys-r-depth" style="--r-depth: -8.75px">R</span><span class="toys-r-depth" style="--r-depth: -9px">R</span><span class="toys-r-depth" style="--r-depth: -9.25px">R</span><span class="toys-r-depth" style="--r-depth: -9.5px">R</span><span class="toys-r-depth" style="--r-depth: -9.75px">R</span><span class="toys-r-depth" style="--r-depth: -10px">R</span><span class="toys-r-depth" style="--r-depth: -10.25px">R</span><span class="toys-r-depth" style="--r-depth: -10.5px">R</span><span class="toys-r-depth" style="--r-depth: -10.75px">R</span><span class="toys-r-depth" style="--r-depth: -11px">R</span><span class="toys-r-depth" style="--r-depth: -11.25px">R</span><span class="toys-r-depth" style="--r-depth: -11.5px">R</span><span class="toys-r-depth" style="--r-depth: -11.75px">R</span><span class="toys-r-depth" style="--r-depth: -12px">R</span><span class="toys-r-depth" style="--r-depth: -12.25px">R</span><span class="toys-r-depth" style="--r-depth: -12.5px">R</span><span class="toys-r-depth" style="--r-depth: -12.75px">R</span><span class="toys-r-depth" style="--r-depth: -13px">R</span><span class="toys-r-depth" style="--r-depth: -13.25px">R</span><span class="toys-r-depth" style="--r-depth: -13.5px">R</span><span class="toys-r-depth" style="--r-depth: -13.75px">R</span><span class="toys-r-depth" style="--r-depth: -14px">R</span><span class="toys-r-depth" style="--r-depth: -14.25px">R</span><span class="toys-r-depth" style="--r-depth: -14.5px">R</span><span class="toys-r-depth" style="--r-depth: -14.75px">R</span><span class="toys-r-depth" style="--r-depth: -15px">R</span><span class="toys-r-depth" style="--r-depth: -15.25px">R</span><span class="toys-r-depth" style="--r-depth: -15.5px">R</span><span class="toys-r-depth" style="--r-depth: -15.75px">R</span><span class="toys-r-depth" style="--r-depth: -16px">R</span><span class="toys-r-face">R</span></span></span><span class="toys-r-quote">”</span> <span class="toys-title-us">Us</span></span>
+                            </h2>
+                        </div>
+                        <div class="toys-photos" role="group" aria-label="Classic and holiday Toys R Us canvases">
+                            <div class="toys-photo toys-photo-classic">
+                                <img src="images/toys-r-us-classic-720.webp" srcset="images/toys-r-us-classic-400.webp 400w, images/toys-r-us-classic-720.webp 720w, images/toys-r-us-classic-1100.webp 1100w" sizes="(max-width: 700px) 70vw, (max-width: 1099px) 31vw, 260px" alt="Classic Toys R Us needlepoint canvas with Geoffrey the giraffe and the rainbow storefront" width="1100" height="794" fetchpriority="high" decoding="async">
+                                <span class="toys-photo-caption"><span>The classic</span><span class="toys-photo-mesh">13 &amp; 18 Mesh</span></span>
+                            </div>
+                            <div class="toys-photo toys-photo-holiday">
+                                <img src="images/toys-r-us-holiday-720.webp" srcset="images/toys-r-us-holiday-400.webp 400w, images/toys-r-us-holiday-720.webp 720w, images/toys-r-us-holiday-1100.webp 1100w" sizes="(max-width: 700px) 70vw, (max-width: 1099px) 31vw, 260px" alt="Holiday Toys R Us needlepoint canvas with snow, Christmas lights, and Geoffrey in a Santa hat" width="1100" height="797" decoding="async">
+                                <span class="toys-photo-caption"><span>The holiday edition</span><span class="toys-photo-mesh">13 &amp; 18 Mesh</span></span>
+                            </div>
+                        </div>
+                        <div class="toys-feature-footer">
+                            <a class="toys-cta village-feature-cta" href="village?featured=toys-r-us" data-toys-cta aria-live="polite">
+                                <time datetime="2026-10-30T11:00:00-05:00" data-toys-launch hidden>Arriving 10/30<span data-toys-time-note> · 11 a.m. Central</span></time>
+                                <span data-toys-shop>Shop Toys R Us</span>
+                                <span data-toys-arrow aria-hidden="true">→</span>
+                            </a>
+                        </div>
+                    </article>
+                    <article class="costco-feature" aria-labelledby="costcoTitle">
+                        <div class="costco-cards">
+                        <div class="costco-membership costco-membership-gold" data-costco-responsive-card>
+                            <a class="costco-card-link" href="village?featured=costco" aria-label="Shop Costco — classic canvas"></a>
+                            <header class="costco-membership-heading">
+                                <h2 class="costco-title" id="costcoTitle"><span class="costco-title-initial">C</span>OSTCO</h2>
+                                <div class="costco-series-line">
+                                    <img class="costco-series-wordmark" src="images/costco-village-wordmark.svg" alt="Village Expansion" width="602" height="44">
+                                </div>
+                            </header>
+                            <figure class="costco-canvases costco-gallery" data-costco-gallery>
+                                <button class="costco-canvas-swap" type="button" data-costco-swap aria-label="Show holiday Costco canvas">
+                                    <span class="costco-canvas-crop costco-canvas-classic" data-costco-photo="classic">
+                                        <img src="images/costco-classic-13-1100.webp" srcset="images/costco-classic-13-720.webp 720w, images/costco-classic-13-1100.webp 1100w" sizes="(max-width: 700px) calc(190vw - 190px), (max-width: 1099px) 76vw, 520px" alt="Classic Costco storefront needlepoint canvas, shown close up" width="1100" height="880" decoding="async">
+                                    </span>
+                                    <span class="costco-canvas-crop costco-canvas-holiday" data-costco-photo="holiday" hidden>
+                                        <img src="images/costco-holiday-13-1100.webp" srcset="images/costco-holiday-13-720.webp 720w, images/costco-holiday-13-1100.webp 1100w" sizes="(max-width: 700px) calc(190vw - 190px), (max-width: 1099px) 76vw, 520px" alt="Holiday Costco storefront needlepoint canvas with snowflakes and garlands, shown close up" width="1100" height="880" decoding="async">
+                                    </span>
+                                </button>
+                                <figcaption>
+                                    <span class="costco-editions" role="group" aria-label="Costco canvas edition">
+                                        <button type="button" data-costco-edition="classic" aria-pressed="true">Classic</button>
+                                        <button type="button" data-costco-edition="holiday" aria-pressed="false">Holiday</button>
+                                    </span>
+                                    <span>13 &amp; 18 Mesh</span>
+                                </figcaption>
+                            </figure>
+                            <figure class="costco-canvases costco-desktop-canvases">
+                                <span class="costco-canvas-crop costco-canvas-classic">
+                                    <img src="images/costco-classic-13-720.webp" srcset="images/costco-classic-13-720.webp 720w, images/costco-classic-13-1100.webp 1100w" sizes="460px" alt="Classic Costco storefront needlepoint canvas, shown close up" width="1100" height="880" decoding="async">
+                                </span>
+                                <figcaption><span>Classic</span><span>13 &amp; 18 Mesh</span></figcaption>
+                            </figure>
+                            <div class="costco-membership-footer">
+                                <span class="costco-gold-star" aria-hidden="true">★</span>
+                                <svg class="costco-executive-flourish" viewBox="12 -5 150 165" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                                    <path class="costco-executive-flourish-gutter" d="M145 27C164-1 87-7 55 22C20 55 82 68 111 88C154 119 99 160 48 145C-2 131 24 92 77 100C106 105 112 125 97 139"/>
+                                    <path class="costco-executive-flourish-ink" d="M145 27C164-1 87-7 55 22C20 55 82 68 111 88C154 119 99 160 48 145C-2 131 24 92 77 100C106 105 112 125 97 139"/>
+                                </svg>
+                                <p class="costco-member-type" data-costco-member-type>Gold Star Stitcher</p>
+                                <p class="costco-member-note">The Village Expansion Series</p>
+                            </div>
+                        </div>
+                        <div class="costco-membership costco-membership-executive" role="group" aria-label="Holiday canvas — Executive membership card">
+                            <a class="costco-card-link" href="village?featured=costco" aria-label="Shop Costco — holiday canvas"></a>
+                            <header class="costco-membership-heading">
+                                <h3 class="costco-title"><span class="costco-title-initial">C</span>OSTCO</h3>
+                                <div class="costco-series-line">
+                                    <img class="costco-series-wordmark" src="images/costco-village-wordmark.svg" alt="Village Expansion" width="602" height="44">
+                                </div>
+                            </header>
+                            <figure class="costco-canvases">
+                                <span class="costco-canvas-crop costco-canvas-holiday">
+                                    <img src="images/costco-holiday-13-720.webp" srcset="images/costco-holiday-13-720.webp 720w, images/costco-holiday-13-1100.webp 1100w" sizes="460px" alt="Holiday Costco storefront needlepoint canvas with snowflakes and garlands, shown close up" width="1100" height="880" decoding="async">
+                                </span>
+                                <figcaption><span>Holiday</span><span>13 &amp; 18 Mesh</span></figcaption>
+                            </figure>
+                            <div class="costco-membership-footer">
+                                <svg class="costco-executive-flourish" viewBox="12 -5 150 165" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                                    <path class="costco-executive-flourish-gutter" d="M145 27C164-1 87-7 55 22C20 55 82 68 111 88C154 119 99 160 48 145C-2 131 24 92 77 100C106 105 112 125 97 139"/>
+                                    <path class="costco-executive-flourish-ink" d="M145 27C164-1 87-7 55 22C20 55 82 68 111 88C154 119 99 160 48 145C-2 131 24 92 77 100C106 105 112 125 97 139"/>
+                                </svg>
+                                <p class="costco-member-type">Executive Stitcher</p>
+                                <p class="costco-member-note">The Village Expansion Series</p>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="costco-feature-footer">
+                            <a class="costco-cta village-feature-cta" href="village?featured=costco"><span>Shop Costco</span><span aria-hidden="true">→</span></a>
+                        </div>
+                    </article>
                 </div>
             </div>
         </div>
@@ -139,13 +211,13 @@
                 <div class="ticker">
                     <span class="ticker-item">SPEND $150, GET FREE SHIPPING</span>
                     <span class="ticker-sep">✦</span>
-                    <span class="ticker-item">A NEW NEIGHBOR IS MOVING IN · TOYS “R” US</span>
+                    <span class="ticker-item">THE VILLAGE KEEPS GROWING · TOYS “R” US + COSTCO</span>
                     <span class="ticker-sep">✦</span>
                     <span class="ticker-item">@HAUS.OF.TOOTS ON TIKTOK &amp; INSTAGRAM</span>
                     <span class="ticker-sep">✦</span>
                     <span class="ticker-item">SPEND $150, GET FREE SHIPPING</span>
                     <span class="ticker-sep">✦</span>
-                    <span class="ticker-item">A NEW NEIGHBOR IS MOVING IN · TOYS “R” US</span>
+                    <span class="ticker-item">THE VILLAGE KEEPS GROWING · TOYS “R” US + COSTCO</span>
                     <span class="ticker-sep">✦</span>
                     <span class="ticker-item">@HAUS.OF.TOOTS ON TIKTOK &amp; INSTAGRAM</span>
                     <span class="ticker-sep">✦</span>
