@@ -465,6 +465,42 @@
     height: auto;
     overflow: visible;
 }
+/* A town welcome sign sits in the foreground of the Village storefronts. */
+.village-welcome-sign {
+    position: absolute;
+    z-index: 1;
+    width: 88%;
+    height: auto;
+    left: 6%;
+    bottom: -3%;
+    overflow: visible;
+    pointer-events: none;
+    filter: drop-shadow(0 5px 3px rgb(90 64 54 / 24%));
+    transform: rotate(-3deg);
+    transform-origin: 50% 100%;
+}
+.village-sign-welcome {
+    fill: var(--coral-ink);
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 3px;
+}
+.village-sign-name {
+    fill: var(--purple-text);
+    font-family: var(--font-display);
+    font-size: 49px;
+}
+@keyframes village-sign-rock {
+    0%, 100% { transform: rotate(-3deg); }
+    35% { transform: rotate(2deg); }
+    68% { transform: rotate(-4deg); }
+}
+@media (prefers-reduced-motion: no-preference) {
+    .collection-card-village:is(:hover, :focus-visible) .village-welcome-sign {
+        animation: village-sign-rock 850ms ease-in-out both;
+    }
+}
 .collection-card-mainstage .collection-card-description strong { display: block; margin-top: .4rem; font-weight: 500; }
 .collection-card-grid-four { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.25rem; align-items: stretch; }
 .collection-card-grid-four .collection-card-title { font-size: clamp(1.4rem, 2.1vw, 1.9rem); }
