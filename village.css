@@ -36,7 +36,7 @@
     filter: drop-shadow(0 5px 3px rgb(90 64 54 / 18%));
 }
 .village-sign-welcome { fill: var(--coral-ink); font: 600 15px var(--font-body); letter-spacing: 3px; }
-.village-sign-name { fill: var(--purple-text); font: 49px var(--font-display); }
+.village-sign-name { fill: var(--purple-text); font: 43px var(--font-display); }
 .village-collection-title {
     position: absolute;
     width: 1px;

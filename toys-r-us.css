@@ -489,7 +489,7 @@
 .village-sign-name {
     fill: var(--purple-text);
     font-family: var(--font-display);
-    font-size: 49px;
+    font-size: 43px;
 }
 @keyframes village-sign-rock {
     0%, 100% { transform: rotate(-3deg); }
