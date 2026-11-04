@@ -155,6 +155,9 @@
 
     <path fill="#77717a" d="M0 5h153v138H0z"/><path fill="#f4ebdf" d="M8 14h137v129H8z"/>
     <path fill="#77717a" d="M-4 0h161v11H-4zM8 24h137v22H8zM8 53h137v8H8zM8 76h137v8H8z"/>
+    <!-- Alternating edge blocks frame the display windows, as on the canvas. -->
+    <path fill="#77717a" d="M0 84h15v59H0zM138 84h15v59h-15z"/>
+    <path fill="#f4ebdf" d="M2 86h11v10H2zM2 106h11v10H2zM2 126h11v10H2zM140 86h11v10h-11zM140 106h11v10h-11zM140 126h11v10h-11z"/>
     <path fill="#f4ebdf" d="M15 91h37v44H15zM101 91h37v44h-37z"/><path fill="#b0aaa6" d="M20 97h27v32H20zM106 97h27v32h-27z"/>
     <path fill="#77717a" d="M59 143V90a18 18 0 0 1 36 0v53z"/><path fill="#f4ebdf" d="M65 143V91a12 12 0 0 1 24 0v52z"/><path fill="#b0aaa6" d="M69 143V92a8 8 0 0 1 16 0v51z"/>
     <path fill="#77717a" d="M-4 143h161v7H-4z"/>

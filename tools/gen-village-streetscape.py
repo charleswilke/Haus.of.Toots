@@ -95,6 +95,16 @@ for name, first_fill, baseline, start, span, side, width in reversed(models):
                 f=top+(bottom-top)*t; b=back_top+(back_bottom-back_top)*t
                 corners.append(f+(b-f)*x)
             out.append(f'  <path fill="{("#a8a19b" if name=="Sephora" else "#8c9fa6")}" d="{polygon(corners)}"/>')
+    if name == 'Container Store':
+        # The shallow gable continues over the shop, with its ridge running
+        # toward the same rear corners as the return wall.
+        eave = point(complex(-5,17))
+        peak = point(complex(84,0))
+        def roof_back(p):
+            return complex(p.real-building_depth*1.12,HORIZON+(p.imag-HORIZON)*.9)
+        rear_eave, rear_peak = roof_back(eave), roof_back(peak)
+        out.append(f'  <path fill="#6f8da7" d="{polygon([eave,rear_eave,rear_peak,peak])}"/>')
+        out.append(f'  <path fill="none" stroke="#a8bdce" stroke-width=".8" stroke-linejoin="round" d="M{rear_eave.real:.2f},{rear_eave.imag:.2f} L{rear_peak.real:.2f},{rear_peak.imag:.2f} L{peak.real:.2f},{peak.imag:.2f}"/>')
     if name == 'JOANN':
         # Sweep the rounded shoulder through the building's depth. Its rear
         # curve peeks out above the return wall instead of ending at a flat edge.
