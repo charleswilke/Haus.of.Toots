@@ -14,7 +14,7 @@ ns = '{http://www.w3.org/2000/svg}'
 window = root.find(f'{ns}defs/{ns}g[@id="window"]')
 # Storefront order, first front-wall color, ground level, distance, width in world space, side color.
 models = [
- ('American Girl', '#d6a7ad', 197, 0, 120, '#c5a2a9', 166),
+ ('American Girl', '#eac9bd', 197, 0, 120, '#c9b0a6', 166),
  ('Toys R Us', '#a37e6a', 118, 175, 160, '#97745f', 196),
  ('JOANN', '#a9bab1', 172, 400, 170, '#829e96', 160),
  ('Container Store', '#e6d4c4', 139, 650, 210, '#bdc5c6', 167),
@@ -76,12 +76,15 @@ for name, first_fill, baseline, start, span, side, width in reversed(models):
             if sub.isclosed(): part += 'Z'
             pieces.append(part)
         return ' '.join(pieces)
+    if name == 'American Girl':
+        out.append('  <g transform="translate(20 0)">')
     out.append(f'  <!-- {name}: projected facade, with an eye-level return wall. -->')
     # Back corners move toward a separate left-hand vanishing point. The upper
     # wall edge sits BELOW the front parapet: it cannot expose a roof top.
-    wall_top = {'American Girl':12, 'Toys R Us':36, 'JOANN':28, 'Container Store':18, 'Sephora':5, 'Costco':38}[name]
-    top = point(complex(0, wall_top))
-    bottom = point(complex(0, baseline))
+    wall_top = {'American Girl':22, 'Toys R Us':36, 'JOANN':28, 'Container Store':18, 'Sephora':5, 'Costco':38}[name]
+    wall_left = 20 if name == 'American Girl' else 0
+    top = point(complex(wall_left, wall_top))
+    bottom = point(complex(wall_left, baseline))
     building_depth = 62 * 600 / (start + 600)
     depth = building_depth
     back_top = complex(top.real-depth, HORIZON+(top.imag-HORIZON)*.9)
@@ -130,7 +133,7 @@ for name, first_fill, baseline, start, span, side, width in reversed(models):
     if name == 'American Girl':
         # Match the front bevel's actual sloping left edge with one continuous
         # return, avoiding a detached wedge where several trim strips meet.
-        upper=point(complex(-4,3)); lower=point(complex(1,13))
+        upper=point(complex(16,13)); lower=point(complex(19,23))
         rear_upper=complex(upper.real-building_depth*1.1,HORIZON+(upper.imag-HORIZON)*.9)
         rear_lower=complex(lower.real-building_depth*1.1,HORIZON+(lower.imag-HORIZON)*.9)
         out.append(f'  <path fill="#b6a6a5" d="{polygon([upper,rear_upper,rear_lower,lower])}"/>')
@@ -267,6 +270,8 @@ for name, first_fill, baseline, start, span, side, width in reversed(models):
             d=f'M{left.real:.2f},{left.imag:.2f} L{right.real:.2f},{right.imag:.2f} l0,3 Q{mid.real:.2f},{mid.imag:.2f} {left.real:.2f},{left.imag+3:.2f}Z'
             out.append(f'  <path fill="{color}" d="{d}"/>')
         out.append(f'  <path stroke="#f7efdf" stroke-width=".7" d="M{back_l.real:.2f},{back_l.imag:.2f} L{back_r.real:.2f},{back_r.imag:.2f}"/>')
+    if name == 'American Girl':
+        out.append('  </g>')
 # Trees stand upright with bases anchored to the same ground plane.
 for u in [147,367,609,895,1210,1610]:
     p=project(u,0);scale=600/(u+600)

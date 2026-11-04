@@ -81,12 +81,12 @@
     <g fill="#8e9fa4"><path d="m-21 34 13 7v25l-13-7Z"/><path d="m-21 80 13 7v25l-13-7Z"/><path d="m-21 131 13 7v25l-13-7Z"/></g>
     <path stroke="#ead4ca" stroke-width="2" d="m-15 37 0 26m0 20v25m0 26v25"/>
 
-    <path fill="#d6a7ad" d="M0 12h166v178H0z"/><path fill="#eac9bd" d="M10 22h146v168H10z"/>
+    <path fill="#eac9bd" d="M20 22h126v168H20z"/>
     <!-- One shallow stone cornice with a softly beveled face. -->
-    <path fill="#c7b9b4" d="M-4 3h174l-5 10H1Z"/>
-    <path fill="#ddd0c4" d="M-4 3h174l-1 2H-3Z"/>
-    <path fill="#b8a9a9" d="M1 12h164v2H1Z"/>
-    <path fill="#f8eee1" d="M12 34h13v156H12zM141 34h13v156h-13zM62 34h5v42h-5zM101 34h5v42h-5zM78 84h10v58H78Z"/>
+    <path fill="#c7b9b4" d="M16 13h134l-3 10H19Z"/>
+    <path fill="#ddd0c4" d="M16 13h134l-1 2H17Z"/>
+    <path fill="#b8a9a9" d="M20 22h126v2H20Z"/>
+    <path fill="#f8eee1" d="M20 34h5v156H20zM141 34h5v156h-5zM62 34h5v42h-5zM101 34h5v42h-5zM78 84h10v58H78Z"/>
     <g><use href="#window" x="31" y="42"/><use href="#window" x="70" y="42"/><use href="#window" x="109" y="42"/></g>
     <!-- Two wider display windows on the second floor. -->
     <path fill="#faf8f5" d="M31 91h41v32H31ZM95 91h41v32H95Z"/>
@@ -102,7 +102,7 @@
     </g>
     <path fill="#b37991" d="M61 151h43v39H61z"/><path fill="#f9eee0" d="M68 157h29v33H68z"/><path fill="#90aaa8" d="M71 160h23v30H71z"/>
     <use href="#window" x="27" y="153"/><use href="#window" x="112" y="153"/>
-    <path fill="#b9a4b4" d="M-5 190h176v7H-5z"/>
+    <path fill="#b9aa9f" d="M16 190h134v7H16z"/>
   </g>
   <!-- JOANN: curved parapet, upstairs windows, scalloped striped awning. -->
   <g transform="matrix(.98 -.15 0 .85 590 108)">
