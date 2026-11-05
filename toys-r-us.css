@@ -20,7 +20,7 @@
 
 .village-feature {
     --toys-pink: #bf466e;
-    --toys-plum: #65427e;
+    --toys-plum: var(--purple-text);
     --toys-cream: #fffaf0;
     --costco-red: #ce2a2d;
     --costco-blue: #1258a0;
@@ -76,10 +76,7 @@
 .toys-title-us { color: var(--toys-pink); }
 .toys-r-face, .toys-r-quote {
     display: inline-block;
-    background: linear-gradient(120deg, var(--purple-text), #69468c);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    color: var(--toys-plum);
 }
 /* Render the solid at four times its display size for smoother rotated edges.
    The spacer keeps the original letter's width and baseline in the title. */
@@ -105,12 +102,12 @@
     position: relative;
     transform: translateZ(.1px);
     background: none;
-    color: #69468c;
+    color: var(--toys-plum);
 }
 .toys-r-depth {
     position: absolute;
     inset: 0;
-    color: #69468c;
+    color: var(--toys-plum);
     visibility: hidden;
     transform: translateZ(var(--r-depth));
     pointer-events: none;
@@ -160,7 +157,7 @@
     letter-spacing: .65px;
     text-transform: uppercase;
 }
-.toys-photo-mesh { margin-left: auto; color: #79526a; font-size: .75rem; letter-spacing: .2px; white-space: nowrap; }
+.toys-photo-mesh { margin-left: auto; color: var(--toys-plum); font-size: .75rem; letter-spacing: .2px; white-space: nowrap; }
 
 .toys-feature-footer, .costco-feature-footer { display: flex; flex-direction: column; gap: 13px; margin-top: auto; }
 .toys-feature-footer { padding: 0 30px 20px; }
@@ -178,8 +175,8 @@
     text-decoration: none;
     transition: background-color .2s ease;
 }
-.toys-cta { color: var(--toys-cream); border-color: #765198; background: linear-gradient(120deg, var(--purple-text), #69468c); }
-.toys-cta:hover { background: linear-gradient(120deg, #8055a3, #614084); color: var(--toys-cream); }
+.toys-cta { color: var(--toys-cream); border-color: var(--toys-plum); background: var(--toys-plum); }
+.toys-cta:hover { background: var(--toys-plum); color: var(--toys-cream); }
 .toys-cta [hidden] { display: none; }
 .toys-cta time { font-size: .95rem; }
 .toys-cta[aria-disabled="true"] { cursor: default; }
