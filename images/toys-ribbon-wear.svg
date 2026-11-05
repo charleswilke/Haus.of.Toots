@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 100" preserveAspectRatio="none">
+    <defs>
+        <filter id="ink-wear" x="0" y="0" width="100%" height="100%">
+            <feTurbulence type="fractalNoise" baseFrequency=".72" numOctaves="3" stitchTiles="stitch" seed="13"/>
+            <feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 .98  0 0 0 0 .92  7 0 0 0 -3.8"/>
+        </filter>
+    </defs>
+    <g opacity=".3">
+        <rect width="220" height="100" filter="url(#ink-wear)"/>
+        <path d="M22 11L81 10M139 88L202 87" stroke="#fff4da" stroke-width="1.1" fill="none" opacity=".7"/>
+    </g>
+</svg>
