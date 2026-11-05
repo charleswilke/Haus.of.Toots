@@ -15,11 +15,11 @@ window = root.find(f'{ns}defs/{ns}g[@id="window"]')
 # Storefront order, first front-wall color, ground level, distance, width in world space, side color.
 models = [
  ('American Girl', '#eac9bd', 197, 0, 120, '#c9b0a6', 166),
- ('Toys R Us', '#a37e6a', 118, 175, 160, '#97745f', 196),
+ ('Toys R Us', '#a37e6a', 118, 156, 198.4, '#97745f', 196),
  ('JOANN', '#a9bab1', 172, 400, 170, '#829e96', 160),
  ('Container Store', '#e6d4c4', 139, 650, 210, '#bdc5c6', 167),
  ('Sephora', '#77717a', 150, 930, 240, '#68646b', 153),
- ('Costco', '#c6b2aa', 146, 1250, 290, '#b2948f', 174),
+ ('Costco', '#c6b2aa', 146, 1250, 700, '#b2948f', 174),
 ]
 # The viewer's eye line is below every roof. Every front-wall horizontal
 # projects to this exact vanishing point; vertical edges remain vertical.
@@ -52,6 +52,7 @@ for name, first_fill, baseline, start, span, side, width in reversed(models):
     first = next(i for i, c in enumerate(children) if c.get('fill') == first_fill)
     children = children[first:]
     roof_mode = False
+    height_scale = {'Costco': 1.55, 'Toys R Us': 1.24}.get(name, 1)
     def point(z):
         if roof_mode:
             # The slatted mansard slopes OUT toward its lower eave. Slats and
@@ -59,8 +60,9 @@ for name, first_fill, baseline, start, span, side, width in reversed(models):
             depth = max(0, min(1, (z.imag - 8) / 30))
             x = 98 + (z.real - 98) * (1 + .075 * depth)
             u = start + x * span / width
-            return project(u, baseline-z.imag) + complex(18,3) * (600/(u+600)) * depth
-        return project(start + z.real * span / width, baseline - z.imag)
+            return project(u, (baseline-z.imag) * height_scale) + complex(18,3) * height_scale * (600/(u+600)) * depth
+        # Scale from the curb, preserving the street's vanishing point.
+        return project(start + z.real * span / width, (baseline - z.imag) * height_scale)
     def shape(d, dx=0, dy=0):
         path = parse_path(d)
         pieces = []
@@ -85,11 +87,20 @@ for name, first_fill, baseline, start, span, side, width in reversed(models):
     wall_left = 20 if name == 'American Girl' else 0
     top = point(complex(wall_left, wall_top))
     bottom = point(complex(wall_left, baseline))
-    building_depth = 62 * 600 / (start + 600)
+    building_depth = 62 * 600 / (start + 600) * height_scale
     depth = building_depth
     back_top = complex(top.real-depth, HORIZON+(top.imag-HORIZON)*.9)
     back_bottom = complex(bottom.real-depth, HORIZON+(bottom.imag-HORIZON)*.9)
-    out.append(f'  <path fill="{side}" d="{polygon([top,back_top,back_bottom,bottom])}"/>')
+    if name == 'Costco':
+        # Each raised tier needs an occupied return beneath its cornice.
+        # Use the same rear projection for wall and trim so the edges meet.
+        for x, upper, lower in [(0,38,146), (14,21,38), (47,0,21)]:
+            front_top, front_bottom = point(complex(x,upper)), point(complex(x,lower))
+            rear_top = complex(front_top.real-depth, HORIZON+(front_top.imag-HORIZON)*.9)
+            rear_bottom = complex(front_bottom.real-depth, HORIZON+(front_bottom.imag-HORIZON)*.9)
+            out.append(f'  <path fill="{side}" d="{polygon([front_top,rear_top,rear_bottom,front_bottom])}"/>')
+    else:
+        out.append(f'  <path fill="{side}" d="{polygon([top,back_top,back_bottom,bottom])}"/>')
     # Two bays along the deeper return make the occupied building volume legible.
     for frac in [.34, .66]:
         for bay_left, bay_right in [(.14,.40),(.58,.84)]:
@@ -140,8 +151,9 @@ for name, first_fill, baseline, start, span, side, width in reversed(models):
         out.append(f'  <path stroke="#d1c3b9" stroke-width=".5" d="M{rear_upper.real:.2f},{rear_upper.imag:.2f} L{upper.real:.2f},{upper.imag:.2f}"/>')
     for x, y_top, y_bottom, color in returns.get(name, []):
         edge_top, edge_bottom = point(complex(x,y_top)), point(complex(x,y_bottom))
-        rear_top=complex(edge_top.real-depth*1.12,HORIZON+(edge_top.imag-HORIZON)*.9)
-        rear_bottom=complex(edge_bottom.real-depth*1.12,HORIZON+(edge_bottom.imag-HORIZON)*.9)
+        return_depth = depth if name == 'Costco' else depth*1.12
+        rear_top=complex(edge_top.real-return_depth,HORIZON+(edge_top.imag-HORIZON)*.9)
+        rear_bottom=complex(edge_bottom.real-return_depth,HORIZON+(edge_bottom.imag-HORIZON)*.9)
         out.append(f'  <path fill="{color}" d="{polygon([edge_top,rear_top,rear_bottom,edge_bottom])}"/>')
         out.append(f'  <path stroke="#eaded5" stroke-opacity=".5" stroke-width=".7" d="M{rear_top.real:.2f},{rear_top.imag:.2f} L{edge_top.real:.2f},{edge_top.imag:.2f}"/>')
         out.append(f'  <path stroke="{side}" stroke-width="1.1" d="M{rear_bottom.real:.2f},{rear_bottom.imag:.2f} L{edge_bottom.real:.2f},{edge_bottom.imag:.2f}"/>')
@@ -186,7 +198,7 @@ for name, first_fill, baseline, start, span, side, width in reversed(models):
                     for x in [31,77,143]:
                         top = point(complex(x,8))
                         foot = point(complex(x-5,21))
-                        depth = 10 * 600/(start+600)
+                        depth = 10 * height_scale * 600/(start+600)
                         back_top = complex(top.real-depth,HORIZON+(top.imag-HORIZON)*.975)
                         back_foot = complex(foot.real-depth,HORIZON+(foot.imag-HORIZON)*.975)
                         out.append(f'  <path fill="#8b6c59" d="{polygon([top,back_top,back_foot,foot])}"/>')
@@ -273,7 +285,7 @@ for name, first_fill, baseline, start, span, side, width in reversed(models):
     if name == 'American Girl':
         out.append('  </g>')
 # Trees stand upright with bases anchored to the same ground plane.
-for u in [147,367,609,895,1210,1610]:
+for u in [147,367,609,895,1210,2020]:
     p=project(u,0);scale=600/(u+600)
     out.append(f'  <use href="#tree" transform="translate({p.real:.2f} {p.imag-52*scale:.2f}) scale({scale:.3f})"/>')
 # Layered evergreens close the right edge behind the foreground welcome sign.
