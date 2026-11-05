@@ -1,0 +1,17 @@
+Generated with the built-in image_gen tool. The approved source is tootsies-matchbook-reference.png; the lettering-only SVG is produced by tools/gen-tootsies-matchbook-wordmark.py.
+
+Use case: logo-brand.
+Asset type: a matchbook-style brand mark for fictional "Tootsie's Tattoo Parlor", intended to sit small over the lower-left of a needlepoint collection photograph, and larger in a collection-page header.
+
+Input images: Image 1 is a reference for the tactile wide matchbook form and emotionally expressive printed lettering from the user's personal site; do NOT copy its words, chairs, bulb or burgundy/gold palette. Image 2 is a reference for the user's personal exuberant custom-lettering energy: individually shaped substantial letters, subtle rising/falling arcs and coral printed depth; do NOT include a portrait, the person's name, or the dark background.
+
+Create one compact WIDE LANDSCAPE closed paper matchbook, front-facing and almost flat, about 1.45 times as wide as tall, designed as a beautiful little souvenir from a friendly neighborhood tattoo parlor. The object and its cover design together should function as a legible little logo, not as a whole still-life or packaging presentation.
+
+Cover: warm cream paper #FAF8F5, expressive deep purple lettering with mid-purple #8B60AE and restrained coral #FF6B7A secondary ink. A coral retaining flap spans the bottom about 14 percent of the matchbook, with a single small horizontal metal staple centered on it, and a slim dark plum striker along the very bottom. Squared paper corners with the tiniest wear and a gentle fold seam. Restrained real paper fiber and imperfect two-color ink registration; tactile and warmly handled but not heavily distressed.
+
+Lettering is the star:
+Largest line exactly "TOOTSIE'S", spelled T-O-O-T-S-I-E-apostrophe-S, taking most of the cover width in a gentle upward arch. Custom chunky sign-painter / hand-cut poster capitals: lively, curving substantial strokes, irregular widths, human spacing, different individual shapes, warm theatrical swagger. Give letters room and ensure the apostrophe reads. A little coral printed offset depth is welcome, not smooth digital 3D extrusion. Make this lovingly lettered, personal and memorable rather than a generic font.
+Below that, exact words "TATTOO PARLOR" in smaller clear hand-drawn shop-sign capitals on one line or two balanced lines, depending on strongest composition. Keep this easy to read at small size and enough space above the coral flap.
+
+Only printed text is "TOOTSIE'S" and "TATTOO PARLOR". No tagline, date, phone number or tiny filler copy. No hearts, needles, tattoo product designs, swallows, stars, illustrations or extra icons; the letterforms and matchbook details carry the design.
+Single resolved mark, fully inside generous transparent margins. TRUE TRANSPARENT BACKGROUND around the matchbook, with just a very restrained close-contact shadow. No tabletop, hands, matches protruding, smoke, flame, props, scene, mockup board, perspective exaggeration, white background, neon or glossy plastic. Warm ink-on-paper sensibility meeting a playful cream/coral/purple needlepoint brand.

@@ -465,6 +465,22 @@
     height: auto;
     overflow: visible;
 }
+/* Painted parlor lettering floats over the Flash photo with a cream paint edge. */
+.flash-card-wordmark {
+    position: absolute;
+    z-index: 1;
+    width: 68%;
+    height: auto;
+    left: 4%;
+    bottom: 6%;
+    pointer-events: none;
+    filter:
+        drop-shadow(1.5px 0 0 var(--cream))
+        drop-shadow(-1.5px 0 0 var(--cream))
+        drop-shadow(0 1.5px 0 var(--cream))
+        drop-shadow(0 -1.5px 0 var(--cream))
+        drop-shadow(0 3px 3px rgb(65 39 62 / 25%));
+}
 /* A town welcome sign sits in the foreground of the Village storefronts. */
 .village-welcome-sign {
     position: absolute;
