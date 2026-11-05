@@ -101,14 +101,24 @@ for name, first_fill, baseline, start, span, side, width in reversed(models):
             out.append(f'  <path fill="{side}" d="{polygon([front_top,rear_top,rear_bottom,front_bottom])}"/>')
     else:
         out.append(f'  <path fill="{side}" d="{polygon([top,back_top,back_bottom,bottom])}"/>')
-    # Two bays along the deeper return make the occupied building volume legible.
-    for frac in [.34, .66]:
-        for bay_left, bay_right in [(.14,.40),(.58,.84)]:
-            corners=[]
-            for x,t in [(bay_left,frac),(bay_right,frac),(bay_right,frac+.12),(bay_left,frac+.12)]:
-                f=top+(bottom-top)*t; b=back_top+(back_bottom-back_top)*t
-                corners.append(f+(b-f)*x)
-            out.append(f'  <path fill="{("#a8a19b" if name=="Sephora" else "#8c9fa6")}" d="{polygon(corners)}"/>')
+    def return_window(left, right, upper, lower, fill):
+        corners=[]
+        for x,t in [(left,upper),(right,upper),(right,lower),(left,lower)]:
+            front=top+(bottom-top)*t
+            rear=back_top+(back_bottom-back_top)*t
+            corners.append(front+(rear-front)*x)
+        out.append(f'  <path fill="{fill}" d="{polygon(corners)}"/>')
+    if name == 'Costco':
+        # Two full-height display windows replace the four tiny upper bays.
+        # Their frames follow the return wall, with glass at storefront scale.
+        for left, right in [(.10,.45),(.55,.90)]:
+            return_window(left,right,.39,1,'#e8dfd3')
+            return_window(left+.05,right-.05,.45,.96,'#8c9fa6')
+    else:
+        # Smaller upper bays suit the other storefronts' return walls.
+        for frac in [.34, .66]:
+            for left, right in [(.14,.40),(.58,.84)]:
+                return_window(left,right,frac,frac+.12,'#a8a19b' if name=='Sephora' else '#8c9fa6')
     if name == 'Container Store':
         # The shallow gable continues over the shop, with its ridge running
         # toward the same rear corners as the return wall.
@@ -170,7 +180,7 @@ for name, first_fill, baseline, start, span, side, width in reversed(models):
             for child in el: emit(child,attrs,dx,dy)
             roof_mode = False
             return
-        if tag=='g' and el.get('id') in ['joann-projecting-awning', 'container-projecting-awnings', 'american-girl-projecting-awnings']:
+        if tag=='g' and el.get('id') in ['joann-projecting-awning', 'container-projecting-awnings', 'american-girl-projecting-awnings', 'costco-projecting-awnings']:
             return  # Draw the projecting canopy in front of the doors below.
         if tag=='g':
             for child in el: emit(child,attrs,dx,dy)
@@ -228,6 +238,29 @@ for name, first_fill, baseline, start, span, side, width in reversed(models):
                 a=' '.join(f'{k}="{v}"' for k,v in attrs.items())
                 out.append(f'  <path {a} d="{d}"/>')
     for child in children: emit(child)
+    if name == 'Costco':
+        # The canvas has red sloped window awnings and a blue entry canopy.
+        # Project fabric outward from the wall, with a shaded side and valance.
+        for left,right,y,drop,colors in [
+            (9,37,72,12,('#b95c67','#8e4c59')),
+            (139,167,72,12,('#b95c67','#8e4c59')),
+            (54,121,78,9,('#6e90ae','#557894')),
+        ]:
+            def warehouse_canopy(x,t):
+                u=start+x*span/width
+                return point(complex(x,y+drop*t))+complex(12,2)*height_scale*(600/(u+600))*t
+            back_l,back_r=warehouse_canopy(left,0),warehouse_canopy(right,0)
+            front_l,front_r=warehouse_canopy(left,1),warehouse_canopy(right,1)
+            hem=complex(0,3*height_scale*600/(start+600))
+            shadow=[point(complex(left,y+drop)),point(complex(right,y+drop)),front_r+hem*2,front_l+hem*2]
+            out.append(f'  <path fill="#705661" fill-opacity=".18" d="{polygon(shadow)}"/>')
+            out.append(f'  <path fill="{colors[1]}" d="{polygon([back_l,front_l,front_l+hem,point(complex(left,y+drop+3))])}"/>')
+            out.append(f'  <path fill="{colors[0]}" d="{polygon([back_l,back_r,front_r,front_l])}"/>')
+            for i in range(1,6):
+                x=left+(right-left)*i/6
+                a,b=warehouse_canopy(x,0),warehouse_canopy(x,1)
+                out.append(f'  <path stroke="{colors[1]}" stroke-width=".75" d="M{a.real:.2f},{a.imag:.2f} L{b.real:.2f},{b.imag:.2f}"/>')
+            out.append(f'  <path fill="{colors[1]}" d="{polygon([front_l,front_r,front_r+hem,front_l+hem])}"/>')
     if name == 'American Girl':
         # Simple fabric wedges: the projection has its own depth direction,
         # independent of the facade, with a side panel and hanging front hem.

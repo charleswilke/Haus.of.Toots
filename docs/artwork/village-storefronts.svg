@@ -174,10 +174,17 @@
     <path fill="#c6b2aa" d="M0 38h174v101H0z"/><path fill="#e8cabc" d="M14 21h146v118H14z"/><path fill="#d6b2a5" d="M47 0h81v139H47z"/>
     <path fill="#b4778a" d="M-3 34h180v7H-3zM10 17h154v8H10zM42-4h91v9H42z"/>
     <path fill="#d6b2a5" d="M57 13h61v42H57z"/><path fill="#b29ab7" d="M60 63h55v8H60z"/>
-    <path fill="#faf1e9" d="M12 82h22v49H12zM142 82h22v49h-22zM66 88h43v51H66z"/>
-    <path fill="#90abae" d="M70 94h15v45H70zM90 94h15v45H90zM15 89h16v35H15zM145 89h16v35h-16z"/>
+    <path fill="#faf1e9" d="M12 82h22v57H12zM142 82h22v57h-22zM66 88h43v51H66z"/>
+    <path fill="#90abae" d="M70 94h15v45H70zM90 94h15v45H90zM15 89h16v50H15zM145 89h16v50h-16z"/>
+    <path fill="#90abae" d="M55 94h9v45h-9zM111 94h9v45h-9z"/>
     <path stroke="#dce6df" stroke-width="1.5" d="M71 123h13M91 123h13"/>
-    <path fill="#bc8594" d="M9 72h28v10H9zM139 72h28v10h-28z"/><path fill="#a28a9c" d="M-4 139h182v7H-4z"/>
+    <g id="costco-projecting-awnings">
+      <path fill="#b95c67" d="M9 72h28l3 12H6zM139 72h28l3 12h-34z"/>
+      <path fill="#8e4c59" d="M6 84h34v3H6zM136 84h34v3h-34z"/>
+      <path fill="#6e90ae" d="M54 78h67l3 9H51z"/>
+      <path fill="#557894" d="M51 87h73v3H51z"/>
+    </g>
+    <path fill="#a28a9c" d="M-4 139h182v7H-4z"/>
   </g>
   <!-- Toys R Us: broad tiered mansard roof, rainbow cladding and a striped entry canopy.
        The canvas supplies the architecture; the roof stays completely unlettered. -->
