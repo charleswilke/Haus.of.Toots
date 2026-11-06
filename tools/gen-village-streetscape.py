@@ -32,18 +32,32 @@ def project(u, height):
 def polygon(points):
     return 'M' + ' '.join(f'{p.real:.2f},{p.imag:.2f}' for p in points) + 'Z'
 
+def road_point(x_at_base, y):
+    depth = (y - HORIZON) / (300 - HORIZON)
+    return complex(VANISH_X + (x_at_base - VANISH_X) * depth, y)
+
+def lane_markings(dashes):
+    # Center the paint between the road edges at x=340 and x=950.
+    return ' '.join(
+        polygon([road_point(635, far), road_point(655, far),
+                 road_point(655, near), road_point(635, near)])
+        for far, near in dashes
+    )
+
+lane_paint = {'fill': '#f6e9df', 'fill-opacity': '.65'}
 out = [source[:source.index('  <!-- One vanishing point')]]
-out.append('''  <!-- Street-level perspective: all front-wall horizontals meet at (1252, 220).
+out.append(f'''  <!-- Street-level perspective: the road and front-wall horizontals meet at ({VANISH_X}, {HORIZON}).
        Roof top surfaces are hidden; only the facades and shaded return walls show. -->
   <path fill="#c2cbb5" d="M0 225h1440v75H0Z"/>
-  <path fill="#e8d9d5" d="M0 300 1240 220h17L230 300Z"/>
-  <path fill="#f6e9df" d="m1250 220 7 1L340 300H200Z"/>
-  <!-- A single road follows the storefront curb; the old right lane is grass. -->
-  <path fill="#a89bab" d="m1257 220-307 80H340Z"/>
-  <path fill="#f6e9df" d="m1257 220-289 80h-18Z"/>
-  <path fill="#c2cbb5" d="m1257 220 183 5v75H968Z"/>
+  <path fill="#e8d9d5" d="M0 300 1240 {HORIZON}H{VANISH_X}L230 300Z"/>
+  <path fill="#f6e9df" d="M1250 {HORIZON}H{VANISH_X}L340 300H200Z"/>
+  <path fill="#a89bab" d="M{VANISH_X} {HORIZON} 950 300H340Z"/>
+  <path fill="#f6e9df" d="M{VANISH_X} {HORIZON} 968 300H950Z"/>
+  <path fill="#c2cbb5" d="M{VANISH_X} {HORIZON} 1440 225v75H968Z"/>
   <path fill="#b5c5aa" d="m1325 240 115 20v40h-275Z"/>
 ''')
+lane = lane_markings([(248.5, 250.5), (253, 256), (259, 263), (267, 272), (277, 283), (290, 299)])
+out.append(f'  <path fill="{lane_paint["fill"]}" fill-opacity="{lane_paint["fill-opacity"]}" d="{lane}"/>')
 clip_count = 0
 # Paint from the horizon toward the viewer so nearer stores occlude farther ones.
 for name, first_fill, baseline, start, span, side, width in reversed(models):
@@ -362,10 +376,10 @@ for filename, sky_only in [('village-sky.svg', True), ('village-neighborhood.svg
         # Extra foreground on phones places the sign on grass below the shops,
         # instead of shrinking the buildings or floating the sign in the sky.
         layer.set('viewBox', '0 0 1440 570')
-        for fill, d in [
-            ('#c2cbb5','M0 300h1440v270H0Z'),
-            ('#a89bab','M340 300h610L-86 570H-2755Z'),
-            ('#f6e9df','M950 300h18L-68 570h-18Z'),
-        ]:
+        ET.SubElement(layer, ns+'path', {'fill':'#c2cbb5','d':'M0 300h1440v270H0Z'})
+        for left, right, fill in [(340, 950, '#a89bab'), (950, 968, '#f6e9df')]:
+            d = polygon([road_point(left, 300), road_point(right, 300),
+                         road_point(right, 570), road_point(left, 570)])
             ET.SubElement(layer, ns+'path', {'fill':fill,'d':d})
+        ET.SubElement(layer, ns+'path', {**lane_paint, 'd': lane_markings([(311, 323), (339, 356), (373, 396)])})
         (ROOT/'images/village-neighborhood-mobile.svg').write_text(ET.tostring(layer, encoding='unicode')+'\n')
