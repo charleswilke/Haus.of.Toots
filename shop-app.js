@@ -1285,23 +1285,29 @@ class ShopApp {
         return formatter.format(numericAmount);
     }
 
+    getVariantMeshSizes(variant) {
+        return (variant.selectedOptions || [])
+            .filter(option => /mesh/i.test(option?.name || ''))
+            .map(option => String(option.value || '').match(/\d+/)?.[0])
+            .filter(Boolean);
+    }
+
+    getProductMeshTag(product) {
+        return (product?.tags || []).find(tag => /^\d+\s*mesh$/i.test(String(tag).trim()));
+    }
+
     getProductCardMeta(product) {
         const variants = product?.variants?.edges?.map(edge => edge.node).filter(Boolean) || [];
-        const meshValues = [];
-
-        variants.forEach(variant => {
-            (variant.selectedOptions || []).forEach(option => {
-                if (!/mesh/i.test(option?.name || '')) return;
-                const value = String(option?.value || '').match(/\d+/)?.[0];
-                if (value && !meshValues.includes(value)) meshValues.push(value);
-            });
-        });
-
-        if (meshValues.length > 0) {
-            return `${meshValues.join(' & ')} mesh`;
+        const meshValues = new Set();
+        for (const variant of variants) {
+            for (const size of this.getVariantMeshSizes(variant)) meshValues.add(size);
         }
 
-        const meshTag = (product?.tags || []).find(tag => /^\d+\s*mesh$/i.test(String(tag).trim()));
+        if (meshValues.size > 0) {
+            return `${[...meshValues].join(' & ')} mesh`;
+        }
+
+        const meshTag = this.getProductMeshTag(product);
         if (meshTag) return String(meshTag).toLowerCase();
 
         const title = String(product?.title || '');

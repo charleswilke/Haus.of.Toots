@@ -100,7 +100,10 @@ class HomeApp extends ShopApp {
         this.productFilters = document.getElementById('homeProductFilters');
         this.allProductsFilter = this.productFilters.querySelector('[data-product-filter="all"]');
         this.inStockFilter = this.productFilters.querySelector('[data-product-filter="in-stock"]');
+        this.meshFilter = document.getElementById('homeMeshFilter');
+        this.defaultMeshFilter = this.meshFilter.querySelector('[checked]');
 
+        this.meshFilter.addEventListener('change', () => this.renderProducts());
         this.productFilters.addEventListener('click', ({ target }) => {
             const button = target.closest('[data-product-filter]');
             if (!button) return;
@@ -109,6 +112,7 @@ class HomeApp extends ShopApp {
                 this.productFilters.querySelectorAll('[aria-pressed="true"]').forEach(filter => {
                     filter.setAttribute('aria-pressed', 'false');
                 });
+                this.defaultMeshFilter.checked = true;
             } else {
                 const isPressed = button.getAttribute('aria-pressed') === 'true';
                 button.setAttribute('aria-pressed', String(!isPressed));
@@ -134,11 +138,12 @@ class HomeApp extends ShopApp {
             button => button.dataset.productFilter
         ).filter(key => key !== 'all' && key !== 'in-stock');
         const inStockOnly = this.inStockFilter.getAttribute('aria-pressed') === 'true';
-        this.allProductsFilter.setAttribute('aria-pressed', String(!selectedCollections.length && !inStockOnly));
+        const mesh = this.meshFilter.querySelector(':checked').value;
+        this.allProductsFilter.setAttribute('aria-pressed', String(!selectedCollections.length && !inStockOnly && !mesh));
 
         this.filteredProducts = this.allProducts.filter(product =>
             (!selectedCollections.length || this.matchesCollections(product, selectedCollections)) &&
-            (!inStockOnly || this.isProductInStock(product))
+            this.matchesMeshAndStock(product, mesh, inStockOnly)
         );
         const count = this.filteredProducts.length;
         document.getElementById('homeProductCount').textContent = `${count} ${count === 1 ? 'product' : 'products'}`;
@@ -223,9 +228,29 @@ class HomeApp extends ShopApp {
 
     // ─── Helpers ──────────────────────────────────────────────────────────────
 
-    isProductInStock(product) {
+    matchesMeshAndStock(product, mesh, inStockOnly) {
         const variants = product.variants?.edges || [];
-        return variants.some(({ node }) => node?.availableForSale === true && !this.isVariantPreorder(node));
+        if (mesh) {
+            const sizedVariants = variants
+                .filter(({ node }) => node)
+                .map(({ node }) => ({ variant: node, sizes: this.getVariantMeshSizes(node) }))
+                .filter(({ sizes }) => sizes.length);
+
+            if (sizedVariants.length) {
+                return sizedVariants.some(({ variant, sizes }) =>
+                    sizes.includes(mesh) && (!inStockOnly || this.isVariantInStock(variant))
+                );
+            }
+
+            const taggedSize = String(this.getProductMeshTag(product) || '').match(/\d+/)?.[0];
+            if (taggedSize !== mesh) return false;
+        }
+
+        return !inStockOnly || variants.some(({ node }) => this.isVariantInStock(node));
+    }
+
+    isVariantInStock(variant) {
+        return variant?.availableForSale === true && !this.isVariantPreorder(variant);
     }
 
     escapeAttr(str) {
