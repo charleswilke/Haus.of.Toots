@@ -17,7 +17,7 @@ models = [
  ('American Girl', '#eac9bd', 197, 0, 120, '#c9b0a6', 166),
  ('Toys R Us', '#a37e6a', 118, 156, 198.4, '#97745f', 196),
  ('JOANN', '#a9bab1', 172, 400, 170, '#829e96', 160),
- ('Container Store', '#e6d4c4', 139, 650, 210, '#bdc5c6', 167),
+ ('Container Store', '#e6d4c4', 139, 650, 240, '#bdc5c6', 167),
  ('Sephora', '#77717a', 150, 930, 240, '#68646b', 153),
  ('Costco', '#c6b2aa', 146, 1250, 700, '#b2948f', 174),
 ]
@@ -52,7 +52,7 @@ for name, first_fill, baseline, start, span, side, width in reversed(models):
     first = next(i for i, c in enumerate(children) if c.get('fill') == first_fill)
     children = children[first:]
     roof_mode = False
-    height_scale = {'Costco': 1.55, 'Toys R Us': 1.24}.get(name, 1)
+    height_scale = {'Costco': 1.55, 'Toys R Us': 1.24, 'Container Store': 1.12}.get(name, 1)
     def point(z):
         if roof_mode:
             # The slatted mansard slopes OUT toward its lower eave. Slats and
