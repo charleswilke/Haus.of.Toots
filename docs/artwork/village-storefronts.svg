@@ -125,8 +125,23 @@
     <path fill="url(#awning-stripes)" d="M-6 122h172v5q-6.615 7-13.23 0q-6.615 7-13.23 0q-6.615 7-13.23 0q-6.615 7-13.23 0q-6.615 7-13.23 0q-6.615 7-13.23 0q-6.615 7-13.23 0q-6.615 7-13.23 0q-6.615 7-13.23 0q-6.615 7-13.23 0q-6.615 7-13.23 0q-6.615 7-13.23 0q-6.615 7-13.23 0Z"/>
     <path stroke="#f7efdf" stroke-width="1.5" d="M7 94h146"/>
     </g>
-    <path fill="#f8eee1" d="M15 129h130v36H15z"/><path fill="#8baaaa" d="M20 133h38v32H20zM66 133h28v32H66zM102 133h38v32h-38z"/>
-    <path fill="#c58097" d="M63 129h4v36h-4zM94 129h4v36h-4z"/>
+    <!-- Street-level windows show shelves and soft merchandise silhouettes. -->
+    <path fill="#c9b89f" d="M15 119h130v46H15Z"/>
+    <path fill="#f8eee1" d="M17 121h43v41H17Z M100 121h43v41h-43Z"/>
+    <path fill="#a8bfba" d="M20 124h37v35H20Z M103 124h37v35h-37Z"/>
+    <path fill="#b78296" d="M24 128h6v6h-6Z M43 140h8v6h-8Z M24 153h10v5H24Z"/>
+    <path fill="#d4b273" d="M33 127h7v7h-7Z M24 139h7v7h-7Z M44 153h8v5h-8Z"/>
+    <path fill="#73968f" d="M44 129h8v5h-8Z M34 140h6v6h-6Z M36 152h6v6h-6Z"/>
+    <path fill="#e6d7bd" d="M22 134h33v1.5H22Z M22 146h33v1.5H22Z"/>
+    <path fill="#b47f99" d="M107 156l2-10-2-4 4-5h4l4 5-2 4 2 10Z"/>
+    <path fill="#729895" d="M121 156v-9h3q0-7 4-7t4 7h3v9Z"/>
+    <path fill="#e6d7bd" d="M105 156h33v2h-33Z"/>
+    <!-- Paired glazed doors with warm framing, kick plates and pull handles. -->
+    <path fill="#9a8573" d="M62 119h36v46H62Z"/>
+    <path fill="#bccfc9" d="M64 121h15.25v39H64Z M80.75 121H96v39H80.75Z"/>
+    <path fill="#f8eee1" fill-opacity=".44" d="M64 147l15.25-12v4L64 151Z M80.75 152 96 140v4l-15.25 12Z"/>
+    <path fill="#a88e75" d="M64 160h15.25v3H64Z M80.75 160H96v3H80.75Z"/>
+    <path fill="none" stroke="#554a43" stroke-width="2" stroke-linecap="round" d="M76 143v6 M84 143v6"/>
     <path fill="#829c96" d="M-5 165h170v7H-5z"/>
   </g>
   <!-- Container Store: shallow pediment and long, gridded display windows. -->
