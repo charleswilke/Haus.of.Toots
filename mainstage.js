@@ -91,9 +91,12 @@ document.addEventListener('DOMContentLoaded', () => {
         placeSparks();
     }
 
-    face.addEventListener('animationiteration', (event) => {
+    function refreshSparks(event) {
         if (event.animationName === 'mainstage-face-lighten') placeSparks();
-    });
+    }
+
+    face.addEventListener('animationstart', refreshSparks);
+    face.addEventListener('animationiteration', refreshSparks);
     wideLayout.addEventListener('change', updateLayout);
     reducedMotion.addEventListener('change', placeSparks);
     updateLayout();

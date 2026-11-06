@@ -145,6 +145,9 @@
 }
 
 .mainstage-wordmark {
+    --mainstage-glow-time-scale: 1;
+    --mainstage-glow-duration: calc(5.8s * var(--mainstage-glow-time-scale));
+    --mainstage-glow-repeats: infinite;
     display: block;
     width: min(100%, 330px);
     height: auto;
@@ -156,8 +159,8 @@
 
 .mainstage-wordmark .depth-layer {
     fill: var(--layer-color);
-    animation: mainstage-depth-rise 5.8s ease-in-out infinite;
-    animation-delay: var(--layer-delay);
+    animation: mainstage-depth-rise var(--mainstage-glow-duration) ease-in-out var(--mainstage-glow-repeats);
+    animation-delay: calc(var(--layer-delay) * var(--mainstage-glow-time-scale));
 }
 
 @keyframes mainstage-depth-rise {
@@ -172,7 +175,7 @@
 }
 
 .mainstage-wordmark .letter-face {
-    animation: mainstage-face-lighten 5.8s ease-in-out infinite;
+    animation: mainstage-face-lighten var(--mainstage-glow-duration) ease-in-out var(--mainstage-glow-repeats);
 }
 
 @keyframes mainstage-face-lighten {
@@ -186,8 +189,8 @@
     transform-box: fill-box;
     transform-origin: center;
     filter: drop-shadow(0 0 2px #bfc7ff);
-    animation: mainstage-spark-burst 5.8s ease-out infinite;
-    animation-delay: var(--spark-delay, 0s);
+    animation: mainstage-spark-burst var(--mainstage-glow-duration) ease-out var(--mainstage-glow-repeats);
+    animation-delay: calc(var(--spark-delay, 0s) * var(--mainstage-glow-time-scale));
 }
 
 @keyframes mainstage-spark-burst {
@@ -195,6 +198,17 @@
     36% { opacity: 0.8; transform: scale(0.85) rotate(-8deg); }
     40% { opacity: 1; transform: scale(1.12) rotate(0deg); }
     47% { opacity: 0; transform: translateY(-3px) scale(0.4) rotate(20deg); }
+}
+
+@media (hover: hover) {
+    .collection-card-mainstage .mainstage-wordmark {
+        --mainstage-glow-time-scale: 0.42;
+        --mainstage-glow-repeats: 1;
+    }
+
+    .collection-card-mainstage:not(:hover, :focus-visible) .mainstage-wordmark :is(.depth-layer, .letter-face, .title-spark) {
+        animation-name: none;
+    }
 }
 
 .mainstage-wordmark .mainstage-collection-label {
