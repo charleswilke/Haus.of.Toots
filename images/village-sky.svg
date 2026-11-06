@@ -30,7 +30,7 @@
       <stop offset="1" stop-color="#fff0cc" stop-opacity="0" />
     </radialGradient>
     <pattern id="toy-stripes" width="18" height="110" patternUnits="userSpaceOnUse"><path fill="#cf7e88" d="M0 0h3v110H0z" /><path fill="#6ea6a0" d="M3 0h3v110H3z" /><path fill="#e3c777" d="M6 0h3v110H6z" /><path fill="#8cb4b4" d="M9 0h3v110H9z" /><path fill="#d8a3b4" d="M12 0h3v110h-3z" /><path fill="#849db9" d="M15 0h3v110h-3z" /></pattern>
-    <pattern id="toy-roof" width="12" height="7" patternUnits="userSpaceOnUse"><path fill="#b58e77" d="M0 0h12v7H0z" /><path fill="#96765f" d="M0 5h12v2H0z" /></pattern>
+    <pattern id="toy-roof" width="12" height="5" patternUnits="userSpaceOnUse"><path fill="#776563" d="M0 0h12v5H0z" /><path fill="#635350" d="M0 4h12v1H0z" /></pattern>
     <pattern id="awning-stripes" width="26" height="35" patternUnits="userSpaceOnUse" patternTransform="skewX(-12)"><path fill="#faf8f5" d="M0 0h13v35H0z" /><path fill="#83a7a0" d="M13 0h13v35H13z" /></pattern>
     <g id="window"><path fill="#faf8f5" d="M0 0h26v32H0z" /><path fill="#9cb7b4" d="M3 3h20v26H3z" /><path stroke="#faf8f5" stroke-width="2" d="M13 3v26M3 15h20" /></g>
     <g id="tree"><path stroke="#88749c" stroke-width="4" d="M0 0v52" /><ellipse cy="-8" rx="18" ry="29" fill="#8baaa2" /><ellipse cx="-6" cy="-11" rx="9" ry="20" fill="#a6bdb0" /></g>
@@ -51,7 +51,7 @@
     <path stroke="url(#village-blue-sweep)" stroke-width="90" d="M80 206C330 263 367 77 665 112S1110 181 1510 38" />
     <path stroke="url(#village-peach-sweep)" stroke-width="45" opacity=".5" d="M-100 191C170 104 315 228 553 182S837 48 1058 100" />
   </g>
-  <defs><clipPath id="facade-clip-1"><path d="M350.48,199.83 531.00,203.87 531.00,262.62 350.48,273.29 350.48,199.83Z" /></clipPath></defs><defs><clipPath id="facade-clip-2"><path d="M343.15,194.14 346.97,177.56 380.92,179.15 381.77,164.55 412.01,166.48 423.13,181.13 431.50,181.52 430.36,167.65 475.60,170.53 487.47,184.15 494.59,184.48 491.30,171.53 512.90,172.90 525.09,185.91 535.50,186.40 550.82,200.05 552.75,205.50 343.97,201.17 343.15,194.14Z" /></clipPath></defs><defs>
+  <defs><clipPath id="facade-clip-1"><path d="M350.48,199.83 531.00,203.87 531.00,262.62 350.48,273.29 350.48,199.83Z" /></clipPath></defs><defs><clipPath id="facade-clip-2"><path d="M352.67,157.64 410.95,161.68 417.61,199.59 342.64,197.76 352.67,157.64Z M427.36,151.41 472.92,155.20 485.94,201.26 417.61,199.59 427.36,151.41Z M478.14,165.38 527.25,169.00 542.82,202.99 485.94,201.26 478.14,165.38Z" /></clipPath></defs><defs>
     <g id="village-pine">
       <path fill="currentColor" d="M0 0-20 35h10l-24 35h16l-30 43h34v24h12v-24h34L18 70h16L10 35h10Z" />
       <path stroke="#6e8e7d" stroke-width="2" stroke-opacity=".3" d="M0 51v84" />

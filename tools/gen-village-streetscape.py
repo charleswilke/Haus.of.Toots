@@ -57,10 +57,13 @@ for name, first_fill, baseline, start, span, side, width in reversed(models):
         if roof_mode:
             # The slatted mansard slopes OUT toward its lower eave. Slats and
             # trim use this same surface, so they recede together up the roof.
-            depth = max(0, min(1, (z.imag - 8) / 30))
+            depth = max(0, min(1, (z.imag + 8) / 46))
             x = 98 + (z.real - 98) * (1 + .075 * depth)
             u = start + x * span / width
-            return project(u, (baseline-z.imag) * height_scale) + complex(18,3) * height_scale * (600/(u+600)) * depth
+            # Taper the horizontal projection from the final bay's inner seam
+            # to the right edge so the eave ends close to the storefront wall.
+            right_bay = max(0, min(1, (z.real - 118) / (200 - 118)))
+            return project(u, (baseline-z.imag) * height_scale) + complex(18*(1-right_bay),3) * height_scale * (600/(u+600)) * depth
         # Scale from the curb, preserving the street's vanishing point.
         return project(start + z.real * span / width, (baseline - z.imag) * height_scale)
     def shape(d, dx=0, dy=0):
@@ -177,7 +180,24 @@ for name, first_fill, baseline, start, span, side, width in reversed(models):
             shadow=[point(complex(-4,42)),point(complex(200,42)),point(complex(200,52)),point(complex(-4,52))]
             out.append(f'  <path fill="#6d594e" fill-opacity=".18" d="{polygon(shadow)}"/>')
             roof_mode = True
-            for child in el: emit(child,attrs,dx,dy)
+            # Wrap the near bay and its fascia over the return wall. Match the
+            # front shingle courses where they cross the corner.
+            ridge = complex(4,3)
+            eave = complex(-9,38)
+            def roof_back(p):
+                return complex(p.real-building_depth*1.06, HORIZON+(p.imag-HORIZON)*.9)
+            upper, lower = point(ridge), point(eave)
+            return_color = el.find(f'{ns}path[@id="toys-roof-return"]').get('fill')
+            out.append(f'  <path fill="{return_color}" d="{polygon([upper,roof_back(upper),roof_back(lower),lower])}"/>')
+            for y in range(9,38,5):
+                front = point(ridge+(eave-ridge)*(y-ridge.imag)/(eave.imag-ridge.imag))
+                rear = roof_back(front)
+                out.append(f'  <path stroke="#71615c" stroke-width=".85" d="M{rear.real:.2f},{rear.imag:.2f} L{front.real:.2f},{front.imag:.2f}"/>')
+            lip = point(complex(-9,44))
+            out.append(f'  <path fill="#61514d" d="{polygon([lower,roof_back(lower),roof_back(lip),lip])}"/>')
+            for child in el:
+                if child.get('id') != 'toys-roof-return':
+                    emit(child,attrs,dx,dy)
             roof_mode = False
             return
         if tag=='g' and el.get('id') in ['joann-projecting-awning', 'container-projecting-awnings', 'american-girl-projecting-awnings', 'costco-projecting-awnings']:
@@ -193,36 +213,13 @@ for name, first_fill, baseline, start, span, side, width in reversed(models):
                 clip_count+=1
                 cid=f'facade-clip-{clip_count}'
                 if pattern == 'url(#toy-roof)':
-                    # Extend the slatted roof back over the return wall; the
-                    # wall ends under the eave rather than poking through it.
-                    upper=point(complex(-2,21)); lower=point(complex(-9,38))
-                    reach=building_depth*1.06
-                    rear_upper=upper+complex(-reach,1)
-                    rear_lower=lower+complex(-reach,-1)
-                    out.append(f'  <path fill="#9a7962" d="{polygon([upper,rear_upper,rear_lower,lower])}"/>')
-                    for t in [.22,.48,.74]:
-                        front=upper+(lower-upper)*t
-                        rear=rear_upper+(rear_lower-rear_upper)*t
-                        out.append(f'  <path stroke="#806550" stroke-width="1" d="M{rear.real:.2f},{rear.imag:.2f} L{front.real:.2f},{front.imag:.2f}"/>')
-                    # Exposed vertical/sloping tier returns, with no visible top planes.
-                    for x in [31,77,143]:
-                        top = point(complex(x,8))
-                        foot = point(complex(x-5,21))
-                        depth = 10 * height_scale * 600/(start+600)
-                        back_top = complex(top.real-depth,HORIZON+(top.imag-HORIZON)*.975)
-                        back_foot = complex(foot.real-depth,HORIZON+(foot.imag-HORIZON)*.975)
-                        out.append(f'  <path fill="#8b6c59" d="{polygon([top,back_top,back_foot,foot])}"/>')
-                    lip_top=point(complex(-9,38)); lip_bottom=point(complex(-9,44))
-                    back_top=complex(lip_top.real-building_depth,HORIZON+(lip_top.imag-HORIZON)*.975)
-                    back_bottom=complex(lip_bottom.real-building_depth,HORIZON+(lip_bottom.imag-HORIZON)*.975)
-                    out.append(f'  <path fill="#755d50" d="{polygon([lip_top,back_top,back_bottom,lip_bottom])}"/>')
+                    roof_fill, seam_fill = [band.get('fill') for band in root.find(f'{ns}defs/{ns}pattern[@id="toy-roof"]')]
+                    out.append(f'  <path fill="{roof_fill}" d="{d}"/>')
                 out.append(f'  <defs><clipPath id="{cid}"><path d="{d}"/></clipPath></defs><g clip-path="url(#{cid})">')
                 if pattern=='url(#toy-roof)':
-                    colors=['#b58e77','#96765f']
-                    for y in range(-7,49,7):
-                        for off,h,color in [(0,5,colors[0]),(5,2,colors[1])]:
-                            pts=[complex(-40,y+off),complex(215,y+off),complex(215,y+off+h),complex(-40,y+off+h)]
-                            out.append(f'  <path fill="{color}" d="{polygon([point(p) for p in pts])}"/>')
+                    for y in range(-6,38,5):
+                        pts=[complex(-9,y),complex(200,y),complex(200,y+1),complex(-9,y+1)]
+                        out.append(f'  <path fill="{seam_fill}" d="{polygon([point(p) for p in pts])}"/>')
                 else:
                     is_toy=pattern=='url(#toy-stripes)'
                     colors=['#cf7e88','#6ea6a0','#e3c777','#8cb4b4','#d8a3b4','#849db9'] if is_toy else ['#f7efdf','#8da879']
