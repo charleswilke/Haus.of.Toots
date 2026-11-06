@@ -102,6 +102,8 @@ class HomeApp extends ShopApp {
         this.inStockFilter = this.productFilters.querySelector('[data-product-filter="in-stock"]');
         this.meshFilter = document.getElementById('homeMeshFilter');
         this.defaultMeshFilter = this.meshFilter.querySelector('[checked]');
+        this.filterTrigger = document.getElementById('homeProductFilterTrigger');
+        this.setupFilterDisclosure();
 
         this.meshFilter.addEventListener('change', () => this.renderProducts());
         this.productFilters.addEventListener('click', ({ target }) => {
@@ -118,6 +120,29 @@ class HomeApp extends ShopApp {
                 button.setAttribute('aria-pressed', String(!isPressed));
             }
             this.renderProducts();
+        });
+    }
+
+    setupFilterDisclosure() {
+        const trigger = this.filterTrigger;
+        const disclosure = trigger.parentElement;
+        const isOpen = () => trigger.getAttribute('aria-expanded') === 'true';
+        const close = () => trigger.setAttribute('aria-expanded', 'false');
+
+        trigger.addEventListener('click', () => {
+            trigger.setAttribute('aria-expanded', String(!isOpen()));
+        });
+        document.addEventListener('click', ({ target }) => {
+            if (isOpen() && !disclosure.contains(target)) close();
+        });
+        disclosure.addEventListener('focusout', ({ relatedTarget }) => {
+            if (isOpen() && relatedTarget && !disclosure.contains(relatedTarget)) close();
+        });
+        disclosure.addEventListener('keydown', (event) => {
+            if (event.key !== 'Escape' || !isOpen()) return;
+            event.stopPropagation();
+            close();
+            trigger.focus();
         });
     }
 
@@ -139,6 +164,8 @@ class HomeApp extends ShopApp {
         ).filter(key => key !== 'all' && key !== 'in-stock');
         const inStockOnly = this.inStockFilter.getAttribute('aria-pressed') === 'true';
         const mesh = this.meshFilter.querySelector(':checked').value;
+        const dropdownSelections = selectedCollections.length + Number(inStockOnly);
+        this.filterTrigger.textContent = dropdownSelections ? `Filters (${dropdownSelections})` : 'All Products';
         this.allProductsFilter.setAttribute('aria-pressed', String(!selectedCollections.length && !inStockOnly && !mesh));
 
         this.filteredProducts = this.allProducts.filter(product =>
