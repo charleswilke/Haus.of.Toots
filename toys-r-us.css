@@ -462,21 +462,54 @@
     height: auto;
     overflow: visible;
 }
-/* Painted parlor lettering floats over the Flash photo with a cream paint edge. */
-.flash-card-wordmark {
+/* The sign and its brass hangers pivot together from the top of the window. */
+.flash-card-sign {
+    --flash-sign-drop: 15px;
     position: absolute;
     z-index: 1;
-    width: 68%;
-    height: auto;
-    left: 4%;
-    bottom: 6%;
+    inset: 0 0 auto;
+    width: min(64%, 230px);
+    margin-inline: auto;
+    padding-top: var(--flash-sign-drop);
     pointer-events: none;
+    transform-origin: top center;
+}
+.flash-card-sign::before,
+.flash-card-sign::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    width: 3px;
+    height: calc(var(--flash-sign-drop) + 12%);
+    border-radius: 0 0 2px 2px;
+    background: linear-gradient(90deg, #695040, #e0b979 48%, #876044);
+    box-shadow: 1px 1px 1px rgb(65 39 62 / 35%);
+}
+.flash-card-sign::before { left: 20%; }
+.flash-card-sign::after { right: 20%; }
+
+.flash-card-wordmark {
+    display: block;
+    width: 100%;
+    height: auto;
     filter:
         drop-shadow(1.5px 0 0 var(--cream))
         drop-shadow(-1.5px 0 0 var(--cream))
         drop-shadow(0 1.5px 0 var(--cream))
         drop-shadow(0 -1.5px 0 var(--cream))
         drop-shadow(0 3px 3px rgb(65 39 62 / 25%));
+}
+@keyframes flash-sign-sway {
+    0%, 100% { transform: perspective(420px) rotateX(0deg); }
+    38% { transform: perspective(420px) rotateX(20deg); }
+    75% { transform: perspective(420px) rotateX(-5deg); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .collection-card-flash:is(:hover, :focus-visible) .flash-card-sign {
+        animation: flash-sign-sway 950ms ease-in-out;
+    }
 }
 /* A town welcome sign sits in the foreground of the Village storefronts. */
 .village-welcome-sign {
