@@ -26,7 +26,7 @@
     <link rel="preload" href="images/fonts/chewy-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="images/fonts/winky-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="styles.css?v=20261029a">
-    <link rel="stylesheet" href="shop-styles.css?v=20261029h">
+    <link rel="stylesheet" href="shop-styles.css?v=20261106e">
     <link rel="stylesheet" href="mainstage.css?v=20261029b">
     <link rel="stylesheet" href="toys-r-us.css?v=20261105purple">
     <script src="mainstage.js?v=20261006b" defer></script>
@@ -440,7 +440,19 @@
     <!-- Browse Products -->
     <section class="home-browse-section">
         <div class="container">
-            <h2 class="visually-hidden">Browse all designs</h2>
+            <h2 class="visually-hidden">Browse products</h2>
+            <div id="homeProductFilters" class="home-product-filters" hidden>
+                <div class="home-product-filter-options" role="group" aria-label="Filter products">
+                    <button type="button" class="home-product-filter" data-product-filter="all" aria-pressed="true">All Products</button>
+                    <button type="button" class="home-product-filter" data-product-filter="main-stage" data-title-collection="main-stage" aria-pressed="false">Main Stage</button>
+                    <button type="button" class="home-product-filter" data-product-filter="village" data-title-collection="village" aria-pressed="false">Village Expansion</button>
+                    <button type="button" class="home-product-filter" data-product-filter="flash" data-title-collection="flash" aria-pressed="false">Flash Sheets</button>
+                    <button type="button" class="home-product-filter" data-product-filter="accessories" data-title-collection="accessories" aria-pressed="false">Accessories</button>
+                    <button type="button" class="home-product-filter home-product-filter-stock" data-product-filter="in-stock" aria-pressed="false">In Stock</button>
+                </div>
+                <p id="homeProductCount" class="home-product-count" role="status"></p>
+            </div>
+
             <!-- Compact so the loading state does not hold open a tall empty stretch of page. -->
             <div id="homeLoadingState" class="loading-state loading-state-inline">
                 <div class="loading-spinner"></div>
@@ -449,6 +461,10 @@
 
             <div id="homeErrorState" class="error-state" style="display: none;">
                 <p>Unable to load products right now. Please try again later.</p>
+            </div>
+
+            <div id="homeEmptyState" class="collection-empty-message" hidden>
+                <p>No products match these filters.</p>
             </div>
 
             <div id="homeProductsGrid" class="products-grid" style="display: none;">
@@ -567,8 +583,8 @@
 
     <script src="shopify-config.js?v=20260703" defer></script>
     <script src="shopify.js?v=20261104b" defer></script>
-    <script src="shop-app.js?v=20261104b" defer></script>
-    <script src="index-app.js?v=20260923a" defer></script>
+    <script src="shop-app.js?v=20261106a" defer></script>
+    <script src="index-app.js?v=20261106a" defer></script>
     <script src="script.js?v=20261007c" defer></script>
 </body>
 </html>

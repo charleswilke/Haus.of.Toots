@@ -3,6 +3,13 @@
 // ===================================
 
 class ShopApp {
+    static COLLECTION_HANDLES = {
+        accessories: ['accessories'],
+        'main-stage': ['main-stage-collection'],
+        village: ['village-expansion-series', 'village'],
+        flash: ['ndlpt-flash-sheet-collection', 'flash']
+    };
+
     constructor() {
         this.products = [];
         this.collectionContext = this.getCollectionContext();
@@ -349,20 +356,22 @@ class ShopApp {
         return /needle\s*minder/.test(text);
     }
 
-    getProductTitleCollection(product) {
+    getProductCollectionKeys(product) {
         const handles = (product.collections?.edges || []).map(({ node }) => node.handle);
-        const collections = [
-            ['accessories', ['accessories']],
-            ['main-stage', ['main-stage-collection']],
-            ['village', ['village-expansion-series', 'village']],
-            ['flash', ['ndlpt-flash-sheet-collection', 'flash']]
-        ];
-        const membership = collections.find(([, aliases]) => aliases.some(handle => handles.includes(handle)));
-        if (membership) return membership[0];
+        return Object.keys(ShopApp.COLLECTION_HANDLES).filter(key =>
+            ShopApp.COLLECTION_HANDLES[key].some(handle => handles.includes(handle))
+        );
+    }
+
+    getProductTitleCollection(product) {
+        const [membership] = this.getProductCollectionKeys(product);
+        if (membership) return membership;
 
         // Collection pages also work with older cached product responses.
         const context = this.collectionContext;
-        const pageCollection = collections.find(([, aliases]) => aliases.includes(context?.handle) || aliases.includes(context?.key?.toLowerCase()));
+        const pageCollection = Object.entries(ShopApp.COLLECTION_HANDLES).find(([, aliases]) =>
+            aliases.includes(context?.handle) || aliases.includes(context?.key?.toLowerCase())
+        );
         if (pageCollection) return pageCollection[0];
 
         const text = this.getCollectionSearchText(product);

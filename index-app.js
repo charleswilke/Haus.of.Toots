@@ -83,39 +83,76 @@ class HomeApp extends ShopApp {
     async loadAllProducts() {
         try {
             this.allProducts = await shopifyClient.getAllProducts(50);
+            this.allProducts.sort((a, b) =>
+                (Date.parse(b.createdAt) || 0) - (Date.parse(a.createdAt) || 0)
+            );
+            this.setupProductFilters();
             this.showGrid();
             this.renderProducts();
+            this.productFilters.hidden = false;
         } catch (error) {
             console.error('Failed to load products:', error);
             this.showError();
         }
     }
 
+    setupProductFilters() {
+        this.productFilters = document.getElementById('homeProductFilters');
+        this.allProductsFilter = this.productFilters.querySelector('[data-product-filter="all"]');
+        this.inStockFilter = this.productFilters.querySelector('[data-product-filter="in-stock"]');
+
+        this.productFilters.addEventListener('click', ({ target }) => {
+            const button = target.closest('[data-product-filter]');
+            if (!button) return;
+
+            if (button === this.allProductsFilter) {
+                this.productFilters.querySelectorAll('[aria-pressed="true"]').forEach(filter => {
+                    filter.setAttribute('aria-pressed', 'false');
+                });
+            } else {
+                const isPressed = button.getAttribute('aria-pressed') === 'true';
+                button.setAttribute('aria-pressed', String(!isPressed));
+            }
+            this.renderProducts();
+        });
+    }
+
+    matchesCollections(product, selectedCollections) {
+        const keys = this.getProductCollectionKeys(product);
+        if (!keys.length) keys.push(this.getProductTitleCollection(product));
+        if (product.tags?.some(tag => tag.trim().toLowerCase() === 'accessories')) {
+            keys.push('accessories');
+        }
+        return keys.some(key => selectedCollections.includes(key));
+    }
+
     // ─── Rendering ────────────────────────────────────────────────────────────
 
     renderProducts() {
-        // Sort the full catalog before splitting it into scroll batches.
-        const products = [...this.allProducts].sort((a, b) =>
-            (Date.parse(b.createdAt) || 0) - (Date.parse(a.createdAt) || 0)
-        );
+        const selectedCollections = Array.from(
+            this.productFilters.querySelectorAll('[aria-pressed="true"]'),
+            button => button.dataset.productFilter
+        ).filter(key => key !== 'all' && key !== 'in-stock');
+        const inStockOnly = this.inStockFilter.getAttribute('aria-pressed') === 'true';
+        this.allProductsFilter.setAttribute('aria-pressed', String(!selectedCollections.length && !inStockOnly));
 
-        this.filteredProducts = products;
+        this.filteredProducts = this.allProducts.filter(product =>
+            (!selectedCollections.length || this.matchesCollections(product, selectedCollections)) &&
+            (!inStockOnly || this.isProductInStock(product))
+        );
+        const count = this.filteredProducts.length;
+        document.getElementById('homeProductCount').textContent = `${count} ${count === 1 ? 'product' : 'products'}`;
+        document.getElementById('homeEmptyState').hidden = count > 0;
+
         this.visibleCount = 0;
+        this.moreProductsObserver?.disconnect();
 
         const grid = document.getElementById('homeProductsGrid');
         if (!grid) return;
         grid.innerHTML = '';
 
-        if (products.length === 0) {
-            grid.innerHTML = `
-                <div class="collection-empty-message" style="grid-column: 1 / -1;">
-                    <p>No products match this filter right now. Check back soon!</p>
-                </div>`;
-            return;
-        }
-
         this.renderNextBatch();
-        this.watchForMoreProducts();
+        if (this.visibleCount < count) this.watchForMoreProducts();
     }
 
     /**
@@ -168,19 +205,14 @@ class HomeApp extends ShopApp {
         if (!this.moreProductsObserver) {
             this.moreProductsObserver = new IntersectionObserver((entries) => {
                 if (!entries.some(e => e.isIntersecting)) return;
-                if (this.visibleCount >= this.filteredProducts.length) {
-                    this.moreProductsObserver.unobserve(sentinel);
-                    return;
-                }
                 this.renderNextBatch();
                 // Re-observing re-fires the callback, so a batch too short to fill
                 // the viewport keeps loading until the sentinel is pushed off screen.
                 this.moreProductsObserver.unobserve(sentinel);
-                this.moreProductsObserver.observe(sentinel);
+                if (this.visibleCount < this.filteredProducts.length) this.moreProductsObserver.observe(sentinel);
             }, { rootMargin: '400px 0px' });
         }
 
-        this.moreProductsObserver.unobserve(sentinel);
         this.moreProductsObserver.observe(sentinel);
     }
 
@@ -193,7 +225,7 @@ class HomeApp extends ShopApp {
 
     isProductInStock(product) {
         const variants = product.variants?.edges || [];
-        return variants.some(e => e.node.availableForSale);
+        return variants.some(({ node }) => node?.availableForSale === true && !this.isVariantPreorder(node));
     }
 
     escapeAttr(str) {
