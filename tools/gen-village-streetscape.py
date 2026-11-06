@@ -16,7 +16,7 @@ window = root.find(f'{ns}defs/{ns}g[@id="window"]')
 models = [
  ('American Girl', '#eac9bd', 197, 0, 120, '#c9b0a6', 166),
  ('Toys R Us', '#a37e6a', 118, 156, 198.4, '#97745f', 196),
- ('JOANN', '#a9bab1', 172, 400, 170, '#829e96', 160),
+ ('JOANN', '#a9bab1', 172, 400, 190, '#829e96', 160),
  ('Container Store', '#e6d4c4', 139, 650, 240, '#bdc5c6', 167),
  ('Sephora', '#77717a', 150, 930, 240, '#68646b', 153),
  ('Costco', '#c6b2aa', 146, 1250, 700, '#b2948f', 174),
@@ -66,7 +66,7 @@ for name, first_fill, baseline, start, span, side, width in reversed(models):
     first = next(i for i, c in enumerate(children) if c.get('fill') == first_fill)
     children = children[first:]
     roof_mode = False
-    height_scale = {'Costco': 1.55, 'Toys R Us': 1.24, 'Container Store': 1.12}.get(name, 1)
+    height_scale = {'Costco': 1.55, 'Toys R Us': 1.24, 'JOANN': 1.40, 'Container Store': 1.12}.get(name, 1)
     def point(z):
         if roof_mode:
             # The slatted mansard slopes OUT toward its lower eave. Slats and
@@ -312,9 +312,10 @@ for name, first_fill, baseline, start, span, side, width in reversed(models):
         back_l, back_r = canopy(7,0), canopy(153,0)
         front_l, front_r = canopy(7,1), canopy(153,1)
         out.append('  <!-- Projecting JOANN canopy: receding fabric stripes, shaded side and hanging valance. -->')
-        shadow = [point(complex(7,116)),point(complex(153,116)),front_r+complex(0,7),front_l+complex(0,7)]
+        raised_corner = point(complex(7,116))
+        shadow = [raised_corner,point(complex(153,116)),front_r+complex(0,7),front_l+complex(0,7)]
         out.append(f'  <path fill="#627d70" fill-opacity=".16" d="{polygon(shadow)}"/>')
-        out.append(f'  <path fill="#6f8d66" d="{polygon([back_l,front_l,front_l+complex(0,4),point(complex(7,122))])}"/>')
+        out.append(f'  <path fill="#6f8d66" d="{polygon([back_l,front_l,front_l+complex(0,3),raised_corner])}"/>')
         for i in range(12):
             a,b = 7 + 146*i/12, 7 + 146*(i+1)/12
             color = ['#f7efdf','#8da879'][i%2]
