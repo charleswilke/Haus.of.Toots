@@ -497,7 +497,7 @@
     height: auto;
     overflow: visible;
 }
-/* The sign and its brass hangers pivot together from the top of the window. */
+/* Silver SVG links and the sign pivot together from the top of the window. */
 .flash-card-sign {
     --flash-sign-drop: 15px;
     position: absolute;
@@ -515,14 +515,14 @@
     position: absolute;
     z-index: -1;
     top: 0;
-    width: 3px;
+    width: clamp(6px, 3.5%, 8px);
     height: calc(var(--flash-sign-drop) + 12%);
-    border-radius: 0 0 2px 2px;
-    background: linear-gradient(90deg, #695040, #e0b979 48%, #876044);
-    box-shadow: 1px 1px 1px rgb(65 39 62 / 35%);
+    background: url('images/tootsies-sign-chain.svg') center / 100% 100% no-repeat;
+    filter: drop-shadow(.5px .75px .5px rgb(35 31 39 / 50%));
+    transform: translateX(-50%);
 }
 .flash-card-sign::before { left: 20%; }
-.flash-card-sign::after { right: 20%; }
+.flash-card-sign::after { left: 80%; }
 
 .flash-card-wordmark {
     display: block;

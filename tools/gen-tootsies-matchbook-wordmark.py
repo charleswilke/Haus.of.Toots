@@ -18,6 +18,8 @@ from PIL import Image
 from scipy import ndimage as ndi
 import vtracer
 
+from tootsies_ribbon import add_ribbon
+
 
 ROOT = Path(__file__).resolve().parents[1]
 NS = "{http://www.w3.org/2000/svg}"
@@ -121,8 +123,9 @@ def main():
             f'{base}\n{detail}\n</svg>\n'
         )
         path = ROOT / f"images/tootsies-matchbook-wordmark{suffix}.svg"
+        svg = add_ribbon(svg)
         path.write_text(svg)
-        print(f"{path}: {width} x {height}; {len(svg.encode()):,} bytes; {svg.count('<path ')} paths")
+        print(f"{path}: {len(svg.encode()):,} bytes; {svg.count('<path ')} paths")
 
 
 if __name__ == "__main__":
