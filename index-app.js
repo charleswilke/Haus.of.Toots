@@ -165,7 +165,9 @@ class HomeApp extends ShopApp {
         const inStockOnly = this.inStockFilter.getAttribute('aria-pressed') === 'true';
         const mesh = this.meshFilter.querySelector(':checked').value;
         const dropdownSelections = selectedCollections.length + Number(inStockOnly);
-        this.filterTrigger.textContent = dropdownSelections ? `Filters (${dropdownSelections})` : 'All Products';
+        const filterLabel = dropdownSelections ? `Filters (${dropdownSelections})` : '';
+        this.filterTrigger.querySelector('.home-product-filter-label').textContent = filterLabel || 'All Products';
+        this.filterTrigger.querySelector('.home-product-filter-label-mobile').textContent = filterLabel || 'All';
         this.allProductsFilter.setAttribute('aria-pressed', String(!selectedCollections.length && !inStockOnly && !mesh));
 
         this.filteredProducts = this.allProducts.filter(product =>
@@ -173,7 +175,7 @@ class HomeApp extends ShopApp {
             this.matchesMeshAndStock(product, mesh, inStockOnly)
         );
         const count = this.filteredProducts.length;
-        document.getElementById('homeProductCount').textContent = `${count} ${count === 1 ? 'product' : 'products'}`;
+        document.getElementById('homeProductCount').textContent = `${count} ${count === 1 ? 'item' : 'items'}`;
         document.getElementById('homeEmptyState').hidden = count > 0;
 
         this.visibleCount = 0;

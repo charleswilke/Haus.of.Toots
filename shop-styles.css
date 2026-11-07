@@ -3830,13 +3830,19 @@ body[data-title-collection] .series-copy .hero-title .highlight {
 }
 
 .home-product-filters {
+    --product-count-width: 8rem;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: 0.5rem 1rem;
     padding: 0.625rem 1rem;
+    padding-inline-end: calc(var(--product-count-width) + 1rem);
     margin-bottom: 1.5rem;
+}
+
+.home-product-filters::after {
+    z-index: 1;
 }
 
 .home-product-filters[hidden] {
@@ -3872,6 +3878,10 @@ body[data-title-collection] .series-copy .hero-title .highlight {
 }
 
 .home-product-filter-trigger {
+    display: none;
+}
+
+.home-product-filter-label-mobile {
     display: none;
 }
 
@@ -3944,21 +3954,35 @@ body[data-title-collection] .series-copy .hero-title .highlight {
 }
 
 .home-product-count {
+    position: absolute;
+    z-index: 2;
+    inset: 0 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--product-count-width);
     margin: 0;
-    color: var(--cocoa-warm);
+    padding: 0.75rem 1rem 0.75rem 1.75rem;
+    border-radius: 0 3px 27px 0;
+    clip-path: polygon(18.75% 0, 100% 0, 100% 100%, 0 100%);
+    background: var(--coral-primary);
+    color: var(--button-ink);
     font-size: 0.875rem;
     font-weight: 600;
+    white-space: nowrap;
 }
 
-@media (max-width: 620px) {
+.home-product-count::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 56' preserveAspectRatio='none'%3E%3Cpath d='M28 6H120Q122 6 122 8V28Q122 50 100 50H9Z' fill='none' stroke='%23fffaf0' stroke-opacity='.8' stroke-width='1' stroke-dasharray='3 3' stroke-linejoin='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+    pointer-events: none;
+}
+
+@media (max-width: 1099px) {
     .home-product-filters {
         z-index: 3;
-        gap: 0.5rem;
-        padding-inline: 0.75rem;
-    }
-
-    .home-product-filter-summary {
-        display: contents;
     }
 
     .home-product-filter-disclosure {
@@ -3971,8 +3995,6 @@ body[data-title-collection] .series-copy .hero-title .highlight {
         justify-content: space-between;
         gap: 0.375rem;
         min-width: 6.25rem;
-        padding-inline: 0.6rem;
-        font-size: 0.8125rem;
         white-space: nowrap;
     }
 
@@ -4016,19 +4038,55 @@ body[data-title-collection] .series-copy .hero-title .highlight {
     .home-product-filter-options button {
         text-align: left;
     }
+}
+
+@media (max-width: 620px) {
+    .home-product-filters {
+        --product-count-width: 4.5rem;
+        display: grid;
+        grid-template-columns: max-content minmax(0, 1fr);
+        gap: 0.375rem;
+        padding-block: 0.5rem;
+        padding-inline-start: 0.5rem;
+        padding-inline-end: calc(var(--product-count-width) + 0.5rem);
+    }
+
+    .home-product-filter-summary {
+        display: contents;
+    }
+
+    .home-product-filter-trigger {
+        min-width: 0;
+        min-height: 2.25rem;
+        padding-inline: 0.375rem;
+        font-size: 0.8125rem;
+    }
+
+    .home-product-filter-label {
+        display: none;
+    }
+
+    .home-product-filter-label-mobile {
+        display: inline;
+    }
 
     .home-mesh-filter {
-        grid-template-columns: 1.625rem auto 1.625rem;
+        grid-template-columns: minmax(1.375rem, 1fr) auto minmax(1.375rem, 1fr);
+        min-height: 2.25rem;
+        font-size: 0.8125rem;
     }
 
     .home-mesh-filter span {
-        padding-inline: 0.45rem;
+        padding-inline: 0.3rem;
     }
 
     .home-product-count {
-        margin-inline-start: auto;
+        padding-inline: 0.875rem 0.375rem;
         font-size: 0.8125rem;
-        white-space: nowrap;
+    }
+
+    .home-product-count::after {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 52' preserveAspectRatio='none'%3E%3Cpath d='M18 5H65Q67 5 67 7V26Q67 47 46 47H7Z' fill='none' stroke='%23fffaf0' stroke-opacity='.8' stroke-width='1' stroke-dasharray='3 3' stroke-linejoin='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
     }
 }
 
