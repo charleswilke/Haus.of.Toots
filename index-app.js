@@ -166,8 +166,8 @@ class HomeApp extends ShopApp {
         const mesh = this.meshFilter.querySelector(':checked').value;
         const dropdownSelections = selectedCollections.length + Number(inStockOnly);
         const filterLabel = dropdownSelections ? `Filters (${dropdownSelections})` : '';
-        this.filterTrigger.querySelector('.home-product-filter-label').textContent = filterLabel || 'All Products';
-        this.filterTrigger.querySelector('.home-product-filter-label-mobile').textContent = filterLabel || 'All';
+        this.filterTrigger.querySelector('.home-product-filter-label').textContent = filterLabel || 'All items';
+        this.filterTrigger.querySelector('.home-product-filter-label-mobile').textContent = filterLabel || 'All items';
         this.allProductsFilter.setAttribute('aria-pressed', String(!selectedCollections.length && !inStockOnly && !mesh));
 
         this.filteredProducts = this.allProducts.filter(product =>

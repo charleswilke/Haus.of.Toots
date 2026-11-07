@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 56" width="160" height="56" preserveAspectRatio="none">
+  <title>Variegated purple embroidery thread</title>
+  <defs>
+    <linearGradient id="floss" x1="0" y1="0" x2="160" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#956cb5"/>
+      <stop offset=".16" stop-color="#aa81c3"/>
+      <stop offset=".34" stop-color="#885cac"/>
+      <stop offset=".52" stop-color="#a57bc1"/>
+      <stop offset=".71" stop-color="#8d60af"/>
+      <stop offset=".87" stop-color="#aa80c5"/>
+      <stop offset="1" stop-color="#9467b3"/>
+    </linearGradient>
+    <linearGradient id="floss-offset" href="#floss" gradientTransform="translate(-24 0)"/>
+    <linearGradient id="floss-shifted" href="#floss" gradientTransform="translate(19 0)"/>
+    <filter id="thread-frost" x="-12" y="-8" width="184" height="72" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="1.35"/>
+    </filter>
+    <path id="strand-1" d="M-8 4.5C24 1.5 50 7 82 4S135 2 168 5"/>
+    <path id="strand-2" d="M-8 14C22 16.5 50 10.5 84 13.5S139 16 168 13"/>
+    <path id="strand-3" d="M-8 23C26 20.5 56 25.5 87 23S139 21 168 24"/>
+    <path id="strand-4" d="M-8 32C24 34.5 53 29 85 32S137 34 168 31"/>
+    <path id="strand-5" d="M-8 41C25 38.5 53 43.5 84 41S136 39.5 168 42"/>
+    <path id="strand-6" d="M-8 50.5C22 53 55 48 87 50.5S139 52 168 49"/>
+    <g id="strands">
+      <use href="#strand-1"/>
+      <use href="#strand-2"/>
+      <use href="#strand-3"/>
+      <use href="#strand-4"/>
+      <use href="#strand-5"/>
+      <use href="#strand-6"/>
+    </g>
+  </defs>
+  <path d="M0 0H160V56H0Z" fill="#9368b4"/>
+  <!-- Soften the thread beneath the glass; UI lettering and stitches stay sharp. -->
+  <g filter="url(#thread-frost)">
+    <g fill="none" stroke-width="9.2" stroke-linecap="round">
+      <use href="#strand-1" stroke="url(#floss)"/>
+      <use href="#strand-2" stroke="url(#floss-offset)"/>
+      <use href="#strand-3" stroke="url(#floss-shifted)"/>
+      <use href="#strand-4" stroke="url(#floss)"/>
+      <use href="#strand-5" stroke="url(#floss-offset)"/>
+      <use href="#strand-6" stroke="url(#floss-shifted)"/>
+    </g>
+    <g fill="none" stroke-linecap="round">
+      <use href="#strands" stroke="#fff0ff" stroke-width=".6" opacity=".14" transform="translate(0 -2.6)"/>
+      <use href="#strands" stroke="#e9c8f6" stroke-width=".45" opacity=".13" transform="translate(0 -.9)"/>
+      <use href="#strands" stroke="#54316e" stroke-width=".55" opacity=".13" transform="translate(0 1.1)"/>
+      <use href="#strands" stroke="#ffe8ff" stroke-width=".45" opacity=".11" transform="translate(0 2.8)"/>
+    </g>
+  </g>
+</svg>
