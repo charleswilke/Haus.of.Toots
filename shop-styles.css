@@ -268,7 +268,7 @@
    =================================== */
 
 .collection-hub-section {
-    padding: var(--spacing-sm) 0 var(--spacing-md);
+    padding: var(--spacing-sm) 0;
 }
 
 .collection-hub-intro {
