@@ -10,7 +10,7 @@ import { copyFileSync, cpSync, mkdirSync, readdirSync, rmSync } from 'node:fs';
 const copyOpts = { recursive: true, filter: src => !src.endsWith('.DS_Store') };
 
 const dist = 'dist';
-const skipDirs = new Set(['dist', 'api', 'docs', '_archived', 'node_modules', 'images', 'tests']);
+const skipDirs = new Set(['dist', 'api', 'docs', '_archived', 'node_modules', 'images', 'tests', 'tools']);
 const skipFiles = new Set(['build.mjs', 'package.json', 'package-lock.json', 'vercel.json', 'HausOfToots.code-workspace']);
 // Temporarily hidden pages: keep their source available for easy restoration.
 const hiddenPages = new Set(['just-landed.html', 'gallery.html']);

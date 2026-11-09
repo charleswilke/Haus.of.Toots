@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Emits the `geo` object for a city entry in LNS_SHOPS (hot-at-lns.html modal):
+// Emits the `geo` object for a city entry in LNS_SHOPS (lns-map.js, the hot-at-lns.html modal):
 // a simplified state outline as an SVG path, normalized so the larger dimension
 // is 100, plus the city's x/y in the same units.
 //
