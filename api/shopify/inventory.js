@@ -2,7 +2,7 @@ const DEFAULT_DOMAIN = process.env.SHOPIFY_STORE_DOMAIN || 'haus-of-toots.myshop
 const DEFAULT_STOREFRONT_VERSION = process.env.SHOPIFY_STOREFRONT_API_VERSION || '2025-10';
 const DEFAULT_ADMIN_VERSION = process.env.SHOPIFY_ADMIN_API_VERSION || '2025-10';
 
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
     if (req.method !== 'POST') {
         res.setHeader('Allow', 'POST');
         return res.status(405).json({ error: 'Method not allowed.' });
@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
         console.error('Inventory API error:', error);
         return res.status(500).json({ error: error.message || 'Unable to fetch inventory.' });
     }
-};
+}
 
 async function fetchInventoryPayload(variantIds) {
     const adminToken = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN;
