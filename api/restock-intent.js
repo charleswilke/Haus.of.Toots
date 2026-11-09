@@ -3,7 +3,7 @@ const RESTOCK_ROCKET_SHOP_DOMAIN = process.env.RESTOCK_ROCKET_SHOP_DOMAIN || '0e
 const RESTOCK_ROCKET_URL = 'https://app.restockrocket.io/api/v1/intents.json';
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
     if (req.method !== 'POST') {
         res.setHeader('Allow', 'POST');
         return res.status(405).json({ error: 'Method not allowed.' });
@@ -37,7 +37,7 @@ module.exports = async (req, res) => {
         console.error('Restock proxy error:', error);
         return res.status(502).json({ error: 'Waitlist signup is temporarily unavailable.' });
     }
-};
+}
 
 function validatePayload(body) {
     if (!body || typeof body !== 'object') return 'Invalid request body.';
