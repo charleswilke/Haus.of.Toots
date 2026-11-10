@@ -77,9 +77,24 @@ function replaySmallScreenGreeting(element) {
     if (!swap || photos.length !== 2) return;
     let active = 'classic';
 
+    // The hidden edition's photo is marked lazy so it stays out of the first
+    // load. Switching it to eager makes the browser fetch it even while hidden.
+    function fetchHiddenPhotos() {
+        photos.forEach(photo => photo.querySelector('img')?.setAttribute('loading', 'eager'));
+    }
+
+    // Fetch it once the page has settled so the first swap is instant, unless
+    // the shopper has asked their browser to save data.
+    if (!window.navigator?.connection?.saveData) {
+        const whenIdle = () => (window.requestIdleCallback || window.setTimeout).call(window, fetchHiddenPhotos);
+        if (document.readyState === 'complete') whenIdle();
+        else window.addEventListener('load', whenIdle, { once: true });
+    }
+
     function select(edition) {
         if (edition === active) return;
         active = edition;
+        fetchHiddenPhotos();
         photos.forEach(photo => { photo.hidden = photo.dataset.costcoPhoto !== edition; });
         choices.forEach(choice => {
             choice.setAttribute('aria-pressed', String(choice.dataset.costcoEdition === edition));

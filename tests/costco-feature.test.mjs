@@ -5,7 +5,7 @@ import test from 'node:test';
 
 const source = readFileSync(new URL('../toys-r-us.js', import.meta.url), 'utf8');
 
-function visit(random, small = true) {
+function visit(random, small = true, { saveData = false } = {}) {
     const classes = new Set();
     const label = { textContent: 'Gold Star Stitcher' };
     const card = {
@@ -21,25 +21,42 @@ function visit(random, small = true) {
     });
     const swap = button({});
     const choices = ['classic', 'holiday'].map(edition => button({ costcoEdition: edition }));
-    const photos = ['classic', 'holiday'].map(edition => ({ dataset: { costcoPhoto: edition }, hidden: edition !== 'classic' }));
+    const photos = ['classic', 'holiday'].map(edition => {
+        const image = {
+            loading: edition === 'classic' ? 'eager' : 'lazy',
+            setAttribute(name, value) { this[name] = value; },
+        };
+        return { dataset: { costcoPhoto: edition }, hidden: edition !== 'classic', image, querySelector: () => image };
+    });
     const gallery = {
         querySelector: () => swap,
         querySelectorAll: selector => selector === '[data-costco-photo]' ? photos : choices,
     };
     let randomCalls = 0;
+    const windowHandlers = {};
+    const idleCallbacks = [];
     vm.runInNewContext(source, {
-        document: { querySelector: selector => ({
+        document: { readyState: 'interactive', querySelector: selector => ({
             '[data-costco-responsive-card]': card,
             '[data-costco-gallery]': gallery,
         })[selector] ?? null },
-        window: { matchMedia: query => {
-            assert.equal(query, '(max-width: 1099px)');
-            return media;
-        } },
+        window: {
+            matchMedia: query => {
+                assert.equal(query, '(max-width: 1099px)');
+                return media;
+            },
+            navigator: { connection: { saveData } },
+            addEventListener: (name, fn) => { windowHandlers[name] = fn; },
+            requestIdleCallback: fn => { idleCallbacks.push(fn); },
+        },
         Math: { random: () => { randomCalls++; return random; } },
     });
     return {
         label, photos, choices, swap,
+        get hiddenPhotoLoading() { return photos[1].image.loading; },
+        get waitsForLoad() { return typeof windowHandlers.load === 'function'; },
+        finishLoading() { windowHandlers.load(); },
+        goIdle() { idleCallbacks.splice(0).forEach(fn => fn()); },
         get executive() { return classes.has('costco-membership-mobile-executive'); },
         get randomCalls() { return randomCalls; },
         resize(small) { media.matches = small; onResize(); },
@@ -85,6 +102,53 @@ test('desktop always restores Gold Star and resizing back keeps the chosen style
     }
 });
 
+test('the hidden edition photo stays out of the first load and is fetched once the page settles', () => {
+    const page = visit(.9);
+    assert.equal(page.hiddenPhotoLoading, 'lazy');
+    page.finishLoading();
+    assert.equal(page.hiddenPhotoLoading, 'lazy');
+    page.goIdle();
+    assert.equal(page.hiddenPhotoLoading, 'eager');
+});
+
+test('shoppers saving data only fetch the hidden edition photo when they ask for it', () => {
+    const page = visit(.9, true, { saveData: true });
+    assert.equal(page.waitsForLoad, false);
+    assert.equal(page.hiddenPhotoLoading, 'lazy');
+    page.choices[1].handlers.click();
+    assert.equal(page.hiddenPhotoLoading, 'eager');
+    assert.deepEqual(page.photos.map(photo => photo.hidden), [true, false]);
+});
+
+test('swapping before the page settles fetches the hidden edition photo straight away', () => {
+    const page = visit(.9);
+    page.swap.handlers.click();
+    assert.equal(page.hiddenPhotoLoading, 'eager');
+});
+
+test('Costco photos are marked up so a screen only fetches the ones it shows', () => {
+    const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+    const feature = html.slice(html.indexOf('<article class="costco-feature"'), html.indexOf('costco-feature-footer'));
+    const tags = [...feature.matchAll(/<(img|source)\b[^>]*costco-(classic|holiday)-13[^>]*>/g)]
+        .map(([tag, element, edition]) => ({ tag, element, edition, sizes: tag.match(/sizes="([^"]*)"/)[1] }));
+    assert.equal(tags.length, 4);
+
+    // Images sharing one srcset and sizes always resolve to the same file, so
+    // the copy hidden by the layout never costs a second download.
+    const responsive = '(max-width: 700px) calc(190vw - 190px), (max-width: 1099px) 76vw, 460px';
+    const classic = tags.filter(({ edition }) => edition === 'classic');
+    assert.deepEqual(classic.map(({ element, sizes }) => [element, sizes]), [['img', responsive], ['img', responsive]]);
+    assert.ok(classic.every(({ tag }) => !/loading="lazy"/.test(tag)), 'the classic photo is the hero image and must load eagerly');
+
+    const [galleryHoliday, desktopHoliday] = tags.filter(({ edition }) => edition === 'holiday');
+    assert.equal(galleryHoliday.element, 'img');
+    assert.equal(galleryHoliday.sizes, responsive);
+    assert.match(galleryHoliday.tag, /loading="lazy"/);
+
+    assert.equal(desktopHoliday.element, 'source');
+    assert.match(desktopHoliday.tag, /media="\(min-width: 1100px\)"/);
+    assert.match(feature, /<picture>\s*<source[^>]*costco-holiday-13[^>]*>\s*<img src="data:image\/gif;base64,[^"]+"/);
+});
 
 test('each Costco panel entry advances once, holds on exit, and stops at the zoom cap', () => {
     const handlers = {};
