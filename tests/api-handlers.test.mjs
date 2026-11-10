@@ -48,7 +48,7 @@ for (const path of ['../api/restock-intent.js', '../api/shopify/inventory.js']) 
 // lives in the module for the whole test run, never carries across tests.
 let nextClient = 1;
 
-function restockRequest(body, headerOverrides = {}) {
+function siteRequest(body, headerOverrides = {}) {
     const headers = {
         host: 'hausoftoots.com',
         origin: 'https://hausoftoots.com',
@@ -65,9 +65,34 @@ function restockRequest(body, headerOverrides = {}) {
 async function postRestock(body, headerOverrides, fetchStub = refuseNetwork) {
     const { default: handler } = await import('../api/restock-intent.js');
     const res = mockResponse();
-    await withFetchStub(fetchStub, () => handler(restockRequest(body, headerOverrides), res));
+    await withFetchStub(fetchStub, () => handler(siteRequest(body, headerOverrides), res));
     return res;
 }
+
+async function postInventory(body, headerOverrides, fetchStub = refuseNetwork) {
+    const { default: handler } = await import('../api/shopify/inventory.js');
+    const res = mockResponse();
+    await withFetchStub(fetchStub, () => handler(siteRequest(body, headerOverrides), res));
+    return res;
+}
+
+const INVENTORY_TOKENS = ['SHOPIFY_ADMIN_ACCESS_TOKEN', 'SHOPIFY_STOREFRONT_INVENTORY_TOKEN', 'SHOPIFY_STOREFRONT_TOKEN'];
+
+async function withInventoryTokens(tokens, run) {
+    const saved = Object.fromEntries(INVENTORY_TOKENS.map(name => [name, process.env[name]]));
+    for (const name of INVENTORY_TOKENS) delete process.env[name];
+    Object.assign(process.env, tokens);
+    try {
+        return await run();
+    } finally {
+        for (const name of INVENTORY_TOKENS) {
+            if (saved[name] === undefined) delete process.env[name];
+            else process.env[name] = saved[name];
+        }
+    }
+}
+
+const variantGid = number => `gid://shopify/ProductVariant/${number}`;
 
 const validSignup = () => ({
     intent: { shopify_variant_id: 1, shopify_product_id: 2 },
@@ -184,9 +209,96 @@ test('restock-intent rate-limits one client without affecting others', async () 
     assert.equal((await postRestock({}, { 'x-forwarded-for': '198.51.100.8' })).statusCode, 400);
 });
 
-test('inventory rejects a request with no variant IDs', async () => {
-    const { default: handler } = await import('../api/shopify/inventory.js');
-    const res = mockResponse();
-    await withFetchStub(refuseNetwork, () => handler({ method: 'POST', body: { variantIds: [] } }, res));
-    assert.equal(res.statusCode, 400);
+test('inventory rejects requests with no usable variant IDs', async () => {
+    assert.equal((await postInventory({ variantIds: [] })).statusCode, 400);
+    assert.equal((await postInventory({ variantIds: 'gid://shopify/ProductVariant/1' })).statusCode, 400);
+    assert.equal((await postInventory({})).statusCode, 400);
+    assert.equal((await postInventory('{not json')).statusCode, 400);
+
+    const otherObjects = { variantIds: ['gid://shopify/Order/1', 'gid://shopify/Customer/2', 7, { id: 1 }] };
+    assert.equal((await postInventory(otherObjects)).statusCode, 400);
+});
+
+test('inventory only accepts JSON requests from the site itself', async () => {
+    const body = { variantIds: [variantGid(1)] };
+    assert.equal((await postInventory(body, { origin: 'https://example.com' })).statusCode, 403);
+    assert.equal((await postInventory(body, { origin: undefined })).statusCode, 403);
+    assert.equal((await postInventory(JSON.stringify(body), { 'content-type': 'text/plain' })).statusCode, 415);
+    assert.equal((await postInventory(body, { 'content-length': '50000' })).statusCode, 413);
+});
+
+test('inventory looks up only variant IDs and maps the Admin API reply', async () => {
+    let sent = null;
+    const stub = async (url, options) => {
+        sent = { url, headers: options.headers, variables: JSON.parse(options.body).variables };
+        return {
+            ok: true,
+            json: async () => ({
+                data: {
+                    nodes: [
+                        { id: variantGid(1), sellableOnlineQuantity: 3, inventoryQuantity: 5, inventoryPolicy: 'DENY' },
+                        { id: variantGid(2), sellableOnlineQuantity: 0, inventoryQuantity: 0, inventoryPolicy: 'CONTINUE' },
+                        null
+                    ]
+                }
+            })
+        };
+    };
+    const body = { variantIds: [variantGid(1), 'gid://shopify/Order/9', variantGid(2), variantGid(1)] };
+
+    const res = await withInventoryTokens(
+        { SHOPIFY_ADMIN_ACCESS_TOKEN: 'test-admin-token' },
+        () => postInventory(body, {}, stub)
+    );
+
+    assert.match(sent.url, /\/admin\/api\/[^/]+\/graphql\.json$/);
+    assert.equal(sent.headers['X-Shopify-Access-Token'], 'test-admin-token');
+    assert.deepEqual(sent.variables, { ids: [variantGid(1), variantGid(2)] });
+    assert.equal(res.statusCode, 200);
+    assert.deepEqual(res.body, {
+        source: 'admin',
+        items: [
+            { id: variantGid(1), availableForSale: true, currentlyNotInStock: false, quantityAvailable: 3 },
+            { id: variantGid(2), availableForSale: true, currentlyNotInStock: true, quantityAvailable: 0 }
+        ]
+    });
+});
+
+test('inventory keeps Shopify error details out of its replies', async () => {
+    const failing = async () => ({
+        ok: false,
+        status: 401,
+        text: async () => 'Invalid API key or access token for shop internal-shop-name'
+    });
+    const body = { variantIds: [variantGid(1)] };
+    const originalError = console.error;
+    console.error = () => {};
+
+    try {
+        const upstreamFailure = await withInventoryTokens(
+            { SHOPIFY_ADMIN_ACCESS_TOKEN: 'test-admin-token' },
+            () => postInventory(body, {}, failing)
+        );
+        assert.equal(upstreamFailure.statusCode, 502);
+        assert.deepEqual(upstreamFailure.body, { error: 'Unable to fetch inventory.' });
+
+        const notConfigured = await withInventoryTokens({}, () => postInventory(body));
+        assert.equal(notConfigured.statusCode, 503);
+        assert.doesNotMatch(JSON.stringify(notConfigured.body), /SHOPIFY_|TOKEN/);
+    } finally {
+        console.error = originalError;
+    }
+});
+
+test('inventory rate-limits one client without affecting others', async () => {
+    const client = { 'x-forwarded-for': '198.51.100.20' };
+    for (let i = 0; i < 300; i++) {
+        assert.equal((await postInventory({ variantIds: [] }, client)).statusCode, 400);
+    }
+
+    const limited = await postInventory({ variantIds: [] }, client);
+    assert.equal(limited.statusCode, 429);
+    assert.ok(Number(limited.headers['Retry-After']) > 0);
+
+    assert.equal((await postInventory({ variantIds: [] }, { 'x-forwarded-for': '198.51.100.21' })).statusCode, 400);
 });

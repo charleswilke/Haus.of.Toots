@@ -936,10 +936,11 @@ class ShopApp {
      * Create HTML for cart item
      */
     createCartItem(item) {
+        const variantId = this.escapeHtml(item.variantId);
         return `
-            <div class="cart-item" data-variant-id="${item.variantId}">
+            <div class="cart-item" data-variant-id="${variantId}">
                 ${item.productImage 
-                    ? `<img src="${item.productImage}" alt="${item.productTitle}" class="cart-item-image">`
+                    ? `<img src="${this.escapeHtml(item.productImage)}" alt="${this.escapeHtml(item.productTitle)}" class="cart-item-image">`
                     : `<div class="cart-item-image" style="background: var(--neutral-light);"></div>`
                 }
                 <div class="cart-item-details">
@@ -948,18 +949,18 @@ class ShopApp {
                     <div class="cart-item-price">${this.formatPrice(item.price.amount, item.price.currencyCode)}</div>
                     <div class="cart-item-controls">
                         <div class="quantity-control">
-                            <button class="quantity-btn quantity-decrease" data-variant-id="${item.variantId}">−</button>
-                            <span class="quantity-value">${item.quantity}</span>
-                            <button class="quantity-btn quantity-increase" data-variant-id="${item.variantId}">+</button>
+                            <button class="quantity-btn quantity-decrease" data-variant-id="${variantId}">−</button>
+                            <span class="quantity-value">${Number(item.quantity) || 0}</span>
+                            <button class="quantity-btn quantity-increase" data-variant-id="${variantId}">+</button>
                         </div>
-                        <button class="remove-item-btn" data-variant-id="${item.variantId}" title="Remove item">
+                        <button class="remove-item-btn" data-variant-id="${variantId}" title="Remove item">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="3 6 5 6 21 6"></polyline>
                                 <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                             </svg>
                         </button>
                     </div>
-                    <p class="cart-item-stock-status" data-variant-id="${item.variantId}" aria-live="polite"></p>
+                    <p class="cart-item-stock-status" data-variant-id="${variantId}" aria-live="polite"></p>
                 </div>
             </div>
         `;
@@ -1336,7 +1337,7 @@ class ShopApp {
             '"': '&quot;',
             "'": '&#039;'
         };
-        return text.replace(/[&<>"']/g, m => map[m]);
+        return String(text ?? '').replace(/[&<>"']/g, m => map[m]);
     }
 
     /**
