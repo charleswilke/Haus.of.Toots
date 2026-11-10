@@ -56,25 +56,13 @@ class HomeApp extends ShopApp {
         if (!ticker) return;
 
         const speed = 24; // px per second — adjust to taste
-        let halfWidth = 0;
-        let pos = 0;
-        let lastTime = null;
 
-        // Measure once after layout settles so scrollWidth is stable
+        // The scrolling is a CSS animation (shop-styles.css). This only tells
+        // it how long one loop lasts, so the speed is the same however wide
+        // the messages are. Measured once after layout settles.
         requestAnimationFrame(() => {
-            halfWidth = ticker.scrollWidth / 2;
-
-            const step = (timestamp) => {
-                if (lastTime !== null) {
-                    pos -= speed * (timestamp - lastTime) / 1000;
-                    if (pos <= -halfWidth) pos += halfWidth;
-                    ticker.style.transform = `translateX(${pos}px)`;
-                }
-                lastTime = timestamp;
-                requestAnimationFrame(step);
-            };
-
-            requestAnimationFrame(step);
+            const loopWidth = ticker.scrollWidth / 2;
+            if (loopWidth > 0) ticker.style.setProperty('--ticker-duration', `${(loopWidth / speed).toFixed(2)}s`);
         });
     }
 

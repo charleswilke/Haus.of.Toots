@@ -3798,10 +3798,22 @@ body[data-title-collection] .series-copy .hero-title .highlight {
     );
 }
 
+/* The markup repeats the messages twice, so sliding left by half the
+   ticker's width lands exactly where it started. index-app.js sets
+   --ticker-duration from the measured width to hold a steady speed. */
 .ticker {
     display: inline-flex;
     white-space: nowrap;
     will-change: transform;
+    animation: ticker-scroll var(--ticker-duration, 60s) linear infinite;
+}
+
+@keyframes ticker-scroll {
+    to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ticker { animation: none; }
 }
 
 .ticker-item {
