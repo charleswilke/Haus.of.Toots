@@ -123,3 +123,17 @@ function replaySmallScreenGreeting(element) {
         feature.style.setProperty('--costco-aisle-scale', (1 + steps * .03).toFixed(2));
     });
 })();
+
+// Some pointer visits spin the R so it lands facing forward, then fixes itself.
+// Never on the first visit and never twice running, so it stays a surprise.
+(() => {
+    const feature = document.querySelector('.toys-feature');
+    if (!feature) return;
+    let visits = 0;
+    let lastWasOops = false;
+    feature.addEventListener('pointerenter', () => {
+        visits += 1;
+        lastWasOops = visits > 1 && !lastWasOops && Math.random() < .3;
+        feature.classList.toggle('is-r-oops', lastWasOops);
+    });
+})();

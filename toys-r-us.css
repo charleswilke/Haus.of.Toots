@@ -78,23 +78,37 @@
     display: inline-block;
     color: var(--toys-plum);
 }
-/* Render the solid at four times its display size for smoother rotated edges.
+/* Render the solid at twice its display size: sharp when it swings toward the
+   shopper, without the stair-stepped edges a larger oversample leaves when shrunk.
    The spacer keeps the original letter's width and baseline in the title. */
 .toys-backward-r {
     position: relative;
     display: inline-block;
     transform-style: preserve-3d;
-    transform-origin: 50% 50% -2px;
+    transform-origin: 50% 50% -10px;
     transform: scaleX(-1) rotate(-5deg);
 }
+/* The stage anchors a cast shadow that turns with the letter but stays on the ground. */
+.toys-r-stage { position: relative; display: inline-block; }
+.toys-r-shadow {
+    position: absolute;
+    inset: 0;
+    color: #2a1340;
+    opacity: 0;
+    transform-origin: 50% 84%;
+    transform: translateY(.05em) scaleY(.16);
+    filter: blur(1.5px);
+    pointer-events: none;
+}
+.toys-r-shadow > span { display: inline-block; transform: scaleX(-1) rotate(-5deg); }
 .toys-r-spacer { visibility: hidden; }
 .toys-r-solid {
     position: absolute;
     top: 0;
     left: 0;
-    font-size: 4em;
+    font-size: 2em;
     line-height: 1;
-    transform: scale(.25);
+    transform: scale(.5);
     transform-origin: top left;
     transform-style: preserve-3d;
 }
@@ -104,14 +118,18 @@
     background: none;
     color: var(--toys-plum);
 }
+/* Side walls darken from the face to the back so the extrusion reads as a solid. */
 .toys-r-depth {
+    --r-t: calc(var(--r-i) / 64);
     position: absolute;
     inset: 0;
-    color: var(--toys-plum);
+    color: color-mix(in oklab, var(--toys-plum), #1f0d33 calc(26% + var(--r-t) * 30%));
     visibility: hidden;
-    transform: translateZ(var(--r-depth));
+    transform: translateZ(calc(var(--r-t) * -20px));
     pointer-events: none;
 }
+/* The back is lit like the face, so a wrong-way landing reads as a plain forward R. */
+.toys-r-depth:nth-last-child(2) { color: var(--toys-plum); }
 .toys-r-quote-left { transform: scaleX(-1); }
 
 .toys-photos {
@@ -625,14 +643,66 @@
     70% { rotate: -8deg; }
     85% { rotate: 4deg; }
 }
-/* Hidden depth slices cannot accumulate antialiasing along the idle outline. */
+/* Hidden depth slices cannot accumulate antialiasing along the idle outline.
+   They fade away through the settle so the solid melts back into flat lettering.
+   Stacked slices stay opaque until each is nearly clear, so the drop is front-loaded. */
 @keyframes toys-r-depth-reveal {
     0%, 100% { visibility: hidden; }
     1%, 99% { visibility: visible; }
+    48% { opacity: 1; }
+    58% { opacity: .1; }
+    70% { opacity: .03; }
+    83%, 100% { opacity: 0; }
 }
+/* Wind up, spin tipped toward the shopper so the top edge shows, overshoot, settle. */
 @keyframes toys-r-spin {
-    from { transform: perspective(250px) rotateY(0deg) scaleX(-1) rotate(-5deg); }
-    to { transform: perspective(250px) rotateY(360deg) scaleX(-1) rotate(-5deg); }
+    0% { transform: perspective(300px) rotateX(0deg) rotateY(0deg) scaleX(-1) rotate(-5deg); animation-timing-function: ease-out; }
+    14% { transform: perspective(300px) rotateX(-9deg) rotateY(-22deg) scaleX(-1) rotate(-5deg); animation-timing-function: cubic-bezier(.5, 0, .2, 1); }
+    76% { transform: perspective(300px) rotateX(-9deg) rotateY(373deg) scaleX(-1) rotate(-5deg); animation-timing-function: ease-in-out; }
+    90% { transform: perspective(300px) rotateX(-2deg) rotateY(356deg) scaleX(-1) rotate(-5deg); animation-timing-function: ease-in-out; }
+    100% { transform: perspective(300px) rotateX(0deg) rotateY(360deg) scaleX(-1) rotate(-5deg); }
+}
+/* Now and then the R lands facing forward, holds, hops when it notices, and turns
+   the last half to face backward again. toys-r-us.js picks which hovers get this. */
+@keyframes toys-r-oops {
+    0% { transform: perspective(300px) translateY(0) rotateX(0deg) rotateY(0deg) scaleX(-1) rotate(-5deg); animation-timing-function: ease-out; }
+    7% { transform: perspective(300px) translateY(0) rotateX(-9deg) rotateY(-22deg) scaleX(-1) rotate(-5deg); animation-timing-function: cubic-bezier(.5, 0, .2, 1); }
+    41% { transform: perspective(300px) translateY(0) rotateX(-9deg) rotateY(553deg) scaleX(-1) rotate(-5deg); animation-timing-function: ease-in-out; }
+    48% { transform: perspective(300px) translateY(0) rotateX(-2deg) rotateY(536deg) scaleX(-1) rotate(-5deg); animation-timing-function: ease-in-out; }
+    52%, 68% { transform: perspective(300px) translateY(0) rotateX(0deg) rotateY(540deg) scaleX(-1) rotate(-5deg); animation-timing-function: ease-out; }
+    72% { transform: perspective(300px) translateY(-.09em) rotateX(0deg) rotateY(540deg) scaleX(-1) rotate(-5deg); animation-timing-function: ease-in; }
+    76% { transform: perspective(300px) translateY(0) rotateX(-6deg) rotateY(526deg) scaleX(-1) rotate(-5deg); animation-timing-function: cubic-bezier(.5, 0, .2, 1); }
+    92% { transform: perspective(300px) translateY(0) rotateX(-6deg) rotateY(729deg) scaleX(-1) rotate(-5deg); animation-timing-function: ease-in-out; }
+    97% { transform: perspective(300px) translateY(0) rotateX(-1deg) rotateY(717deg) scaleX(-1) rotate(-5deg); animation-timing-function: ease-in-out; }
+    100% { transform: perspective(300px) translateY(0) rotateX(0deg) rotateY(720deg) scaleX(-1) rotate(-5deg); }
+}
+/* The sides melt away for the forward pause and return for the correction. */
+@keyframes toys-r-oops-depth {
+    0%, 100% { visibility: hidden; }
+    1%, 99% { visibility: visible; }
+    24% { opacity: 1; }
+    29% { opacity: .1; }
+    35% { opacity: .03; }
+    41%, 70% { opacity: 0; }
+    73%, 84% { opacity: 1; }
+    87% { opacity: .1; }
+    91% { opacity: .03; }
+    95%, 100% { opacity: 0; }
+}
+/* The back stays solid through the pause; it is the forward R being shown. */
+@keyframes toys-r-oops-back {
+    0%, 100% { visibility: hidden; }
+    1%, 99% { visibility: visible; }
+    84% { opacity: 1; }
+    95%, 100% { opacity: 0; }
+}
+@keyframes toys-r-oops-shadow {
+    0%, 100% { opacity: 0; }
+    7%, 94% { opacity: .3; }
+}
+@keyframes toys-r-shadow-fade {
+    0%, 100% { opacity: 0; }
+    14%, 80% { opacity: .3; }
 }
 @keyframes toys-rainbow-roll {
     to { background-position: 110px 0; }
@@ -660,10 +730,29 @@
         animation-delay: .06s;
     }
     .toys-feature:is(:hover, :has(.village-feature-cta:focus-visible)) .toys-backward-r {
-        animation: toys-r-spin .95s cubic-bezier(.45, 0, .25, 1);
+        animation: toys-r-spin 1.15s;
+    }
+    .toys-feature:is(:hover, :has(.village-feature-cta:focus-visible)) .toys-r-shadow {
+        animation: toys-r-shadow-fade 1.15s linear;
+    }
+    .toys-feature:is(:hover, :has(.village-feature-cta:focus-visible)) .toys-r-shadow > span {
+        animation: toys-r-spin 1.15s;
     }
     .toys-feature:is(:hover, :has(.village-feature-cta:focus-visible)) .toys-r-depth {
-        animation: toys-r-depth-reveal .95s linear;
+        animation: toys-r-depth-reveal 1.15s linear;
+    }
+    .toys-feature.is-r-oops:hover .toys-backward-r,
+    .toys-feature.is-r-oops:hover .toys-r-shadow > span {
+        animation: toys-r-oops 2.3s;
+    }
+    .toys-feature.is-r-oops:hover .toys-r-shadow {
+        animation: toys-r-oops-shadow 2.3s linear;
+    }
+    .toys-feature.is-r-oops:hover .toys-r-depth {
+        animation: toys-r-oops-depth 2.3s linear;
+    }
+    .toys-feature.is-r-oops:hover .toys-r-depth:nth-last-child(2) {
+        animation: toys-r-oops-back 2.3s linear;
     }
     .toys-feature:is(:hover, :has(.village-feature-cta:focus-visible)) .toys-ribbon {
         animation: toys-rainbow-roll .7s ease-in-out forwards;
@@ -699,6 +788,7 @@
     .toys-feature .toys-photo, .costco-feature .costco-membership,
     .village-feature-cta [aria-hidden] { transition: none; }
     .toys-feature .toys-r-quote, .toys-feature .toys-backward-r, .toys-feature .toys-r-depth, .toys-feature .toys-ribbon,
+    .toys-feature .toys-r-shadow, .toys-feature .toys-r-shadow > span,
     .costco-feature .costco-membership::before { animation: none !important; }
     .toys-feature:is(:hover, :has(.village-feature-cta:focus-visible)) .toys-photo-classic { transform: rotate(-4deg); }
     .toys-feature:is(:hover, :has(.village-feature-cta:focus-visible)) .toys-photo-holiday { transform: rotate(4deg); }
