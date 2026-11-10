@@ -2,6 +2,10 @@
 // To show a real logo, drop the file in images/lns/ and set `logo`
 // (placeholder hex initials render until then).
 const LNS_SHOPS = {
+    // Memphis city center; directions use the shop's street address.
+    'memphis': { city: 'Memphis, TN', geo: { d: 'M26.1 2.6L26.0 0.0L28.5 0.6L43.1 0.3L55.9 0.9L58.2 0.7L66.8 1.2L76.7 1.3L100.0 1.3L99.5 4.6L97.3 5.3L95.9 8.0L93.8 7.4L89.2 10.2L88.9 8.8L87.3 9.7L84.8 12.9L81.8 13.7L78.9 15.9L75.8 16.0L72.9 18.1L72.0 20.4L69.7 20.7L69.4 24.1L54.5 24.2L34.2 23.9L24.4 24.0L21.3 24.0L0.0 24.0L1.1 23.6L2.3 21.1L2.1 17.7L4.3 15.3L4.6 13.1L6.3 12.4L6.7 9.7L9.0 6.1L8.9 2.6L10.3 2.6L11.7 2.4L26.1 2.6Z', w: 100, h: 24.2, x: 3, y: 21.8, coords: '35.15° N · 90.05° W' }, shops: [
+        { name: 'Stitchers Memphis', addr: '5498 Poplar Ave #4, Memphis, TN 38119', url: 'https://stitchersmemphis.com/', logo: 'images/lns/stitchers-memphis.webp' }
+    ]},
     // City-center coordinates for the stylized map; directions use the street address.
     'larchmont': { city: 'Larchmont, NY', geo: { d: 'M83.8 0.1L83.9 3.8L83.2 7.1L84.4 10.3L84.1 13.7L82.6 17.3L83.7 22.2L83.0 23.7L85.1 26.6L84.6 38.9L84.8 40.4L81.6 52.1L81.1 66.2L82.0 67.7L78.8 69.6L79.7 71.7L85.3 73.1L86.4 72.1L91.2 72.1L93.6 71.5L97.6 68.7L97.9 70.7L100.0 71.6L95.2 74.2L85.1 78.1L80.9 78.9L78.1 78.7L76.1 79.6L74.9 76.6L76.5 71.5L72.1 69.0L66.1 65.1L65.5 63.8L63.5 63.7L61.2 60.7L61.5 58.0L59.9 56.0L57.5 53.7L0.0 53.7L0.0 49.2L8.0 43.8L9.3 41.4L11.9 39.7L10.9 36.7L9.8 36.1L9.0 31.3L16.7 29.2L23.4 29.3L26.2 29.8L29.1 31.7L31.0 31.0L36.6 31.1L40.0 29.8L43.7 26.6L46.0 26.5L46.1 21.6L47.3 18.8L44.4 16.8L45.0 14.6L50.3 11.6L52.2 9.0L58.5 3.0L64.4 0.0L73.3 0.5L83.8 0.1Z', w: 100, h: 79.6, x: 78.4, y: 72.7, coords: '40.93° N · 73.75° W' }, shops: [
         { name: 'Stitch by Stitch', addr: '1953 Palmer Ave, Larchmont, NY 10538', url: 'https://stitchbystitchneedlepoint.com/', logo: 'images/lns/stitch-by-stitch-symbol.svg' }

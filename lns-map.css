@@ -213,6 +213,12 @@
     object-fit: contain;
 }
 
+/* Tint the transparent Stitchers Memphis mark navy (#0e1b4d). */
+.lns-card-logo[src*="stitchers-memphis"],
+.lns-modal-logo[src*="stitchers-memphis"] {
+    filter: brightness(0) saturate(100%) invert(27.776%) sepia(99.067%) saturate(3500.000%) hue-rotate(224.972deg) brightness(30.174%);
+}
+
 /* The transparent Sew Another Stitch asset has generous outer padding.
    Scale its visible mark to fill the existing logo area. */
 .lns-card-logo[src*="sew-another-stitch-red"],

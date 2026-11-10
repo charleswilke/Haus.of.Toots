@@ -24,7 +24,7 @@
     <link rel="preload" href="images/fonts/winky-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="styles.css?v=20261106tilt">
     <link rel="stylesheet" href="shop-styles.css?v=20261029h">
-    <link rel="stylesheet" href="lns-map.css?v=20261101b">
+    <link rel="stylesheet" href="lns-map.css?v=20261110a">
 </head>
 <body>
     <div id="shared-nav"></div>
@@ -693,7 +693,6 @@
     <use href="#lnsHex" x="586.6" y="355.0" class="hx hx2"/>
     <use href="#lnsHex" x="607.4" y="355.0" class="hx hx1"/>
     <use href="#lnsHex" x="628.1" y="355.0" class="hx hx1"/>
-    <use href="#lnsHex" x="648.9" y="355.0" class="hx hx1"/>
     <use href="#lnsHex" x="669.7" y="355.0" class="hx hx2"/>
     <use href="#lnsHex" x="690.5" y="355.0" class="hx hx4"/>
     <use href="#lnsHex" x="711.3" y="355.0" class="hx hx3"/>
@@ -918,6 +917,11 @@
       <use href="#lnsHeart" x="555.4" y="265.0" class="lns-marker-heart"/>
       <text x="569.4" y="263.0" text-anchor="start" class="lns-marker-label"><tspan class="lns-marker-city">Kansas City</tspan><tspan x="569.4" dy="12" class="lns-marker-state">MO</tspan></text>
     </a>
+    <a href="#stop-memphis" class="lns-marker" aria-label="Memphis, TN: Stitchers Memphis">
+      <use href="#lnsHexBig" x="648.9" y="355.0" class="hx-marker"/>
+      <use href="#lnsHeart" x="648.9" y="355.0" class="lns-marker-heart"/>
+      <text x="634.9" y="353.0" text-anchor="end" class="lns-marker-label"><tspan class="lns-marker-city">Memphis</tspan><tspan x="634.9" dy="12" class="lns-marker-state">TN</tspan></text>
+    </a>
     <a href="#stop-barrington" class="lns-marker" aria-label="Barrington, IL: The Pepper Pot">
       <use href="#lnsHexBig" x="680.1" y="193.0" class="hx-marker"/>
       <use href="#lnsHeart" x="680.1" y="193.0" class="lns-marker-heart"/>
@@ -1106,6 +1110,12 @@
                     <h3 class="lns-card-name"><a href="https://stitchbystitchneedlepoint.com/" target="_blank" rel="noopener" class="lns-shop-name-link">Stitch by <span class="lns-name-tail">Stitch<svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span><span class="visually-hidden"> (opens in a new tab)</span></a></h3>
                     <p class="lns-card-addr">1953 Palmer Ave<br>Larchmont, NY 10538</p>
                 </div>
+                <div class="lns-shop-card" data-city="memphis" id="stop-memphis">
+                    <img class="lns-card-logo" src="images/lns/stitchers-memphis.webp" alt="" loading="lazy">
+                    <p class="lns-card-city">Memphis, TN</p>
+                    <h3 class="lns-card-name"><a href="https://stitchersmemphis.com/" target="_blank" rel="noopener" class="lns-shop-name-link">Stitchers <span class="lns-name-tail">Memphis<svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span><span class="visually-hidden"> (opens in a new tab)</span></a></h3>
+                    <p class="lns-card-addr">5498 Poplar Ave #4<br>Memphis, TN 38119</p>
+                </div>
                 <div class="lns-shop-card" data-city="nashville" id="shop-stitching-belle">
                     <img class="lns-card-logo" src="images/lns/stitching-belle.webp" alt="" loading="lazy">
                     <p class="lns-card-city">Nashville, TN</p>
@@ -1172,6 +1182,6 @@
         </div>
     </div>
 
-    <script src="lns-map.js?v=20261109a"></script>
+    <script src="lns-map.js?v=20261110a"></script>
 </body>
 </html>

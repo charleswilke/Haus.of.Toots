@@ -89,6 +89,8 @@ const OUTLINE = [
 
 // --- Shops ---
 const SHOPS = [
+  // City-center coordinates for the stylized map; directions use the street address.
+  { name: "Stitchers Memphis", url: "https://stitchersmemphis.com/", addr: "5498 Poplar Ave #4, Memphis, TN 38119", city: "Memphis", state: "TN", lat: 35.1495, lon: -90.0490 },
   // City-center coordinates until the shop announces its street address.
   { name: "Rose Garden Stitch Co.", url: "https://www.rosegardenstitch.co/", addr: null, city: "Portland", state: "OR", lat: 45.5152, lon: -122.6784 },
   { name: "Sew Another Stitch", url: "https://sewanotherstitch.com/", addr: "433 St John St, Havre de Grace, MD 21078", city: "Havre de Grace", state: "MD", lat: 39.5493, lon: -76.0897 },
@@ -214,6 +216,7 @@ const LABELS = {
   "Omaha":       { dx: 14,  dy: -2,  anchor: "start" },
   "Kansas City": { dx: 14,  dy: -2,  anchor: "start" },
   "Barrington":  { dx: 0,   dy: -25, anchor: "middle" },
+  "Memphis":     { dx: -14, dy: -2, anchor: "end" },
   "Nashville":   { dx: 0,   dy: 23,  anchor: "middle" },
   "Cornelius":   { dx: 0,   dy: -25, anchor: "middle" },
   "Chapel Hill": { dx: 14,  dy: -2,  anchor: "start" },
