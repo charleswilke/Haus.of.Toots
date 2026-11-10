@@ -4079,6 +4079,29 @@ body[data-title-collection] .series-copy .hero-title .highlight {
         pointer-events: none;
     }
 
+    /* Follow the fabric's diagonal instead of drawing a rectangular focus ring. */
+    .home-product-filter-options [data-product-filter="all"]:focus-visible {
+        outline: none;
+    }
+
+    .home-product-filter-options [data-product-filter="all"]:focus-visible > span::after {
+        content: '';
+        position: absolute;
+        inset: -4px;
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 136 64' preserveAspectRatio='none'%3E%3Cpath d='M32 2H133L107.286 62H5Q2 62 2 59V32A30 30 0 0 1 32 2Z' fill='none' stroke='%232b1d23' stroke-width='2' stroke-linejoin='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+        pointer-events: none;
+    }
+
+    @media (forced-colors: active) {
+        .home-product-filter-options [data-product-filter="all"]:focus-visible {
+            outline: 2px solid CanvasText;
+        }
+
+        .home-product-filter-options [data-product-filter="all"]:focus-visible > span::after {
+            content: none;
+        }
+    }
+
     .home-product-filter-options [data-product-filter="all"] > span::before {
         content: '';
         position: absolute;
@@ -4096,6 +4119,16 @@ body[data-title-collection] .series-copy .hero-title .highlight {
 
     .home-product-filter-options [data-product-filter="all"]:hover::before {
         filter: brightness(1.05);
+    }
+
+    .home-product-filter-options [data-product-filter="all"][aria-pressed="false"] {
+        --filter-stitch: color-mix(in srgb, var(--purple-text) 55%, transparent);
+        color: color-mix(in srgb, var(--purple-text) 72%, var(--button-ink));
+        text-shadow: none;
+    }
+
+    .home-product-filter-options [data-product-filter="all"][aria-pressed="false"]::before {
+        opacity: 0.35;
     }
 }
 
