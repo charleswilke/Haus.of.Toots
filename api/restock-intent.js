@@ -1,20 +1,15 @@
+import { clientKey, createRateLimiter, isJsonRequest, isSameSiteRequest } from './_lib/guards.js';
+
 const SHOPIFY_DOMAIN = process.env.SHOPIFY_STORE_DOMAIN || 'haus-of-toots.myshopify.com';
 const RESTOCK_ROCKET_SHOP_DOMAIN = process.env.RESTOCK_ROCKET_SHOP_DOMAIN || '0e9sd0-v2.myshopify.com';
 const RESTOCK_ROCKET_URL = 'https://app.restockrocket.io/api/v1/intents.json';
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const SITE_HOSTS = new Set(['hausoftoots.com', 'www.hausoftoots.com']);
 const MAX_BODY_BYTES = 4096;
 const UPSTREAM_TIMEOUT_MS = 8000;
 
 // Generous enough for a shopper joining several waitlists on a drop day.
-const RATE_LIMIT_MAX = 20;
-const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
-const RATE_LIMIT_MAX_CLIENTS = 5000;
-
-// Lives in one function instance's memory, so it slows a single abusive
-// client but is not a hard cap across instances or cold starts.
-const recentRequests = new Map();
+const takeRateLimitSlot = createRateLimiter({ max: 20, windowMs: 10 * 60 * 1000 });
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
@@ -26,7 +21,7 @@ export default async function handler(req, res) {
         return res.status(403).json({ error: 'Forbidden.' });
     }
 
-    if (!/^application\/json\b/i.test(String(req.headers['content-type'] || ''))) {
+    if (!isJsonRequest(req)) {
         return res.status(415).json({ error: 'Expected a JSON request.' });
     }
 
@@ -79,55 +74,6 @@ export default async function handler(req, res) {
         console.error('Restock proxy error:', error);
         return res.status(502).json({ error: 'Waitlist signup is temporarily unavailable.' });
     }
-}
-
-/**
- * Browsers send Origin on every POST, so a page on another site cannot
- * submit signups through a visitor's browser. Matching the request's own
- * host keeps preview deployments and local development working.
- */
-function isSameSiteRequest(req) {
-    const source = req.headers.origin || req.headers.referer;
-    if (!source) return false;
-
-    let sourceHost;
-    try {
-        sourceHost = new URL(source).host.toLowerCase();
-    } catch (error) {
-        return false;
-    }
-
-    const requestHost = String(req.headers['x-forwarded-host'] || req.headers.host || '').toLowerCase();
-    return SITE_HOSTS.has(sourceHost) || (requestHost !== '' && sourceHost === requestHost);
-}
-
-function clientKey(req) {
-    const forwardedFor = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim();
-    return forwardedFor || String(req.headers['x-real-ip'] || '') || 'unknown';
-}
-
-/**
- * Records a request for this client. Returns 0 when it is allowed, or the
- * number of seconds to wait when the client is over the limit.
- */
-function takeRateLimitSlot(key, now = Date.now()) {
-    const windowStart = now - RATE_LIMIT_WINDOW_MS;
-    const hits = (recentRequests.get(key) || []).filter(time => time > windowStart);
-
-    if (hits.length >= RATE_LIMIT_MAX) {
-        recentRequests.set(key, hits);
-        return Math.max(1, Math.ceil((hits[0] + RATE_LIMIT_WINDOW_MS - now) / 1000));
-    }
-
-    hits.push(now);
-    // Re-inserting keeps the Map ordered by last activity, so the entry
-    // evicted below is always the client seen longest ago.
-    recentRequests.delete(key);
-    recentRequests.set(key, hits);
-    if (recentRequests.size > RATE_LIMIT_MAX_CLIENTS) {
-        recentRequests.delete(recentRequests.keys().next().value);
-    }
-    return 0;
 }
 
 /**
