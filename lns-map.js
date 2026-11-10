@@ -1,0 +1,314 @@
+// Shop data for the map modal, keyed by the marker anchor slug.
+// To show a real logo, drop the file in images/lns/ and set `logo`
+// (placeholder hex initials render until then).
+const LNS_SHOPS = {
+    // City-center coordinates for the stylized map; directions use the street address.
+    'larchmont': { city: 'Larchmont, NY', geo: { d: 'M83.8 0.1L83.9 3.8L83.2 7.1L84.4 10.3L84.1 13.7L82.6 17.3L83.7 22.2L83.0 23.7L85.1 26.6L84.6 38.9L84.8 40.4L81.6 52.1L81.1 66.2L82.0 67.7L78.8 69.6L79.7 71.7L85.3 73.1L86.4 72.1L91.2 72.1L93.6 71.5L97.6 68.7L97.9 70.7L100.0 71.6L95.2 74.2L85.1 78.1L80.9 78.9L78.1 78.7L76.1 79.6L74.9 76.6L76.5 71.5L72.1 69.0L66.1 65.1L65.5 63.8L63.5 63.7L61.2 60.7L61.5 58.0L59.9 56.0L57.5 53.7L0.0 53.7L0.0 49.2L8.0 43.8L9.3 41.4L11.9 39.7L10.9 36.7L9.8 36.1L9.0 31.3L16.7 29.2L23.4 29.3L26.2 29.8L29.1 31.7L31.0 31.0L36.6 31.1L40.0 29.8L43.7 26.6L46.0 26.5L46.1 21.6L47.3 18.8L44.4 16.8L45.0 14.6L50.3 11.6L52.2 9.0L58.5 3.0L64.4 0.0L73.3 0.5L83.8 0.1Z', w: 100, h: 79.6, x: 78.4, y: 72.7, coords: '40.93° N · 73.75° W' }, shops: [
+        { name: 'Stitch by Stitch', addr: '1953 Palmer Ave, Larchmont, NY 10538', url: 'https://stitchbystitchneedlepoint.com/', logo: 'images/lns/stitch-by-stitch-symbol.svg' }
+    ]},
+    // Portland city center; the shop's street address is not yet announced.
+    'portland': { city: 'Portland, OR', geo: { d: 'M16.6 1.5L20.4 3.1L21.5 5.2L22.1 10.4L28.5 12.3L33.9 9.5L37.3 9.2L41.2 10.2L41.6 11.3L48.4 8.9L50.0 9.7L53.7 9.2L56.7 7.5L62.2 6.0L67.1 5.7L68.8 4.5L94.4 4.6L96.1 7.5L99.0 8.8L100.0 11.1L97.4 16.2L96.7 19.2L95.3 21.3L95.5 22.9L94.2 25.5L92.9 26.0L90.4 32.2L91.3 34.5L93.6 34.8L94.7 36.2L93.0 41.9L93.0 73.4L72.4 73.6L56.3 73.5L43.5 73.5L26.9 73.2L16.3 73.3L4.2 73.4L2.4 71.4L1.5 65.8L1.7 62.0L0.0 59.0L1.2 56.1L2.1 51.5L3.9 46.6L4.7 42.3L6.1 27.6L5.9 25.7L7.1 19.2L7.6 10.4L6.9 5.5L7.5 2.5L12.5 0.0L14.6 2.0L16.6 1.5Z', w: 100, h: 73.6, x: 23.2, y: 12.9, coords: '45.52° N · 122.68° W' }, shops: [
+        { name: 'Rose Garden Stitch Co.', addr: null, status: 'Opening soon · Address to be announced', url: 'https://www.rosegardenstitch.co/', logo: 'images/lns/rose-garden-stitch.png' }
+    ]},
+    'washington': { city: 'Washington, DC', geo: { d: 'M31.6 0.0L79.9 48.6L29.5 100.0L0.0 29.7L31.6 0.0Z', w: 79.9, h: 100, x: 6.3, y: 33.5, coords: '38.93° N · 77.10° W' }, shops: [
+        { name: 'The Point of It All', addr: '5115 MacArthur Blvd NW, Washington, DC 20016', url: 'https://thepointofitallonline.com/', logo: 'images/lns/point-of-it-all.avif' }
+    ]},
+    'havre-de-grace': { city: 'Havre de Grace, MD', geo: { d: 'M0.2 0.0L83.4 0.0L85.5 36.4L100.0 36.7L95.6 48.9L92.1 49.4L85.9 51.1L81.1 52.4L81.3 47.6L79.4 45.7L82.0 43.7L78.5 38.9L77.4 41.0L72.7 40.5L71.1 35.3L72.6 35.3L72.7 28.5L74.2 25.8L72.3 16.6L74.7 11.2L78.5 10.3L79.2 4.7L76.3 5.4L76.2 8.2L70.3 11.9L68.6 15.2L68.2 23.6L66.0 27.5L67.0 34.2L69.9 38.8L69.5 42.3L71.4 45.7L70.4 48.1L65.2 43.5L57.8 41.3L55.6 36.9L51.4 39.4L49.8 35.9L53.1 31.5L55.1 26.9L58.1 23.9L55.2 21.0L53.4 22.8L50.4 20.1L45.7 18.7L45.7 14.4L43.3 12.0L39.8 11.6L37.2 3.5L33.4 3.5L29.6 0.8L27.5 3.0L23.8 2.8L22.9 6.0L16.3 4.0L11.8 8.2L8.9 7.3L4.4 12.2L0.0 14.9L0.2 0.0Z', w: 100, h: 52.4, x: 76.5, y: 5, coords: '39.55° N · 76.09° W' }, shops: [
+        { name: 'Sew Another Stitch', addr: '433 St John St, Havre de Grace, MD 21078', url: 'https://sewanotherstitch.com/', logo: 'images/lns/sew-another-stitch-red.png' }
+    ]},
+    'dublin': { city: 'Dublin, OH', geo: { d: 'M92.4 0.0L92.4 37.8L89.2 39.3L90.7 42.4L90.6 46.7L87.7 53.5L85.7 63.8L77.3 72.9L74.6 74.1L72.3 72.3L69.8 76.3L67.3 76.1L64.6 81.5L65.2 84.7L63.0 87.4L59.8 83.1L55.8 89.8L56.8 94.1L54.3 95.7L53.4 99.4L47.8 100.0L44.8 96.1L42.4 95.4L41.4 90.6L38.4 91.5L36.0 94.3L27.9 92.1L24.5 94.1L19.7 90.3L12.9 89.2L12.6 86.7L8.2 80.9L0.0 80.9L0.4 41.6L0.2 8.0L29.3 6.9L37.7 10.8L40.5 13.1L42.6 10.9L47.3 15.4L50.3 16.8L60.3 13.1L66.1 13.9L72.5 8.6L81.8 3.5L92.4 0.0Z', w: 92.4, h: 100, x: 36.6, y: 52.9, coords: '40.10° N · 83.11° W' }, shops: [
+        { name: "What's the Point Needlepoint", addr: '126 S. High St, Dublin, OH 43017', url: 'https://whatsthepoint.biz/', logo: 'images/lns/whats-the-point.png' }
+    ]},
+    'cincinnati': { city: 'Cincinnati, OH', geo: { d: 'M92.4 0.0L92.4 37.8L89.2 39.3L90.7 42.4L90.6 46.7L87.7 53.5L85.7 63.8L77.3 72.9L74.6 74.1L72.3 72.3L69.8 76.3L67.3 76.1L64.6 81.5L65.2 84.7L63.0 87.4L59.8 83.1L55.8 89.8L56.8 94.1L54.3 95.7L53.4 99.4L47.8 100.0L44.8 96.1L42.4 95.4L41.4 90.6L38.4 91.5L36.0 94.3L27.9 92.1L24.5 94.1L19.7 90.3L12.9 89.2L12.6 86.7L8.2 80.9L0.0 80.9L0.4 41.6L0.2 8.0L29.3 6.9L37.7 10.8L40.5 13.1L42.6 10.9L47.3 15.4L50.3 16.8L60.3 13.1L66.1 13.9L72.5 8.6L81.8 3.5L92.4 0.0Z', w: 92.4, h: 100, x: 6.6, y: 80.9, coords: '39.10° N · 84.51° W' }, shops: [
+        { name: 'When Pigs Fly Needlepoint', addr: 'Cincinnati, OH', url: 'https://whenpigsflyndlpt.com/', logo: 'images/lns/when-pigs-fly.png' }
+    ]},
+    'los-angeles': { city: 'Los Angeles, CA', geo: { d: 'M1.3 0.0L36.6 0.0L36.6 31.7L81.8 73.9L82.3 75.3L83.1 77.0L84.3 79.0L85.9 81.3L84.9 82.7L83.4 83.5L82.6 85.2L82.9 87.6L82.7 89.2L81.9 90.5L81.0 90.8L81.5 94.7L81.0 98.0L60.8 100.0L59.8 98.6L58.4 93.0L56.8 90.9L52.7 87.3L50.0 87.2L48.8 84.1L43.2 82.9L37.9 80.1L32.7 79.7L31.3 78.4L31.4 72.9L29.1 71.3L25.7 66.9L20.7 60.1L21.6 54.9L20.3 53.0L18.5 53.0L16.3 50.3L15.5 47.3L15.6 44.6L11.7 39.1L10.3 37.5L5.3 32.2L4.5 28.0L2.1 22.8L0.0 18.4L1.8 12.8L1.7 9.1L2.4 5.7L0.9 2.3Z', w: 85.9, h: 100, x: 49.7, y: 84.6, coords: '33.99° N · 118.44° W' }, shops: [
+        { name: 'Angel City Stitchery', addr: '13347 Washington Blvd Ste B, Los Angeles, CA 90066', url: 'https://angelcitystitchery.com/', logo: 'images/lns/angel-city-stitchery.webp' }
+    ]},
+    'denver': { city: 'Denver, CO', geo: { d: 'M0.0 0.0L99.8 0.0L100.0 73.6L0.1 73.5L0.0 0.0Z', w: 100, h: 73.6, x: 58.2, y: 24.1, coords: '39.69° N · 104.97° W' }, shops: [
+        { name: 'Sunny Stitches', addr: '1927 E Kentucky Ave, Denver, CO 80209', url: 'https://sunnystitches.com/', logo: 'images/lns/sunny-stitches.webp' }
+    ]},
+    'austin': { city: 'Austin, TX', geo: { d: 'M27.7 0.0L50.6 0.0L50.6 17.3L51.1 17.1L52.8 18.8L55.2 18.9L55.3 18.2L56.2 18.7L56.7 20.3L58.3 20.3L60.0 21.1L60.9 20.8L62.1 21.7L63.1 20.9L64.5 21.3L65.0 20.9L65.2 22.2L66.2 22.4L66.1 23.3L67.1 23.5L68.5 22.4L69.2 23.2L70.0 23.1L70.1 23.8L71.8 23.0L72.5 24.8L73.1 23.9L72.8 23.6L73.1 23.7L73.5 22.7L74.0 22.6L74.3 23.4L75.2 23.8L75.9 23.1L76.6 23.2L76.3 23.7L77.8 24.2L78.3 25.0L78.8 24.4L79.7 24.4L79.9 23.7L81.6 23.3L82.4 23.7L84.1 22.9L84.6 23.3L86.5 23.4L86.9 22.6L88.9 23.5L89.7 24.5L90.4 24.5L92.4 25.7L92.8 25.4L93.3 26.3L94.9 25.9L96.0 26.3L96.0 40.2L97.7 42.1L97.5 43.7L98.3 44.4L99.4 47.4L99.9 47.4L100.0 48.8L99.6 48.9L99.7 50.6L98.3 53.1L98.6 54.0L98.1 54.9L98.5 55.3L98.6 57.3L96.9 59.7L97.6 60.8L95.3 61.1L90.8 63.5L90.3 63.5L91.2 62.6L92.6 62.1L92.1 61.7L90.5 61.9L91.0 60.6L90.6 59.9L89.7 60.8L89.1 60.6L88.6 61.8L89.4 62.4L89.5 64.1L87.9 65.3L87.5 65.1L87.4 65.8L90.0 63.8L90.8 63.9L85.8 68.0L78.5 72.0L73.4 76.5L71.2 80.8L70.6 83.3L70.8 86.5L72.3 92.8L71.3 88.7L70.6 88.6L71.1 88.4L70.4 85.6L70.7 81.5L72.8 76.5L74.1 74.9L77.7 72.7L77.9 72.1L75.9 72.9L75.7 72.2L75.2 72.1L75.0 73.7L74.0 74.6L73.2 74.1L72.3 74.5L71.8 75.1L73.1 74.8L73.3 75.4L72.0 77.2L69.7 76.8L69.5 77.1L70.6 77.2L70.6 78.0L71.5 78.4L70.3 81.8L69.6 82.2L69.5 81.4L68.6 82.2L69.3 82.6L70.2 82.3L69.8 86.4L70.1 88.1L71.3 91.1L71.2 92.2L71.4 92.8L72.3 93.0L72.3 94.0L70.8 94.2L70.6 95.0L69.5 94.6L68.5 93.4L64.3 93.0L62.3 91.6L60.8 91.4L59.8 90.3L57.6 90.0L56.2 86.0L54.8 84.4L54.9 82.4L54.1 81.9L54.3 79.6L51.5 77.5L51.1 75.9L48.3 73.2L48.0 71.3L46.8 69.8L45.4 65.9L44.5 64.6L42.9 63.5L42.5 62.7L41.0 62.2L41.0 61.2L40.7 61.7L39.8 60.1L35.0 59.8L33.1 59.0L32.4 60.0L30.2 60.2L29.2 62.2L28.6 65.0L27.8 65.2L26.8 66.9L25.6 67.0L21.7 64.5L19.8 64.0L16.2 61.1L14.9 58.6L14.7 55.8L13.5 54.4L13.1 52.5L9.4 50.3L5.2 45.8L3.3 44.9L1.9 42.5L0.0 41.3L0.1 40.1L27.2 40.1L27.7 0.0Z', w: 100, h: 95, x: 67.8, y: 55.2, coords: '30.31° N · 97.74° W' }, shops: [
+        { name: 'The Needle Works', addr: '4401 Medical Pkwy, Austin, TX 78756', url: 'https://theneedleworks.com/', logo: 'images/lns/needle-works.webp' }
+    ]},
+    'dallas': { city: 'Dallas, TX', geo: { d: 'M27.7 0.0L50.6 0.0L50.6 17.3L51.1 17.1L52.8 18.8L55.2 18.9L55.3 18.2L56.2 18.7L56.7 20.3L58.3 20.3L60.0 21.1L60.9 20.8L62.1 21.7L63.1 20.9L64.5 21.3L65.0 20.9L65.2 22.2L66.2 22.4L66.1 23.3L67.1 23.5L68.5 22.4L69.2 23.2L70.0 23.1L70.1 23.8L71.8 23.0L72.5 24.8L73.1 23.9L72.8 23.6L73.1 23.7L73.5 22.7L74.0 22.6L74.3 23.4L75.2 23.8L75.9 23.1L76.6 23.2L76.3 23.7L77.8 24.2L78.3 25.0L78.8 24.4L79.7 24.4L79.9 23.7L81.6 23.3L82.4 23.7L84.1 22.9L84.6 23.3L86.5 23.4L86.9 22.6L88.9 23.5L89.7 24.5L90.4 24.5L92.4 25.7L92.8 25.4L93.3 26.3L94.9 25.9L96.0 26.3L96.0 40.2L97.7 42.1L97.5 43.7L98.3 44.4L99.4 47.4L99.9 47.4L100.0 48.8L99.6 48.9L99.7 50.6L98.3 53.1L98.6 54.0L98.1 54.9L98.5 55.3L98.6 57.3L96.9 59.7L97.6 60.8L95.3 61.1L90.8 63.5L90.3 63.5L91.2 62.6L92.6 62.1L92.1 61.7L90.5 61.9L91.0 60.6L90.6 59.9L89.7 60.8L89.1 60.6L88.6 61.8L89.4 62.4L89.5 64.1L87.9 65.3L87.5 65.1L87.4 65.8L90.0 63.8L90.8 63.9L85.8 68.0L78.5 72.0L73.4 76.5L71.2 80.8L70.6 83.3L70.8 86.5L72.3 92.8L71.3 88.7L70.6 88.6L71.1 88.4L70.4 85.6L70.7 81.5L72.8 76.5L74.1 74.9L77.7 72.7L77.9 72.1L75.9 72.9L75.7 72.2L75.2 72.1L75.0 73.7L74.0 74.6L73.2 74.1L72.3 74.5L71.8 75.1L73.1 74.8L73.3 75.4L72.0 77.2L69.7 76.8L69.5 77.1L70.6 77.2L70.6 78.0L71.5 78.4L70.3 81.8L69.6 82.2L69.5 81.4L68.6 82.2L69.3 82.6L70.2 82.3L69.8 86.4L70.1 88.1L71.3 91.1L71.2 92.2L71.4 92.8L72.3 93.0L72.3 94.0L70.8 94.2L70.6 95.0L69.5 94.6L68.5 93.4L64.3 93.0L62.3 91.6L60.8 91.4L59.8 90.3L57.6 90.0L56.2 86.0L54.8 84.4L54.9 82.4L54.1 81.9L54.3 79.6L51.5 77.5L51.1 75.9L48.3 73.2L48.0 71.3L46.8 69.8L45.4 65.9L44.5 64.6L42.9 63.5L42.5 62.7L41.0 62.2L41.0 61.2L40.7 61.7L39.8 60.1L35.0 59.8L33.1 59.0L32.4 60.0L30.2 60.2L29.2 62.2L28.6 65.0L27.8 65.2L26.8 66.9L25.6 67.0L21.7 64.5L19.8 64.0L16.2 61.1L14.9 58.6L14.7 55.8L13.5 54.4L13.1 52.5L9.4 50.3L5.2 45.8L3.3 44.9L1.9 42.5L0.0 41.3L0.1 40.1L27.2 40.1L27.7 0.0Z', w: 100, h: 95, x: 74.8, y: 33.4, coords: '32.75° N · 96.83° W' }, shops: [
+        { name: "Mimi's Needlepoint", addr: '803 W Davis St Ste 103, Dallas, TX 75208', url: 'https://mimisneedlepoint.com/', logo: 'images/lns/mimis.webp' }
+    ]},
+    'sioux-falls': { city: 'Sioux Falls, SD', geo: { d: 'M0.0 17.3L0.2 0.0L98.3 0.2L98.1 2.2L94.4 6.2L96.8 9.8L99.8 11.8L99.8 44.7L97.9 44.7L97.8 45.7L98.8 46.7L98.4 49.8L99.5 49.8L100.0 51.7L97.4 58.1L99.9 63.2L97.7 62.9L96.7 60.2L90.9 58.1L89.7 56.7L81.5 56.3L79.2 58.2L72.9 53.9L0.1 53.9L0.0 17.3Z', w: 100, h: 63.2, x: 96, y: 44.3, coords: '43.52° N · 96.74° W' }, shops: [
+        { name: "Barbara's Needlepoint", addr: '1708 S Western Ave Unit 1, Sioux Falls, SD 57105', url: 'https://www.barbarasneedlepoint.com/', logo: 'images/lns/barbaras.webp', bg: '#A4D1D4' }
+    ]},
+    'omaha': { city: 'Omaha, NE', geo: { d: 'M0.0 0.0L63.5 0.0L69.0 3.6L71.0 2.0L78.2 2.4L79.1 3.5L84.2 5.3L85.1 7.6L87.6 7.9L88.1 12.7L89.4 15.1L90.6 15.7L90.2 16.7L91.3 18.3L91.1 22.4L92.1 22.3L92.0 23.3L92.9 23.5L92.9 27.6L93.9 27.9L93.4 29.7L94.3 32.1L93.4 34.8L95.0 36.5L94.7 37.7L96.1 37.6L95.6 38.6L96.5 41.0L98.0 42.0L99.1 44.1L98.7 45.1L100.0 45.8L22.9 45.8L22.9 30.5L0.0 30.5L0.0 0.0Z', w: 100, h: 45.8, x: 91.5, y: 26.6, coords: '41.26° N · 96.05° W' }, shops: [
+        { name: 'Village Needleworks', addr: '8721 Shamrock Rd, Omaha, NE 68114', url: 'https://www.villageneedleworks.com/', logo: 'images/lns/village-needleworks.webp' }
+    ]},
+    'kansas-city': { city: 'Kansas City, MO', geo: { d: 'M0.1 0.5L60.5 0.0L62.2 1.4L63.6 3.9L65.2 4.5L63.8 8.3L65.9 16.8L75.7 26.4L76.5 32.2L77.7 33.3L80.4 31.6L84.8 33.7L83.3 36.1L83.7 38.3L80.9 43.4L81.2 45.9L87.4 50.5L87.2 52.2L88.8 51.7L93.8 55.8L93.8 58.8L95.2 61.5L93.7 63.6L95.8 68.3L97.1 69.2L97.6 67.8L100.0 69.7L98.3 77.1L95.9 76.3L94.8 79.3L94.2 77.2L93.1 77.2L93.9 81.0L92.3 82.3L93.5 83.3L91.1 83.3L92.5 85.9L91.1 87.8L80.8 88.2L85.3 83.0L85.5 80.8L84.2 78.6L17.2 78.6L17.7 27.9L14.0 26.7L13.3 23.7L10.0 20.7L12.2 16.6L13.4 16.9L12.6 13.9L9.5 14.1L5.2 10.8L5.7 9.5L2.3 5.7L1.1 2.7L1.7 1.4L0.0 1.6L0.1 0.5Z', w: 100, h: 88.2, x: 17.6, y: 31.1, coords: '38.98° N · 94.59° W' }, shops: [
+        { name: 'KC Needlepoint', addr: '8050 Wornall Rd, Kansas City, MO 64114', url: 'https://www.kcneedlepoint.com/', logo: 'images/lns/kc-needlepoint.webp' }
+    ]},
+    'barrington': { city: 'Barrington, IL', geo: { d: 'M12.0 0.0L37.8 0.3L51.5 0.3L51.1 3.8L53.2 7.8L55.4 14.5L55.3 57.2L53.8 60.5L55.6 64.3L55.8 67.5L54.0 70.1L53.6 72.4L51.1 76.3L49.5 76.6L49.8 78.9L48.8 79.8L47.9 84.0L48.4 85.2L46.6 87.8L47.9 91.0L42.1 92.7L41.6 94.5L42.9 96.9L41.1 98.4L36.0 95.6L34.4 95.8L32.3 99.0L33.0 100.0L30.8 99.8L27.7 94.6L28.8 93.5L27.7 90.0L27.7 87.2L23.2 83.3L21.6 83.7L20.1 81.4L16.0 77.7L16.1 74.8L18.4 70.2L18.1 68.5L19.4 66.3L17.5 65.0L14.4 64.2L12.8 65.9L11.7 64.8L10.8 58.9L6.2 55.0L1.9 50.3L0.2 44.8L0.0 41.1L1.2 38.6L1.4 35.3L5.3 33.3L5.7 30.5L7.5 28.7L7.8 25.6L5.5 23.0L6.4 19.8L11.8 18.9L16.2 16.7L16.6 13.9L18.4 12.7L19.0 9.2L18.6 6.9L15.5 5.2L15.1 3.3L12.0 0.0Z', w: 55.8, h: 100, x: 46.8, y: 6.4, coords: '42.16° N · 88.14° W' }, shops: [
+        { name: 'The Pepper Pot', addr: 'Icehouse Mall, 200 Applebee St, Barrington, IL 60010', url: 'https://thepepperpot.co/', logo: 'images/lns/pepper-pot.webp' }
+    ]},
+    'nashville': { city: 'Nashville, TN', geo: { d: 'M6.6 9.7L8.2 8.0L7.1 6.1L9.0 6.1L8.0 5.3L9.2 4.3L8.9 2.6L26.0 2.6L25.9 0.0L28.3 0.6L43.9 0.4L76.4 1.4L100.0 0.9L98.9 3.9L99.3 4.8L97.0 5.4L95.6 7.8L94.4 8.1L93.5 7.4L91.9 8.0L89.5 10.3L88.6 8.7L86.4 10.8L85.4 10.7L84.5 12.9L82.6 13.0L78.8 15.8L74.2 16.5L72.6 18.1L72.6 19.6L69.5 20.7L69.1 24.1L0.0 24.0L2.8 21.9L1.7 19.7L2.7 18.4L1.5 18.5L1.6 17.9L2.6 17.1L2.9 18.2L3.2 16.0L4.5 16.6L4.2 15.3L5.3 14.8L4.0 13.6L7.0 12.0L6.2 11.6L6.5 11.0L7.5 11.3L6.6 9.7Z', w: 100, h: 24.1, x: 39.8, y: 7.8, coords: '36.13° N · 86.86° W' }, shops: [
+        { name: 'Kick Ass Needlepoint', addr: '850 Hillwood Blvd #6, Nashville, TN 37209', url: 'https://kickassneedlepoint.com/', logo: 'images/lns/kick-ass.webp' },
+        { name: 'The Stitching Belle', addr: '3518 Nebraska Ave, Nashville, TN 37205', url: 'https://thestitchingbelle.com/', logo: 'images/lns/stitching-belle.webp' }
+    ]},
+    'cornelius': { city: 'Cornelius, NC', geo: { d: 'M38.8 0.4L46.8 0.6L55.9 0.7L98.2 0.5L99.6 6.2L96.3 5.7L91.9 7.2L88.7 8.3L92.0 8.6L96.0 8.5L97.1 9.8L99.2 9.3L100.0 12.7L99.3 14.3L97.9 14.5L95.0 18.0L91.1 18.2L90.5 20.6L92.1 23.0L93.4 23.5L91.0 27.4L88.9 27.0L85.2 27.3L82.6 28.2L78.6 30.9L75.4 34.5L73.8 39.0L71.4 38.0L67.2 39.0L54.0 25.4L40.9 25.2L41.1 23.5L39.3 21.1L38.1 22.0L38.1 20.5L23.7 19.8L20.6 20.3L18.1 21.7L14.1 22.6L8.1 22.8L0.0 22.8L0.3 19.4L2.6 19.1L3.5 16.8L6.4 14.6L9.5 14.6L12.4 12.4L15.4 11.6L18.0 8.4L19.5 7.5L19.9 8.9L24.4 6.2L26.5 6.7L28.0 4.1L30.2 3.4L30.7 0.0L38.8 0.4Z', w: 100, h: 39, x: 39.8, y: 16.2, coords: '35.45° N · 80.89° W' }, shops: [
+        { name: 'Cotswold Needlepoint', addr: '16930 W Catawba Ave Suite 103, Cornelius, NC 28031', url: 'https://cotswoldneedlepoint.com/', logo: 'images/lns/cotswold-monogram.png' }
+    ] },
+    'chapel-hill': { city: 'Chapel Hill, NC', geo: { d: 'M38.8 0.4L46.8 0.6L55.9 0.7L98.2 0.5L99.6 6.2L96.3 5.7L91.9 7.2L88.7 8.3L92.0 8.6L96.0 8.5L97.1 9.8L99.2 9.3L100.0 12.7L99.3 14.3L97.9 14.5L95.0 18.0L91.1 18.2L90.5 20.6L92.1 23.0L93.4 23.5L91.0 27.4L88.9 27.0L85.2 27.3L82.6 28.2L78.6 30.9L75.4 34.5L73.8 39.0L71.4 38.0L67.2 39.0L54.0 25.4L40.9 25.2L41.1 23.5L39.3 21.1L38.1 22.0L38.1 20.5L23.7 19.8L20.6 20.3L18.1 21.7L14.1 22.6L8.1 22.8L0.0 22.8L0.3 19.4L2.6 19.1L3.5 16.8L6.4 14.6L9.5 14.6L12.4 12.4L15.4 11.6L18.0 8.4L19.5 7.5L19.9 8.9L24.4 6.2L26.5 6.7L28.0 4.1L30.2 3.4L30.7 0.0L38.8 0.4Z', w: 100, h: 39, x: 61.5, y: 9.4, coords: '35.93° N · 79.03° W' }, shops: [
+        { name: 'Elizabeth Brooke', addr: '900 Willow Drive Suite 107, Chapel Hill, NC 27514', url: 'https://shopelizabethbrooke.com/', logo: 'images/lns/elizabeth-brooke.webp' }
+    ] },
+    'north-myrtle-beach': { city: 'North Myrtle Beach, SC', geo: { d: 'M12.0 3.3L16.4 1.0L22.1 0.0L47.8 1.2L47.9 3.8L50.1 2.3L53.3 6.6L53.0 9.5L76.4 9.9L100.0 33.7L96.3 35.0L91.8 39.1L87.3 45.5L86.5 50.7L83.0 54.8L78.3 54.8L77.3 57.8L72.4 61.1L69.6 64.7L65.3 66.2L60.6 70.0L60.2 71.8L55.8 73.9L51.1 79.2L46.3 77.0L46.2 72.8L42.9 66.1L40.1 64.3L39.8 58.9L38.5 54.8L32.9 51.0L29.2 46.3L29.5 43.5L23.9 39.2L21.1 34.5L16.3 31.4L13.0 26.2L12.3 23.3L9.1 17.8L7.0 18.2L0.0 12.9L0.3 10.3L4.8 4.9L12.0 3.3Z', w: 100, h: 79.2, x: 97.2, y: 34.2, coords: '33.83° N · 78.68° W' }, shops: [
+        { name: 'North Myrtle Beach Needlepoint', addr: '211 Hwy 17 N Ste 105, North Myrtle Beach, SC 29582', url: 'https://www.northmyrtlebeachneedlepoint.com/', logo: 'images/lns/north-myrtle-beach-needlepoint.png' }
+    ]},
+    'atlanta': { city: 'Atlanta, GA', geo: { d: 'M45.3 0.0L41.4 4.6L41.1 6.8L47.1 11.4L49.0 11.1L51.8 15.8L52.4 18.3L55.3 22.8L59.5 25.5L61.8 29.5L66.7 33.1L66.5 35.6L69.7 39.6L74.5 42.9L75.7 46.5L75.9 51.1L78.4 52.6L81.3 58.4L81.4 62.0L85.6 63.9L81.1 71.2L80.3 75.0L78.4 78.3L78.2 81.7L76.2 83.3L75.4 92.5L70.5 91.6L66.3 89.9L64.6 91.5L65.3 95.5L64.5 99.9L62.3 100.0L61.4 95.4L38.2 93.7L13.4 92.3L10.9 86.1L8.9 80.2L10.2 74.5L8.4 68.0L10.0 64.4L9.9 61.7L13.0 59.0L10.9 57.7L11.7 55.5L9.7 52.1L7.6 46.1L3.2 18.9L0.0 0.4L23.3 0.2L36.0 0.4Z', w: 85.6, h: 100, x: 22.2, y: 23.1, coords: '33.93° N · 84.38° W' }, shops: [
+        { name: 'The Nimble Needle', addr: '206B Johnson Ferry Rd, Atlanta, GA 30328', url: 'https://www.atlantanimbleneedle.com/', logo: 'images/lns/nimble-needle.webp' }
+    ]},
+    'bridgeport': { city: 'Bridgeport, WV', geo: { d: 'M0.9 58.1L6.4 57.4L7.0 54.1L9.5 52.9L8.6 48.3L12.4 42.2L15.3 46.3L17.5 44.9L16.8 40.8L18.2 40.4L19.5 35.8L21.8 35.9L23.9 32.4L25.5 34.0L29.1 32.7L35.9 26.7L41.6 8.3L40.8 0.6L43.2 0.0L43.2 24.1L64.5 24.1L64.3 37.6L72.3 30.6L75.1 31.4L78.7 26.6L81.3 28.9L85.1 29.4L86.5 27.5L85.7 26.8L88.8 26.7L90.8 24.7L94.4 27.2L98.0 27.2L96.9 28.3L100.0 32.8L98.1 39.5L87.6 30.7L86.4 38.6L76.9 49.2L74.3 46.9L67.9 58.4L61.0 53.7L58.1 62.2L48.5 75.6L47.8 77.2L49.3 78.9L47.1 80.6L47.7 82.1L44.1 84.3L42.5 83.0L38.1 85.6L36.3 84.2L35.1 87.4L28.8 89.2L26.1 86.5L22.1 89.9L19.6 90.1L16.0 87.9L13.3 83.5L14.5 82.0L7.0 77.8L2.8 70.9L3.6 69.7L0.0 65.5L1.3 62.2L0.9 58.1Z', w: 100, h: 90.1, x: 48.6, y: 35.4, coords: '39.29° N · 80.26° W' }, shops: [
+        { name: 'Honeysuckle Needlepoint', addr: '102 Hill St, Bridgeport, WV 26330', url: null, logo: 'images/lns/honeysuckle.webp', bg: '#FBF8F2' }
+    ]},
+    'hopewell': { city: 'Hopewell, NJ', geo: { d: 'M0.0 71.5L4.5 64.4L13.6 60.3L13.6 57.9L26.6 49.8L18.7 39.6L15.9 38.9L15.7 34.0L11.6 32.3L11.4 29.4L12.3 24.0L16.1 20.1L13.4 15.9L18.7 11.2L23.0 2.9L27.4 0.0L52.3 14.9L48.6 26.8L42.9 30.1L41.1 35.4L43.2 37.9L49.4 39.2L49.8 37.6L46.3 66.0L38.7 79.7L29.2 88.4L22.0 100.0L18.6 100.0L21.3 91.0L12.4 89.2L0.8 78.5L0.0 71.5Z', w: 52.3, h: 100, x: 25.3, y: 40, coords: '40.39° N · 74.76° W' }, shops: [
+        { name: 'The Secret Stitchery', addr: '155 W Broad St, Hopewell, NJ 08525', url: 'https://shopthesecretstitchery.com/', logo: 'images/lns/secret-stitchery.webp', bg: '#292F4D' }
+    ]},
+    'maplewood': { city: 'Maplewood, NJ', geo: { d: 'M0.0 71.5L4.5 64.4L13.6 60.3L13.6 57.9L26.6 49.8L18.7 39.6L15.9 38.9L15.7 34.0L11.6 32.3L11.4 29.4L12.3 24.0L16.1 20.1L13.4 15.9L18.7 11.2L23.0 2.9L27.4 0.0L52.3 14.9L48.6 26.8L42.9 30.1L41.1 35.4L43.2 37.9L49.4 39.2L49.8 37.6L46.3 66.0L38.7 79.7L29.2 88.4L22.0 100.0L18.6 100.0L21.3 91.0L12.4 89.2L0.8 78.5L0.0 71.5Z', w: 52.3, h: 100, x: 40.7, y: 26, coords: '40.73° N · 74.27° W' }, shops: [
+        { name: 'Mrs. Meshugga Needlepoint Shop', addr: '1875 Springfield Ave, Maplewood, NJ 07040', url: 'https://www.mrsmeshugga.com/', logo: 'images/lns/mrs-meshugga.webp' }
+    ]}
+};
+
+// Clicking an address (card or modal) opens a small menu offering
+// to copy it or open it in Google Maps, instead of following the
+// card's stretched shop-name link.
+const lnsAddrMenu = (function () {
+    let open = null;
+
+    function close() {
+        if (open) { open.remove(); open = null; }
+    }
+
+    function copyText(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+            return navigator.clipboard.writeText(text);
+        }
+        return new Promise((resolve, reject) => {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+                document.execCommand('copy') ? resolve() : reject();
+            } finally {
+                ta.remove();
+            }
+        });
+    }
+
+    function toggle(el) {
+        const wasOpen = open && open.parentElement === el;
+        close();
+        if (wasOpen) return;
+        // innerText keeps the <br> as a newline
+        const address = el.innerText.trim().replace(/\s*\n\s*/g, ', ');
+
+        const menu = document.createElement('div');
+        menu.className = 'lns-addr-menu';
+
+        const copyBtn = document.createElement('button');
+        copyBtn.type = 'button';
+        copyBtn.textContent = 'Copy address';
+        copyBtn.addEventListener('click', () => {
+            copyText(address).then(() => {
+                copyBtn.textContent = 'Copied!';
+                setTimeout(() => {
+                    menu.remove();
+                    if (open === menu) open = null;
+                }, 900);
+            }).catch(close);
+        });
+
+        const mapsBtn = document.createElement('button');
+        mapsBtn.type = 'button';
+        mapsBtn.textContent = 'Open in Maps';
+        mapsBtn.addEventListener('click', () => {
+            window.open('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(address), '_blank', 'noopener');
+            close();
+        });
+
+        menu.append(copyBtn, mapsBtn);
+        el.appendChild(menu);
+        open = menu;
+    }
+
+    document.addEventListener('click', (e) => {
+        const addr = e.target.closest('.lns-addr-btn');
+        if (!addr) { close(); return; }
+        if (e.target.closest('.lns-addr-menu')) return;
+        toggle(addr);
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') { close(); return; }
+        if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('lns-addr-btn')) {
+            e.preventDefault();
+            toggle(e.target);
+        }
+    });
+
+    function activate(el) {
+        el.classList.add('lns-addr-btn');
+        el.setAttribute('role', 'button');
+        el.tabIndex = 0;
+    }
+
+    document.querySelectorAll('.lns-card-addr:not([data-address-pending])').forEach(activate);
+
+    return { activate };
+})();
+
+(function () {
+    const modal = document.getElementById('lnsModal');
+    const cardEl = modal.querySelector('.lns-modal-card');
+    const stateSvg = document.getElementById('lnsModalState');
+    const statePath = document.getElementById('lnsModalStatePath');
+    const stateHeart = document.getElementById('lnsModalStateHeart');
+    const coordsEl = document.getElementById('lnsModalCoords');
+    const cityEl = document.getElementById('lnsModalCity');
+    const shopsEl = document.getElementById('lnsModalShops');
+    const closeBtn = modal.querySelector('.lns-modal-close');
+    let lastFocus = null;
+
+    function shopEntry(shop) {
+        const entry = document.createElement('div');
+        entry.className = 'lns-modal-shop';
+
+        if (shop.logo) {
+            const img = document.createElement('img');
+            img.className = 'lns-modal-logo';
+            img.src = shop.logo;
+            img.alt = shop.name + ' logo';
+            if (shop.url) {
+                // Duplicate of the shop-name link below, so keep it
+                // out of the tab order and screen-reader flow.
+                const logoLink = document.createElement('a');
+                logoLink.className = 'lns-modal-logo-link';
+                logoLink.href = shop.url;
+                logoLink.target = '_blank';
+                logoLink.rel = 'noopener';
+                logoLink.setAttribute('aria-hidden', 'true');
+                logoLink.tabIndex = -1;
+                logoLink.appendChild(img);
+                entry.appendChild(logoLink);
+            } else {
+                entry.appendChild(img);
+            }
+        } else {
+            const ph = document.createElement('div');
+            ph.className = 'lns-modal-logo-ph';
+            ph.setAttribute('aria-hidden', 'true');
+            ph.textContent = shop.name.charAt(0);
+            entry.appendChild(ph);
+        }
+
+        const info = document.createElement('div');
+        info.className = 'lns-modal-shop-info';
+
+        const text = document.createElement('div');
+        text.className = 'lns-modal-shop-text';
+
+        const name = document.createElement('p');
+        name.className = 'lns-modal-shop-name';
+        if (shop.url) {
+            const nameLink = document.createElement('a');
+            nameLink.className = 'lns-shop-name-link';
+            nameLink.href = shop.url;
+            nameLink.target = '_blank';
+            nameLink.rel = 'noopener';
+            const split = shop.name.lastIndexOf(' ');
+            nameLink.append(shop.name.slice(0, split + 1));
+            const tail = document.createElement('span');
+            tail.className = 'lns-name-tail';
+            tail.textContent = shop.name.slice(split + 1);
+            const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            arrow.classList.add('lns-external-arrow');
+            Object.entries({
+                width: '14', height: '14', viewBox: '0 0 16 16',
+                fill: 'none', stroke: 'currentColor', 'stroke-width': '1.75',
+                'stroke-linecap': 'round', 'stroke-linejoin': 'round',
+                'aria-hidden': 'true', focusable: 'false'
+            }).forEach(([key, value]) => arrow.setAttribute(key, value));
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d', 'M4 12 12 4M4 4h8v8');
+            arrow.appendChild(path);
+            tail.appendChild(arrow);
+            nameLink.appendChild(tail);
+            const newTab = document.createElement('span');
+            newTab.className = 'visually-hidden';
+            newTab.textContent = ' (opens in a new tab)';
+            nameLink.appendChild(newTab);
+            name.appendChild(nameLink);
+        } else {
+            name.textContent = shop.name;
+        }
+        text.appendChild(name);
+
+        const addr = document.createElement('p');
+        addr.className = 'lns-modal-shop-addr';
+        // Keep "City, ST ZIP" in one piece: if the address wraps,
+        // it breaks before the city, never inside it.
+        const address = shop.status || shop.addr;
+        const cut = address.indexOf(', ');
+        if (cut > -1) {
+            addr.append(address.slice(0, cut + 2));
+            const locality = document.createElement('span');
+            locality.className = 'lns-addr-locality';
+            locality.textContent = address.slice(cut + 2);
+            addr.appendChild(locality);
+        } else {
+            addr.textContent = address;
+        }
+        if (!shop.status) lnsAddrMenu.activate(addr);
+        text.appendChild(addr);
+
+        info.appendChild(text);
+
+        entry.appendChild(info);
+        return entry;
+    }
+
+    function openModal(slug) {
+        const stop = LNS_SHOPS[slug];
+        if (!stop) return;
+        const g = stop.geo;
+        stateSvg.setAttribute('viewBox', '0 0 ' + g.w + ' ' + g.h);
+        statePath.setAttribute('d', g.d);
+        stateHeart.setAttribute('transform', 'translate(' + g.x + ',' + g.y + ') scale(2)');
+        coordsEl.textContent = g.coords;
+        cityEl.textContent = stop.city;
+        shopsEl.innerHTML = '';
+        stop.shops.forEach(s => shopsEl.appendChild(shopEntry(s)));
+        lastFocus = document.activeElement;
+        modal.hidden = false;
+        document.body.style.overflow = 'hidden';
+        closeBtn.focus();
+    }
+
+    function closeModal() {
+        modal.hidden = true;
+        document.body.style.overflow = '';
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+
+    // Capture phase, so the global smooth-scroll anchor handler
+    // (script.js) never sees the marker click.
+    document.addEventListener('click', (e) => {
+        const marker = e.target.closest('.lns-marker');
+        if (!marker) return;
+        e.preventDefault();
+        e.stopPropagation();
+        openModal(marker.getAttribute('href').replace('#stop-', ''));
+    }, true);
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.querySelector('.lns-modal-backdrop').addEventListener('click', closeModal);
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !modal.hidden) closeModal();
+    });
+})();
