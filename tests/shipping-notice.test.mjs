@@ -52,15 +52,15 @@ test('the homepage shipping notice starts hidden in the page markup', () => {
 test('a current notice is revealed and an expired one is removed', () => {
     const notice = loadNotice();
 
-    const before = applyOn(notice, new Date(notice.cutoffEnd.getTime() - 86_400_000));
+    const before = applyOn(notice, new Date(2026, 10, 10, 23, 59, 59));
     assert.equal(before.hidden, false);
     assert.equal(before.dataset.phase, 'before');
 
-    const away = applyOn(notice, new Date(notice.cutoffEnd.getTime() + 3_600_000));
+    const away = applyOn(notice, new Date(2026, 10, 11, 0, 0, 0));
     assert.equal(away.hidden, false);
     assert.equal(away.dataset.phase, 'away');
 
-    const expired = applyOn(notice, new Date(notice.shipDate.getTime() + 86_400_000));
+    const expired = applyOn(notice, new Date(2026, 10, 16, 0, 0, 0));
     assert.equal(expired.removed, true);
     assert.equal(expired.hidden, true);
 });

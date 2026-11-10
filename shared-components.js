@@ -6,16 +6,16 @@
 
 // ===================================
 // SHIPPING NOTICE (temporary, self-expiring)
-// Jessie is out of town 9/11 - 9/14. Orders placed after Thu 9/10 ship
-// Tue 9/15. Phases: "before" (through the cutoff), "away" (cutoff to the
+// Orders placed on or after Wed 11/11 ship Mon 11/16.
+// Phases: "before" (before the cutoff), "away" (cutoff to the
 // ship date), "done" (hidden). Delete this block and the homepage markup
 // once the trip is over, or leave it: it hides itself after the ship date.
 // ===================================
 
 const ShippingNotice = {
     // Local time on the visitor's machine; a few hours of drift is fine.
-    cutoffEnd: new Date(2026, 8, 11, 0, 0, 0),   // first moment after Thu 9/10
-    shipDate: new Date(2026, 8, 15, 0, 0, 0),    // Tue 9/15
+    cutoffEnd: new Date(2026, 10, 11, 0, 0, 0),  // first moment of Wed 11/11
+    shipDate: new Date(2026, 10, 16, 0, 0, 0),   // Mon 11/16
 
     // ?notice=before|away previews a phase; ?notice=debug adds arrows to flip
     // between them (homepage postcard only; the cart note follows the real date).
@@ -36,14 +36,14 @@ const ShippingNotice = {
         if (phase === 'away') {
             return {
                 kicker: 'Shipping Alert',
-                body: 'Orders will ship <strong>Tuesday, Sept 15th</strong>.',
-                cart: 'Shipping alert: orders will ship Tuesday, Sept 15th.'
+                body: 'Orders will ship on <strong>Monday, November 16th</strong>.',
+                cart: 'Shipping alert: orders will ship on Monday, November 16th.'
             };
         }
         return {
             kicker: 'Shipping Alert',
-            body: 'Orders placed after <strong>Thursday, Sept 10th</strong> will ship on <strong>Tuesday, Sept 15th</strong>.',
-            cart: 'Shipping alert: orders placed after Thursday, Sept 10th will ship on Tuesday, Sept 15th.'
+            body: 'Orders placed on or after <strong>November 11th</strong> will ship on <strong>Monday, November 16th</strong>.',
+            cart: 'Shipping alert: orders placed on or after November 11th will ship on Monday, November 16th.'
         };
     },
 
