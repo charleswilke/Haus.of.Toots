@@ -57,8 +57,8 @@ const ShippingNotice = {
                 </p>`;
     },
 
-    // Homepage postcard: markup is static in index.html for the "before"
-    // phase; this swaps the copy or removes the section as the dates pass.
+    // Homepage postcard: markup is static and hidden in index.html; this
+    // reveals it with the right copy, or removes it once the dates pass.
     applyHomepage() {
         const section = document.getElementById('shippingNotice');
         if (!section) return;
@@ -78,6 +78,7 @@ const ShippingNotice = {
         if (kicker) kicker.textContent = c.kicker;
         if (body) body.innerHTML = c.body;
         section.dataset.phase = phase;
+        section.hidden = false;
     },
 
     addDebugArrows(section) {

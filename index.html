@@ -64,8 +64,8 @@
     <div id="shared-cursor-canvas"></div>
     <script src="shared-components.js?v=20261007d" defer></script>
 
-    <!-- Shipping Notice (temporary: Jessie's NYC trip; self-hides after 9/15 via ShippingNotice in shared-components.js) -->
-    <section class="shipping-notice-section" id="shippingNotice">
+    <!-- Shipping Notice: hidden until ShippingNotice in shared-components.js finds its dates are current, so an expired notice never shows while the page loads. -->
+    <section class="shipping-notice-section" id="shippingNotice" hidden>
         <div class="container">
             <div class="shipping-postcard" role="status">
                 <div class="shipping-postcard-inner">

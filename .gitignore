@@ -36,6 +36,9 @@ tmp/
 .vercel
 .env*.local
 
+# Per-machine Claude Code permissions (launch.json is shared and stays tracked)
+.claude/settings.local.json
+
 # Build output and dependencies
 node_modules/
 dist/
