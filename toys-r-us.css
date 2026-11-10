@@ -268,15 +268,8 @@
 }
 .costco-title {
     margin: 0;
-    color: var(--costco-red);
-    font: 900 italic clamp(40px, 21cqi, 80px) / .95 'Arial Black', Arial, sans-serif;
-    font-variant: normal;
-    -webkit-text-stroke: .4px currentColor;
-    letter-spacing: -2px;
-    text-transform: uppercase;
-    white-space: nowrap;
 }
-.costco-title-initial { font-size: 1.12em; }
+.costco-wordmark { display: block; width: 100%; height: auto; }
 .costco-series-line { margin-top: 5px; padding-right: 12px; }
 .costco-series-wordmark {
     display: block;
@@ -356,7 +349,7 @@
 .costco-executive-flourish-gutter { stroke: #0c0d0f; stroke-width: 27; }
 .costco-executive-flourish-ink { opacity: .6; }
 :is(.costco-membership-executive, .costco-membership-mobile-executive)::after { background: linear-gradient(125deg, transparent 0 38%, #ffffff0a 38% 43%, transparent 43%); }
-:is(.costco-membership-executive, .costco-membership-mobile-executive) .costco-title { -webkit-text-stroke: 3.5px #fffaf0; paint-order: stroke fill; }
+:is(.costco-membership-executive, .costco-membership-mobile-executive) .costco-wordmark { filter: drop-shadow(1.25px 0 0 #fffaf0) drop-shadow(-1.25px 0 0 #fffaf0) drop-shadow(0 1.25px 0 #fffaf0) drop-shadow(0 -1.25px 0 #fffaf0); }
 :is(.costco-membership-executive, .costco-membership-mobile-executive) .costco-series-wordmark { filter: drop-shadow(1px 0 0 #fffaf0) drop-shadow(-1px 0 0 #fffaf0) drop-shadow(0 1px 0 #fffaf0) drop-shadow(0 -1px 0 #fffaf0); }
 :is(.costco-membership-executive, .costco-membership-mobile-executive) .costco-canvases figcaption { color: #ded8ca; }
 :is(.costco-membership-executive, .costco-membership-mobile-executive) .costco-membership-footer { border-color: #c7a255; background: transparent; }
@@ -418,7 +411,6 @@
     .costco-gallery { display: none; }
     .costco-desktop-canvases { display: block; }
     .costco-cards .costco-membership-heading { width: 100%; }
-    .costco-cards .costco-title { font-size: clamp(28px, 21cqi, 54px); letter-spacing: -1px; }
     .costco-cards .costco-series-line { margin-top: 3px; padding-right: 6px; }
     .costco-cards .costco-canvases figcaption { flex-wrap: wrap; font-size: .65rem; letter-spacing: .6px; }
     .costco-cards .costco-membership-footer { margin-inline: -12px; padding: 16px 8px 14px; }
