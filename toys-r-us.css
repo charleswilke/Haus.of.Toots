@@ -130,7 +130,8 @@
 }
 /* The back is lit like the face, so a wrong-way landing reads as a plain forward R. */
 .toys-r-depth:nth-last-child(2) { color: var(--toys-plum); }
-.toys-r-quote-left { transform: scaleX(-1); }
+.toys-r-quote { --quote-side: 1; }
+.toys-r-quote-left { --quote-side: -1; transform: scaleX(-1); }
 
 .toys-photos {
     position: relative;
@@ -696,6 +697,28 @@
     84% { opacity: 1; }
     95%, 100% { opacity: 0; }
 }
+/* The quote marks start with their usual wiggle, so nothing gives the surprise away.
+   They spot the forward R before it does: both leap up and apart, tremble through the
+   pause, flinch when the R hops, watch it turn back, then sag with relief. */
+@keyframes toys-quotes-oops {
+    0%, 33%, 47% { translate: 0 0; rotate: 0deg; scale: 1; }
+    7% { rotate: -16deg; }
+    15% { rotate: 13deg; }
+    23% { rotate: -8deg; }
+    28% { rotate: 4deg; }
+    47% { animation-timing-function: cubic-bezier(.2, 1.6, .4, 1); }
+    54% { translate: calc(var(--quote-side) * .1em) -.13em; rotate: calc(var(--quote-side) * 20deg); scale: 1.28; }
+    57% { translate: calc(var(--quote-side) * .1em) -.13em; rotate: calc(var(--quote-side) * 15deg); scale: 1.28; }
+    60% { translate: calc(var(--quote-side) * .1em) -.13em; rotate: calc(var(--quote-side) * 21deg); scale: 1.28; }
+    63% { translate: calc(var(--quote-side) * .1em) -.13em; rotate: calc(var(--quote-side) * 16deg); scale: 1.28; }
+    66% { translate: calc(var(--quote-side) * .1em) -.13em; rotate: calc(var(--quote-side) * 20deg); scale: 1.28; }
+    69% { translate: calc(var(--quote-side) * .1em) -.13em; rotate: calc(var(--quote-side) * 18deg); scale: 1.28; animation-timing-function: ease-out; }
+    73% { translate: calc(var(--quote-side) * .13em) -.19em; rotate: calc(var(--quote-side) * 26deg); scale: 1.28; animation-timing-function: ease-in-out; }
+    80%, 90% { translate: calc(var(--quote-side) * .05em) -.04em; rotate: calc(var(--quote-side) * 9deg); scale: 1.1; }
+    90% { animation-timing-function: ease-in; }
+    95% { translate: 0 .03em; rotate: 0deg; scale: 1.08 .86; animation-timing-function: ease-out; }
+    100% { translate: 0 0; rotate: 0deg; scale: 1; }
+}
 @keyframes toys-r-oops-shadow {
     0%, 100% { opacity: 0; }
     7%, 94% { opacity: .3; }
@@ -744,6 +767,9 @@
     .toys-feature.is-r-oops:hover .toys-backward-r,
     .toys-feature.is-r-oops:hover .toys-r-shadow > span {
         animation: toys-r-oops 2.3s;
+    }
+    .toys-feature.is-r-oops:hover .toys-r-quote {
+        animation: toys-quotes-oops 2.3s ease-in-out;
     }
     .toys-feature.is-r-oops:hover .toys-r-shadow {
         animation: toys-r-oops-shadow 2.3s linear;
