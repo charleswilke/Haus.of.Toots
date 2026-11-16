@@ -432,7 +432,7 @@ function initNeedleHovers() {
 // ===================================
 
 function initSmoothScroll() {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    document.querySelectorAll('a[href^="#"]:not([data-native-scroll])').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
             if (href !== '#' && href !== '') {
@@ -553,16 +553,15 @@ if (prefersReducedMotion.matches) {
 // ===================================
 
 // Highlight active page in navigation
-const currentPage = window.location.pathname;
+const navPage = pathname => pathname.replace(/\/$/, '').replace(/\.html$/, '').replace(/^\/index$/, '');
+const currentPage = navPage(window.location.pathname);
 const navLinks = document.querySelectorAll('.nav-link');
 
 navLinks.forEach(link => {
-    const linkPath = new URL(link.href).pathname;
-    // Check if the link matches current page, accounting for index.html being the root
-    if (linkPath === currentPage || 
-        (currentPage === '/' && linkPath.endsWith('index.html')) ||
-        (currentPage.endsWith('index.html') && linkPath === '/')) {
+    const url = new URL(link.href);
+    if (url.origin === window.location.origin && navPage(url.pathname) === currentPage) {
         link.classList.add('active');
+        link.setAttribute('aria-current', 'page');
     }
 });
 

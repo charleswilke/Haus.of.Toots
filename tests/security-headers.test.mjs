@@ -11,9 +11,14 @@ const siteWideHeaders = Object.fromEntries(
         .map(({ key, value }) => [key, value])
 );
 
-function cspDirectives() {
+function cspDirectives(pathname = '/') {
+    const policies = vercelConfig.headers
+        .filter(rule => new RegExp(`^${rule.source}$`).test(pathname))
+        .flatMap(rule => rule.headers.filter(({ key }) => key === 'Content-Security-Policy'));
+    assert.equal(policies.length, 1, `expected one content security policy for ${pathname}`);
+
     return Object.fromEntries(
-        siteWideHeaders['Content-Security-Policy']
+        policies[0].value
             .split(';')
             .map(directive => directive.trim().split(/\s+/))
             .map(([name, ...values]) => [name, values])
@@ -25,7 +30,7 @@ test('every response carries the baseline security headers', () => {
     assert.equal(siteWideHeaders['X-Frame-Options'], 'DENY');
     assert.equal(siteWideHeaders['Referrer-Policy'], 'strict-origin-when-cross-origin');
     assert.ok(siteWideHeaders['Permissions-Policy']);
-    assert.ok(siteWideHeaders['Content-Security-Policy']);
+    assert.ok(cspDirectives()['default-src']);
 });
 
 test('the content security policy only runs scripts served by the site', () => {
@@ -42,6 +47,21 @@ test('the policy allows the Shopify hosts the storefront depends on', () => {
     assert.ok(csp['connect-src'].includes(`https://${domain}`));
     // Product photos come from Shopify's CDN.
     assert.ok(csp['img-src'].includes('https:'));
+});
+
+test('only the Returns page permits framing the Make It Right Form', () => {
+    const source = read('returns.html').match(/<iframe\b[^>]*\bsrc="([^"]+)"/i)[1];
+    const form = new URL(source);
+    assert.equal(form.origin, 'https://docs.google.com');
+    assert.equal(form.searchParams.get('embedded'), 'true');
+
+    const baseline = cspDirectives();
+    assert.deepEqual(baseline['frame-src'], ["'none'"]);
+    assert.deepEqual(cspDirectives('/about'), baseline);
+    assert.deepEqual(cspDirectives('/returns'), {
+        ...baseline,
+        'frame-src': [new URL('./', form).href],
+    });
 });
 
 // script-src 'self' blocks inline scripts and inline event handlers in

@@ -345,18 +345,6 @@ section {
     gap: var(--spacing-md);
 }
 
-/* Medium screens - reduce navigation gap for cleaner spacing */
-@media (min-width: 809px) and (max-width: 1200px) {
-    .nav-links {
-        gap: var(--spacing-sm);
-    }
-    
-    .nav-link {
-        padding: 0.5rem 0.75rem;
-    }
-    
-}
-
 /* Large screens - slightly reduced gap for optimal spacing */
 @media (min-width: 1201px) and (max-width: 1399px) {
     .nav-links {
@@ -384,6 +372,16 @@ section {
     text-transform: uppercase;
     letter-spacing: 0.5px;
     white-space: nowrap;
+}
+
+@media (min-width: 809px) and (max-width: 1200px) {
+    .nav-links {
+        gap: 0.625rem;
+    }
+
+    .nav-link {
+        padding-inline: 0.75rem;
+    }
 }
 
 .nav-link::after {

@@ -24,6 +24,11 @@
       "permanent": true
     },
     {
+      "source": "/returns/",
+      "destination": "/returns",
+      "permanent": true
+    },
+    {
       "source": "/flash-sheet-series",
       "destination": "/flash",
       "permanent": true
@@ -49,10 +54,6 @@
       "source": "/(.*)",
       "headers": [
         {
-          "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://haus-of-toots.myshopify.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
-        },
-        {
           "key": "X-Content-Type-Options",
           "value": "nosniff"
         },
@@ -67,6 +68,24 @@
         {
           "key": "Permissions-Policy",
           "value": "camera=(), microphone=(), geolocation=()"
+        }
+      ]
+    },
+    {
+      "source": "/((?!returns$).*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://haus-of-toots.myshopify.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+        }
+      ]
+    },
+    {
+      "source": "/returns",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://haus-of-toots.myshopify.com; frame-src https://docs.google.com/forms/d/e/1FAIpQLSdUaWSDtb9ejWSLEWTyemy46z5jVoBJwuhgefJ4eOfK2Wnutw/; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
         }
       ]
     },

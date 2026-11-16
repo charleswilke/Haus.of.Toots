@@ -116,6 +116,7 @@ const SharedComponents = {
                 <a href="index.html" class="nav-link">Shop</a>
                 <a href="hot-at-lns.html" class="nav-link">@ Your LNS</a>
                 <a href="https://haus-of-toots.myshopify.com/pages/ws-account-create" class="nav-link" target="_blank" rel="noopener noreferrer">Wholesale</a>
+                <a href="returns.html" class="nav-link">Returns</a>
                 <a href="about.html" class="nav-link">About</a>
             </div>
         </div>
