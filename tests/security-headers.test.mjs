@@ -64,6 +64,15 @@ test('only the Returns page permits framing the Make It Right Form', () => {
     });
 });
 
+test('the public Returns form is embedded without the visitor’s Google session', () => {
+    const markup = read('returns.html');
+    const frame = markup.match(/<iframe\b[^>]*>/i)[0];
+    const form = new URL(frame.match(/\bsrc="([^"]+)"/i)[1]);
+    form.search = '';
+    assert.match(frame, /\scredentialless(?=\s|>)/);
+    assert.ok(markup.includes(`href="${form.href}"`));
+});
+
 // script-src 'self' blocks inline scripts and inline event handlers in
 // production, where they fail silently. Page code belongs in a .js file.
 test('pages contain no inline scripts or inline event handlers', () => {

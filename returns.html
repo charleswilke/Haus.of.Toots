@@ -58,10 +58,12 @@
 
         <section class="returns-form" id="make-it-right" aria-label="Make It Right Form" tabindex="-1">
             <a class="returns-form-link" href="https://docs.google.com/forms/d/e/1FAIpQLSdUaWSDtb9ejWSLEWTyemy46z5jVoBJwuhgefJ4eOfK2Wnutw/viewform" target="_blank" rel="noopener noreferrer">Open form in a new tab</a>
+            <!-- Keep Google from routing the public embed through a visitor's signed-in account. -->
             <iframe
                 class="returns-form-frame"
                 title="Make It Right Form"
                 src="https://docs.google.com/forms/d/e/1FAIpQLSdUaWSDtb9ejWSLEWTyemy46z5jVoBJwuhgefJ4eOfK2Wnutw/viewform?embedded=true"
+                credentialless
                 loading="lazy">
             </iframe>
         </section>
