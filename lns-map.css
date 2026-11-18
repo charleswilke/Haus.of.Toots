@@ -18,7 +18,7 @@
     border: 2px dashed var(--coral-light);
     border-radius: 16px;
     padding: 0 var(--spacing-md) var(--spacing-sm);
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
     box-shadow: 0 8px 30px rgba(232, 85, 99, 0.08);
 }
 
