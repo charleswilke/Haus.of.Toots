@@ -390,10 +390,11 @@
     }
 }
 
-@media (max-width: 760px) {
+@media (max-width: 800px),
+       (hover: none) and (pointer: coarse) and (max-height: 500px) {
     .lns-sort-bar {
         --sort-cut: 0.95rem;
-        grid-template-columns: 8.5rem minmax(0, 1fr) min(53vw, calc(100% - 9rem));
+        grid-template-columns: 6.25rem minmax(0, 1fr) min(66vw, calc(100% - 6.75rem), 21.25rem);
     }
 
     .lns-list-title {
@@ -405,53 +406,42 @@
         display: none;
     }
 
-    .lns-sort-tag:has(.lns-sort-compact:not([hidden])) {
-        padding: 0;
+    .lns-sort-tag {
+        padding-inline: 0.65rem calc(0.65rem + var(--sort-cut) / 2);
     }
 
-    .lns-sort-tag:has(.lns-sort-compact:not([hidden])) .lns-sort-caption {
-        position: absolute;
-        inset-block-start: 0.52rem;
-        inset-inline: 0.85rem calc(var(--sort-cut) + 0.5rem);
-        font-size: 0.7rem;
-        pointer-events: none;
+    .lns-sort-caption {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        white-space: nowrap;
     }
 
-    .lns-sort-caption::after {
+    .lns-sort-tag:has(.lns-sort-compact:not([hidden])) .lns-sort-caption::after {
         content: '';
-        position: absolute;
-        inset-block-start: 1.32rem;
-        inset-inline-end: 0;
         width: 7px;
         height: 7px;
         border: solid currentColor;
         border-width: 0 1.5px 1.5px 0;
-        transform: rotate(45deg);
+        transform: translateY(-2px) rotate(45deg);
     }
 
+    /* Keep the native menu and use the compact caption as its visible trigger. */
     .lns-sort-compact:not([hidden]) {
+        position: absolute;
+        z-index: 1;
+        inset: 0;
         display: block;
-        appearance: none;
         width: 100%;
         height: 100%;
-        min-height: 56px;
-        padding: 1.1rem calc(var(--sort-cut) + 1rem) 0.25rem 0.85rem;
-        border: 0;
-        border-radius: inherit;
-        background: transparent;
-        color: inherit;
-        font: 600 1rem/1.15 var(--font-body);
+        opacity: 0;
+        font-size: 1rem;
         cursor: pointer;
     }
 
-    .lns-sort-compact:focus-visible {
+    .lns-sort-tag:has(.lns-sort-compact:focus-visible) {
         outline: 2px solid currentColor;
         outline-offset: -4px;
-    }
-
-    .lns-sort-compact option {
-        background: var(--cream);
-        color: var(--button-ink);
     }
 }
 
@@ -468,17 +458,9 @@
         color: HighlightText;
         forced-color-adjust: none;
     }
-
-    .lns-sort-compact:not([hidden]) {
-        appearance: auto;
-    }
-
-    .lns-sort-caption::after {
-        content: none;
-    }
 }
 
-@media (hover: none) and (pointer: coarse) and (max-width: 767px),
+@media (max-width: 767px),
        (hover: none) and (pointer: coarse) and (max-height: 500px) {
     .lns-map-frame {
         display: none;
