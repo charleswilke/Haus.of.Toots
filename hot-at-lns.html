@@ -1016,13 +1016,37 @@
                 <img class="lns-map-watermark" src="images/hauslogo.webp" alt="" aria-hidden="true" loading="lazy">
             </div>
             <div class="lns-sort-bar">
-                <label class="lns-sort-control" for="lnsShopSort" hidden>
-                    <span class="lns-sort-caption">Sort by</span>
-                    <select id="lnsShopSort">
-                        <option value="name">Business name</option>
-                        <option value="state">State</option>
+                <div class="lns-sort-tag">
+                    <label class="lns-sort-caption" id="lnsSortLabel" for="lnsShopSort">Sort by</label>
+                    <select class="lns-sort-compact" id="lnsShopSort" hidden>
+                        <option value="name:asc">Name · A–Z</option>
+                        <option value="name:desc">Name · Z–A</option>
+                        <option value="state:asc">State · A–Z</option>
+                        <option value="state:desc">State · Z–A</option>
                     </select>
-                </label>
+                </div>
+                <div class="lns-sort-toggles" hidden>
+                    <div class="lns-sort-group" role="radiogroup" aria-labelledby="lnsSortLabel">
+                        <label>
+                            <input class="visually-hidden" type="radio" name="lnsSortBy" value="name" checked>
+                            <span>Business name</span>
+                        </label>
+                        <label>
+                            <input class="visually-hidden" type="radio" name="lnsSortBy" value="state">
+                            <span>State</span>
+                        </label>
+                    </div>
+                    <div class="lns-sort-group" role="radiogroup" aria-label="Alphabetical order">
+                        <label>
+                            <input class="visually-hidden" type="radio" name="lnsSortOrder" value="asc" aria-label="Ascending, A to Z" checked>
+                            <span>A–Z</span>
+                        </label>
+                        <label>
+                            <input class="visually-hidden" type="radio" name="lnsSortOrder" value="desc" aria-label="Descending, Z to A">
+                            <span>Z–A</span>
+                        </label>
+                    </div>
+                </div>
                 <h1 class="lns-list-title">Local Needlepoint Shops</h1>
             </div>
             <div class="lns-shop-grid">
@@ -1220,6 +1244,6 @@
 
     <script src="lns-map.js?v=20261110a"></script>
     <script src="lns-hover-pin.js?v=20261117"></script>
-    <script src="lns-shop-list.js?v=20261117c"></script>
+    <script src="lns-shop-list.js?v=20261117d"></script>
 </body>
 </html>
