@@ -173,6 +173,42 @@
     fill: var(--coral-dark);
 }
 
+.lns-map.has-hover-pins :is(.lns-marker-label, .lns-marker-leader) {
+    display: none;
+}
+
+.lns-hover-pin {
+    display: none;
+    pointer-events: none;
+}
+
+.lns-hover-pin.is-visible {
+    display: inline;
+}
+
+.lns-hover-pin-icon {
+    transform-origin: 0 0;
+}
+
+.lns-hover-pin-drop {
+    fill: var(--coral-dark);
+    stroke: var(--white);
+    stroke-width: 1.75px;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 2px 3px rgba(208, 69, 82, 0.25));
+}
+
+.lns-hover-pin-badge rect {
+    fill: var(--white);
+    stroke: var(--coral-light);
+    stroke-width: 1px;
+}
+
+.lns-hover-pin-badge text {
+    fill: var(--neutral-dark);
+    font: 600 15px var(--font-body);
+}
+
 /* --- Shop cards --- */
 
 .lns-shop-grid {

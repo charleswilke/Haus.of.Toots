@@ -289,7 +289,18 @@ ${leader}      <use href="#lnsHexBig" x="${c.hx.toFixed(1)}" y="${c.hy.toFixed(1
       <text x="${labelX}" y="${labelY}" text-anchor="${anchor}" class="${labelClass}">${labelText}</text>
     </a>\n`;
 }
-svg += `  </g>\n</svg>`;
+svg += `  </g>
+  <g class="lns-hover-pin" aria-hidden="true">
+    <g class="lns-hover-pin-icon">
+      <path class="lns-hover-pin-drop" d="M0 0C-5-9-15-17-15-28a15 15 0 0 1 30 0C15-17 5-9 0 0Z"/>
+      <use href="#lnsHeart" transform="translate(0 -28) scale(1.4)" class="lns-marker-heart"/>
+    </g>
+    <g class="lns-hover-pin-badge">
+      <rect y="-77" height="26" rx="13"/>
+      <text x="0" y="-59" text-anchor="middle"></text>
+    </g>
+  </g>
+</svg>`;
 
 process.stdout.write(svg);
 

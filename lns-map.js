@@ -317,6 +317,104 @@ const lnsAddrMenu = (function () {
     closeBtn.addEventListener('click', closeModal);
     modal.querySelector('.lns-modal-backdrop').addEventListener('click', closeModal);
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && !modal.hidden) closeModal();
+        if (e.key === 'Escape' && !modal.hidden) {
+            e.preventDefault();
+            closeModal();
+        }
     });
+})();
+
+// Draw the active pin above all the other markers so nearby hearts never cover it.
+(function () {
+    const map = document.querySelector('.lns-map');
+    const pin = map.querySelector('.lns-hover-pin');
+    const icon = pin.querySelector('.lns-hover-pin-icon');
+    const badge = pin.querySelector('.lns-hover-pin-badge');
+    const label = badge.querySelector('text');
+    const backdrop = badge.querySelector('rect');
+    const modal = document.getElementById('lnsModal');
+    const hint = document.querySelector('.lns-map-hint-desktop');
+    const originalHint = hint.textContent;
+    const desktop = matchMedia('(min-width: 769px) and (hover: hover) and (pointer: fine)');
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+    let hoveredMarker = null;
+    let focusedMarker = null;
+    let activeMarker = null;
+
+    function sizeBadge() {
+        const halfWidth = Math.ceil(label.getComputedTextLength() / 2) + 11;
+        backdrop.setAttribute('x', -halfWidth);
+        backdrop.setAttribute('width', 2 * halfWidth);
+    }
+
+    function updatePin() {
+        const marker = desktop.matches && modal.hidden ? hoveredMarker || focusedMarker : null;
+        if (marker === activeMarker) return;
+        activeMarker = marker;
+        pin.classList.toggle('is-visible', Boolean(marker));
+        for (const part of [icon, badge]) {
+            part.getAnimations().forEach(animation => animation.cancel());
+        }
+        if (!marker) return;
+
+        const hex = marker.querySelector('.hx-marker');
+        pin.setAttribute('transform', `translate(${hex.getAttribute('x')} ${hex.getAttribute('y')})`);
+        const slug = marker.getAttribute('href').replace('#stop-', '');
+        label.textContent = LNS_SHOPS[slug].city;
+        sizeBadge();
+
+        if (reducedMotion.matches) return;
+        icon.animate([
+            { transform: 'scale(0.86, 0.32)', easing: 'cubic-bezier(0.18, 0.7, 0.33, 1)' },
+            { transform: 'scale(0.83, 1.19)', offset: 0.48 },
+            { transform: 'scale(1.1, 0.94)', offset: 0.73 },
+            { transform: 'scale(1)' }
+        ], 440);
+        badge.animate([
+            { transform: 'translateY(5px)', opacity: 0 },
+            { transform: 'translateY(0)', opacity: 1 }
+        ], { duration: 180, delay: 135, easing: 'ease-out', fill: 'backwards' });
+    }
+
+    for (const marker of map.querySelectorAll('.lns-marker')) {
+        marker.addEventListener('pointerenter', event => {
+            if (event.pointerType === 'touch') return;
+            hoveredMarker = marker;
+            updatePin();
+        });
+        marker.addEventListener('pointerleave', () => {
+            if (hoveredMarker !== marker) return;
+            hoveredMarker = null;
+            updatePin();
+        });
+        marker.addEventListener('focus', () => {
+            if (marker.matches(':focus-visible')) focusedMarker = marker;
+            updatePin();
+        });
+        marker.addEventListener('blur', () => {
+            focusedMarker = null;
+            updatePin();
+        });
+    }
+
+    function syncDesktop() {
+        map.classList.toggle('has-hover-pins', desktop.matches);
+        hint.textContent = desktop.matches
+            ? 'Hover over a heart to see the city. Select it to find local shops.'
+            : originalHint;
+        updatePin();
+    }
+
+    desktop.addEventListener('change', syncDesktop);
+    modal.addEventListener('focusin', updatePin);
+    document.addEventListener('keydown', event => {
+        if (event.defaultPrevented || event.key !== 'Escape' || !modal.hidden || !activeMarker) return;
+        hoveredMarker = null;
+        focusedMarker = null;
+        updatePin();
+    });
+    document.fonts.ready.then(() => {
+        if (activeMarker) sizeBadge();
+    });
+    syncDesktop();
 })();
