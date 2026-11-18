@@ -283,7 +283,7 @@ for (const c of cities) {
   const leader = callout
     ? `      <path class="lns-marker-leader" d="M${(c.hx + callout.exitDx).toFixed(1)},${(c.hy + callout.exitDy).toFixed(1)} L${callout.bendX},${callout.y - 4} H${callout.x - 10}" aria-hidden="true"/>\n`
     : "";
-  svg += `    <a href="#stop-${slug}" class="lns-marker" aria-label="${c.city}, ${c.state}: ${shopNames}">
+  svg += `    <a href="#stop-${slug}" class="lns-marker" data-city="${c.city}, ${c.state}" aria-label="${c.city}, ${c.state}: ${shopNames}">
 ${leader}      <use href="#lnsHexBig" x="${c.hx.toFixed(1)}" y="${c.hy.toFixed(1)}" class="hx-marker"/>
       <use href="#lnsHeart" x="${c.hx.toFixed(1)}" y="${c.hy.toFixed(1)}" class="lns-marker-heart"/>
       <text x="${labelX}" y="${labelY}" text-anchor="${anchor}" class="${labelClass}">${labelText}</text>
@@ -292,12 +292,12 @@ ${leader}      <use href="#lnsHexBig" x="${c.hx.toFixed(1)}" y="${c.hy.toFixed(1
 svg += `  </g>
   <g class="lns-hover-pin" aria-hidden="true">
     <g class="lns-hover-pin-icon">
-      <path class="lns-hover-pin-drop" d="M0 0C-5-9-15-17-15-28a15 15 0 0 1 30 0C15-17 5-9 0 0Z"/>
-      <use href="#lnsHeart" transform="translate(0 -28) scale(1.4)" class="lns-marker-heart"/>
+      <path class="lns-hover-pin-drop"/>
+      <use href="#lnsHeart" class="lns-marker-heart"/>
     </g>
     <g class="lns-hover-pin-badge">
-      <rect y="-77" height="26" rx="13"/>
-      <text x="0" y="-59" text-anchor="middle"></text>
+      <rect y="-76" height="26" rx="13"/>
+      <text x="0" y="-58" text-anchor="middle"></text>
     </g>
   </g>
 </svg>`;
