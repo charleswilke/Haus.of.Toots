@@ -332,6 +332,8 @@
 }
 
 .lns-sort-group {
+    position: relative;
+    isolation: isolate;
     display: flex;
     gap: 2px;
     padding: 2px;
@@ -343,10 +345,11 @@
 
 .lns-sort-group label {
     position: relative;
+    z-index: 1;
     display: flex;
 }
 
-.lns-sort-group span {
+.lns-sort-group label > span {
     display: grid;
     place-items: center;
     min-width: 44px;
@@ -356,6 +359,21 @@
     border-radius: 999px;
     white-space: nowrap;
     cursor: pointer;
+}
+
+.lns-sort-indicator {
+    position: absolute;
+    z-index: 0;
+    border: 1px solid var(--sort-plum);
+    border-radius: 999px;
+    background: linear-gradient(165deg, #79519b, var(--sort-plum) 70%, #563771);
+    transform-origin: left center;
+    pointer-events: none;
+}
+
+.lns-sort-group.has-sort-indicator input:checked + span {
+    border-color: transparent;
+    background: transparent;
 }
 
 .lns-sort-group label:hover span {
@@ -534,11 +552,16 @@
 
 @media (forced-colors: active) {
     .lns-sort-group input:checked + span,
+    .lns-sort-group.has-sort-indicator input:checked + span,
     .lns-sort-choice[aria-pressed="true"] {
         border-color: Highlight;
         background: Highlight;
         color: HighlightText;
         forced-color-adjust: none;
+    }
+
+    .lns-sort-indicator {
+        display: none;
     }
 }
 
