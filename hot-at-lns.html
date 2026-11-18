@@ -1017,13 +1017,14 @@
             </div>
             <div class="lns-sort-bar">
                 <div class="lns-sort-tag">
-                    <label class="lns-sort-caption" id="lnsSortLabel" for="lnsShopSort">Sort by</label>
-                    <select class="lns-sort-compact" id="lnsShopSort" hidden>
-                        <option value="name:asc">Name · A–Z</option>
-                        <option value="name:desc">Name · Z–A</option>
-                        <option value="state:asc">State · A–Z</option>
-                        <option value="state:desc">State · Z–A</option>
-                    </select>
+                    <span class="lns-sort-caption" id="lnsSortLabel">Sort by</span>
+                    <button class="lns-sort-trigger" type="button" aria-expanded="false" aria-controls="lnsShopSort" hidden>Sort by</button>
+                </div>
+                <div class="lns-sort-menu" id="lnsShopSort" role="group" aria-label="Sort options" hidden>
+                    <button class="lns-sort-choice" type="button" data-sort="name:asc" aria-pressed="true">Business name · A–Z</button>
+                    <button class="lns-sort-choice" type="button" data-sort="name:desc" aria-pressed="false">Business name · Z–A</button>
+                    <button class="lns-sort-choice" type="button" data-sort="state:asc" aria-pressed="false">State · A–Z</button>
+                    <button class="lns-sort-choice" type="button" data-sort="state:desc" aria-pressed="false">State · Z–A</button>
                 </div>
                 <div class="lns-sort-toggles" hidden>
                     <div class="lns-sort-group" role="radiogroup" aria-labelledby="lnsSortLabel">
@@ -1244,6 +1245,6 @@
 
     <script src="lns-map.js?v=20261110a"></script>
     <script src="lns-hover-pin.js?v=20261117"></script>
-    <script src="lns-shop-list.js?v=20261117d"></script>
+    <script src="lns-shop-list.js?v=20261117e"></script>
 </body>
 </html>

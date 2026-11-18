@@ -314,7 +314,8 @@
     inset-inline-start: var(--sort-stitch-inset);
 }
 
-.lns-sort-compact,
+.lns-sort-trigger,
+.lns-sort-menu,
 .lns-sort-toggles[hidden] {
     display: none;
 }
@@ -410,38 +411,117 @@
         padding-inline: 0.65rem calc(0.65rem + var(--sort-cut) / 2);
     }
 
-    .lns-sort-caption {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.45rem;
-        white-space: nowrap;
+    .lns-sort-tag:has(.lns-sort-trigger:not([hidden])) {
+        padding: 0;
     }
 
-    .lns-sort-tag:has(.lns-sort-compact:not([hidden])) .lns-sort-caption::after {
+    .lns-sort-tag:has(.lns-sort-trigger:not([hidden])) .lns-sort-caption {
+        display: none;
+    }
+
+    .lns-sort-trigger:not([hidden]) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.45rem;
+        width: 100%;
+        height: 100%;
+        min-height: 44px;
+        padding: 0.45rem calc(0.65rem + var(--sort-cut) / 2) 0.45rem 0.65rem;
+        border: 0;
+        background: transparent;
+        color: inherit;
+        font: inherit;
+        white-space: nowrap;
+        cursor: pointer;
+        -webkit-tap-highlight-color: rgba(255, 250, 240, 0.14);
+    }
+
+    .lns-sort-trigger::after {
         content: '';
         width: 7px;
         height: 7px;
         border: solid currentColor;
         border-width: 0 1.5px 1.5px 0;
         transform: translateY(-2px) rotate(45deg);
+        transition: transform 140ms ease;
     }
 
-    /* Keep the native menu and use the compact caption as its visible trigger. */
-    .lns-sort-compact:not([hidden]) {
+    .lns-sort-trigger[aria-expanded="true"]::after {
+        transform: translateY(2px) rotate(225deg);
+    }
+
+    .lns-sort-trigger:focus-visible {
+        outline: 2px solid currentColor;
+        outline-offset: -4px;
+    }
+
+    .lns-sort-bar:has(.lns-sort-menu:not([hidden])) {
+        z-index: 2;
+    }
+
+    .lns-sort-menu:not([hidden]) {
         position: absolute;
         z-index: 1;
-        inset: 0;
-        display: block;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-        font-size: 1rem;
+        inset-block-start: calc(100% + 0.5rem);
+        inset-inline-start: 0;
+        display: grid;
+        gap: 0.2rem;
+        width: min(13.75rem, 100%);
+        max-height: 55vh;
+        overflow-y: auto;
+        padding: 0.55rem;
+        border: 1px solid rgba(101, 65, 132, 0.3);
+        border-radius: 16px 4px 16px 4px;
+        background: #fffdf9;
+        box-shadow: 0 8px 24px rgba(90, 64, 54, 0.2);
+    }
+
+    .lns-sort-menu::before {
+        content: '';
+        position: absolute;
+        inset: 4px;
+        border: 1px dashed rgba(101, 65, 132, 0.28);
+        border-radius: 12px 3px 12px 3px;
+        pointer-events: none;
+    }
+
+    .lns-sort-choice {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        min-height: 44px;
+        padding: 0.45rem 0.6rem;
+        border: 1px solid transparent;
+        border-radius: 9px 3px 9px 3px;
+        background: transparent;
+        color: var(--sort-plum);
+        font: 600 0.875rem/1.2 var(--font-body);
+        text-align: start;
         cursor: pointer;
     }
 
-    .lns-sort-tag:has(.lns-sort-compact:focus-visible) {
-        outline: 2px solid currentColor;
-        outline-offset: -4px;
+    .lns-sort-choice:hover,
+    .lns-sort-choice[aria-pressed="true"] {
+        border-color: rgba(101, 65, 132, 0.26);
+        background: #f4edf7;
+    }
+
+    .lns-sort-choice[aria-pressed="true"]::after {
+        content: '';
+        flex: none;
+        width: 6px;
+        height: 11px;
+        margin-inline-end: 0.2rem;
+        border: solid currentColor;
+        border-width: 0 2px 2px 0;
+        transform: translateY(-1px) rotate(45deg);
+    }
+
+    .lns-sort-choice:focus-visible {
+        outline: 2px solid var(--sort-plum);
+        outline-offset: -2px;
     }
 }
 
@@ -452,7 +532,8 @@
 }
 
 @media (forced-colors: active) {
-    .lns-sort-group input:checked + span {
+    .lns-sort-group input:checked + span,
+    .lns-sort-choice[aria-pressed="true"] {
         border-color: Highlight;
         background: Highlight;
         color: HighlightText;
