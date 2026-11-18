@@ -271,7 +271,7 @@
 
 .lns-list-title {
     grid-column: 3;
-    padding: 0.6rem 1.1rem 0.65rem calc(1.1rem + var(--sort-cut) / 2);
+    padding: 0.6rem 1.65rem 0.65rem calc(1.65rem + var(--sort-cut) / 2);
     border-radius: 0 3px 25px 0;
     clip-path: polygon(var(--sort-cut) 0, 100% 0, 100% 100%, 0 100%);
     background: var(--coral-primary);
@@ -323,9 +323,9 @@
     display: flex;
     grid-column: 2;
     grid-row: 1;
-    place-self: center;
+    place-self: center start;
     gap: 0.55rem;
-    padding-inline: 0.45rem;
+    padding-inline: 0.2rem 0.45rem;
     font: 600 0.875rem/1.15 var(--font-body);
 }
 
@@ -348,7 +348,7 @@
     display: grid;
     place-items: center;
     min-width: 44px;
-    min-height: 44px;
+    min-height: 34px;
     padding: 0.2rem 0.65rem;
     border: 1px solid transparent;
     border-radius: 999px;
@@ -371,14 +371,34 @@
     outline-offset: 2px;
 }
 
+@media (pointer: coarse) {
+    .lns-sort-group label::before,
+    .lns-sort-group label::after {
+        content: '';
+        position: absolute;
+        inset-inline: 0;
+        height: 5px;
+        cursor: pointer;
+    }
+
+    .lns-sort-group label::before {
+        bottom: 100%;
+    }
+
+    .lns-sort-group label::after {
+        top: 100%;
+    }
+}
+
 @media (max-width: 760px) {
     .lns-sort-bar {
         --sort-cut: 0.95rem;
-        grid-template-columns: 8.5rem minmax(0, 1fr) min(49vw, calc(100% - 9rem));
+        grid-template-columns: 8.5rem minmax(0, 1fr) min(53vw, calc(100% - 9rem));
     }
 
     .lns-list-title {
-        padding-inline: calc(0.7rem + var(--sort-cut) / 2) 0.7rem;
+        --sort-title-padding: clamp(0.9rem, 4vw, 1.3rem);
+        padding-inline: calc(var(--sort-title-padding) + var(--sort-cut) / 2) var(--sort-title-padding);
     }
 
     .lns-sort-bar .lns-sort-toggles {
