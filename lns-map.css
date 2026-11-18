@@ -581,13 +581,113 @@
 
 .lns-shop-card {
     position: relative;
+    display: flex;
+    flex-direction: column;
     background: var(--white);
     border: 2px solid var(--neutral-light);
     border-radius: 12px;
-    padding: 1.5rem var(--spacing-sm) var(--spacing-sm);
+    padding: 0;
     text-align: center;
     scroll-margin-top: 110px;
     transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.lns-shop-card::before {
+    content: '';
+    position: absolute;
+    z-index: 2;
+    inset: 5px;
+    border: 1px dashed rgba(232, 85, 99, 0.4);
+    border-radius: 7px;
+    pointer-events: none;
+}
+
+.lns-card-main {
+    position: relative;
+    flex: 1;
+    padding: 1rem var(--spacing-sm) 0.8rem;
+}
+
+.lns-card-footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px dashed rgba(31, 111, 120, 0.35);
+    border-radius: 0 0 10px 10px;
+    background: #e7f1ee;
+    color: var(--teal-contrast);
+}
+
+.lns-card-address {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    width: 100%;
+    min-height: 54px;
+    padding: 0.5rem 0.85rem;
+    border: 0;
+    border-radius: inherit;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: center;
+}
+
+.lns-address-pin {
+    flex: none;
+    width: 24px;
+    height: 24px;
+}
+
+.lns-address-text {
+    flex: 0 1 auto;
+    min-width: 0;
+    text-align: left;
+}
+
+.lns-card-address.lns-addr-btn:is(:hover, :focus-visible),
+.lns-card-address[aria-expanded="true"] {
+    background: #d7e9e3;
+    color: var(--teal-contrast);
+    text-decoration: none;
+}
+
+.lns-card-address:focus-visible {
+    outline: 2px solid var(--teal-contrast);
+    outline-offset: -4px;
+}
+
+.lns-card-address[data-address-pending] {
+    cursor: default;
+}
+
+.lns-address-text,
+.lns-card-address .lns-card-addr,
+.lns-card-address .lns-card-city {
+    display: block;
+}
+
+.lns-card-address .lns-card-addr {
+    margin: 0;
+    color: inherit;
+    font-size: 0.875rem;
+    line-height: 1.35;
+}
+
+.lns-card-address .lns-card-city {
+    margin: 0.1rem 0 0;
+    color: inherit;
+    font-size: 0.72rem;
+    line-height: 1.35;
+    letter-spacing: 1.2px;
+}
+
+.lns-card-main .lns-card-name {
+    margin-bottom: 0;
+}
+
+.lns-shop-card:has(.lns-addr-menu) {
+    z-index: 3;
 }
 
 .lns-shop-card:hover {
@@ -793,13 +893,13 @@
     border-radius: 2px;
 }
 
-/* The card contains the stretched link; keep the name unpositioned so
-   its click area covers the card, with address controls layered above. */
+/* The stretched link covers the logo/name panel; the footer has its
+   own address action and never follows the shop website link. */
 .lns-shop-card .lns-shop-name-link::after {
     content: "";
     position: absolute;
     inset: 0;
-    border-radius: 12px;
+    border-radius: 10px 10px 0 0;
 }
 
 /* Addresses sit above the stretched card link and open their own
@@ -854,7 +954,8 @@
 
 /* The modal scrolls (overflow: auto), which would clip a menu opening
    downward past its edge — flip it above the address there */
-.lns-modal-shop .lns-addr-menu {
+.lns-modal-shop .lns-addr-menu,
+.lns-card-footer .lns-addr-menu {
     top: auto;
     bottom: calc(100% + 0.25rem);
 }

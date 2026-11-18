@@ -123,9 +123,15 @@ const lnsShopLinkHints = (function () {
 // card's stretched shop-name link.
 const lnsAddrMenu = (function () {
     let open = null;
+    let openFor = null;
+    let nextId = 0;
 
-    function close() {
+    function close(restoreFocus = false) {
+        const trigger = openFor;
         if (open) { open.remove(); open = null; }
+        if (trigger) trigger.setAttribute('aria-expanded', 'false');
+        openFor = null;
+        if (restoreFocus && trigger) trigger.focus();
     }
 
     function copyText(text) {
@@ -148,7 +154,7 @@ const lnsAddrMenu = (function () {
     }
 
     function toggle(el) {
-        const wasOpen = open && open.parentElement === el;
+        const wasOpen = openFor === el;
         close();
         if (wasOpen) return;
         // Cards and popups can break the address across lines.
@@ -156,6 +162,9 @@ const lnsAddrMenu = (function () {
 
         const menu = document.createElement('div');
         menu.className = 'lns-addr-menu';
+        menu.id = el.getAttribute('aria-controls');
+        menu.setAttribute('role', 'group');
+        menu.setAttribute('aria-label', 'Address options');
 
         const copyBtn = document.createElement('button');
         copyBtn.type = 'button';
@@ -164,10 +173,9 @@ const lnsAddrMenu = (function () {
             copyText(address).then(() => {
                 copyBtn.textContent = 'Copied!';
                 setTimeout(() => {
-                    menu.remove();
-                    if (open === menu) open = null;
+                    if (open === menu) close(true);
                 }, 900);
-            }).catch(close);
+            }).catch(() => close(true));
         });
 
         const mapsBtn = document.createElement('button');
@@ -175,23 +183,30 @@ const lnsAddrMenu = (function () {
         mapsBtn.textContent = 'Open in Maps';
         mapsBtn.addEventListener('click', () => {
             window.open('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(address), '_blank', 'noopener');
-            close();
+            close(true);
         });
 
         menu.append(copyBtn, mapsBtn);
-        el.appendChild(menu);
+        (el.closest('.lns-card-footer') || el).appendChild(menu);
         open = menu;
+        openFor = el;
+        el.setAttribute('aria-expanded', 'true');
+        copyBtn.focus();
     }
 
     document.addEventListener('click', (e) => {
+        if (e.target.closest('.lns-addr-menu')) return;
         const addr = e.target.closest('.lns-addr-btn');
         if (!addr) { close(); return; }
-        if (e.target.closest('.lns-addr-menu')) return;
         toggle(addr);
     });
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') { close(); return; }
-        if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('lns-addr-btn')) {
+        if (e.key === 'Escape' && open) {
+            close(true);
+            e.stopImmediatePropagation();
+            return;
+        }
+        if ((e.key === 'Enter' || e.key === ' ') && e.target.tagName !== 'BUTTON' && e.target.classList && e.target.classList.contains('lns-addr-btn')) {
             e.preventDefault();
             toggle(e.target);
         }
@@ -199,12 +214,15 @@ const lnsAddrMenu = (function () {
 
     function activate(el) {
         el.classList.add('lns-addr-btn');
-        el.setAttribute('role', 'button');
+        if (el.tagName === 'BUTTON') el.disabled = false;
+        else el.setAttribute('role', 'button');
         el.tabIndex = 0;
+        el.setAttribute('aria-expanded', 'false');
+        el.setAttribute('aria-controls', 'lns-addr-menu-' + nextId++);
         if (el.dataset.address) el.setAttribute('aria-label', el.dataset.address + ' — address options');
     }
 
-    document.querySelectorAll('.lns-card-addr:not([data-address-pending])').forEach(activate);
+    document.querySelectorAll('button.lns-card-address').forEach(activate);
 
     return { activate };
 })();
