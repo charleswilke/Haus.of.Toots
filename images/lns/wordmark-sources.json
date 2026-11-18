@@ -53,7 +53,10 @@
     "layout": "Cameo and official wordmark framed independently."
   },
   "Kick Ass Needlepoint": {
-    "file": "kick-ass-original.png",
+    "file": "kick-ass-restored.png",
+    "original": "kick-ass-original.png",
+    "method": "Built-in imagegen cleanup and thread routing correction",
+    "prompt": "Use case: precise-object-edit. Image 1 is the high-resolution edit target. Image 2 is the original brand reference. Correct the lime-green thread so it passes visibly THROUGH the open eye at the very top of the black sewing needle. The thread must enter the actual opening of the needle eye and emerge on the other side with a clear, physically believable over/under relationship, then continue in the existing gentle S curve toward the boot. Do not merely cross the solid shaft below the eye. Keep the needle and boot geometry, circle position, exact lettering ('KICK' / 'ASS' / 'NDLPT'), stitch-inspired glyph shapes, pink-and-lime palette, and layout otherwise unchanged. Maintain faithful flat logo artwork like Image 2: solid white boot and circle interior, solid lime and pink fills, no paper texture, gradients, grain or shading. Use smooth clean antialiased edges. Give the black circle a uniform clearly visible stroke proportional to the original (about 1% of the circle diameter) so it remains crisp when the logo is shown about 110px wide. Retain the entire needle and thread with no clipping, and preserve genuine transparency outside the logo. No extra details, no redesign.",
     "source": "https://kickassneedlepoint.com/cdn/shop/files/Kick_ass_NDLPT_circle_color_4f4c5ddd-b8c1-4181-8b27-5d6fe6d39749.png?v=1735581998&width=1200"
   },
   "When Pigs Fly Needlepoint": {
