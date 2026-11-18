@@ -256,7 +256,7 @@ function hexPoints(r) {
 }
 
 let svg = `<svg class="lns-map" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="lnsMapTitle">
-  <title id="lnsMapTitle">Hex-tile map of the lower 48 United States showing local needlepoint shops that carry Haus of Toots canvases</title>
+  <title id="lnsMapTitle">Find your local HoT spot.</title>
   <defs>
     <polygon id="lnsHex" points="${hexPoints(R * 0.86)}"/>
     <polygon id="lnsHexBig" points="${hexPoints(R * 0.86)}"/>
