@@ -113,6 +113,8 @@ const SHOPS = [
   { name: "Honeysuckle Needlepoint", url: null, addr: "102 Hill St, Bridgeport, WV 26330", city: "Bridgeport", state: "WV", lat: 39.2865, lon: -80.256 },
   { name: "Mrs. Meshugga Needlepoint Shop", url: "https://www.mrsmeshugga.com/", addr: "1875 Springfield Ave, Maplewood, NJ 07040", city: "Maplewood", state: "NJ", lat: 40.729, lon: -74.2735 },
   { name: "What's the Point Needlepoint", url: "https://whatsthepoint.biz/", addr: "126 S. High St, Dublin, OH 43017", city: "Dublin", state: "OH", lat: 40.098, lon: -83.114 },
+  // Avon city center; directions use the shop's street address.
+  { name: "Clover & Canvas Needlepoint", url: "https://cloverandcanvas.com/", addr: "36840 Detroit Rd, Avon, OH 44011", city: "Avon", state: "OH", lat: 41.4517, lon: -82.0354 },
   { name: "When Pigs Fly Needlepoint", url: "https://whenpigsflyndlpt.com/", addr: "Cincinnati, OH", city: "Cincinnati", state: "OH", lat: 39.1031, lon: -84.512 },
   { name: "The Point of It All", url: "https://thepointofitallonline.com/", addr: "5115 MacArthur Blvd NW, Washington, DC 20016", city: "Washington", state: "DC", lat: 38.926, lon: -77.101 },
   // City-center coordinates for the stylized map; directions use the street address.
@@ -209,6 +211,7 @@ cities.sort((a, b) => a.lon - b.lon);
 const LABELS = {
   "Portland":    { dx: 14,  dy: -2,  anchor: "start" },
   "Dublin":      { dx: 0,   dy: -25, anchor: "middle" },
+  "Avon":        { dx: 0,   dy: -25, anchor: "middle" },
   "Cincinnati":  { dx: -14, dy: -2,  anchor: "end" },
   "Los Angeles": { dx: 14,  dy: -2,  anchor: "start" },
   "Denver":      { dx: 0,   dy: -25, anchor: "middle" },

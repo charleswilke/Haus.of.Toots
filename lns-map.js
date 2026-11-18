@@ -23,6 +23,10 @@ const LNS_SHOPS = {
     'dublin': { city: 'Dublin, OH', geo: { d: 'M92.4 0.0L92.4 37.8L89.2 39.3L90.7 42.4L90.6 46.7L87.7 53.5L85.7 63.8L77.3 72.9L74.6 74.1L72.3 72.3L69.8 76.3L67.3 76.1L64.6 81.5L65.2 84.7L63.0 87.4L59.8 83.1L55.8 89.8L56.8 94.1L54.3 95.7L53.4 99.4L47.8 100.0L44.8 96.1L42.4 95.4L41.4 90.6L38.4 91.5L36.0 94.3L27.9 92.1L24.5 94.1L19.7 90.3L12.9 89.2L12.6 86.7L8.2 80.9L0.0 80.9L0.4 41.6L0.2 8.0L29.3 6.9L37.7 10.8L40.5 13.1L42.6 10.9L47.3 15.4L50.3 16.8L60.3 13.1L66.1 13.9L72.5 8.6L81.8 3.5L92.4 0.0Z', w: 92.4, h: 100, x: 36.6, y: 52.9, coords: '40.10° N · 83.11° W' }, shops: [
         { name: "What's the Point Needlepoint", addr: '126 S. High St, Dublin, OH 43017', url: 'https://whatsthepoint.biz/', logo: 'images/lns/whats-the-point.webp' }
     ]},
+    // Avon city center; directions use the shop's street address.
+    'avon': { city: 'Avon, OH', geo: { d: 'M92.4 0.0L92.4 37.8L89.2 39.3L90.7 42.4L90.6 46.7L87.7 53.5L85.7 63.8L77.3 72.9L74.6 74.1L72.3 72.3L69.8 76.3L67.3 76.1L64.6 81.5L65.2 84.7L63.0 87.4L59.8 83.1L55.8 89.8L56.8 94.1L54.3 95.7L53.4 99.4L47.8 100.0L44.8 96.1L42.4 95.4L41.4 90.6L38.4 91.5L36.0 94.3L27.9 92.1L24.5 94.1L19.7 90.3L12.9 89.2L12.6 86.7L8.2 80.9L0.0 80.9L0.4 41.6L0.2 8.0L29.3 6.9L37.7 10.8L40.5 13.1L42.6 10.9L47.3 15.4L50.3 16.8L60.3 13.1L66.1 13.9L72.5 8.6L81.8 3.5L92.4 0.0Z', w: 92.4, h: 100, x: 59.8, y: 14.8, coords: '41.45° N · 82.04° W' }, shops: [
+        { name: 'Clover & Canvas Needlepoint', addr: '36840 Detroit Rd, Avon, OH 44011', url: 'https://cloverandcanvas.com/', logo: 'images/lns/clover-and-canvas.png' }
+    ]},
     'cincinnati': { city: 'Cincinnati, OH', geo: { d: 'M92.4 0.0L92.4 37.8L89.2 39.3L90.7 42.4L90.6 46.7L87.7 53.5L85.7 63.8L77.3 72.9L74.6 74.1L72.3 72.3L69.8 76.3L67.3 76.1L64.6 81.5L65.2 84.7L63.0 87.4L59.8 83.1L55.8 89.8L56.8 94.1L54.3 95.7L53.4 99.4L47.8 100.0L44.8 96.1L42.4 95.4L41.4 90.6L38.4 91.5L36.0 94.3L27.9 92.1L24.5 94.1L19.7 90.3L12.9 89.2L12.6 86.7L8.2 80.9L0.0 80.9L0.4 41.6L0.2 8.0L29.3 6.9L37.7 10.8L40.5 13.1L42.6 10.9L47.3 15.4L50.3 16.8L60.3 13.1L66.1 13.9L72.5 8.6L81.8 3.5L92.4 0.0Z', w: 92.4, h: 100, x: 6.6, y: 80.9, coords: '39.10° N · 84.51° W' }, shops: [
         { name: 'When Pigs Fly Needlepoint', addr: 'Cincinnati, OH', url: 'https://whenpigsflyndlpt.com/', logo: 'images/lns/when-pigs-fly.webp' }
     ]},
@@ -81,6 +85,39 @@ const LNS_SHOPS = {
     ]}
 };
 
+// Shared by the static shop cards and dynamically created map popups.
+const lnsShopLinkHints = (function () {
+    let nextId = 0;
+
+    function activate(link) {
+        link.setAttribute('aria-label', link.textContent.trim());
+        // Position the hint on the name without shrinking the stretched
+        // link's click area from the whole card to just its text.
+        const label = document.createElement('span');
+        label.className = 'lns-link-label';
+        label.append(...link.childNodes);
+        link.appendChild(label);
+        const hint = document.createElement('span');
+        hint.className = 'lns-site-tooltip';
+        hint.id = 'lns-site-tip-' + nextId++;
+        hint.setAttribute('role', 'tooltip');
+        hint.textContent = 'Visit LNS site';
+        link.setAttribute('aria-describedby', hint.id);
+        label.appendChild(hint);
+        const reset = () => link.classList.remove('lns-hint-dismissed');
+        link.addEventListener('pointerleave', reset);
+        link.addEventListener('blur', reset);
+    }
+
+    document.querySelectorAll('.lns-shop-name-link').forEach(activate);
+    document.addEventListener('keydown', event => {
+        if (event.key !== 'Escape') return;
+        document.querySelectorAll('.lns-shop-name-link:hover, .lns-shop-name-link:focus')
+            .forEach(link => link.classList.add('lns-hint-dismissed'));
+    });
+    return { activate };
+})();
+
 // Clicking an address (card or modal) opens a small menu offering
 // to copy it or open it in Google Maps, instead of following the
 // card's stretched shop-name link.
@@ -115,7 +152,7 @@ const lnsAddrMenu = (function () {
         close();
         if (wasOpen) return;
         // Cards and popups can break the address across lines.
-        const address = el.innerText.trim().replace(/,?\s*\n\s*/g, ', ');
+        const address = el.dataset.address || el.innerText.trim().replace(/,?\s*\n\s*/g, ', ');
 
         const menu = document.createElement('div');
         menu.className = 'lns-addr-menu';
@@ -164,6 +201,7 @@ const lnsAddrMenu = (function () {
         el.classList.add('lns-addr-btn');
         el.setAttribute('role', 'button');
         el.tabIndex = 0;
+        if (el.dataset.address) el.setAttribute('aria-label', el.dataset.address + ' — address options');
     }
 
     document.querySelectorAll('.lns-card-addr:not([data-address-pending])').forEach(activate);
@@ -251,6 +289,7 @@ const lnsAddrMenu = (function () {
             newTab.className = 'visually-hidden';
             newTab.textContent = ' (opens in a new tab)';
             nameLink.appendChild(newTab);
+            lnsShopLinkHints.activate(nameLink);
             name.appendChild(nameLink);
         } else {
             name.textContent = shop.name;

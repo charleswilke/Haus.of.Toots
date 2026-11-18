@@ -12,8 +12,9 @@
     const orderByState = new Map(states.map((code, index) => [code, index]));
     const shops = Array.from(grid.children, card => {
         const location = card.querySelector('.lns-card-city').textContent.trim();
-        const code = location.slice(location.lastIndexOf(',') + 1).trim();
-        const name = card.querySelector('.lns-card-name').textContent.trim()
+        const code = location.match(/,\s*([A-Z]{2})\b/)?.[1];
+        const name = (card.querySelector('.lns-shop-name-link')?.getAttribute('aria-label')
+            || card.querySelector('.lns-card-name').textContent).trim()
             .replace(/^The\s+/i, '')
             .replace(/\s*\(opens in a new tab\)$/, '');
         return { card, name, state: orderByState.get(code) ?? states.length };

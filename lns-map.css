@@ -611,6 +611,14 @@
     object-fit: contain;
 }
 
+/* Tint the white mark sage and compensate for its transparent top/bottom
+   padding (81px of the 500px source) within the shared logo area. */
+.lns-card-logo[src*="clover-and-canvas"],
+.lns-modal-logo[src*="clover-and-canvas"] {
+    filter: brightness(0) saturate(100%) invert(37%) sepia(15%) saturate(495%) hue-rotate(71deg) brightness(94%) contrast(87%);
+    transform: scale(1.2);
+}
+
 /* Tint the transparent Stitchers Memphis mark navy (#0e1b4d). */
 .lns-card-logo[src*="stitchers-memphis"],
 .lns-modal-logo[src*="stitchers-memphis"] {
@@ -650,7 +658,7 @@
     text-transform: uppercase;
     letter-spacing: 2px;
     color: var(--neutral-mid);
-    margin-bottom: 0.35rem;
+    margin-bottom: var(--spacing-sm);
 }
 
 .lns-card-name {
@@ -666,7 +674,11 @@
     font-size: 0.95rem;
     color: var(--neutral-dark);
     line-height: 1.5;
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: 0.2rem;
+}
+
+.lns-card-zip {
+    white-space: nowrap;
 }
 
 .lns-shop-name-link {
@@ -684,6 +696,89 @@
     height: 0.65em;
     margin-left: 0.3em;
     vertical-align: 0.05em;
+    transition: transform 180ms ease;
+}
+
+.lns-shop-name-link:is(:hover, :focus-visible) .lns-external-arrow {
+    transform: translate(2px, -2px);
+}
+
+.lns-link-label {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+}
+
+/* Anchor the hint to the text while the link still covers the card. */
+.lns-site-tooltip {
+    position: absolute;
+    z-index: 6;
+    bottom: calc(100% + 0.35rem);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.55rem 0.95rem;
+    border: 1px solid var(--coral-light);
+    border-radius: 10px;
+    background: var(--cream);
+    color: var(--coral-ink);
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1.3;
+    white-space: nowrap;
+    box-shadow: 0 3px 0 rgba(232, 85, 99, 0.14), 0 5px 14px rgba(232, 85, 99, 0.1);
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 120ms ease;
+}
+
+.lns-site-tooltip::before {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border: 1px dashed var(--coral-light);
+    border-radius: 6px;
+    pointer-events: none;
+}
+
+.lns-site-tooltip::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    border-right: 1px solid var(--coral-light);
+    border-bottom: 1px solid var(--coral-light);
+    background: var(--cream);
+    transform: translateX(-50%) rotate(45deg);
+    pointer-events: none;
+}
+
+.lns-shop-name-link:is(:hover, :focus-visible):not(.lns-hint-dismissed) .lns-site-tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+.lns-shop-card:has(.lns-shop-name-link:is(:hover, :focus-visible)) {
+    z-index: 2;
+}
+
+.lns-modal-shop-name .lns-shop-name-link {
+    position: relative;
+    display: inline-block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lns-external-arrow,
+    .lns-site-tooltip {
+        transition: none;
+    }
+
+    .lns-shop-name-link:is(:hover, :focus-visible) .lns-external-arrow {
+        transform: none;
+    }
 }
 
 .lns-shop-name-link:hover,
