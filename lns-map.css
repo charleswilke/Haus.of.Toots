@@ -22,16 +22,6 @@
     box-shadow: 0 8px 30px rgba(232, 85, 99, 0.08);
 }
 
-/* Visually hidden page title (the map speaks for itself) */
-.lns-sr-title {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
-}
-
 .lns-map {
     display: block;
     width: 100%;
@@ -73,10 +63,6 @@
     letter-spacing: 0.035em;
     line-height: 1.4;
     box-shadow: 0 3px 0 rgba(31, 111, 120, 0.16);
-}
-
-.lns-map-hint-mobile {
-    display: none;
 }
 
 .lns-map-hint::after {
@@ -173,7 +159,395 @@
     fill: var(--coral-dark);
 }
 
+.lns-map.has-hover-pins :is(.lns-marker-label, .lns-marker-leader) {
+    display: none;
+}
+
+.lns-marker.is-warping :is(.hx-marker, .lns-marker-heart) {
+    opacity: 0;
+}
+
+.lns-hover-pin {
+    display: none;
+    pointer-events: none;
+}
+
+.lns-hover-pin.is-visible {
+    display: inline;
+}
+
+.lns-hover-pin-drop {
+    fill: var(--coral-dark);
+    stroke: var(--white);
+    stroke-width: 1px;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 1px 2px rgba(208, 69, 82, 0.25));
+}
+
+.lns-hover-pin-badge {
+    visibility: hidden;
+}
+
+.lns-hover-pin-badge.is-visible {
+    visibility: visible;
+}
+
+.lns-hover-pin-badge rect {
+    fill: var(--white);
+    stroke: var(--coral-light);
+}
+
+.lns-hover-pin-badge text {
+    fill: var(--neutral-dark);
+    font: 600 15px var(--font-body);
+}
+
+@media (max-width: 768px) {
+    .lns-hover-pin-badge text {
+        font-size: 20px;
+    }
+}
+
 /* --- Shop cards --- */
+
+.lns-sort-bar {
+    --sort-plum: #654184;
+    --sort-cut: 1.5rem;
+    --sort-stitch-inset: 6px;
+    --sort-stitch-end: calc(var(--sort-cut) * 0.107142857);
+    --sort-stitch-diagonal: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 56' preserveAspectRatio='none'%3E%3Cpath d='M25 6 3 50' fill='none' stroke='%23fffaf0' stroke-opacity='.8' stroke-width='1' stroke-dasharray='3 3' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr) max-content;
+    min-height: 3.625rem;
+    margin-bottom: var(--spacing-sm);
+    border: 1px solid rgba(90, 64, 54, 0.24);
+    border-radius: 26px 4px 26px 4px;
+    background:
+        linear-gradient(90deg, rgba(90, 64, 54, 0.045) 1px, transparent 1px),
+        linear-gradient(rgba(90, 64, 54, 0.045) 1px, transparent 1px),
+        #fffdf9;
+    background-size: 8px 8px;
+    box-shadow: 0 10px 24px rgba(90, 64, 54, 0.1), 0 5px 0 -2px rgba(255, 107, 122, 0.22);
+}
+
+.lns-sort-bar::after,
+.lns-sort-tag::before,
+.lns-sort-tag::after,
+.lns-list-title::before,
+.lns-list-title::after {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+}
+
+.lns-sort-bar::after {
+    z-index: -1;
+    inset: 5px;
+    border: 1px dashed rgba(232, 85, 99, 0.36);
+    border-radius: 20px 2px 20px 2px;
+}
+
+.lns-sort-tag,
+.lns-list-title {
+    position: relative;
+    display: grid;
+    grid-row: 1;
+    place-items: center;
+    margin: 0;
+    color: var(--cream);
+}
+
+.lns-sort-tag {
+    grid-column: 1;
+    padding: 0.45rem calc(1.05rem + var(--sort-cut)) 0.45rem 1.1rem;
+    border-radius: 25px 0 0 3px;
+    clip-path: polygon(0 0, 100% 0, calc(100% - var(--sort-cut)) 100%, 0 100%);
+    background: linear-gradient(150deg, rgba(49, 23, 72, 0.30), rgba(49, 23, 72, 0.48)),
+        url('images/filter-variegated-purple-thread.svg') center / 100% 100%, var(--sort-plum);
+    font: 600 0.875rem/1.15 var(--font-body);
+}
+
+.lns-list-title {
+    grid-column: 3;
+    padding: 0.6rem 1.65rem 0.65rem calc(1.65rem + var(--sort-cut) / 2);
+    border-radius: 0 3px 25px 0;
+    clip-path: polygon(var(--sort-cut) 0, 100% 0, 100% 100%, 0 100%);
+    background: var(--coral-primary);
+    font: 400 clamp(1rem, 3.5vw, 1.55rem)/1.05 var(--font-display);
+    text-align: center;
+    text-wrap: balance;
+}
+
+/* Keep the stitch inset independent of the width of either fabric tab. */
+.lns-sort-tag::after,
+.lns-list-title::after {
+    inset: 10.7142857% var(--sort-stitch-inset);
+    border: 1px dashed rgba(255, 250, 240, 0.8);
+}
+
+.lns-sort-tag::after {
+    border-right: 0;
+    border-radius: 19px 0 0 0;
+    clip-path: polygon(0 0, calc(100% - var(--sort-stitch-end)) 0, calc(100% - var(--sort-cut) + var(--sort-stitch-end)) 100%, 0 100%);
+}
+
+.lns-list-title::after {
+    border-left: 0;
+    border-radius: 0 0 19px 0;
+    clip-path: polygon(calc(var(--sort-cut) - var(--sort-stitch-end)) 0, 100% 0, 100% 100%, var(--sort-stitch-end) 100%);
+}
+
+.lns-sort-tag::before,
+.lns-list-title::before {
+    inset-block: 0;
+    width: var(--sort-cut);
+    background: var(--sort-stitch-diagonal) center / 100% 100% no-repeat;
+}
+
+.lns-sort-tag::before {
+    inset-inline-end: var(--sort-stitch-inset);
+}
+
+.lns-list-title::before {
+    inset-inline-start: var(--sort-stitch-inset);
+}
+
+.lns-sort-trigger,
+.lns-sort-menu,
+.lns-sort-toggles[hidden] {
+    display: none;
+}
+
+.lns-sort-toggles {
+    --sort-pill-height: 26px;
+    display: flex;
+    grid-column: 2;
+    grid-row: 1;
+    place-self: center start;
+    gap: 0.55rem;
+    padding-inline: 0.2rem 0.45rem;
+    font: 600 0.875rem/1.15 var(--font-body);
+}
+
+.lns-sort-group {
+    display: flex;
+    gap: 2px;
+    padding: 2px;
+    border: 1px solid rgba(101, 65, 132, 0.32);
+    border-radius: 999px;
+    background: #f4edf7;
+    color: var(--sort-plum);
+}
+
+.lns-sort-group label {
+    position: relative;
+    display: flex;
+}
+
+.lns-sort-group span {
+    display: grid;
+    place-items: center;
+    min-width: 44px;
+    min-height: var(--sort-pill-height);
+    padding: 0.1rem 0.65rem;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.lns-sort-group label:hover span {
+    border-color: currentColor;
+}
+
+.lns-sort-group input:checked + span {
+    border-color: var(--sort-plum);
+    background: linear-gradient(165deg, #79519b, var(--sort-plum) 70%, #563771);
+    color: var(--cream);
+}
+
+.lns-sort-group input:focus-visible + span {
+    outline: 2px solid var(--button-ink);
+    outline-offset: 2px;
+}
+
+@media (pointer: coarse) {
+    .lns-sort-group label::before,
+    .lns-sort-group label::after {
+        content: '';
+        position: absolute;
+        inset-inline: 0;
+        height: calc((44px - var(--sort-pill-height)) / 2);
+        cursor: pointer;
+    }
+
+    .lns-sort-group label::before {
+        bottom: 100%;
+    }
+
+    .lns-sort-group label::after {
+        top: 100%;
+    }
+}
+
+@media (max-width: 800px),
+       (hover: none) and (pointer: coarse) and (max-height: 500px) {
+    .lns-sort-bar {
+        --sort-cut: 0.95rem;
+        grid-template-columns: 6.25rem minmax(0, 1fr) min(66vw, calc(100% - 6.75rem), 21.25rem);
+    }
+
+    .lns-list-title {
+        --sort-title-padding: clamp(0.9rem, 4vw, 1.3rem);
+        padding-inline: calc(var(--sort-title-padding) + var(--sort-cut) / 2) var(--sort-title-padding);
+    }
+
+    .lns-sort-bar .lns-sort-toggles {
+        display: none;
+    }
+
+    .lns-sort-tag {
+        padding-inline: 0.65rem calc(0.65rem + var(--sort-cut) / 2);
+    }
+
+    .lns-sort-tag:has(.lns-sort-trigger:not([hidden])) {
+        padding: 0;
+    }
+
+    .lns-sort-tag:has(.lns-sort-trigger:not([hidden])) .lns-sort-caption {
+        display: none;
+    }
+
+    .lns-sort-trigger:not([hidden]) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.45rem;
+        width: 100%;
+        height: 100%;
+        min-height: 44px;
+        padding: 0.45rem calc(0.65rem + var(--sort-cut) / 2) 0.45rem 0.65rem;
+        border: 0;
+        background: transparent;
+        color: inherit;
+        font: inherit;
+        white-space: nowrap;
+        cursor: pointer;
+        -webkit-tap-highlight-color: rgba(255, 250, 240, 0.14);
+    }
+
+    .lns-sort-trigger::after {
+        content: '';
+        width: 7px;
+        height: 7px;
+        border: solid currentColor;
+        border-width: 0 1.5px 1.5px 0;
+        transform: translateY(-2px) rotate(45deg);
+        transition: transform 140ms ease;
+    }
+
+    .lns-sort-trigger[aria-expanded="true"]::after {
+        transform: translateY(2px) rotate(225deg);
+    }
+
+    .lns-sort-trigger:focus-visible {
+        outline: 2px solid currentColor;
+        outline-offset: -4px;
+    }
+
+    .lns-sort-bar:has(.lns-sort-menu:not([hidden])) {
+        z-index: 2;
+    }
+
+    .lns-sort-menu:not([hidden]) {
+        position: absolute;
+        z-index: 1;
+        inset-block-start: calc(100% + 0.5rem);
+        inset-inline-start: 0;
+        display: grid;
+        gap: 0.2rem;
+        width: min(13.75rem, 100%);
+        max-height: 55vh;
+        overflow-y: auto;
+        padding: 0.55rem;
+        border: 1px solid rgba(101, 65, 132, 0.3);
+        border-radius: 16px 4px 16px 4px;
+        background: #fffdf9;
+        box-shadow: 0 8px 24px rgba(90, 64, 54, 0.2);
+    }
+
+    .lns-sort-menu::before {
+        content: '';
+        position: absolute;
+        inset: 4px;
+        border: 1px dashed rgba(101, 65, 132, 0.28);
+        border-radius: 12px 3px 12px 3px;
+        pointer-events: none;
+    }
+
+    .lns-sort-choice {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        min-height: 44px;
+        padding: 0.45rem 0.6rem;
+        border: 1px solid transparent;
+        border-radius: 9px 3px 9px 3px;
+        background: transparent;
+        color: var(--sort-plum);
+        font: 600 0.875rem/1.2 var(--font-body);
+        text-align: start;
+        cursor: pointer;
+    }
+
+    .lns-sort-choice:hover,
+    .lns-sort-choice[aria-pressed="true"] {
+        border-color: rgba(101, 65, 132, 0.26);
+        background: #f4edf7;
+    }
+
+    .lns-sort-choice[aria-pressed="true"]::after {
+        content: '';
+        flex: none;
+        width: 6px;
+        height: 11px;
+        margin-inline-end: 0.2rem;
+        border: solid currentColor;
+        border-width: 0 2px 2px 0;
+        transform: translateY(-1px) rotate(45deg);
+    }
+
+    .lns-sort-choice:focus-visible {
+        outline: 2px solid var(--sort-plum);
+        outline-offset: -2px;
+    }
+}
+
+@media (max-width: 350px) {
+    .lns-list-title {
+        font-size: 0.925rem;
+    }
+}
+
+@media (forced-colors: active) {
+    .lns-sort-group input:checked + span,
+    .lns-sort-choice[aria-pressed="true"] {
+        border-color: Highlight;
+        background: Highlight;
+        color: HighlightText;
+        forced-color-adjust: none;
+    }
+}
+
+@media (max-width: 767px),
+       (hover: none) and (pointer: coarse) and (max-height: 500px) {
+    .lns-map-frame {
+        display: none;
+    }
+}
 
 .lns-shop-grid {
     display: grid;
@@ -597,7 +971,7 @@
         margin-bottom: 3.5rem;
     }
 
-    /* On mobile the tag hangs outside the bottom seam. Leave room
+    /* On narrow screens the tag hangs outside the bottom seam. Leave room
        below the frame for the tag and a small gap before the shop cards. */
     .lns-map-hint {
         position: absolute;
@@ -610,14 +984,6 @@
         margin: 0;
         padding: calc(0.45rem + 8px) 1rem 0.45rem;
         font-size: 0.85rem;
-    }
-
-    .lns-map-hint-desktop {
-        display: none;
-    }
-
-    .lns-map-hint-mobile {
-        display: inline;
     }
 
     /* Labels get dense on small screens; markers + numbers still tell the story */

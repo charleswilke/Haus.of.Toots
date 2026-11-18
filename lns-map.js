@@ -317,6 +317,9 @@ const lnsAddrMenu = (function () {
     closeBtn.addEventListener('click', closeModal);
     modal.querySelector('.lns-modal-backdrop').addEventListener('click', closeModal);
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && !modal.hidden) closeModal();
+        if (e.key === 'Escape' && !modal.hidden) {
+            e.preventDefault();
+            closeModal();
+        }
     });
 })();
