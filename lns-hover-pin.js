@@ -16,7 +16,7 @@
     const raised = [1, 1, 1];
     // Each beat specifies progress, outline blend, width, and height.
     const springUp = [[.18, 0, 1.28, .65], [.56, 1, .82, 1.24], [.78, 1, 1.09, .93], [1, ...raised]];
-    const springBack = [[.68, .08, 1.15, .76], [1, ...rest]];
+    const springBack = [[.18, .94, .88, 1.14], [.54, 0, 1.32, .62], [.78, 0, .9, 1.13], [1, ...rest]];
     const map = document.querySelector('.lns-map');
     const pin = map.querySelector('.lns-hover-pin');
     const icon = pin.querySelector('.lns-hover-pin-icon');
@@ -88,7 +88,7 @@
 
         if (!marker) {
             if (drawnMarker && desktop.matches && modal.hidden && !reducedMotion.matches) {
-                animate(springBack, 230, resetPin);
+                animate(springBack, 420, resetPin);
             } else {
                 resetPin();
             }
