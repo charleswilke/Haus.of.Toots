@@ -1054,11 +1054,24 @@
                 </div>
                 <h1 class="lns-list-title">Local Needlepoint Shops</h1>
             </div>
+            <svg class="lns-artwork-filters" width="0" height="0" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <filter id="lnsSageInk" color-interpolation-filters="sRGB">
+                        <feColorMatrix type="matrix" values="0 0 0 0 0.3254902 0 0 0 0 0.4235294 0 0 0 0 0.4078431 0 0 0 1 0"/>
+                    </filter>
+                    <filter id="lnsRoseInk" color-interpolation-filters="sRGB">
+                        <feColorMatrix type="matrix" values="0 0 0 0 0.6392157 0 0 0 0 0.1803922 0 0 0 0 0.2627451 0 0 0 1 0"/>
+                    </filter>
+                    <!-- Exchange the navy ground and white lettering while retaining the green alligator. -->
+                    <filter id="lnsSecretOnWhite" color-interpolation-filters="sRGB">
+                        <feColorMatrix type="matrix" values="0.3877194 -2.2767026 1.0033079 0 1.0464596 -0.0337327 -1.3168834 0.4155145 0 1.1194154 0.3790216 -2.0359540 0.9452716 0 1.0214647 0 0 0 1 0"/>
+                    </filter>
+                </defs>
+            </svg>
             <div class="lns-shop-grid">
                 <div class="lns-shop-card" data-city="los-angeles" id="stop-los-angeles">
                     <div class="lns-card-main">
-                        <img class="lns-card-logo" src="images/lns/angel-city-stitchery.webp" alt="" loading="lazy">
-                        <h3 class="lns-card-name"><a href="https://angelcitystitchery.com/" target="_blank" rel="noopener" class="lns-shop-name-link">Angel City <span class="lns-name-tail">Stitchery<svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span><span class="visually-hidden"> (opens in a new tab)</span></a></h3>
+                        <h3 class="lns-card-name lns-card-name-artwork"><a href="https://angelcitystitchery.com/" target="_blank" rel="noopener" class="lns-shop-name-link"><span class="lns-brand-lockup lns-brand-lockup-wide"><img class="lns-brand-wordmark lns-brand-wordmark-large" src="images/lns/angel-city-wordmark.png" alt="" loading="lazy"></span><span class="visually-hidden">Angel City Stitchery (opens in a new tab)</span><svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></a></h3>
                     </div>
                     <div class="lns-card-footer">
                         <button class="lns-card-address" type="button" data-address="13347 Washington Blvd Ste B, Los Angeles, CA 90066" disabled>
@@ -1069,8 +1082,7 @@
                 </div>
                 <div class="lns-shop-card" data-city="sioux-falls" id="stop-sioux-falls">
                     <div class="lns-card-main">
-                        <img class="lns-card-logo" src="images/lns/barbaras.webp" alt="" loading="lazy">
-                        <h3 class="lns-card-name"><a href="https://www.barbarasneedlepoint.com/" target="_blank" rel="noopener" class="lns-shop-name-link">Barbara's <span class="lns-name-tail">Needlepoint<svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span><span class="visually-hidden"> (opens in a new tab)</span></a></h3>
+                        <h3 class="lns-card-name lns-card-name-artwork"><a href="https://www.barbarasneedlepoint.com/" target="_blank" rel="noopener" class="lns-shop-name-link"><span class="lns-brand-lockup"><img class="lns-card-logo lns-brand-logo" src="images/lns/barbaras.webp" alt="" loading="lazy"></span><span class="visually-hidden">Barbara's Needlepoint (opens in a new tab)</span><svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></a></h3>
                     </div>
                     <div class="lns-card-footer">
                         <button class="lns-card-address" type="button" data-address="1708 S Western Ave Unit 1, Sioux Falls, SD 57105" disabled>
@@ -1081,8 +1093,7 @@
                 </div>
                 <div class="lns-shop-card" data-city="avon" id="stop-avon">
                     <div class="lns-card-main">
-                        <img class="lns-card-logo" src="images/lns/clover-and-canvas.png" alt="" loading="lazy">
-                        <h3 class="lns-card-name"><a href="https://cloverandcanvas.com/" target="_blank" rel="noopener" class="lns-shop-name-link">Clover &amp; Canvas <span class="lns-name-tail">Needlepoint<svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span><span class="visually-hidden"> (opens in a new tab)</span></a></h3>
+                        <h3 class="lns-card-name lns-card-name-artwork"><a href="https://cloverandcanvas.com/" target="_blank" rel="noopener" class="lns-shop-name-link"><span class="lns-brand-lockup lns-brand-lockup-wide lns-clover-lockup"><span class="lns-art-crop lns-clover-art" style="--crop-ratio:302 / 305;--crop-size:58px;--crop-image-width:165.56291390728478%;--crop-left:-34.437086092715234%;--crop-top:-14.754098360655737%"><img src="images/lns/clover-and-canvas.png" alt="" loading="lazy"></span><span class="lns-art-crop lns-clover-art" style="--crop-ratio:485 / 80;--crop-size:290px;--crop-image-width:103.09278350515463%;--crop-left:-2.0618556701030926%;--crop-top:-482.5%"><img src="images/lns/clover-and-canvas.png" alt="" loading="lazy"></span></span><span class="visually-hidden">Clover &amp; Canvas Needlepoint (opens in a new tab)</span><svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></a></h3>
                     </div>
                     <div class="lns-card-footer">
                         <button class="lns-card-address" type="button" data-address="36840 Detroit Rd, Avon, OH 44011" disabled>
@@ -1093,8 +1104,7 @@
                 </div>
                 <div class="lns-shop-card" data-city="cornelius" id="stop-cornelius">
                     <div class="lns-card-main">
-                        <img class="lns-card-logo" src="images/lns/cotswold-monogram.webp" alt="" loading="lazy">
-                        <h3 class="lns-card-name"><a href="https://cotswoldneedlepoint.com/" target="_blank" rel="noopener" class="lns-shop-name-link">Cotswold <span class="lns-name-tail">Needlepoint<svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span><span class="visually-hidden"> (opens in a new tab)</span></a></h3>
+                        <h3 class="lns-card-name lns-card-name-artwork"><a href="https://cotswoldneedlepoint.com/" target="_blank" rel="noopener" class="lns-shop-name-link"><span class="lns-brand-lockup lns-brand-side-by-side"><img class="lns-brand-mark" src="images/lns/cotswold-monogram.webp" alt="" loading="lazy"><img class="lns-brand-wordmark" src="images/lns/cotswold-wordmark.png" alt="" loading="lazy"></span><span class="visually-hidden">Cotswold Needlepoint (opens in a new tab)</span><svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></a></h3>
                     </div>
                     <div class="lns-card-footer">
                         <button class="lns-card-address" type="button" data-address="16930 W Catawba Ave Suite 103, Cornelius, NC 28031" disabled>
@@ -1105,8 +1115,7 @@
                 </div>
                 <div class="lns-shop-card" data-city="chapel-hill" id="stop-chapel-hill">
                     <div class="lns-card-main">
-                        <img class="lns-card-logo" src="images/lns/elizabeth-brooke.webp" alt="" loading="lazy">
-                        <h3 class="lns-card-name"><a href="https://shopelizabethbrooke.com/" target="_blank" rel="noopener" class="lns-shop-name-link">Elizabeth <span class="lns-name-tail">Brooke<svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span><span class="visually-hidden"> (opens in a new tab)</span></a></h3>
+                        <h3 class="lns-card-name lns-card-name-artwork"><a href="https://shopelizabethbrooke.com/" target="_blank" rel="noopener" class="lns-shop-name-link"><span class="lns-brand-lockup lns-brand-lockup-wide"><img class="lns-brand-wordmark lns-brand-wordmark-large" src="images/lns/elizabeth-brooke-wordmark.png" alt="" loading="lazy"></span><span class="visually-hidden">Elizabeth Brooke (opens in a new tab)</span><svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></a></h3>
                     </div>
                     <div class="lns-card-footer">
                         <button class="lns-card-address" type="button" data-address="900 Willow Drive Suite 107, Chapel Hill, NC 27514" disabled>
@@ -1117,8 +1126,7 @@
                 </div>
                 <div class="lns-shop-card" data-city="bridgeport" id="stop-bridgeport">
                     <div class="lns-card-main">
-                        <img class="lns-card-logo" src="images/lns/honeysuckle.webp" alt="" loading="lazy">
-                        <h3 class="lns-card-name">Honeysuckle Needlepoint</h3>
+                        <h3 class="lns-card-name lns-card-name-artwork"><span class="lns-brand-lockup "><img class="lns-brand-honeysuckle" src="images/lns/honeysuckle-restored.png" alt="" loading="lazy"></span><span class="visually-hidden">Honeysuckle Needlepoint</span></h3>
                     </div>
                     <div class="lns-card-footer">
                         <button class="lns-card-address" type="button" data-address="102 Hill St, Bridgeport, WV 26330" disabled>
@@ -1129,8 +1137,7 @@
                 </div>
                 <div class="lns-shop-card" data-city="kansas-city" id="stop-kansas-city">
                     <div class="lns-card-main">
-                        <img class="lns-card-logo" src="images/lns/kc-needlepoint.webp" alt="" loading="lazy">
-                        <h3 class="lns-card-name"><a href="https://www.kcneedlepoint.com/" target="_blank" rel="noopener" class="lns-shop-name-link">KC <span class="lns-name-tail">Needlepoint<svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span><span class="visually-hidden"> (opens in a new tab)</span></a></h3>
+                        <h3 class="lns-card-name lns-card-name-artwork"><a href="https://www.kcneedlepoint.com/" target="_blank" rel="noopener" class="lns-shop-name-link"><span class="lns-brand-lockup"><img class="lns-card-logo lns-brand-logo" src="images/lns/kc-needlepoint.webp" alt="" loading="lazy"></span><span class="visually-hidden">KC Needlepoint (opens in a new tab)</span><svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></a></h3>
                     </div>
                     <div class="lns-card-footer">
                         <button class="lns-card-address" type="button" data-address="8050 Wornall Rd, Kansas City, MO 64114" disabled>
@@ -1141,8 +1148,7 @@
                 </div>
                 <div class="lns-shop-card" data-city="nashville" id="stop-nashville">
                     <div class="lns-card-main">
-                        <img class="lns-card-logo" src="images/lns/kick-ass.webp" alt="" loading="lazy">
-                        <h3 class="lns-card-name"><a href="https://kickassneedlepoint.com/" target="_blank" rel="noopener" class="lns-shop-name-link">Kick Ass <span class="lns-name-tail">Needlepoint<svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span><span class="visually-hidden"> (opens in a new tab)</span></a></h3>
+                        <h3 class="lns-card-name lns-card-name-artwork"><a href="https://kickassneedlepoint.com/" target="_blank" rel="noopener" class="lns-shop-name-link"><span class="lns-brand-lockup "><span class="lns-art-crop " style="--crop-ratio:417 / 503;--crop-size:108px;--crop-image-width:116.54676258992806%;--crop-left:-8.872901678657074%;--crop-top:-9.542743538767395%"><img src="images/lns/kick-ass-original.png" alt="" loading="lazy"></span></span><span class="visually-hidden">Kick Ass Needlepoint (opens in a new tab)</span><svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></a></h3>
                     </div>
                     <div class="lns-card-footer">
                         <button class="lns-card-address" type="button" data-address="850 Hillwood Blvd #6, Nashville, TN 37209" disabled>
@@ -1153,8 +1159,7 @@
                 </div>
                 <div class="lns-shop-card" data-city="atlanta" id="shop-labors-of-love">
                     <div class="lns-card-main">
-                        <img class="lns-card-logo" src="images/lns/labors-of-love.webp" alt="" loading="lazy">
-                        <h3 class="lns-card-name"><a href="https://laborsofloveneedlepoint.shop/" target="_blank" rel="noopener" class="lns-shop-name-link">Labors of Love <span class="lns-name-tail">Needlepoint<svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span><span class="visually-hidden"> (opens in a new tab)</span></a></h3>
+                        <h3 class="lns-card-name lns-card-name-artwork"><a href="https://laborsofloveneedlepoint.shop/" target="_blank" rel="noopener" class="lns-shop-name-link"><span class="lns-brand-lockup"><img class="lns-card-logo lns-brand-logo" src="images/lns/labors-of-love.webp" alt="" loading="lazy"></span><span class="visually-hidden">Labors of Love Needlepoint (opens in a new tab)</span><svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></a></h3>
                     </div>
                     <div class="lns-card-footer">
                         <button class="lns-card-address" type="button" data-address="445 Plasamour Dr NE #1, Atlanta, GA 30324" disabled>
@@ -1165,8 +1170,7 @@
                 </div>
                 <div class="lns-shop-card" data-city="dallas" id="stop-dallas">
                     <div class="lns-card-main">
-                        <img class="lns-card-logo" src="images/lns/mimis.webp" alt="" loading="lazy">
-                        <h3 class="lns-card-name"><a href="https://mimisneedlepoint.com/" target="_blank" rel="noopener" class="lns-shop-name-link">Mimi's <span class="lns-name-tail">Needlepoint<svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span><span class="visually-hidden"> (opens in a new tab)</span></a></h3>
+                        <h3 class="lns-card-name lns-card-name-artwork"><a href="https://mimisneedlepoint.com/" target="_blank" rel="noopener" class="lns-shop-name-link"><span class="lns-brand-lockup"><img class="lns-card-logo lns-brand-logo" src="images/lns/mimis.webp" alt="" loading="lazy"></span><span class="visually-hidden">Mimi's Needlepoint (opens in a new tab)</span><svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></a></h3>
                     </div>
                     <div class="lns-card-footer">
                         <button class="lns-card-address" type="button" data-address="803 W Davis St Ste 103, Dallas, TX 75208" disabled>
@@ -1177,8 +1181,7 @@
                 </div>
                 <div class="lns-shop-card" data-city="maplewood" id="stop-maplewood">
                     <div class="lns-card-main">
-                        <img class="lns-card-logo" src="images/lns/mrs-meshugga.webp" alt="" loading="lazy">
-                        <h3 class="lns-card-name"><a href="https://www.mrsmeshugga.com/" target="_blank" rel="noopener" class="lns-shop-name-link">Mrs. Meshugga Needlepoint <span class="lns-name-tail">Shop<svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span><span class="visually-hidden"> (opens in a new tab)</span></a></h3>
+                        <h3 class="lns-card-name lns-card-name-artwork"><a href="https://www.mrsmeshugga.com/" target="_blank" rel="noopener" class="lns-shop-name-link"><span class="lns-brand-lockup"><img class="lns-card-logo lns-brand-logo" src="images/lns/mrs-meshugga.webp" alt="" loading="lazy"></span><span class="visually-hidden">Mrs. Meshugga Needlepoint Shop (opens in a new tab)</span><svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></a></h3>
                     </div>
                     <div class="lns-card-footer">
                         <button class="lns-card-address" type="button" data-address="1875 Springfield Ave, Maplewood, NJ 07040" disabled>
@@ -1189,8 +1192,7 @@
                 </div>
                 <div class="lns-shop-card" data-city="austin" id="stop-austin">
                     <div class="lns-card-main">
-                        <img class="lns-card-logo" src="images/lns/needle-works.webp" alt="" loading="lazy">
-                        <h3 class="lns-card-name"><a href="https://theneedleworks.com/" target="_blank" rel="noopener" class="lns-shop-name-link">The Needle <span class="lns-name-tail">Works<svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span><span class="visually-hidden"> (opens in a new tab)</span></a></h3>
+                        <h3 class="lns-card-name lns-card-name-artwork"><a href="https://theneedleworks.com/" target="_blank" rel="noopener" class="lns-shop-name-link"><span class="lns-brand-lockup"><img class="lns-card-logo lns-brand-logo" src="images/lns/needle-works.webp" alt="" loading="lazy"></span><span class="visually-hidden">The Needle Works (opens in a new tab)</span><svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></a></h3>
                     </div>
                     <div class="lns-card-footer">
                         <button class="lns-card-address" type="button" data-address="4401 Medical Pkwy, Austin, TX 78756" disabled>
@@ -1201,8 +1203,7 @@
                 </div>
                 <div class="lns-shop-card" data-city="atlanta" id="stop-atlanta">
                     <div class="lns-card-main">
-                        <img class="lns-card-logo" src="images/lns/nimble-needle.webp" alt="" loading="lazy">
-                        <h3 class="lns-card-name"><a href="https://www.atlantanimbleneedle.com/" target="_blank" rel="noopener" class="lns-shop-name-link">The Nimble <span class="lns-name-tail">Needle<svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span><span class="visually-hidden"> (opens in a new tab)</span></a></h3>
+                        <h3 class="lns-card-name lns-card-name-artwork"><a href="https://www.atlantanimbleneedle.com/" target="_blank" rel="noopener" class="lns-shop-name-link"><span class="lns-brand-lockup"><img class="lns-brand-mark" src="images/lns/nimble-needle.webp" alt="" loading="lazy"><img class="lns-brand-wordmark" src="images/lns/nimble-needle-wordmark.jpeg" alt="" loading="lazy"></span><span class="visually-hidden">The Nimble Needle (opens in a new tab)</span><svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></a></h3>
                     </div>
                     <div class="lns-card-footer">
                         <button class="lns-card-address" type="button" data-address="206B Johnson Ferry Rd, Atlanta, GA 30328" disabled>
@@ -1213,8 +1214,7 @@
                 </div>
                 <div class="lns-shop-card" data-city="north-myrtle-beach" id="stop-north-myrtle-beach">
                     <div class="lns-card-main">
-                        <img class="lns-card-logo" src="images/lns/north-myrtle-beach-needlepoint.webp" alt="" loading="lazy">
-                        <h3 class="lns-card-name"><a href="https://www.northmyrtlebeachneedlepoint.com/" target="_blank" rel="noopener" class="lns-shop-name-link">North Myrtle Beach <span class="lns-name-tail">Needlepoint<svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span><span class="visually-hidden"> (opens in a new tab)</span></a></h3>
+                        <h3 class="lns-card-name lns-card-name-artwork"><a href="https://www.northmyrtlebeachneedlepoint.com/" target="_blank" rel="noopener" class="lns-shop-name-link"><span class="lns-brand-lockup"><span class="lns-art-crop" style="--crop-ratio:683 / 492;--crop-size:170px;--crop-image-width:128.84333821376282%;--crop-left:-13.323572474377746%;--crop-top:-36.38211382113821%"><img src="images/lns/north-myrtle-beach-original.png" alt="" loading="lazy"></span></span><span class="visually-hidden">North Myrtle Beach Needlepoint (opens in a new tab)</span><svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></a></h3>
                     </div>
                     <div class="lns-card-footer">
                         <button class="lns-card-address" type="button" data-address="211 Hwy 17 N Ste 105, North Myrtle Beach, SC 29582" disabled>
@@ -1225,8 +1225,7 @@
                 </div>
                 <div class="lns-shop-card" data-city="barrington" id="stop-barrington">
                     <div class="lns-card-main">
-                        <img class="lns-card-logo" src="images/lns/pepper-pot.webp" alt="" loading="lazy">
-                        <h3 class="lns-card-name"><a href="https://thepepperpot.co/" target="_blank" rel="noopener" class="lns-shop-name-link">The Pepper <span class="lns-name-tail">Pot<svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span><span class="visually-hidden"> (opens in a new tab)</span></a></h3>
+                        <h3 class="lns-card-name lns-card-name-artwork"><a href="https://thepepperpot.co/" target="_blank" rel="noopener" class="lns-shop-name-link"><span class="lns-brand-lockup"><img class="lns-brand-mark" src="images/lns/pepper-pot.webp" alt="" loading="lazy"><img class="lns-brand-wordmark" src="images/lns/pepper-pot-wordmark.png" alt="" loading="lazy"></span><span class="visually-hidden">The Pepper Pot (opens in a new tab)</span><svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></a></h3>
                     </div>
                     <div class="lns-card-footer">
                         <button class="lns-card-address" type="button" data-address="Icehouse Mall, 200 Applebee St, Barrington, IL 60010" disabled>
@@ -1237,8 +1236,7 @@
                 </div>
                 <div class="lns-shop-card" data-city="washington" id="stop-washington">
                     <div class="lns-card-main">
-                        <img class="lns-card-logo" src="images/lns/point-of-it-all.avif" alt="" loading="lazy">
-                        <h3 class="lns-card-name"><a href="https://thepointofitallonline.com/" target="_blank" rel="noopener" class="lns-shop-name-link">The Point of It <span class="lns-name-tail">All<svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span><span class="visually-hidden"> (opens in a new tab)</span></a></h3>
+                        <h3 class="lns-card-name lns-card-name-artwork"><a href="https://thepointofitallonline.com/" target="_blank" rel="noopener" class="lns-shop-name-link"><span class="lns-brand-lockup"><img class="lns-card-logo lns-brand-logo" src="images/lns/point-of-it-all.avif" alt="" loading="lazy"></span><span class="visually-hidden">The Point of It All (opens in a new tab)</span><svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></a></h3>
                     </div>
                     <div class="lns-card-footer">
                         <button class="lns-card-address" type="button" data-address="5115 MacArthur Blvd NW, Washington, DC 20016" disabled>
@@ -1249,8 +1247,7 @@
                 </div>
                 <div class="lns-shop-card" data-city="portland" id="stop-portland">
                     <div class="lns-card-main">
-                        <img class="lns-card-logo" src="images/lns/rose-garden-stitch.webp" alt="" loading="lazy">
-                        <h3 class="lns-card-name"><a href="https://www.rosegardenstitch.co/" target="_blank" rel="noopener" class="lns-shop-name-link">Rose Garden Stitch <span class="lns-name-tail">Co.<svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span><span class="visually-hidden"> (opens in a new tab)</span></a></h3>
+                        <h3 class="lns-card-name lns-card-name-artwork"><a href="https://www.rosegardenstitch.co/" target="_blank" rel="noopener" class="lns-shop-name-link"><span class="lns-brand-lockup"><img class="lns-brand-mark" src="images/lns/rose-garden-stitch.webp" alt="" loading="lazy"><img class="lns-brand-wordmark" src="images/lns/rose-garden-wordmark.svg" alt="" loading="lazy"></span><span class="visually-hidden">Rose Garden Stitch Co. (opens in a new tab)</span><svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></a></h3>
                     </div>
                     <div class="lns-card-footer">
                         <div class="lns-card-address" data-address-pending>
@@ -1262,8 +1259,7 @@
                 </div>
                 <div class="lns-shop-card" data-city="hopewell" id="stop-hopewell">
                     <div class="lns-card-main">
-                        <img class="lns-card-logo" src="images/lns/secret-stitchery.webp" alt="" loading="lazy">
-                        <h3 class="lns-card-name"><a href="https://shopthesecretstitchery.com/" target="_blank" rel="noopener" class="lns-shop-name-link">The Secret <span class="lns-name-tail">Stitchery<svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span><span class="visually-hidden"> (opens in a new tab)</span></a></h3>
+                        <h3 class="lns-card-name lns-card-name-artwork"><a href="https://shopthesecretstitchery.com/" target="_blank" rel="noopener" class="lns-shop-name-link"><span class="lns-brand-lockup"><img class="lns-card-logo lns-brand-logo" src="images/lns/secret-stitchery.webp" alt="" loading="lazy"></span><span class="visually-hidden">The Secret Stitchery (opens in a new tab)</span><svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></a></h3>
                     </div>
                     <div class="lns-card-footer">
                         <button class="lns-card-address" type="button" data-address="155 W Broad St, Hopewell, NJ 08525" disabled>
@@ -1274,8 +1270,7 @@
                 </div>
                 <div class="lns-shop-card" data-city="havre-de-grace" id="stop-havre-de-grace">
                     <div class="lns-card-main">
-                        <img class="lns-card-logo" src="images/lns/sew-another-stitch-red.webp" alt="" loading="lazy">
-                        <h3 class="lns-card-name"><a href="https://sewanotherstitch.com/" target="_blank" rel="noopener" class="lns-shop-name-link">Sew Another <span class="lns-name-tail">Stitch<svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span><span class="visually-hidden"> (opens in a new tab)</span></a></h3>
+                        <h3 class="lns-card-name lns-card-name-artwork"><a href="https://sewanotherstitch.com/" target="_blank" rel="noopener" class="lns-shop-name-link"><span class="lns-brand-lockup lns-brand-lockup-wide"><span class="lns-brand-wordmark lns-wordmark-tinted lns-brand-wordmark-large" style="--lns-wordmark: url('images/lns/sew-another-stitch-wordmark.png')" aria-hidden="true"></span></span><span class="visually-hidden">Sew Another Stitch (opens in a new tab)</span><svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></a></h3>
                     </div>
                     <div class="lns-card-footer">
                         <button class="lns-card-address" type="button" data-address="433 St John St, Havre de Grace, MD 21078" disabled>
@@ -1286,8 +1281,7 @@
                 </div>
                 <div class="lns-shop-card" data-city="larchmont" id="stop-larchmont">
                     <div class="lns-card-main">
-                        <img class="lns-card-logo" src="images/lns/stitch-by-stitch-symbol.svg" alt="" loading="lazy">
-                        <h3 class="lns-card-name"><a href="https://stitchbystitchneedlepoint.com/" target="_blank" rel="noopener" class="lns-shop-name-link">Stitch by <span class="lns-name-tail">Stitch<svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span><span class="visually-hidden"> (opens in a new tab)</span></a></h3>
+                        <h3 class="lns-card-name lns-card-name-artwork"><a href="https://stitchbystitchneedlepoint.com/" target="_blank" rel="noopener" class="lns-shop-name-link"><span class="lns-brand-lockup"><img class="lns-brand-wordmark" src="images/lns/stitch-by-stitch-wordmark.svg" alt="" loading="lazy"></span><span class="visually-hidden">Stitch by Stitch (opens in a new tab)</span><svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></a></h3>
                     </div>
                     <div class="lns-card-footer">
                         <button class="lns-card-address" type="button" data-address="1953 Palmer Ave, Larchmont, NY 10538" disabled>
@@ -1298,8 +1292,7 @@
                 </div>
                 <div class="lns-shop-card" data-city="memphis" id="stop-memphis">
                     <div class="lns-card-main">
-                        <img class="lns-card-logo" src="images/lns/stitchers-memphis.webp" alt="" loading="lazy">
-                        <h3 class="lns-card-name"><a href="https://stitchersmemphis.com/" target="_blank" rel="noopener" class="lns-shop-name-link">Stitchers <span class="lns-name-tail">Memphis<svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span><span class="visually-hidden"> (opens in a new tab)</span></a></h3>
+                        <h3 class="lns-card-name lns-card-name-artwork"><a href="https://stitchersmemphis.com/" target="_blank" rel="noopener" class="lns-shop-name-link"><span class="lns-brand-lockup"><img class="lns-card-logo lns-brand-logo" src="images/lns/stitchers-memphis.webp" alt="" loading="lazy"></span><span class="visually-hidden">Stitchers Memphis (opens in a new tab)</span><svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></a></h3>
                     </div>
                     <div class="lns-card-footer">
                         <button class="lns-card-address" type="button" data-address="5498 Poplar Ave #4, Memphis, TN 38119" disabled>
@@ -1310,8 +1303,7 @@
                 </div>
                 <div class="lns-shop-card" data-city="nashville" id="shop-stitching-belle">
                     <div class="lns-card-main">
-                        <img class="lns-card-logo" src="images/lns/stitching-belle.webp" alt="" loading="lazy">
-                        <h3 class="lns-card-name"><a href="https://thestitchingbelle.com/" target="_blank" rel="noopener" class="lns-shop-name-link">The Stitching <span class="lns-name-tail">Belle<svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span><span class="visually-hidden"> (opens in a new tab)</span></a></h3>
+                        <h3 class="lns-card-name lns-card-name-artwork"><a href="https://thestitchingbelle.com/" target="_blank" rel="noopener" class="lns-shop-name-link"><span class="lns-brand-lockup lns-brand-lockup-wide lns-belle-lockup"><span class="lns-art-crop " style="--crop-ratio:154 / 181;--crop-size:40px;--crop-image-width:389.61038961038963%;--crop-left:-150%;--crop-top:-6.629834254143646%"><img src="images/lns/stitching-belle.webp" alt="" loading="lazy"></span><span class="lns-art-crop " style="--crop-ratio:792 / 179;--crop-size:280px;--crop-image-width:112.75252525252526%;--crop-left:-7.954545454545454%;--crop-top:-42.45810055865922%"><img src="images/lns/stitching-belle-wordmark.png" alt="" loading="lazy"></span></span><span class="visually-hidden">The Stitching Belle (opens in a new tab)</span><svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></a></h3>
                     </div>
                     <div class="lns-card-footer">
                         <button class="lns-card-address" type="button" data-address="3518 Nebraska Ave, Nashville, TN 37205" disabled>
@@ -1322,8 +1314,7 @@
                 </div>
                 <div class="lns-shop-card" data-city="naperville" id="stop-naperville">
                     <div class="lns-card-main">
-                        <img class="lns-card-logo" src="images/lns/stitchers-garden.webp" alt="" loading="lazy">
-                        <h3 class="lns-card-name"><a href="https://www.stitchersgardenil.com/" target="_blank" rel="noopener" class="lns-shop-name-link">Stitchers <span class="lns-name-tail">Garden<svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span><span class="visually-hidden"> (opens in a new tab)</span></a></h3>
+                        <h3 class="lns-card-name lns-card-name-artwork"><a href="https://www.stitchersgardenil.com/" target="_blank" rel="noopener" class="lns-shop-name-link"><span class="lns-brand-lockup lns-brand-lockup-wide lns-garden-lockup"><span class="lns-art-crop lns-garden-art" style="--crop-ratio:340 / 154;--crop-size:87px;--crop-image-width:147.05882352941177%;--crop-left:-23.52941176470588%;--crop-top:-38.961038961038966%"><img src="images/lns/stitchers-garden-original.png" alt="" loading="lazy"></span><span class="lns-art-crop lns-garden-art" style="--crop-ratio:447 / 37;--crop-size:280px;--crop-image-width:111.85682326621924%;--crop-left:-6.0402684563758395%;--crop-top:-591.8918918918919%"><img src="images/lns/stitchers-garden-original.png" alt="" loading="lazy"></span><span class="lns-art-crop lns-garden-art" style="--crop-ratio:340 / 153;--crop-size:87px;--crop-image-width:147.05882352941177%;--crop-left:-23.52941176470588%;--crop-top:-188.88888888888889%"><img src="images/lns/stitchers-garden-original.png" alt="" loading="lazy"></span></span><span class="visually-hidden">Stitchers Garden (opens in a new tab)</span><svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></a></h3>
                     </div>
                     <div class="lns-card-footer">
                         <button class="lns-card-address" type="button" data-address="1163 E Ogden Ave Ste 713, Naperville, IL 60563" disabled>
@@ -1334,8 +1325,7 @@
                 </div>
                 <div class="lns-shop-card" data-city="denver" id="stop-denver">
                     <div class="lns-card-main">
-                        <img class="lns-card-logo" src="images/lns/sunny-stitches.webp" alt="" loading="lazy">
-                        <h3 class="lns-card-name"><a href="https://sunnystitches.com/" target="_blank" rel="noopener" class="lns-shop-name-link">Sunny <span class="lns-name-tail">Stitches<svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span><span class="visually-hidden"> (opens in a new tab)</span></a></h3>
+                        <h3 class="lns-card-name lns-card-name-artwork"><a href="https://sunnystitches.com/" target="_blank" rel="noopener" class="lns-shop-name-link"><span class="lns-brand-lockup"><img class="lns-card-logo lns-brand-logo" src="images/lns/sunny-stitches.webp" alt="" loading="lazy"></span><span class="visually-hidden">Sunny Stitches (opens in a new tab)</span><svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></a></h3>
                     </div>
                     <div class="lns-card-footer">
                         <button class="lns-card-address" type="button" data-address="1927 E Kentucky Ave, Denver, CO 80209" disabled>
@@ -1346,8 +1336,7 @@
                 </div>
                 <div class="lns-shop-card" data-city="omaha" id="stop-omaha">
                     <div class="lns-card-main">
-                        <img class="lns-card-logo" src="images/lns/village-needleworks.webp" alt="" loading="lazy">
-                        <h3 class="lns-card-name"><a href="https://www.villageneedleworks.com/" target="_blank" rel="noopener" class="lns-shop-name-link">Village <span class="lns-name-tail">Needleworks<svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span><span class="visually-hidden"> (opens in a new tab)</span></a></h3>
+                        <h3 class="lns-card-name lns-card-name-artwork"><a href="https://www.villageneedleworks.com/" target="_blank" rel="noopener" class="lns-shop-name-link"><span class="lns-brand-lockup"><span class="lns-brand-wordmark lns-brand-combined lns-wordmark-tinted" style="--lns-wordmark: url('images/lns/village-needleworks-wordmark.svg')" aria-hidden="true"></span></span><span class="visually-hidden">Village Needleworks (opens in a new tab)</span><svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></a></h3>
                     </div>
                     <div class="lns-card-footer">
                         <button class="lns-card-address" type="button" data-address="8721 Shamrock Rd, Omaha, NE 68114" disabled>
@@ -1358,8 +1347,7 @@
                 </div>
                 <div class="lns-shop-card" data-city="dublin" id="stop-dublin">
                     <div class="lns-card-main">
-                        <img class="lns-card-logo" src="images/lns/whats-the-point.webp" alt="" loading="lazy">
-                        <h3 class="lns-card-name"><a href="https://whatsthepoint.biz/" target="_blank" rel="noopener" class="lns-shop-name-link">What's the Point <span class="lns-name-tail">Needlepoint<svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span><span class="visually-hidden"> (opens in a new tab)</span></a></h3>
+                        <h3 class="lns-card-name lns-card-name-artwork"><a href="https://whatsthepoint.biz/" target="_blank" rel="noopener" class="lns-shop-name-link"><span class="lns-brand-lockup"><img class="lns-card-logo lns-brand-logo" src="images/lns/whats-the-point.webp" alt="" loading="lazy"></span><span class="visually-hidden">What's the Point Needlepoint (opens in a new tab)</span><svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></a></h3>
                     </div>
                     <div class="lns-card-footer">
                         <button class="lns-card-address" type="button" data-address="126 S. High St, Dublin, OH 43017" disabled>
@@ -1370,8 +1358,7 @@
                 </div>
                 <div class="lns-shop-card" data-city="cincinnati" id="stop-cincinnati">
                     <div class="lns-card-main">
-                        <img class="lns-card-logo" src="images/lns/when-pigs-fly.webp" alt="" loading="lazy">
-                        <h3 class="lns-card-name"><a href="https://whenpigsflyndlpt.com/" target="_blank" rel="noopener" class="lns-shop-name-link">When Pigs Fly <span class="lns-name-tail">Needlepoint<svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></span><span class="visually-hidden"> (opens in a new tab)</span></a></h3>
+                        <h3 class="lns-card-name lns-card-name-artwork"><a href="https://whenpigsflyndlpt.com/" target="_blank" rel="noopener" class="lns-shop-name-link"><span class="lns-brand-lockup lns-pigs-lockup"><span class="lns-art-crop lns-pigs-art" style="--crop-ratio:1520 / 720;--crop-size:300.8333333333333px;--crop-image-width:112.17105263157896%;--crop-left:-9.868421052631579%;--crop-top:-38.88888888888889%"><img src="images/lns/when-pigs-fly-original.png" alt="" loading="lazy"></span></span><span class="visually-hidden">When Pigs Fly Needlepoint (opens in a new tab)</span><svg class="lns-external-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12 12 4M4 4h8v8"/></svg></a></h3>
                     </div>
                     <div class="lns-card-footer">
                         <button class="lns-card-address" type="button" data-address="Cincinnati, OH" disabled>

@@ -1,0 +1,70 @@
+{
+  "Angel City Stitchery": {
+    "file": "angel-city-wordmark.png",
+    "source": "https://angelcitystitchery.com/cdn/shop/files/Angel-City-Stitchery-website-logo-full-color-rgb-900px.png?v=1771011231&width=900"
+  },
+  "Cotswold Needlepoint": {
+    "file": "cotswold-wordmark.png",
+    "source": "https://cotswoldneedlepoint.com/cdn/shop/files/Cotswold_Logo_1.png?v=1788459736&width=900"
+  },
+  "Rose Garden Stitch Co.": {
+    "file": "rose-garden-wordmark.svg",
+    "source": "https://www.rosegardenstitch.co/cdn/shop/t/5/assets/rgsc-logo.svg?v=180743833302334762791793639802"
+  },
+  "Sew Another Stitch": {
+    "file": "sew-another-stitch-wordmark.png",
+    "source": "https://sewanotherstitch.com/cdn/shop/files/sew_another_white.png?v=1745607607&width=900",
+    "displayColor": "#536c68"
+  },
+  "Stitch by Stitch": {
+    "file": "stitch-by-stitch-wordmark.svg",
+    "source": "https://stitchbystitchneedlepoint.com/cdn/shop/files/logo_stitch-by-stitch-needlepoint-larchmont-new-york__logo-line--blue.svg?v=1682520434&width=900"
+  },
+  "Village Needleworks": {
+    "file": "village-needleworks-wordmark.svg",
+    "source": "https://www.villageneedleworks.com/cdn/shop/files/VN_Website_Header_WhiteText.svg?v=1788900502&width=900",
+    "displayColor": "#536c68"
+  },
+  "The Pepper Pot": {
+    "file": "pepper-pot-wordmark.png",
+    "source": "https://cdn.shopify.com/s/files/1/0788/5176/8563/files/TPP_Logos_for_Web_Primary_Logotype.png?v=1770779528"
+  },
+  "The Nimble Needle": {
+    "file": "nimble-needle-wordmark.jpeg",
+    "source": "https://media.rainpos.com/10238/TNN_Name.jpeg"
+  },
+  "Elizabeth Brooke": {
+    "file": "elizabeth-brooke-wordmark.png",
+    "source": "https://shopelizabethbrooke.com/cdn/shop/files/EB_Logo_Secondary-2-Sangria.png?v=1770564329&width=1200"
+  },
+  "Stitchers Garden": {
+    "file": "stitchers-garden-original.png",
+    "source": "https://media.rainpos.com/6960/Stitchers_Garden_Logo.png",
+    "layout": "Original floral halves and lettering are framed separately in CSS."
+  },
+  "North Myrtle Beach Needlepoint": {
+    "file": "north-myrtle-beach-original.png",
+    "source": "https://www.northmyrtlebeachneedlepoint.com/cdn/shop/files/Untitled_design_38.png?v=1779121288&width=1200",
+    "layout": "Transparent margins are framed out in CSS."
+  },
+  "The Stitching Belle": {
+    "file": "stitching-belle-wordmark.png",
+    "source": "https://thestitchingbelle.com/cdn/shop/files/The_Stitching_Belle_Brand_Kit_2.png?v=1767366355&width=1200",
+    "layout": "Cameo and official wordmark framed independently."
+  },
+  "Kick Ass Needlepoint": {
+    "file": "kick-ass-original.png",
+    "source": "https://kickassneedlepoint.com/cdn/shop/files/Kick_ass_NDLPT_circle_color_4f4c5ddd-b8c1-4181-8b27-5d6fe6d39749.png?v=1735581998&width=1200"
+  },
+  "When Pigs Fly Needlepoint": {
+    "file": "when-pigs-fly-original.png",
+    "source": "https://whenpigsflyndlpt.com/cdn/shop/files/Asset_25.png?v=1787764529&width=1705",
+    "layout": "Pig and lettering framed out of decorative border; darker rose improves the reversed lettering contrast."
+  },
+  "Honeysuckle Needlepoint": {
+    "file": "honeysuckle-restored.png",
+    "original": "honeysuckle.webp",
+    "method": "Built-in imagegen restoration",
+    "prompt": "Use case: precise-object-edit. Edit target: the supplied Honeysuckle Needlepoint logo bitmap. Restore and upscale this existing logo for a website card, making the edges and lettering clean and crisp. Preserve the existing logo design exactly: the same delicate honeysuckle flower illustration centered above the same two lines of text, same petals, leaves, arrangement, proportions, muted peach/tan and sage colors, and dark charcoal typography. Text must be verbatim: 'Honeysuckle' in the existing serif style; 'NEEDLEPOINT' below in the same spaced uppercase sans-serif style. Preserve the capital H and remaining lowercase in Honeysuckle. This is faithful restoration, not a redesign. Remove compression noise, pixelation, blur and halos. Smooth clear contours and sharp letter edges with natural antialiasing. Transparent background, no white rectangle, no shadows, no new details or ornaments. Keep the logo centered and fill most of the canvas with a modest even transparent margin. Output one high-resolution clean restoration."
+  }
+}

@@ -90,7 +90,9 @@ const lnsShopLinkHints = (function () {
     let nextId = 0;
 
     function activate(link) {
-        link.setAttribute('aria-label', link.textContent.trim());
+        const linkName = link.textContent.trim();
+        const shopName = linkName.replace(/\s*\(opens in a new tab\)$/, '');
+        link.setAttribute('aria-label', linkName);
         // Position the hint on the name without shrinking the stretched
         // link's click area from the whole card to just its text.
         const label = document.createElement('span');
@@ -101,7 +103,7 @@ const lnsShopLinkHints = (function () {
         hint.className = 'lns-site-tooltip';
         hint.id = 'lns-site-tip-' + nextId++;
         hint.setAttribute('role', 'tooltip');
-        hint.textContent = 'Visit LNS site';
+        hint.textContent = 'Visit ' + shopName;
         link.setAttribute('aria-describedby', hint.id);
         label.appendChild(hint);
         const reset = () => link.classList.remove('lns-hint-dismissed');
