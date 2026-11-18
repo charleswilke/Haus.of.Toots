@@ -37,7 +37,7 @@
 
             <div class="lns-map-frame">
 
-                <p class="lns-map-hint"><span class="lns-map-hint-desktop">Haus of Toots creations are now available at these local needlepoint shops!</span></p>
+                <p class="lns-map-hint">Haus of Toots creations are now available at these local needlepoint shops!</p>
 
                 <svg class="lns-map" viewBox="0 0 1090 581" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="lnsMapTitle">
   <title id="lnsMapTitle">Hex-tile map of the lower 48 United States showing local needlepoint shops that carry Haus of Toots canvases</title>
@@ -1015,15 +1015,20 @@
 </svg>
                 <img class="lns-map-watermark" src="images/hauslogo.webp" alt="" aria-hidden="true" loading="lazy">
             </div>
-            <div class="lns-list-header">
-                <h1 class="lns-list-title">Local Needlepoint Shops</h1>
-                <label class="lns-sort" for="lnsShopSort" hidden>
-                    Sort by
-                    <select id="lnsShopSort">
-                        <option value="name">Business name</option>
-                        <option value="state">State</option>
-                    </select>
-                </label>
+            <h1 class="lns-list-title">Local Needlepoint Shops</h1>
+            <div class="lns-sort-bar" hidden>
+                <p class="lns-sort-tag" id="lnsSortLabel">Sort by</p>
+                <div class="lns-sort-options" role="radiogroup" aria-labelledby="lnsSortLabel">
+                    <label>
+                        <input class="visually-hidden" type="radio" name="lnsShopSort" value="name" checked>
+                        <span>Business name</span>
+                    </label>
+                    <label>
+                        <input class="visually-hidden" type="radio" name="lnsShopSort" value="state">
+                        <span>State</span>
+                    </label>
+                </div>
+                <p class="lns-shop-count"></p>
             </div>
             <div class="lns-shop-grid">
                 <div class="lns-shop-card" data-city="los-angeles" id="stop-los-angeles">
@@ -1220,6 +1225,6 @@
 
     <script src="lns-map.js?v=20261110a"></script>
     <script src="lns-hover-pin.js?v=20261117"></script>
-    <script src="lns-shop-list.js?v=20261117"></script>
+    <script src="lns-shop-list.js?v=20261117b"></script>
 </body>
 </html>

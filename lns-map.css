@@ -210,47 +210,177 @@
 
 /* --- Shop cards --- */
 
-.lns-list-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 0.55rem 1rem;
-    margin-bottom: var(--spacing-sm);
-}
-
 .lns-list-title {
-    margin: 0;
+    margin: 0 0 0.75rem;
     color: var(--coral-dark);
     font-family: var(--font-display);
     font-size: clamp(1.6rem, 2.5vw, 2rem);
     font-weight: 400;
 }
 
-.lns-sort {
-    display: inline-flex;
+.lns-sort-bar {
+    --sort-plum: #654184;
+    --sort-cut: 1.25rem;
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
-    gap: 0.55rem;
-    color: var(--teal-contrast);
-    font-size: 0.95rem;
-    font-weight: 600;
+    gap: clamp(0.3rem, 1.3vw, 0.8rem);
+    min-height: 3.625rem;
+    margin-bottom: var(--spacing-sm);
+    border: 1px solid rgba(90, 64, 54, 0.24);
+    border-radius: 26px 4px 26px 4px;
+    background:
+        linear-gradient(90deg, rgba(90, 64, 54, 0.045) 1px, transparent 1px),
+        linear-gradient(rgba(90, 64, 54, 0.045) 1px, transparent 1px),
+        #fffdf9;
+    background-size: 8px 8px;
+    box-shadow: 0 10px 24px rgba(90, 64, 54, 0.1), 0 5px 0 -2px rgba(255, 107, 122, 0.22);
+    font: 600 0.875rem/1.15 var(--font-body);
 }
 
-.lns-sort[hidden] {
+.lns-sort-bar[hidden] {
     display: none;
 }
 
-.lns-sort select {
-    min-height: 44px;
-    padding: 0.4rem 0.75rem;
-    border: 1px solid var(--neutral-light);
-    border-radius: 9px;
-    background-color: var(--white);
-    color: var(--neutral-dark);
-    font: inherit;
+.lns-sort-bar::after,
+.lns-sort-tag::after,
+.lns-shop-count::after {
+    content: '';
+    position: absolute;
+    inset: 5px;
+    border: 1px dashed rgba(232, 85, 99, 0.36);
+    border-radius: 20px 2px 20px 2px;
+    pointer-events: none;
 }
 
-@media (hover: none) and (pointer: coarse) {
+.lns-sort-bar::after {
+    z-index: -1;
+}
+
+.lns-sort-tag,
+.lns-shop-count {
+    position: relative;
+    display: grid;
+    align-self: stretch;
+    place-items: center;
+    margin: 0;
+}
+
+.lns-sort-tag {
+    min-width: 7rem;
+    padding: 0.5rem calc(0.8rem + var(--sort-cut)) 0.5rem 0.95rem;
+    border-radius: 25px 0 0 3px;
+    clip-path: polygon(0 0, 100% 0, calc(100% - var(--sort-cut)) 100%, 0 100%);
+    background: linear-gradient(150deg, rgba(49, 23, 72, 0.30), rgba(49, 23, 72, 0.48)),
+        url('images/filter-variegated-purple-thread.svg') center / 100% 100%, var(--sort-plum);
+    color: var(--cream);
+}
+
+.lns-shop-count {
+    min-width: 7rem;
+    padding: 0.5rem 0.95rem 0.5rem calc(0.8rem + var(--sort-cut));
+    border-radius: 0 3px 25px 0;
+    clip-path: polygon(var(--sort-cut) 0, 100% 0, 100% 100%, 0 100%);
+    background: var(--coral-primary);
+    color: var(--button-ink);
+    white-space: nowrap;
+}
+
+.lns-sort-tag::after,
+.lns-shop-count::after {
+    border-color: rgba(255, 250, 240, 0.85);
+}
+
+.lns-sort-tag::after {
+    border-right: 0;
+    border-radius: 19px 0 0 0;
+    clip-path: polygon(0 0, 100% 0, calc(100% - var(--sort-cut)) 100%, 0 100%);
+}
+
+.lns-shop-count::after {
+    border-left: 0;
+    border-radius: 0 0 19px 0;
+    clip-path: polygon(var(--sort-cut) 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.lns-sort-options {
+    display: flex;
+    justify-self: start;
+    min-width: 0;
+    gap: 2px;
+    padding: 2px;
+    border: 1px solid rgba(101, 65, 132, 0.32);
+    border-radius: 999px;
+    background: #f4edf7;
+    color: var(--sort-plum);
+}
+
+.lns-sort-options label {
+    position: relative;
+    display: flex;
+    min-width: 0;
+}
+
+.lns-sort-options span {
+    display: grid;
+    place-items: center;
+    min-height: 44px;
+    padding: 0.2rem 0.85rem;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.lns-sort-options label:hover span {
+    border-color: currentColor;
+}
+
+.lns-sort-options input:checked + span {
+    border-color: var(--sort-plum);
+    background: linear-gradient(165deg, #79519b, var(--sort-plum) 70%, #563771);
+    color: var(--cream);
+}
+
+.lns-sort-options input:focus-visible + span {
+    outline: 2px solid var(--button-ink);
+    outline-offset: 2px;
+}
+
+@media (max-width: 540px) {
+    .lns-sort-bar {
+        --sort-cut: 0.625rem;
+        font-size: 0.8125rem;
+    }
+
+    .lns-sort-tag {
+        min-width: 0;
+        padding-inline: 0.6rem calc(0.5rem + var(--sort-cut));
+    }
+
+    .lns-shop-count {
+        min-width: 0;
+        padding-inline: calc(0.5rem + var(--sort-cut)) 0.6rem;
+    }
+
+    .lns-sort-options span {
+        padding-inline: 0.45rem;
+    }
+}
+
+@media (forced-colors: active) {
+    .lns-sort-options input:checked + span {
+        border-color: Highlight;
+        background: Highlight;
+        color: HighlightText;
+        forced-color-adjust: none;
+    }
+}
+
+@media (hover: none) and (pointer: coarse) and (max-width: 767px),
+       (hover: none) and (pointer: coarse) and (max-height: 500px) {
     .lns-map-frame {
         display: none;
     }

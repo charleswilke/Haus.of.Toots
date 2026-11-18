@@ -26,9 +26,10 @@
     const label = badge.querySelector('text');
     const backdrop = badge.querySelector('rect');
     const modal = document.getElementById('lnsModal');
-    const hint = document.querySelector('.lns-map-hint-desktop');
+    const hint = document.querySelector('.lns-map-hint');
     const originalHint = hint.textContent;
     const desktop = matchMedia('(hover: hover) and (pointer: fine)');
+    const touch = matchMedia('(any-pointer: coarse)');
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
     let hoveredMarker = null;
     let focusedMarker = null;
@@ -138,16 +139,21 @@
         });
     }
 
-    function syncDesktop() {
+    function syncInputMode() {
         map.classList.toggle('has-hover-pins', desktop.matches);
-        hint.textContent = desktop.matches
-            ? 'Hover over a heart to see the city. Select it to find local shops.'
-            : originalHint;
+        if (touch.matches || navigator.maxTouchPoints > 0) {
+            hint.textContent = 'Tap a heart to find local needlepoint shops.';
+        } else if (desktop.matches) {
+            hint.textContent = 'Hover over a heart to see the city. Select it to find local shops.';
+        } else {
+            hint.textContent = originalHint;
+        }
         if (!desktop.matches) hoveredMarker = null;
         updatePin();
     }
 
-    desktop.addEventListener('change', syncDesktop);
+    desktop.addEventListener('change', syncInputMode);
+    touch.addEventListener('change', syncInputMode);
     modal.addEventListener('focusin', updatePin);
     document.addEventListener('keydown', event => {
         if (event.defaultPrevented || event.key !== 'Escape' || !modal.hidden || !activeMarker) return;
@@ -161,5 +167,5 @@
     window.addEventListener('resize', () => {
         if (drawnMarker) sizeBadge();
     });
-    syncDesktop();
+    syncInputMode();
 })();

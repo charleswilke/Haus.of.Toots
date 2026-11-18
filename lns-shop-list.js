@@ -1,6 +1,8 @@
 (function () {
     const grid = document.querySelector('.lns-shop-grid');
-    const sort = document.getElementById('lnsShopSort');
+    const bar = document.querySelector('.lns-sort-bar');
+    const sort = bar.querySelector('.lns-sort-options');
+    const stateOption = sort.querySelector('[value="state"]');
     const compareNames = new Intl.Collator('en-US', { sensitivity: 'base' }).compare;
     // Postal codes in alphabetical order by full state name.
     const states = 'AL AK AZ AR CA CO CT DE DC FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY'.split(' ');
@@ -15,12 +17,13 @@
     });
 
     function sortShops() {
-        const byState = sort.value === 'state';
+        const byState = stateOption.checked;
         shops.sort((a, b) => (byState ? a.state - b.state : 0) || compareNames(a.name, b.name));
         grid.append(...shops.map(shop => shop.card));
     }
 
     sort.addEventListener('change', sortShops);
     sortShops();
-    sort.closest('label').hidden = false;
+    bar.querySelector('.lns-shop-count').textContent = shops.length + (shops.length === 1 ? ' shop' : ' shops');
+    bar.hidden = false;
 })();
