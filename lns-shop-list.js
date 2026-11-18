@@ -82,4 +82,21 @@
     updateFromToggles();
     trigger.hidden = false;
     toggles.hidden = false;
+
+    const header = document.querySelector('.top-nav');
+    const cart = document.querySelector('.nav-cart-peek');
+    const page = bar.closest('.lns-page');
+    const updateStickyOffset = () => {
+        const bodyTop = parseFloat(getComputedStyle(document.body).paddingTop);
+        page.style.setProperty('--lns-body-top', bodyTop + 'px');
+        page.style.setProperty('--lns-header-bottom', (header?.getBoundingClientRect().bottom ?? bodyTop) + 'px');
+        page.style.setProperty('--lns-sort-height', bar.offsetHeight + 'px');
+        if (cart) page.style.setProperty('--lns-cart-bottom', (cart.offsetTop + cart.offsetHeight) + 'px');
+    };
+
+    updateStickyOffset();
+    const observer = new ResizeObserver(updateStickyOffset);
+    observer.observe(bar, { box: 'border-box' });
+    if (header) observer.observe(header, { box: 'border-box' });
+    if (cart) observer.observe(cart, { box: 'border-box' });
 })();
