@@ -93,6 +93,15 @@
     cursor: pointer;
 }
 
+.lns-marker:focus:not(:focus-visible) {
+    outline: none;
+}
+
+.lns-marker:focus-visible {
+    outline: 2px solid var(--coral-ink);
+    outline-offset: 3px;
+}
+
 .hx-marker {
     fill: var(--coral-primary);
     stroke: var(--white);
@@ -102,7 +111,7 @@
 }
 
 .lns-marker:hover .hx-marker,
-.lns-marker:focus .hx-marker {
+.lns-marker:focus-visible .hx-marker {
     fill: var(--coral-dark);
 }
 
@@ -124,7 +133,7 @@
 }
 
 .lns-marker:hover .lns-marker-leader,
-.lns-marker:focus .lns-marker-leader {
+.lns-marker:focus-visible .lns-marker-leader {
     stroke: var(--coral-dark);
     opacity: 1;
 }
@@ -155,7 +164,7 @@
 }
 
 .lns-marker:hover .lns-marker-label,
-.lns-marker:focus .lns-marker-label {
+.lns-marker:focus-visible .lns-marker-label {
     fill: var(--coral-dark);
 }
 

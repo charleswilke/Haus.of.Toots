@@ -33,6 +33,7 @@
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
     let hoveredMarker = null;
     let focusedMarker = null;
+    let modalMarker = null;
     let activeMarker = null;
     let drawnMarker = null;
     let shape = rest;
@@ -78,8 +79,8 @@
     }
 
     function updatePin() {
-        const marker = desktop.matches && modal.hidden ? hoveredMarker || focusedMarker : null;
-        if (marker === activeMarker && (!drawnMarker || (desktop.matches && modal.hidden))) return;
+        const marker = desktop.matches ? modalMarker || (modal.hidden ? hoveredMarker || focusedMarker : null) : null;
+        if (marker === activeMarker && (!drawnMarker || desktop.matches)) return;
         activeMarker = marker;
         cancelAnimationFrame(frame);
         badge.getAnimations().forEach(animation => animation.cancel());
@@ -155,6 +156,16 @@
     desktop.addEventListener('change', syncInputMode);
     touch.addEventListener('change', syncInputMode);
     modal.addEventListener('focusin', updatePin);
+    modal.addEventListener('lns:shop-open', event => {
+        modalMarker = event.detail.marker;
+        updatePin();
+    });
+    modal.addEventListener('lns:shop-close', () => {
+        modalMarker = null;
+        hoveredMarker = map.querySelector('.lns-marker:hover');
+        focusedMarker = map.querySelector('.lns-marker:focus-visible');
+        updatePin();
+    });
     document.addEventListener('keydown', event => {
         if (event.defaultPrevented || event.key !== 'Escape' || !modal.hidden || !activeMarker) return;
         hoveredMarker = null;

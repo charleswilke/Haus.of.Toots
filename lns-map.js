@@ -240,6 +240,8 @@ const lnsAddrMenu = (function () {
     const shopsEl = document.getElementById('lnsModalShops');
     const closeBtn = modal.querySelector('.lns-modal-close');
     let lastFocus = null;
+    let restoreKeyboardFocus = false;
+    let pointerTrigger = null;
 
     function shopEntry(shop) {
         const entry = document.createElement('div');
@@ -340,7 +342,7 @@ const lnsAddrMenu = (function () {
         return entry;
     }
 
-    function openModal(slug) {
+    function openModal(slug, trigger, fromKeyboard) {
         const stop = LNS_SHOPS[slug];
         if (!stop) return;
         const g = stop.geo;
@@ -351,17 +353,30 @@ const lnsAddrMenu = (function () {
         cityEl.textContent = stop.city;
         shopsEl.innerHTML = '';
         stop.shops.forEach(s => shopsEl.appendChild(shopEntry(s)));
-        lastFocus = document.activeElement;
+        lastFocus = trigger;
+        restoreKeyboardFocus = fromKeyboard;
         modal.hidden = false;
+        modal.dispatchEvent(new CustomEvent('lns:shop-open', { detail: { marker: trigger } }));
         document.body.style.overflow = 'hidden';
         closeBtn.focus();
     }
 
-    function closeModal() {
+    function closeModal(event) {
+        const focused = document.activeElement;
         modal.hidden = true;
         document.body.style.overflow = '';
-        if (lastFocus && lastFocus.focus) lastFocus.focus();
+        if (restoreKeyboardFocus && lastFocus && (!event || event.detail === 0)) {
+            lastFocus.focus({ preventScroll: true });
+        } else if (modal.contains(focused) || focused === lastFocus) {
+            focused.blur();
+        }
+        lastFocus = null;
+        modal.dispatchEvent(new CustomEvent('lns:shop-close'));
     }
+
+    document.addEventListener('pointerdown', e => {
+        pointerTrigger = e.target.closest('.lns-marker');
+    }, true);
 
     // Capture phase, so the global smooth-scroll anchor handler
     // (script.js) never sees the marker click.
@@ -370,7 +385,8 @@ const lnsAddrMenu = (function () {
         if (!marker) return;
         e.preventDefault();
         e.stopPropagation();
-        openModal(marker.getAttribute('href').replace('#stop-', ''));
+        openModal(marker.getAttribute('href').replace('#stop-', ''), marker, e.detail === 0 && pointerTrigger !== marker);
+        pointerTrigger = null;
     }, true);
 
     closeBtn.addEventListener('click', closeModal);
