@@ -50,6 +50,9 @@ const LNS_SHOPS = {
     'barrington': { city: 'Barrington, IL', geo: { d: 'M12.0 0.0L37.8 0.3L51.5 0.3L51.1 3.8L53.2 7.8L55.4 14.5L55.3 57.2L53.8 60.5L55.6 64.3L55.8 67.5L54.0 70.1L53.6 72.4L51.1 76.3L49.5 76.6L49.8 78.9L48.8 79.8L47.9 84.0L48.4 85.2L46.6 87.8L47.9 91.0L42.1 92.7L41.6 94.5L42.9 96.9L41.1 98.4L36.0 95.6L34.4 95.8L32.3 99.0L33.0 100.0L30.8 99.8L27.7 94.6L28.8 93.5L27.7 90.0L27.7 87.2L23.2 83.3L21.6 83.7L20.1 81.4L16.0 77.7L16.1 74.8L18.4 70.2L18.1 68.5L19.4 66.3L17.5 65.0L14.4 64.2L12.8 65.9L11.7 64.8L10.8 58.9L6.2 55.0L1.9 50.3L0.2 44.8L0.0 41.1L1.2 38.6L1.4 35.3L5.3 33.3L5.7 30.5L7.5 28.7L7.8 25.6L5.5 23.0L6.4 19.8L11.8 18.9L16.2 16.7L16.6 13.9L18.4 12.7L19.0 9.2L18.6 6.9L15.5 5.2L15.1 3.3L12.0 0.0Z', w: 55.8, h: 100, x: 46.8, y: 6.4, coords: '42.16° N · 88.14° W' }, shops: [
         { name: 'The Pepper Pot', addr: 'Icehouse Mall, 200 Applebee St, Barrington, IL 60010', url: 'https://thepepperpot.co/', logo: 'images/lns/pepper-pot.webp' }
     ]},
+    'naperville': { city: 'Naperville, IL', geo: { d: 'M12.0 0.0L37.8 0.3L51.5 0.3L51.1 3.8L53.2 7.8L55.4 14.5L55.3 57.2L53.8 60.5L55.6 64.3L55.8 67.5L54.0 70.1L53.6 72.4L51.1 76.3L49.5 76.6L49.8 78.9L48.8 79.8L47.9 84.0L48.4 85.2L46.6 87.8L47.9 91.0L42.1 92.7L41.6 94.5L42.9 96.9L41.1 98.4L36.0 95.6L34.4 95.8L32.3 99.0L33.0 100.0L30.8 99.8L27.7 94.6L28.8 93.5L27.7 90.0L27.7 87.2L23.2 83.3L21.6 83.7L20.1 81.4L16.0 77.7L16.1 74.8L18.4 70.2L18.1 68.5L19.4 66.3L17.5 65.0L14.4 64.2L12.8 65.9L11.7 64.8L10.8 58.9L6.2 55.0L1.9 50.3L0.2 44.8L0.0 41.1L1.2 38.6L1.4 35.3L5.3 33.3L5.7 30.5L7.5 28.7L7.8 25.6L5.5 23.0L6.4 19.8L11.8 18.9L16.2 16.7L16.6 13.9L18.4 12.7L19.0 9.2L18.6 6.9L15.5 5.2L15.1 3.3L12.0 0.0Z', w: 55.8, h: 100, x: 47, y: 13, coords: '41.79° N · 88.13° W' }, shops: [
+        { name: 'Stitchers Garden', addr: '1163 E Ogden Ave Ste 713, Naperville, IL 60563', url: 'https://www.stitchersgardenil.com/', logo: 'images/lns/stitchers-garden.webp' }
+    ]},
     'nashville': { city: 'Nashville, TN', geo: { d: 'M6.6 9.7L8.2 8.0L7.1 6.1L9.0 6.1L8.0 5.3L9.2 4.3L8.9 2.6L26.0 2.6L25.9 0.0L28.3 0.6L43.9 0.4L76.4 1.4L100.0 0.9L98.9 3.9L99.3 4.8L97.0 5.4L95.6 7.8L94.4 8.1L93.5 7.4L91.9 8.0L89.5 10.3L88.6 8.7L86.4 10.8L85.4 10.7L84.5 12.9L82.6 13.0L78.8 15.8L74.2 16.5L72.6 18.1L72.6 19.6L69.5 20.7L69.1 24.1L0.0 24.0L2.8 21.9L1.7 19.7L2.7 18.4L1.5 18.5L1.6 17.9L2.6 17.1L2.9 18.2L3.2 16.0L4.5 16.6L4.2 15.3L5.3 14.8L4.0 13.6L7.0 12.0L6.2 11.6L6.5 11.0L7.5 11.3L6.6 9.7Z', w: 100, h: 24.1, x: 39.8, y: 7.8, coords: '36.13° N · 86.86° W' }, shops: [
         { name: 'Kick Ass Needlepoint', addr: '850 Hillwood Blvd #6, Nashville, TN 37209', url: 'https://kickassneedlepoint.com/', logo: 'images/lns/kick-ass.webp' },
         { name: 'The Stitching Belle', addr: '3518 Nebraska Ave, Nashville, TN 37205', url: 'https://thestitchingbelle.com/', logo: 'images/lns/stitching-belle.webp' }
@@ -64,7 +67,8 @@ const LNS_SHOPS = {
         { name: 'North Myrtle Beach Needlepoint', addr: '211 Hwy 17 N Ste 105, North Myrtle Beach, SC 29582', url: 'https://www.northmyrtlebeachneedlepoint.com/', logo: 'images/lns/north-myrtle-beach-needlepoint.webp' }
     ]},
     'atlanta': { city: 'Atlanta, GA', geo: { d: 'M45.3 0.0L41.4 4.6L41.1 6.8L47.1 11.4L49.0 11.1L51.8 15.8L52.4 18.3L55.3 22.8L59.5 25.5L61.8 29.5L66.7 33.1L66.5 35.6L69.7 39.6L74.5 42.9L75.7 46.5L75.9 51.1L78.4 52.6L81.3 58.4L81.4 62.0L85.6 63.9L81.1 71.2L80.3 75.0L78.4 78.3L78.2 81.7L76.2 83.3L75.4 92.5L70.5 91.6L66.3 89.9L64.6 91.5L65.3 95.5L64.5 99.9L62.3 100.0L61.4 95.4L38.2 93.7L13.4 92.3L10.9 86.1L8.9 80.2L10.2 74.5L8.4 68.0L10.0 64.4L9.9 61.7L13.0 59.0L10.9 57.7L11.7 55.5L9.7 52.1L7.6 46.1L3.2 18.9L0.0 0.4L23.3 0.2L36.0 0.4Z', w: 85.6, h: 100, x: 22.2, y: 23.1, coords: '33.93° N · 84.38° W' }, shops: [
-        { name: 'The Nimble Needle', addr: '206B Johnson Ferry Rd, Atlanta, GA 30328', url: 'https://www.atlantanimbleneedle.com/', logo: 'images/lns/nimble-needle.webp' }
+        { name: 'The Nimble Needle', addr: '206B Johnson Ferry Rd, Atlanta, GA 30328', url: 'https://www.atlantanimbleneedle.com/', logo: 'images/lns/nimble-needle.webp' },
+        { name: 'Labors of Love Needlepoint', addr: '445 Plasamour Dr NE #1, Atlanta, GA 30324', url: 'https://laborsofloveneedlepoint.shop/', logo: 'images/lns/labors-of-love.webp' }
     ]},
     'bridgeport': { city: 'Bridgeport, WV', geo: { d: 'M0.9 58.1L6.4 57.4L7.0 54.1L9.5 52.9L8.6 48.3L12.4 42.2L15.3 46.3L17.5 44.9L16.8 40.8L18.2 40.4L19.5 35.8L21.8 35.9L23.9 32.4L25.5 34.0L29.1 32.7L35.9 26.7L41.6 8.3L40.8 0.6L43.2 0.0L43.2 24.1L64.5 24.1L64.3 37.6L72.3 30.6L75.1 31.4L78.7 26.6L81.3 28.9L85.1 29.4L86.5 27.5L85.7 26.8L88.8 26.7L90.8 24.7L94.4 27.2L98.0 27.2L96.9 28.3L100.0 32.8L98.1 39.5L87.6 30.7L86.4 38.6L76.9 49.2L74.3 46.9L67.9 58.4L61.0 53.7L58.1 62.2L48.5 75.6L47.8 77.2L49.3 78.9L47.1 80.6L47.7 82.1L44.1 84.3L42.5 83.0L38.1 85.6L36.3 84.2L35.1 87.4L28.8 89.2L26.1 86.5L22.1 89.9L19.6 90.1L16.0 87.9L13.3 83.5L14.5 82.0L7.0 77.8L2.8 70.9L3.6 69.7L0.0 65.5L1.3 62.2L0.9 58.1Z', w: 100, h: 90.1, x: 48.6, y: 35.4, coords: '39.29° N · 80.26° W' }, shops: [
         { name: 'Honeysuckle Needlepoint', addr: '102 Hill St, Bridgeport, WV 26330', url: null, logo: 'images/lns/honeysuckle.webp', bg: '#FBF8F2' }
@@ -110,8 +114,8 @@ const lnsAddrMenu = (function () {
         const wasOpen = open && open.parentElement === el;
         close();
         if (wasOpen) return;
-        // innerText keeps the <br> as a newline
-        const address = el.innerText.trim().replace(/\s*\n\s*/g, ', ');
+        // Cards and popups can break the address across lines.
+        const address = el.innerText.trim().replace(/,?\s*\n\s*/g, ', ');
 
         const menu = document.createElement('div');
         menu.className = 'lns-addr-menu';

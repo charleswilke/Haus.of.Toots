@@ -226,6 +226,14 @@
     transform: translate(-3%, -3%) scale(1.45);
 }
 
+/* Turn the logo's off-white backdrop white so it blends into the card. */
+.lns-card-logo[src*="/stitchers-garden.webp"],
+.lns-modal-logo[src*="/stitchers-garden.webp"] {
+    filter: contrast(1.13);
+    mix-blend-mode: multiply;
+    transform: scale(1.16);
+}
+
 /* The round Kick Ass badge is tall and narrow, so the shared height
    leaves it looking undersized; give it more room and absorb the
    difference in its bottom margin to keep the row roughly aligned */
