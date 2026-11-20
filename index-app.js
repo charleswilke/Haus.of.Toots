@@ -78,6 +78,7 @@ class HomeApp extends ShopApp {
             this.showGrid();
             this.renderProducts();
             this.productFilters.hidden = false;
+            this.syncMeshIndicator();
         } catch (error) {
             console.error('Failed to load products:', error);
             this.showError();
@@ -90,14 +91,19 @@ class HomeApp extends ShopApp {
         this.inStockFilter = this.productFilters.querySelector('[data-product-filter="in-stock"]');
         this.meshFilter = document.getElementById('homeMeshFilter');
         this.defaultMeshFilter = this.meshFilter.querySelector('[checked]');
+        this.syncMeshIndicator = createToggleIndicator(this.meshFilter, 'home-mesh-indicator');
         this.filterTrigger = document.getElementById('homeProductFilterTrigger');
         this.setupFilterDisclosure();
 
-        this.meshFilter.addEventListener('change', () => this.renderProducts());
+        this.meshFilter.addEventListener('change', () => {
+            this.renderProducts();
+            this.syncMeshIndicator(true);
+        });
         this.productFilters.addEventListener('click', ({ target }) => {
             const button = target.closest('[data-product-filter]');
             if (!button) return;
 
+            const resetMesh = button === this.allProductsFilter && !this.defaultMeshFilter.checked;
             if (button === this.allProductsFilter) {
                 this.productFilters.querySelectorAll('[aria-pressed="true"]').forEach(filter => {
                     filter.setAttribute('aria-pressed', 'false');
@@ -108,6 +114,7 @@ class HomeApp extends ShopApp {
                 button.setAttribute('aria-pressed', String(!isPressed));
             }
             this.renderProducts();
+            if (resetMesh) this.syncMeshIndicator(true);
         });
     }
 

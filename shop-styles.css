@@ -3903,7 +3903,8 @@ body[data-title-collection] .series-copy .hero-title .highlight {
 
 .home-product-filter[aria-pressed="true"],
 .home-product-filter-trigger,
-.home-mesh-filter input:checked + span {
+.home-mesh-filter input:checked + span,
+.home-mesh-indicator {
     background: linear-gradient(
         165deg,
         var(--filter-fill),
@@ -3926,6 +3927,8 @@ body[data-title-collection] .series-copy .hero-title .highlight {
 }
 
 .home-mesh-filter {
+    position: relative;
+    isolation: isolate;
     display: grid;
     grid-template-columns: 2rem auto 2rem;
     gap: 2px;
@@ -3939,9 +3942,10 @@ body[data-title-collection] .series-copy .hero-title .highlight {
 
 .home-mesh-filter label {
     position: relative;
+    z-index: 1;
 }
 
-.home-mesh-filter span {
+.home-mesh-filter label > span {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -3950,6 +3954,32 @@ body[data-title-collection] .series-copy .hero-title .highlight {
     border-radius: 999px;
     white-space: nowrap;
     cursor: pointer;
+}
+
+.home-mesh-indicator {
+    position: absolute;
+    z-index: 0;
+    border-radius: 999px;
+    transform-origin: left center;
+    transition-property: none;
+    pointer-events: none;
+}
+
+.home-mesh-filter.has-toggle-indicator input:checked + span {
+    background: transparent;
+}
+
+@media (forced-colors: active) {
+    .home-mesh-filter input:checked + span,
+    .home-mesh-filter.has-toggle-indicator input:checked + span {
+        background: Highlight;
+        color: HighlightText;
+        forced-color-adjust: none;
+    }
+
+    .home-mesh-indicator {
+        display: none;
+    }
 }
 
 @media (pointer: coarse) {
@@ -4289,7 +4319,7 @@ body[data-title-collection] .series-copy .hero-title .highlight {
         font-size: 0.8125rem;
     }
 
-    .home-mesh-filter span {
+    .home-mesh-filter label > span {
         padding-inline: 0.3rem;
     }
 
