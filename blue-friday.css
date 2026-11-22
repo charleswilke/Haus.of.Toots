@@ -134,14 +134,110 @@
     text-align: center;
 }
 
+.blue-friday-banner .sale-copy {
+    position: relative;
+    display: inline-flex;
+}
+
 .blue-friday-banner .sale-code {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border: 0;
     border-radius: 4px;
     padding: 2px 6px 3px;
     background: var(--sale-coral);
     color: #32192b;
+    font: inherit;
     font-weight: 700;
     letter-spacing: .04em;
-    white-space: nowrap;
+    cursor: pointer;
+}
+
+.blue-friday-banner .sale-code::before {
+    content: '';
+    position: absolute;
+    /* Extend the hit area around the compact chip. */
+    inset: -12px 0;
+}
+
+.blue-friday-banner .sale-code:hover {
+    filter: brightness(1.08);
+}
+
+.blue-friday-banner .sale-code:focus-visible {
+    outline: 2px solid var(--sale-yellow);
+    outline-offset: 2px;
+}
+
+.blue-friday-banner .sale-copy-icon {
+    position: relative;
+    width: 9px;
+    height: 10px;
+}
+
+.blue-friday-banner .sale-copy-icon::before,
+.blue-friday-banner .sale-copy-icon::after {
+    content: '';
+    position: absolute;
+    width: 7px;
+    height: 8px;
+    border: 1px solid currentColor;
+    border-radius: 2px;
+}
+
+.blue-friday-banner .sale-copy-icon::before {
+    top: 0;
+    right: 0;
+}
+
+.blue-friday-banner .sale-copy-icon::after {
+    bottom: 0;
+    left: 0;
+    background: var(--sale-coral);
+}
+
+.blue-friday-banner .sale-copy-status {
+    position: absolute;
+    z-index: 2;
+    inset-inline-end: 0;
+    inset-block-end: calc(100% + 5px);
+    padding: 3px 7px;
+    border: 1px solid #b9c7ff8c;
+    border-radius: 4px;
+    background: #18245b;
+    color: var(--sale-cream);
+    font-weight: 700;
+    pointer-events: none;
+}
+
+.blue-friday-banner .sale-copy-status:empty {
+    opacity: 0;
+}
+
+.blue-friday-banner .sale-copy-confetti {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    pointer-events: none;
+}
+
+.blue-friday-banner .sale-copy-confetti > span {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    width: 4px;
+    height: 6px;
+    border-radius: 1px;
+    background: var(--confetti-color);
+    animation: sale-copy-burst .55s ease-out both;
+}
+
+@keyframes sale-copy-burst {
+    from { opacity: 1; transform: scale(.6); }
+    60% { opacity: 1; }
+    to { opacity: 0; transform: translate(var(--confetti-x), var(--confetti-y)) rotate(var(--confetti-spin)); }
 }
 
 @media (max-width: 808px) {
