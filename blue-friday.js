@@ -49,24 +49,25 @@
 
     function celebrateCopy() {
         const pieces = [
-            [-62, -14, -160, 'var(--sale-yellow)'],
-            [-52, -30, 120, 'var(--sale-coral)'],
-            [-44, 10, 95, 'var(--sale-cream)'],
-            [-38, -48, -150, 'var(--sale-cream)'],
-            [-26, -22, 180, '#abc5ff'],
-            [-18, -56, -105, 'var(--sale-coral)'],
-            [-5, -39, 145, 'var(--sale-yellow)'],
-            [10, -53, -130, '#abc5ff'],
-            [23, -34, 160, 'var(--sale-coral)'],
-            [32, 12, -130, 'var(--sale-yellow)'],
-            [41, -49, 95, 'var(--sale-cream)'],
-            [49, -20, -175, 'var(--sale-coral)'],
-            [57, -35, 140, '#abc5ff'],
-            [66, -9, 160, 'var(--sale-yellow)']
+            [-61, -7, -160, 'var(--sale-yellow)'],
+            [-54, 9, 120, 'var(--sale-coral)'],
+            [-48, -11, 95, 'var(--sale-cream)'],
+            [-43, 4, -150, 'var(--sale-yellow)'],
+            [-36, -5, 180, '#abc5ff'],
+            [-31, 11, -105, 'var(--sale-coral)'],
+            [-24, 2, 145, 'var(--sale-cream)'],
+            [25, -7, -130, '#abc5ff'],
+            [32, 9, 160, 'var(--sale-coral)'],
+            [37, -11, -130, 'var(--sale-yellow)'],
+            [43, 3, 95, 'var(--sale-cream)'],
+            [49, -4, -175, 'var(--sale-coral)'],
+            [55, 10, 140, '#abc5ff'],
+            [61, -9, 160, 'var(--sale-yellow)']
         ];
 
         confetti.replaceChildren(...pieces.map(([x, y, spin, color]) => {
             const piece = document.createElement('span');
+            if (x > 0) piece.className = 'from-right';
             piece.style.setProperty('--confetti-x', `${x}px`);
             piece.style.setProperty('--confetti-y', `${y}px`);
             piece.style.setProperty('--confetti-spin', `${spin}deg`);

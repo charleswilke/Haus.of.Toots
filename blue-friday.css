@@ -189,21 +189,29 @@
 }
 
 .blue-friday-banner .sale-copy-confetti {
+    --confetti-side-space: 72px;
     position: absolute;
     z-index: 1;
-    inset: 0;
+    /* Allow a sideways burst while keeping it below the headline. */
+    inset: -4px calc(0px - var(--confetti-side-space));
+    overflow: hidden;
     pointer-events: none;
 }
 
 .blue-friday-banner .sale-copy-confetti > span {
     position: absolute;
-    top: 45%;
-    left: 50%;
+    top: calc(50% - 3px);
+    left: calc(var(--confetti-side-space) + 3px);
     width: 4px;
     height: 6px;
     border-radius: 1px;
     background: var(--confetti-color);
     animation: sale-copy-burst .72s ease-out both;
+}
+
+.blue-friday-banner .sale-copy-confetti > .from-right {
+    left: auto;
+    right: calc(var(--confetti-side-space) + 3px);
 }
 
 .blue-friday-banner .sale-copy-confetti > :nth-child(3n + 1) {
@@ -218,7 +226,10 @@
 @keyframes sale-copy-burst {
     from { opacity: 1; transform: scale(.6); }
     60% { opacity: 1; }
-    to { opacity: 0; transform: translate(var(--confetti-x), var(--confetti-y)) rotate(var(--confetti-spin)); }
+    to {
+        opacity: 0;
+        transform: translate(calc(var(--confetti-x) * var(--confetti-spread, 1)), var(--confetti-y)) rotate(var(--confetti-spin));
+    }
 }
 
 @media (max-width: 808px) {
@@ -251,5 +262,11 @@
         padding-inline: 12px;
         border-inline-start: 0;
         border-block-start: 1px dashed #b7caff82;
+    }
+}
+
+@container (max-width: 365px) {
+    .blue-friday-banner .sale-copy-confetti {
+        --confetti-spread: .6;
     }
 }
