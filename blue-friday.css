@@ -127,7 +127,7 @@
 
 .blue-friday-banner .sale-divider {
     grid-column: 3;
-    margin-inline-start: 100%;
+    /* Extend the date's trailing grid column up to the coupon text. */
     margin-inline-end: calc(0px - var(--sale-date-gap));
     color: var(--sale-yellow);
     font: 12px/1 system-ui, sans-serif;
@@ -215,11 +215,6 @@
 @media (max-width: 808px) {
     .blue-friday-slot {
         padding-top: .875rem;
-    }
-
-    /* Center over the full space from the date text to the coupon. */
-    .blue-friday-banner .sale-divider {
-        margin-inline-start: 0;
     }
 }
 
