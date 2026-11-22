@@ -173,9 +173,9 @@
 .blue-friday-banner .sale-copy-status {
     position: absolute;
     z-index: 2;
-    inset-inline-end: 0;
-    inset-block-end: calc(100% + 5px);
-    padding: 3px 7px;
+    inset: 0;
+    display: grid;
+    place-items: center;
     border: 1px solid #b9c7ff8c;
     border-radius: 4px;
     background: #18245b;
