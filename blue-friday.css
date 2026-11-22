@@ -203,7 +203,16 @@
     height: 6px;
     border-radius: 1px;
     background: var(--confetti-color);
-    animation: sale-copy-burst .55s ease-out both;
+    animation: sale-copy-burst .72s ease-out both;
+}
+
+.blue-friday-banner .sale-copy-confetti > :nth-child(3n + 1) {
+    height: 4px;
+    border-radius: 50%;
+}
+
+.blue-friday-banner .sale-copy-confetti > :nth-child(even) {
+    animation-delay: 35ms;
 }
 
 @keyframes sale-copy-burst {

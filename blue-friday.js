@@ -49,13 +49,20 @@
 
     function celebrateCopy() {
         const pieces = [
-            [-43, -16, -120, 'var(--sale-yellow)'],
-            [-33, -36, 115, 'var(--sale-cream)'],
-            [-15, -47, -90, 'var(--sale-coral)'],
-            [3, -43, 80, 'var(--sale-yellow)'],
-            [20, -46, 130, '#abc5ff'],
-            [36, -30, -110, 'var(--sale-coral)'],
-            [43, -11, 160, 'var(--sale-cream)']
+            [-62, -14, -160, 'var(--sale-yellow)'],
+            [-52, -30, 120, 'var(--sale-coral)'],
+            [-44, 10, 95, 'var(--sale-cream)'],
+            [-38, -48, -150, 'var(--sale-cream)'],
+            [-26, -22, 180, '#abc5ff'],
+            [-18, -56, -105, 'var(--sale-coral)'],
+            [-5, -39, 145, 'var(--sale-yellow)'],
+            [10, -53, -130, '#abc5ff'],
+            [23, -34, 160, 'var(--sale-coral)'],
+            [32, 12, -130, 'var(--sale-yellow)'],
+            [41, -49, 95, 'var(--sale-cream)'],
+            [49, -20, -175, 'var(--sale-coral)'],
+            [57, -35, 140, '#abc5ff'],
+            [66, -9, 160, 'var(--sale-yellow)']
         ];
 
         confetti.replaceChildren(...pieces.map(([x, y, spin, color]) => {
