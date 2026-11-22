@@ -4,7 +4,7 @@
 
 .blue-friday-frame {
     width: calc(100% - clamp(24px, 8vw, 64px));
-    max-width: 820px;
+    max-width: 664px;
     margin-inline: auto;
     container-type: inline-size;
 }
