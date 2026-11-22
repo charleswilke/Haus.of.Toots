@@ -173,28 +173,30 @@
 
 .blue-friday-banner .sale-copy-icon {
     position: relative;
-    width: 9px;
-    height: 10px;
+    flex: none;
+    width: 11px;
+    height: 12px;
 }
 
 .blue-friday-banner .sale-copy-icon::before,
 .blue-friday-banner .sale-copy-icon::after {
     content: '';
     position: absolute;
-    width: 7px;
-    height: 8px;
+    box-sizing: border-box;
+    width: 8px;
+    height: 9px;
     border: 1px solid currentColor;
     border-radius: 2px;
 }
 
 .blue-friday-banner .sale-copy-icon::before {
     top: 0;
-    right: 0;
+    left: 0;
 }
 
 .blue-friday-banner .sale-copy-icon::after {
     bottom: 0;
-    left: 0;
+    right: 0;
     background: var(--sale-coral);
 }
 
