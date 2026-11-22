@@ -34,6 +34,7 @@
 
 .blue-friday-banner .sale-main {
     --sale-date-gap: clamp(16px, 3.1cqw, 22px);
+    isolation: isolate;
     display: grid;
     grid-template-areas: 'badge title' 'dates coupon';
     grid-template-columns: max-content minmax(0, max-content);
@@ -189,19 +190,17 @@
 }
 
 .blue-friday-banner .sale-copy-confetti {
-    --confetti-side-space: 72px;
     position: absolute;
-    z-index: 1;
-    /* Allow a sideways burst while keeping it below the headline. */
-    inset: -4px calc(0px - var(--confetti-side-space));
-    overflow: hidden;
+    /* Keep the burst behind the text inside the sale panel. */
+    z-index: -1;
+    inset: 0;
     pointer-events: none;
 }
 
 .blue-friday-banner .sale-copy-confetti > span {
     position: absolute;
     top: calc(50% - 3px);
-    left: calc(var(--confetti-side-space) + 3px);
+    left: 3px;
     width: 4px;
     height: 6px;
     border-radius: 1px;
@@ -211,7 +210,12 @@
 
 .blue-friday-banner .sale-copy-confetti > .from-right {
     left: auto;
-    right: calc(var(--confetti-side-space) + 3px);
+    right: 3px;
+}
+
+.blue-friday-banner .sale-copy-confetti > .from-top {
+    top: 0;
+    left: calc(50% - 2px);
 }
 
 .blue-friday-banner .sale-copy-confetti > :nth-child(3n + 1) {

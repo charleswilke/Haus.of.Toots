@@ -62,12 +62,19 @@
             [43, 3, 95, 'var(--sale-cream)'],
             [49, -4, -175, 'var(--sale-coral)'],
             [55, 10, 140, '#abc5ff'],
-            [61, -9, 160, 'var(--sale-yellow)']
+            [61, -9, 160, 'var(--sale-yellow)'],
+            [-38, -24, -135, 'var(--sale-coral)', 'top'],
+            [-24, -38, 175, 'var(--sale-yellow)', 'top'],
+            [-10, -27, -95, '#abc5ff', 'top'],
+            [3, -44, 130, 'var(--sale-coral)', 'top'],
+            [17, -34, -165, 'var(--sale-yellow)', 'top'],
+            [29, -41, 190, '#abc5ff', 'top'],
+            [42, -22, -145, 'var(--sale-coral)', 'top']
         ];
 
-        confetti.replaceChildren(...pieces.map(([x, y, spin, color]) => {
+        confetti.replaceChildren(...pieces.map(([x, y, spin, color, origin = x > 0 ? 'right' : 'left']) => {
             const piece = document.createElement('span');
-            if (x > 0) piece.className = 'from-right';
+            piece.className = `from-${origin}`;
             piece.style.setProperty('--confetti-x', `${x}px`);
             piece.style.setProperty('--confetti-y', `${y}px`);
             piece.style.setProperty('--confetti-spin', `${spin}deg`);
