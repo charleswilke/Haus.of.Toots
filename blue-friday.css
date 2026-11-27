@@ -68,6 +68,30 @@
     white-space: nowrap;
 }
 
+.blue-friday-banner .sale-live-label {
+    color: var(--sale-coral);
+    font-size: .7em;
+}
+
+.blue-friday-banner .sale-exclamations {
+    display: inline-block;
+    font-size: 1.1em;
+    transform: skewX(-10deg);
+    transform-origin: left bottom;
+}
+
+@supports (background-clip: text) {
+    .blue-friday-banner .sale-exclamations {
+        background: linear-gradient(var(--sale-cream) 70%, var(--sale-coral) 70%);
+        background-clip: text;
+        color: transparent;
+    }
+}
+
+.blue-friday-slot:not(.is-live) .sale-live-label {
+    display: none;
+}
+
 .blue-friday-banner .stitched-discount {
     display: block;
     grid-area: badge;
@@ -171,6 +195,67 @@
     outline-offset: 2px;
 }
 
+.blue-friday-slot.is-live .sale-code {
+    box-shadow: 0 0 0 1px #ffd0d7, 0 0 9px #ff9ba670;
+}
+
+.blue-friday-banner .sale-orbit {
+    display: none;
+}
+
+@supports (offset-path: inset(-2px round 6px)) {
+    @media (prefers-reduced-motion: no-preference) {
+        .blue-friday-slot.is-live .sale-orbit {
+            --sale-orbit-duration: 2.8s;
+            display: block;
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .blue-friday-slot.is-live .sale-orbit > span {
+            /* Start each successive part of the tail farther back on the same path. */
+            --sale-orbit-lag: calc(var(--sale-orbit-step) * 75ms);
+        }
+
+        .blue-friday-slot.is-live .sale-orbit > span::before,
+        .blue-friday-slot.is-live .sale-orbit > span::after {
+            content: '';
+            position: absolute;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            width: 8px;
+            height: 2px;
+            border-radius: 50%;
+            background: var(--sale-cream);
+            box-shadow: 0 0 3px 1px #ffd2df, 0 0 6px 2px #ff9ba6bf;
+            offset-path: inset(-2px round 6px);
+            animation: sale-code-orbit var(--sale-orbit-duration) linear infinite;
+            animation-delay: calc(var(--sale-orbit-lag) - var(--sale-orbit-duration));
+        }
+
+        .blue-friday-slot.is-live .sale-orbit > span::after {
+            animation-delay: calc(var(--sale-orbit-lag) - var(--sale-orbit-duration) / 2);
+        }
+
+        .blue-friday-slot.is-live .sale-orbit > span + span::before,
+        .blue-friday-slot.is-live .sale-orbit > span + span::after {
+            z-index: 0;
+            width: 18px;
+            height: 5px;
+            background: radial-gradient(ellipse, #ffd2df, #ff9ba6b3 35%, #ff9ba600 72%);
+            box-shadow: none;
+            opacity: calc(1 - var(--sale-orbit-step) * .17);
+        }
+    }
+}
+
+@keyframes sale-code-orbit {
+    from { offset-distance: 0%; }
+    to { offset-distance: 100%; }
+}
+
 .blue-friday-banner .sale-copy-status {
     position: absolute;
     z-index: 2;
@@ -253,7 +338,7 @@
     }
 }
 
-@container (max-width: 485px) {
+@container (max-width: 540px) {
     .blue-friday-banner {
         grid-template-columns: minmax(0, 1fr);
     }
@@ -272,5 +357,11 @@
 @container (max-width: 365px) {
     .blue-friday-banner .sale-copy-confetti {
         --confetti-spread: .6;
+    }
+}
+
+@container (max-width: 320px) {
+    .blue-friday-slot.is-live .sale-name {
+        font-size: clamp(26px, 8.9cqw, 29px);
     }
 }

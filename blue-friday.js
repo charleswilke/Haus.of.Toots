@@ -2,23 +2,27 @@
     const banner = document.getElementById('blueFridayBanner');
     if (!banner) return;
 
+    const startsAt = Date.parse(banner.dataset.starts);
     const expiresAt = Date.parse(banner.dataset.expires);
-    let expiryTimer;
+    let saleTimer;
 
-    function updateVisibility() {
-        clearTimeout(expiryTimer);
-        const remaining = expiresAt - Date.now();
-        banner.hidden = !(remaining > 0);
+    function updateSale() {
+        clearTimeout(saleTimer);
+        const now = Date.now();
+        const isVisible = now < expiresAt;
+        banner.hidden = !isVisible;
+        banner.classList.toggle('is-live', isVisible && now >= startsAt);
 
-        if (!banner.hidden) {
-            expiryTimer = setTimeout(updateVisibility, Math.min(remaining, 2_147_483_647));
+        if (isVisible) {
+            const nextChange = startsAt > now && startsAt < expiresAt ? startsAt : expiresAt;
+            saleTimer = setTimeout(updateSale, Math.min(nextChange - now, 2_147_483_647));
         }
     }
 
-    updateVisibility();
+    updateSale();
     // A restored or backgrounded page can miss the scheduled update.
-    window.addEventListener('pageshow', updateVisibility);
-    document.addEventListener('visibilitychange', updateVisibility);
+    window.addEventListener('pageshow', updateSale);
+    document.addEventListener('visibilitychange', updateSale);
 
     const copyButton = banner.querySelector('.sale-code');
     const code = copyButton.querySelector('.sale-code-value').textContent;

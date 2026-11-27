@@ -6,7 +6,7 @@ import vm from 'node:vm';
 const read = name => readFileSync(new URL(`../${name}`, import.meta.url), 'utf8');
 const homepage = read('index.html');
 const script = read('blue-friday.js');
-const expires = /id="blueFridayBanner"[^>]*data-expires="([^"]+)"[^>]*\s+hidden>/.exec(homepage)?.[1];
+const [, starts, expires] = /id="blueFridayBanner"[^>]*data-starts="([^"]+)"[^>]*data-expires="([^"]+)"[^>]*\s+hidden>/.exec(homepage) ?? [];
 
 function loadBanner(date, { denied = false, reducedMotion = false, legacy = false } = {}) {
     let now = Date.parse(date);
@@ -29,7 +29,19 @@ function loadBanner(date, { denied = false, reducedMotion = false, legacy = fals
         '.sale-copy-status': status,
         '.sale-copy-confetti': confetti
     };
-    const banner = { hidden: true, dataset: { expires }, querySelector: selector => elements[selector] };
+    const classes = new Set();
+    const banner = {
+        hidden: true,
+        dataset: { starts, expires },
+        classList: {
+            toggle(className, enabled) {
+                if (enabled) classes.add(className);
+                else classes.delete(className);
+            },
+            contains: className => classes.has(className)
+        },
+        querySelector: selector => elements[selector]
+    };
     const field = { select() { this.selected = true; }, remove() { this.removed = true; } };
 
     vm.runInNewContext(script, {
@@ -66,20 +78,41 @@ function loadBanner(date, { denied = false, reducedMotion = false, legacy = fals
     return { banner, timers, events, writes, status, confetti, field, button, advanceTo: date => { now = Date.parse(date); } };
 }
 
-test('the sale banner is initially hidden and can show before the sale begins', () => {
+test('the sale banner shows a preview and goes live at midnight Central on an open page', () => {
+    assert.equal(starts, '2026-11-27T00:00:00-06:00');
     assert.equal(expires, '2026-12-01T00:00:00-06:00');
-    assert.equal(loadBanner('2026-11-21T20:00:00-06:00').banner.hidden, false);
+    const { banner, timers, advanceTo } = loadBanner('2026-11-27T05:59:59.999Z');
+    assert.equal(banner.hidden, false);
+    assert.equal(banner.classList.contains('is-live'), false);
+    const [{ callback, delay }] = [...timers.values()];
+    assert.equal(delay, 1);
+
+    advanceTo('2026-11-27T06:00:00Z');
+    callback();
+    assert.equal(banner.hidden, false);
+    assert.equal(banner.classList.contains('is-live'), true);
+    assert.equal(timers.size, 1);
+    assert.equal([...timers.values()][0].delay, 4 * 24 * 60 * 60 * 1000);
+});
+
+test('a backgrounded page rechecks the sale start when it becomes visible', () => {
+    const { banner, events, advanceTo } = loadBanner('2026-11-26T23:00:00-06:00');
+    advanceTo('2026-11-27T00:01:00-06:00');
+    events.get('visibilitychange')();
+    assert.equal(banner.classList.contains('is-live'), true);
 });
 
 test('the sale banner hides at midnight Central even on an open page', () => {
     const { banner, timers, advanceTo } = loadBanner('2026-12-01T05:59:59.999Z');
     assert.equal(banner.hidden, false);
+    assert.equal(banner.classList.contains('is-live'), true);
     const [{ callback, delay }] = [...timers.values()];
     assert.equal(delay, 1);
 
     advanceTo('2026-12-01T06:00:00Z');
     callback();
     assert.equal(banner.hidden, true);
+    assert.equal(banner.classList.contains('is-live'), false);
     assert.equal(timers.size, 0);
     assert.equal(loadBanner('2026-12-01T06:00:00Z').banner.hidden, true);
 });
