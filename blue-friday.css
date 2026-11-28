@@ -144,7 +144,7 @@
     display: flex;
     grid-area: coupon;
     align-items: center;
-    gap: 4px;
+    gap: 12px;
     margin: 0;
     font-size: clamp(12.5px, 2.1cqw, 14px);
     white-space: nowrap;
@@ -329,7 +329,6 @@
 
 @container (max-width: 550px) {
     .blue-friday-banner .sale-coupon {
-        gap: 3px;
         font-size: 12px;
     }
 
